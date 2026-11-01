@@ -92,6 +92,75 @@
     }
   })();
 
+  // Hero: cuatro areas de trabajo (rendimiento, seguridad, fiabilidad, herramientas).
+  // Rotacion automatica; en pausa con el cursor o el foco dentro de la tarjeta, o con el
+  // boton de pausa; sin rotacion automatica si el usuario pidio menos movimiento.
+  (function initHeroStates() {
+    var root = document.getElementById('heroStates');
+    if (!root) return;
+    var tabs = Array.prototype.slice.call(document.querySelectorAll('.nb-state'));
+    var panels = Array.prototype.slice.call(root.querySelectorAll('.nb-panel'));
+    var bar = document.getElementById('heroProgress');
+    var count = document.getElementById('heroCount');
+    var toggle = document.getElementById('heroToggle');
+    var DWELL = 8000;
+    if (!tabs.length || tabs.length !== panels.length || !bar) return;
+    var index = 0, timer = null, userPaused = !!PREFERS_REDUCED_MOTION, hovering = false;
+    var track = bar.parentNode;
+    track.style.setProperty('--nb-dwell', DWELL + 'ms');
+
+    function running() { return !userPaused && !hovering && !document.hidden; }
+    function schedule() {
+      clearTimeout(timer);
+      track.classList.remove('is-running', 'is-paused', 'is-static');
+      void bar.offsetWidth; // reinicia la animacion de la barra
+      if (PREFERS_REDUCED_MOTION) { track.classList.add('is-static'); return; }
+      track.classList.add('is-running');
+      if (!running()) { track.classList.add('is-paused'); return; }
+      timer = setTimeout(function () { show(index + 1); }, DWELL);
+    }
+    function show(i, focusTab) {
+      index = (i + panels.length) % panels.length;
+      panels.forEach(function (p, n) { p.hidden = n !== index; });
+      tabs.forEach(function (t, n) {
+        t.setAttribute('aria-selected', String(n === index));
+        t.tabIndex = n === index ? 0 : -1;
+      });
+      if (count) count.textContent = '0' + (index + 1);
+      if (focusTab) tabs[index].focus();
+      schedule();
+    }
+    function sync() {
+      if (running()) schedule();
+      else { clearTimeout(timer); track.classList.add('is-paused'); }
+    }
+
+    tabs.forEach(function (t, n) {
+      t.addEventListener('click', function () { show(n); });
+      t.addEventListener('keydown', function (e) {
+        var k = e.key;
+        if (k === 'ArrowRight' || k === 'ArrowDown') { e.preventDefault(); show(index + 1, true); }
+        else if (k === 'ArrowLeft' || k === 'ArrowUp') { e.preventDefault(); show(index - 1, true); }
+        else if (k === 'Home') { e.preventDefault(); show(0, true); }
+        else if (k === 'End') { e.preventDefault(); show(panels.length - 1, true); }
+      });
+    });
+    document.getElementById('heroPrev').addEventListener('click', function () { show(index - 1); });
+    document.getElementById('heroNext').addEventListener('click', function () { show(index + 1); });
+    function reflectToggle() {
+      toggle.setAttribute('aria-pressed', String(userPaused));
+      toggle.setAttribute('aria-label', userPaused ? 'Resume rotation' : 'Pause rotation');
+    }
+    toggle.addEventListener('click', function () { userPaused = !userPaused; reflectToggle(); sync(); });
+    root.addEventListener('mouseenter', function () { hovering = true; sync(); });
+    root.addEventListener('mouseleave', function () { hovering = false; sync(); });
+    root.addEventListener('focusin', function () { hovering = true; sync(); });
+    root.addEventListener('focusout', function () { hovering = false; sync(); });
+    document.addEventListener('visibilitychange', sync);
+    reflectToggle();
+    show(0);
+  })();
+
   var burger = document.getElementById('topbarBurger'), topbar = document.getElementById('topbar');
   if (burger && topbar) {
     burger.addEventListener('click', function () {
