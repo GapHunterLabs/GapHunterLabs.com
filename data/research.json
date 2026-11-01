@@ -1,13 +1,13 @@
 {
-  "asOf": "2026-10-29",
-  "note": "Counts shown on the home page. Re-verify before changing: GitHub lists PR #3696 as closed because JetBrains integrates through its monorepo; the ticket IJPL-257919 is Fixed.",
+  "asOf": "2026-10-31",
+  "note": "Counts shown on the home page. Re-verify before changing: GitHub lists PRs #3696 and #3699 as closed because JetBrains integrates through its monorepo; the ticket IJPL-257919 is Fixed.",
   "upstreamPullRequests": {
     "repo": "JetBrains/intellij-community",
     "author": "kendjm",
     "total": 8,
-    "integrated": 1,
-    "open": 7,
-    "verifiedBy": "gh search prs --author kendjm --repo JetBrains/intellij-community (2026-10-29) + ticket state on YouTrack (2026-10-29)"
+    "integrated": 2,
+    "open": 6,
+    "verifiedBy": "gh search prs --author kendjm --repo JetBrains/intellij-community (2026-10-31) + ticket state on YouTrack (2026-10-29)"
   },
   "advisoriesClosedUpstream": {
     "count": 10,
