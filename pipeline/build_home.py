@@ -367,7 +367,8 @@ def build(dry_run: bool = False) -> None:
     html = inject(html, "<!-- PRERENDER:METRICS:START -->", "<!-- PRERENDER:METRICS:END -->",
                   metrics_html(data, research, vscode_total), "METRICS")
     html = inject(html, "<!-- PRERENDER:STACK:START -->", "<!-- PRERENDER:STACK:END -->", stack_html(), "STACK")
-    html = inject(html, "<!-- PRERENDER:FOCUS:START -->", "<!-- PRERENDER:FOCUS:END -->", focus_html(), "FOCUS")
+    html = inject(html, "<!-- PRERENDER:HEROCOUNT:START -->", "<!-- PRERENDER:HEROCOUNT:END -->",
+                  str(data["totalPlugins"] + vscode_total), "HEROCOUNT")
     html = inject(html, "<!-- PRERENDER:CATALOG:START -->", "<!-- PRERENDER:CATALOG:END -->", esc(catalog_line), "CATALOG")
 
     sponsors = load_sponsors()

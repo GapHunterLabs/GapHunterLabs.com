@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="/js/theme-init.js?v=d981b522"></script>
-<script src="/js/site-chrome.js?v=fecd3ac4" defer></script>
+<script src="/js/site-chrome.js?v=0d01d2e2" defer></script>
 <script src="/js/site-reveal.js?v=ee52008b" defer></script>
 <script src="/js/slug-shim.js?v=edba12cc" defer></script>
 <!-- Trimmed 2026-08-23 (indexing audit): was 218 chars, well past
@@ -280,7 +280,7 @@
 }
 </script>
 <link rel="stylesheet" href="/css/theme.css?v=b641a03e">
-<link rel="stylesheet" href="/css/home.css?v=959c9b5d">
+<link rel="stylesheet" href="/css/home.css?v=72c053b9">
 <link rel="stylesheet" href="/css/shell.css?v=e66359a0">
 <link rel="stylesheet" href="/css/tw.css?v=8b76ac4a">
 </head>
@@ -322,25 +322,27 @@
     <div class="nb-hero-copy">
       <p class="nb-kicker">Gap Hunter Labs &middot; independent engineering practice</p>
       <p class="nb-sync"><!-- PRERENDER:SYNC:START --><span class="live-dot" aria-hidden="true"></span><span>Catalog synced</span> <time datetime="2026-11-01">2026-11-01</time><!-- PRERENDER:SYNC:END --></p>
-      <h1 class="nb-hero-title" id="heroTitle">I find critical software failures and build the fix, down to the root cause.</h1>
-      <p class="nb-lede">I&rsquo;m Joel Díaz, and Gap Hunter Labs is my engineering practice. I analyze complex systems, audit codebases and investigate performance bottlenecks, critical security vulnerabilities (CVEs) and structural failures in developer tools, enterprise platforms and open-source ecosystems.</p>
-      <p class="nb-lede nb-lede-more">I follow each problem to its root cause and ship the precise fix that removes it: from upstream reports and patches to specialized tools and tailored audits. Every finding and fix published here is backed by verifiable technical evidence: tickets, pull requests, tests and a direct trail to the source.</p>
+      <h1 class="nb-hero-title" id="heroTitle">I trace bottlenecks, vulnerabilities and failures down to their root cause.</h1>
+      <p class="nb-lede">I&rsquo;m Joel Díaz, and Gap Hunter Labs is my engineering practice. I analyze complex systems, audit codebases and investigate performance, security and stability problems in developer tools, enterprise platforms and open-source ecosystems.</p>
+      <div class="nb-states" role="tablist" aria-label="Areas of work"><button class="nb-state" type="button" role="tab" id="heroTab1" aria-controls="heroPanel1" aria-selected="true" tabindex="0"><svg class="b-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z"/></svg><span class="nb-state-name">Performance</span><span class="nb-state-sub">Fewer bottlenecks</span></button><button class="nb-state" type="button" role="tab" id="heroTab2" aria-controls="heroPanel2" aria-selected="false" tabindex="-1"><svg class="b-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2 4 5v6c0 5 3.4 9.4 8 11 4.6-1.6 8-6 8-11V5l-8-3Zm-1 14-4-4 1.4-1.4L11 13.2l4.6-4.6L17 10l-6 6Z"/></svg><span class="nb-state-name">Security</span><span class="nb-state-sub">Fewer risks</span></button><button class="nb-state" type="button" role="tab" id="heroTab3" aria-controls="heroPanel3" aria-selected="false" tabindex="-1"><svg class="b-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m12 2 9 5v10l-9 5-9-5V7l9-5Zm0 2.3L5.5 7.9 12 11.5l6.5-3.6L12 4.3ZM5 9.6v6.2l6 3.3v-6.2L5 9.6Zm14 0-6 3.3v6.2l6-3.3V9.6Z"/></svg><span class="nb-state-name">Reliability</span><span class="nb-state-sub">More stability</span></button><button class="nb-state" type="button" role="tab" id="heroTab4" aria-controls="heroPanel4" aria-selected="false" tabindex="-1"><svg class="b-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8.6 16.6 4 12l4.6-4.6L10 8.8 6.8 12l3.2 3.2-1.4 1.4Zm6.8 0-1.4-1.4 3.2-3.2L14 8.8l1.4-1.4L20 12l-4.6 4.6Z"/></svg><span class="nb-state-name">Engineering</span><span class="nb-state-sub">Backed by evidence</span></button></div>
       <div class="nb-actions">
         <a class="btn primary" href="#work" data-goatcounter-click="cta-hero-work">Read the investigations</a>
         <a class="btn" href="/contact/?intent=hire" data-goatcounter-click="cta-hero-hire">Discuss an engagement</a>
       </div>
     </div>
-    <aside class="nb-profile" aria-label="Profile and method">
-      <figure class="nb-portrait">
-        <img src="/assets/img/joel-diaz.jpg" alt="Joel Díaz, founder of Gap Hunter Labs" width="800" height="816" loading="eager" decoding="async" fetchpriority="high">
-        <figcaption><span>Joel Díaz</span><span class="nb-portrait-rule" aria-hidden="true"></span><span>Independent engineering</span></figcaption>
-      </figure>
-      <ol class="nb-method-mini">
-        <li><span class="nb-step">01</span>I find the gap</li>
-        <li><span class="nb-step">02</span>I trace the cause</li>
-        <li><span class="nb-step">03</span>I build the fix</li>
-      </ol>
-      <div class="nb-focus" role="group" aria-label="Focus areas"><!-- PRERENDER:FOCUS:START --><div class="badge-row"><span class="badge badge--dark"><svg class="b-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8.6 16.6 4 12l4.6-4.6L10 8.8 6.8 12l3.2 3.2-1.4 1.4Zm6.8 0-1.4-1.4 3.2-3.2L14 8.8l1.4-1.4L20 12l-4.6 4.6Z"/></svg><span>Static analysis</span></span><span class="badge badge--dark"><svg class="b-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 4a10 10 0 0 0-8.7 15h2.2A8 8 0 1 1 18.5 19h2.2A10 10 0 0 0 12 4Zm4.5 4.5-4.2 4.2a2 2 0 1 0 1.4 1.4l4.2-4.2-1.4-1.4Z"/></svg><span>Performance</span></span><span class="badge badge--dark"><svg class="b-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2 4 5v6c0 5 3.4 9.4 8 11 4.6-1.6 8-6 8-11V5l-8-3Zm0 2.1 6 2.2V11c0 3.9-2.5 7.4-6 8.9-3.5-1.5-6-5-6-8.9V6.3l6-2.2Z"/></svg><span>Security research</span></span><span class="badge badge--dark"><svg class="b-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2 2 7l10 5 10-5-10-5Zm-8.2 9L2 12l10 5 10-5-1.8-1L12 15 3.8 11Zm0 5L2 17l10 5 10-5-1.8-1L12 20l-8.2-4Z"/></svg><span>Reliability</span></span></div><!-- PRERENDER:FOCUS:END --></div>
+    <aside class="nb-profile nb-hero-card" id="heroStates" aria-label="Real cases by area">
+      <header class="nb-card-head">
+        <img class="nb-avatar" src="/assets/img/joel-diaz.jpg" alt="Joel Díaz, founder of Gap Hunter Labs" width="56" height="56" loading="eager" decoding="async" fetchpriority="high">
+        <p class="nb-card-id"><span>Joel Díaz</span><span>Real cases &middot; engineering 2026</span></p>
+        <p class="nb-card-count" aria-hidden="true"><b id="heroCount">01</b> / 04</p>
+      </header>
+      <div class="nb-panels"><div class="nb-panel" role="tabpanel" id="heroPanel1" aria-labelledby="heroTab1"><p class="nb-panel-label"><span>01</span> &mdash; Performance</p><p class="nb-panel-metric"><span class="m-before">689&ndash;931 ms</span> <span class="nb-arrow" aria-hidden="true">&rarr;</span> <span class="m-after">8&ndash;22 ms</span></p><p class="nb-panel-scope">IntelliJ Platform &middot; Settings &rsaquo; Plugins</p><dl class="nb-panel-facts"><div><dt>Root cause</dt><dd>A dependency walk repeated for every plugin, on the UI thread</dd></div><div><dt>Intervention</dt><dd>One cached lookup set per plugin set</dd></div></dl><p class="nb-panel-foot"><span class="nb-panel-ref"><a href="https://youtrack.jetbrains.com/issue/IJPL-257909" target="_blank" rel="noopener">IJPL-257909</a> &middot; <a href="https://github.com/JetBrains/intellij-community/pull/3701" target="_blank" rel="noopener">PR #3701</a></span><span class="nb-panel-status is-open">In review</span></p></div><div class="nb-panel" role="tabpanel" id="heroPanel2" aria-labelledby="heroTab2"><p class="nb-panel-label"><span>02</span> &mdash; Security</p><p class="nb-panel-metric"><span class="m-before">10 advisories</span> <span class="nb-arrow" aria-hidden="true">&rarr;</span> <span class="m-after">0</span></p><p class="nb-panel-scope">reactive-commons-go &middot; Go</p><dl class="nb-panel-facts"><div><dt>Root cause</dt><dd>A dependency pinned inside the range of 3 critical advisories</dd></div><div><dt>Intervention</dt><dd>A report checked against OSV, with the fixing version</dd></div></dl><p class="nb-panel-foot"><span class="nb-panel-ref"><a href="https://github.com/bancolombia/reactive-commons-go/issues/5" target="_blank" rel="noopener">reactive-commons-go#5</a></span><span class="nb-panel-status is-fixed">Fixed upstream</span></p></div><div class="nb-panel" role="tabpanel" id="heroPanel3" aria-labelledby="heroTab3"><p class="nb-panel-label"><span>03</span> &mdash; Reliability</p><p class="nb-panel-metric"><span class="m-after">2 tickets</span> fixed by JetBrains</p><p class="nb-panel-scope">IntelliJ Platform &middot; concurrency</p><dl class="nb-panel-facts"><div><dt>Root cause</dt><dd>Iteration over an unsynchronized map; a blocking read action in a background task</dd></div><div><dt>Intervention</dt><dd>Root-cause analysis on each ticket, and a static check for the pattern</dd></div></dl><p class="nb-panel-foot"><span class="nb-panel-ref"><a href="https://youtrack.jetbrains.com/issue/IDEA-393501" target="_blank" rel="noopener">IDEA-393501</a> &middot; <a href="https://youtrack.jetbrains.com/issue/IJPL-200871" target="_blank" rel="noopener">IJPL-200871</a></span><span class="nb-panel-status is-fixed">Fixed upstream</span></p></div><div class="nb-panel" role="tabpanel" id="heroPanel4" aria-labelledby="heroTab4"><p class="nb-panel-label"><span>04</span> &mdash; Engineering tools</p><p class="nb-panel-metric"><span class="m-after"><!-- PRERENDER:HEROCOUNT:START -->179<!-- PRERENDER:HEROCOUNT:END --> tools</span> published</p><p class="nb-panel-scope">JetBrains Marketplace &middot; VS Code Marketplace</p><dl class="nb-panel-facts"><div><dt>Example</dt><dd>Background ReadAction Freeze Companion: a static check for blocking read actions</dd></div><div><dt>Example</dt><dd>Ansible Companion: Vault in the editor, plus security detectors</dd></div></dl><p class="nb-panel-foot"><span class="nb-panel-ref"><a href="#tools">Featured tools</a> &middot; <a href="#catalog">Full catalog</a></span><span class="nb-panel-status is-fixed">Published</span></p></div></div>
+      <footer class="nb-card-ctl">
+        <span class="nb-progress" aria-hidden="true"><i id="heroProgress"></i></span>
+        <button class="nb-ctl" type="button" id="heroPrev" aria-label="Previous case"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m14 6-6 6 6 6 1.4-1.4L10.8 12l4.6-4.6L14 6Z"/></svg></button>
+        <button class="nb-ctl" type="button" id="heroToggle" aria-label="Pause rotation" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path class="i-pause" d="M7 5h3.5v14H7V5Zm6.5 0H17v14h-3.5V5Z"/><path class="i-play" d="M8 5v14l11-7L8 5Z"/></svg></button>
+        <button class="nb-ctl" type="button" id="heroNext" aria-label="Next case"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m10 6-1.4 1.4 4.6 4.6-4.6 4.6L10 18l6-6-6-6Z"/></svg></button>
+      </footer>
     </aside>
   </section>
 
@@ -613,7 +615,7 @@
   </div>
 </footer>
 <!-- CHROME:FOOTER:END -->
-<script src="/js/home.js?v=6b2842d9" defer></script>
+<script src="/js/home.js?v=173dfa81" defer></script>
 <!-- Fase 3 del SuperPlan de SEO (2026-09-23): prefetch (no prerender) de
      los enlaces a /catalog/ -- moderate en vez de eager para no
      descargar los 146 al mismo tiempo, solo los que el visitante
