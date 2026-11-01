@@ -96,7 +96,7 @@
   // ---- buscador del topbar (2026-10-05) --------------------------------
   // site-search.js y el indice se cargan recien al abrir el buscador (clic,
   // Ctrl/Cmd+K o "/"). build_search_index.py escribe la URL con su hash.
-  var SEARCH_SRC = /*SEARCH_SRC*/'/js/site-search.js?v=48356328'/*ENDSEARCH_SRC*/;
+  var SEARCH_SRC = /*SEARCH_SRC*/'/js/site-search.js?v=8c2c0309'/*ENDSEARCH_SRC*/;
   var searchLoading = false;
   function openSearch(trigger) {
     if (window.GHLSearch) { window.GHLSearch.open(trigger); return; }

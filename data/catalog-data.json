@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-31 10:40:37 UTC",
+  "generatedAt": "2026-11-01 00:38:16 UTC",
   "totalPlugins": 146,
   "totalDownloads": 13044,
   "pending": 0,
@@ -7,10 +7,6 @@
   "totalReviews": 0,
   "avgRating": null,
   "trend7d": [
-    {
-      "date": "2026-10-25",
-      "totalDownloads": 12376
-    },
     {
       "date": "2026-10-26",
       "totalDownloads": 12415
@@ -34,45 +30,13 @@
     {
       "date": "2026-10-31",
       "totalDownloads": 13044
+    },
+    {
+      "date": "2026-11-01",
+      "totalDownloads": 13044
     }
   ],
-  "recentChanges": [
-    {
-      "date": "2026-10-31",
-      "type": "growth",
-      "name": "Mermaid Companion",
-      "niche": "Diagrams",
-      "delta": 22
-    },
-    {
-      "date": "2026-10-31",
-      "type": "growth",
-      "name": "XSD Companion",
-      "niche": "XSD/WSDL Tooling",
-      "delta": 3
-    },
-    {
-      "date": "2026-10-31",
-      "type": "growth",
-      "name": "React Native Companion",
-      "niche": "React Native Tooling",
-      "delta": 3
-    },
-    {
-      "date": "2026-10-31",
-      "type": "growth",
-      "name": "API Security Companion",
-      "niche": "API Security",
-      "delta": 3
-    },
-    {
-      "date": "2026-10-31",
-      "type": "growth",
-      "name": "Kafka Topic Feedback-Loop Companion",
-      "niche": "Kafka / Messaging Bugs",
-      "delta": 2
-    }
-  ],
+  "recentChanges": [],
   "plugins": [
     {
       "xmlId": "dev.gaphunter.mermaidcompanion",
