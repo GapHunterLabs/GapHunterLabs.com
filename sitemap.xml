@@ -913,12 +913,12 @@
     <lastmod>2026-09-28</lastmod>
   </url>
   <url>
-    <loc>https://gaphunterlabs.com/catalog/dependency-vulnerability-companion/</loc>
-    <lastmod>2026-10-04</lastmod>
-  </url>
-  <url>
     <loc>https://gaphunterlabs.com/catalog/cert-companion/</loc>
     <lastmod>2026-09-28</lastmod>
+  </url>
+  <url>
+    <loc>https://gaphunterlabs.com/catalog/dependency-vulnerability-companion/</loc>
+    <lastmod>2026-10-04</lastmod>
   </url>
   <url>
     <loc>https://gaphunterlabs.com/catalog/xsd-companion/</loc>
@@ -1085,15 +1085,15 @@
     <lastmod>2026-09-22</lastmod>
   </url>
   <url>
+    <loc>https://gaphunterlabs.com/catalog/cassandra-cqlsession-reuse-companion/</loc>
+    <lastmod>2026-09-22</lastmod>
+  </url>
+  <url>
     <loc>https://gaphunterlabs.com/catalog/terraform-iam-wildcard-companion/</loc>
     <lastmod>2026-09-22</lastmod>
   </url>
   <url>
     <loc>https://gaphunterlabs.com/catalog/apache-httpclient-reuse-companion/</loc>
-    <lastmod>2026-09-22</lastmod>
-  </url>
-  <url>
-    <loc>https://gaphunterlabs.com/catalog/cassandra-cqlsession-reuse-companion/</loc>
     <lastmod>2026-09-22</lastmod>
   </url>
   <url>
@@ -1121,6 +1121,10 @@
     <lastmod>2026-09-22</lastmod>
   </url>
   <url>
+    <loc>https://gaphunterlabs.com/catalog/gradle-task-graph-companion/</loc>
+    <lastmod>2026-09-22</lastmod>
+  </url>
+  <url>
     <loc>https://gaphunterlabs.com/catalog/k8s-resource-limit-companion/</loc>
     <lastmod>2026-09-22</lastmod>
   </url>
@@ -1129,15 +1133,15 @@
     <lastmod>2026-09-22</lastmod>
   </url>
   <url>
-    <loc>https://gaphunterlabs.com/catalog/gradle-task-graph-companion/</loc>
-    <lastmod>2026-09-22</lastmod>
-  </url>
-  <url>
     <loc>https://gaphunterlabs.com/catalog/k8s-label-selector-exposure-companion/</loc>
     <lastmod>2026-09-22</lastmod>
   </url>
   <url>
     <loc>https://gaphunterlabs.com/catalog/redos-catastrophic-backtracking-companion/</loc>
+    <lastmod>2026-09-22</lastmod>
+  </url>
+  <url>
+    <loc>https://gaphunterlabs.com/catalog/kafka-premature-offset-commit-companion/</loc>
     <lastmod>2026-09-22</lastmod>
   </url>
   <url>
@@ -1150,10 +1154,6 @@
   </url>
   <url>
     <loc>https://gaphunterlabs.com/catalog/k8s-readiness-liveness-probe-companion/</loc>
-    <lastmod>2026-09-22</lastmod>
-  </url>
-  <url>
-    <loc>https://gaphunterlabs.com/catalog/kafka-premature-offset-commit-companion/</loc>
     <lastmod>2026-09-22</lastmod>
   </url>
   <url>
@@ -1325,11 +1325,11 @@
     <lastmod>2026-09-22</lastmod>
   </url>
   <url>
-    <loc>https://gaphunterlabs.com/catalog/lucene-query-injection-companion/</loc>
+    <loc>https://gaphunterlabs.com/catalog/connection-pool-config-companion/</loc>
     <lastmod>2026-09-22</lastmod>
   </url>
   <url>
-    <loc>https://gaphunterlabs.com/catalog/connection-pool-config-companion/</loc>
+    <loc>https://gaphunterlabs.com/catalog/lucene-query-injection-companion/</loc>
     <lastmod>2026-09-22</lastmod>
   </url>
   <url>
@@ -1385,6 +1385,10 @@
     <lastmod>2026-09-22</lastmod>
   </url>
   <url>
+    <loc>https://gaphunterlabs.com/catalog/ssrf-allowlist-bypass-companion/</loc>
+    <lastmod>2026-09-22</lastmod>
+  </url>
+  <url>
     <loc>https://gaphunterlabs.com/catalog/thread-confinement-escape-companion/</loc>
     <lastmod>2026-09-22</lastmod>
   </url>
@@ -1402,10 +1406,6 @@
   </url>
   <url>
     <loc>https://gaphunterlabs.com/catalog/second-order-sqli-field-companion/</loc>
-    <lastmod>2026-09-22</lastmod>
-  </url>
-  <url>
-    <loc>https://gaphunterlabs.com/catalog/ssrf-allowlist-bypass-companion/</loc>
     <lastmod>2026-09-22</lastmod>
   </url>
   <url>
