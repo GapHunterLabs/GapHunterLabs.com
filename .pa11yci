@@ -3,7 +3,7 @@
     "runners": ["axe"],
     "standard": "WCAG2AA",
     "timeout": 60000,
-    "wait": 500,
+    "wait": 1000,
     "concurrency": 2,
     "chromeLaunchConfig": { "args": ["--no-sandbox", "--disable-dev-shm-usage", "--force-prefers-reduced-motion"] },
     "ignore": []
