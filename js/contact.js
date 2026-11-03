@@ -237,7 +237,7 @@
     submitBtn.disabled = true;
     setStatus('pending', t('Sending…', 'Enviando…'));
     track('contact-' + cfg.label + '-send');
-    fetch(WEB3FORMS_ENDPOINT, { method: 'POST', body: payload })
+    fetch(WEB3FORMS_ENDPOINT, { method: 'POST', headers: { 'Accept': 'application/json' }, body: payload })
       .then(function (r) { return r.json(); })
       .then(function (res) {
         submitBtn.disabled = false;
