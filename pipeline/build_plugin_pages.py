@@ -702,14 +702,15 @@ class PluginRenderer:
         dl = "Pending moderation" if pending else thousands(s["downloads"]) + " downloads"
         price_key = "pending" if pending else (s.get("pricing") or "FREE").lower()
         price = "Pending" if pending else {"FREE": "Free", "FREEMIUM": "Freemium", "PAID": "Paid"}.get(s.get("pricing"), "Free")
+        # No aria-label: visible text is the accessible name (WCAG 2.5.3).
         return (
-            '<a class="rel-card" href="/catalog/%s/" aria-label="%s details">'
+            '<a class="rel-card" href="/catalog/%s/">'
             '<div class="rel-head"><span class="card-cat" style="--cat:%s" title="%s" aria-hidden="true">%s</span>'
             '<span class="price-badge price-%s">%s</span></div>'
             '<div class="rel-name">%s</div><div class="rel-niche">%s</div>'
             '<p class="rel-pitch">%s</p>'
             '<div class="rel-foot"><span>%s</span><span class="rel-go">Details</span></div></a>'
-        ) % (esc(s["repo"]), esc(s["name"]), color, esc(cat["label"]), self.cat_icon_html(s["categoryKey"]),
+        ) % (esc(s["repo"]), color, esc(cat["label"]), self.cat_icon_html(s["categoryKey"]),
              price_key, price, esc(s["name"]), esc(s.get("niche")), esc(pitch_text(s.get("pitch")) or ""), dl)
 
     # ---- compartir --------------------------------------------------------
@@ -877,13 +878,14 @@ class PluginRenderer:
 
     def vsx_card_html(self, o):
         n = o.get("installs") or 0
+        # No aria-label: visible text is the accessible name (WCAG 2.5.3).
         return (
-            '<a class="rel-card" href="/catalog/vscode/%s/" aria-label="%s details">'
+            '<a class="rel-card" href="/catalog/vscode/%s/">'
             '<div class="rel-head"><span class="card-cat" style="--cat:var(--accent)" aria-hidden="true">%s</span>'
             '<span class="price-badge price-free">Free</span></div>'
             '<div class="rel-name">%s</div><div class="rel-niche">%s</div><p class="rel-pitch">%s</p>'
             '<div class="rel-foot"><span>%s %s</span><span class="rel-go">Details</span></div></a>'
-        ) % (esc(o["name"]), esc(o["displayName"]), self.src.icons["vscode"], esc(o["displayName"]),
+        ) % (esc(o["name"]), self.src.icons["vscode"], esc(o["displayName"]),
              esc(o.get("niche")), esc(pitch_text(o.get("pitch")) or ""), thousands(n), "install" if n == 1 else "installs")
 
     def vsx_body_html(self, e):
@@ -1033,7 +1035,10 @@ class PluginRenderer:
 
 CATALOG_JSONLD_RE = re.compile(
     r'<script type="application/ld\+json" id="catalog-jsonld">.*?</script>\s*', re.S)
-MAIN_RE = re.compile(r'(<main class="wrap">).*?(</main>)', re.S)
+# Tolera atributos previos a class="wrap" -- desde la Fase 0 de accesibilidad
+# (2026-11-02) el <main> del shell lleva id="main-content" tabindex="-1" para el
+# skip-link, y al conservar \1 cada ficha hereda ese landmark enfocable.
+MAIN_RE = re.compile(r'(<main\b[^>]*\bclass="wrap">).*?(</main>)', re.S)
 # Fase 2 (2026-09-22): catalog/index.html ya no tiene loader ni carga
 # catalog-shared.js (su grid/tabla vienen pre-renderizados, ver
 # pipeline/build_catalog_grid.py) -- el ancla pasa a ser vscode-catalog.js,
@@ -1082,7 +1087,11 @@ class Shell:
         # de esa pagina (por que la CSP dice lo que dice, etc.): valiosos en
         # el fuente, 8 KB repetidos 146 veces aca. Se quitan solo de las
         # copias generadas; el original no se toca.
-        html = re.sub(r"<!--(?!\[if).*?-->\s*", "", html, flags=re.S)
+        # Se preservan los marcadores LANG:* : pipeline/build_i18n.py regenera
+        # el selector de idioma entre ellos para /es/, de modo que las fichas
+        # en espanol muestren el codigo "ES" y un nombre accesible coherente
+        # (WCAG 2.5.3). Sin los marcadores, la copia ES heredaba el boton EN.
+        html = re.sub(r"<!--(?!\[if)(?! LANG:).*?-->\s*", "", html, flags=re.S)
         for marker in ('<meta charset="UTF-8">', '@@BODY@@', '@@JSONLD@@',
                        'id="topbarBurger"', 'class="site-footer'):
             if marker not in html:

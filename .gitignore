@@ -15,5 +15,9 @@ _review/*.png
 pipeline/node_modules/
 pipeline/package-lock.json
 
+# Accessibility gate (a11y/run-axe.mjs): puppeteer + axe-core installed in CI.
+# The lockfile is committed for reproducible `npm ci`; the modules are not.
+a11y/node_modules/
+
 # Archivo de trabajo de build_i18n.py --extract (se regenera)
 pipeline/i18n/es.todo.json

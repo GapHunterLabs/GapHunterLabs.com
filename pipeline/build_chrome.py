@@ -140,6 +140,11 @@ def page_path(rel):
 def lang_switch_html(lang, en_path, es_path):
     """Menu EN/ES. lang = idioma de la pagina actual."""
     label = "Language" if lang == "en" else "Idioma"
+    # WCAG 2.5.3 (Label in Name): the button's visible text is the language
+    # code (EN/ES), so its accessible name must contain that code. axe strips
+    # parenthesised text from the accessible name, so a colon (not parentheses)
+    # keeps the code as a matchable part of the name: "Language: EN".
+    btn_label = "%s: %s" % (label, lang.upper())
     items = "".join(
         '<a class="gh-pop-item" href="%s" hreflang="%s" lang="%s"%s>%s</a>'
         % (href, code, code, ' aria-current="true"' if code == lang else "", text)
@@ -148,7 +153,7 @@ def lang_switch_html(lang, en_path, es_path):
             '<button type="button" class="gh-icon-btn gh-lang-btn" data-menu-toggle aria-expanded="false" aria-label="%s">'
             '%s<span class="gh-lang-code">%s</span></button>'
             '<div class="gh-pop" data-menu hidden role="group" aria-label="%s">%s</div></div>' + LANG_END) % (
-        label, GLOBE, lang.upper(), label, items)
+        btn_label, GLOBE, lang.upper(), label, items)
 
 
 def alternates_html(en_path, es_path):

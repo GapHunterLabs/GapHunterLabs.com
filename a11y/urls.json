@@ -1,0 +1,30 @@
+{
+  "comment": "Paths checked by the accessibility gate. Served from the repo root. Both language trees and both color themes are covered. Keep in sync with the sitemap's indexable funnel pages.",
+  "paths": [
+    "/",
+    "/catalog/",
+    "/catalog/ansible-companion/",
+    "/methodology/",
+    "/contact/",
+    "/services/",
+    "/plugin-performance-audit/",
+    "/security/",
+    "/privacy/",
+    "/terms/",
+    "/eula/",
+    "/sponsors/",
+    "/ghl-jail/",
+    "/engineering-evidence/",
+    "/engineering-evidence/case-studies/",
+    "/engineering-evidence/jetbrains-platform-tickets/",
+    "/engineering-evidence/open-source-security-reports/",
+    "/engineering-evidence/third-party-plugin-audits/",
+    "/es/",
+    "/es/catalogo/",
+    "/es/catalogo/ansible-companion/",
+    "/es/metodologia/",
+    "/es/contacto/",
+    "/es/servicios/",
+    "/es/ingenieria-y-evidencia/"
+  ]
+}

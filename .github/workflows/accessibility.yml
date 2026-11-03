@@ -1,15 +1,17 @@
 name: Accessibility (axe)
 
-# Runs axe (via pa11y-ci) against the built static pages on every PR that
-# touches markup, styles or scripts, and fails if any WCAG 2 AA violation is
-# found. GitHub Pages deploys from main, so this is the gate that keeps the
-# live site free of accessibility regressions.
+# Runs axe-core over the built static pages and fails on any WCAG 2.1 AA
+# violation. GitHub Pages deploys from main, so this gate keeps the live site
+# free of accessibility regressions.
 #
-# Baseline (2026-11-02): the URL list in .pa11yci covers the pages that already
-# pass axe clean. Six pages carry pre-existing color-contrast debt and are held
-# out until remediated: /, /catalog/, /catalog/<plugin>/, /methodology/ and
-# their /es/ equivalents. The debt is text over category-tinted (--cat)
-# backgrounds, not a plain token swap. Add each page here as it is fixed.
+# Engine (2026-11-03): a self-contained runner (a11y/run-axe.mjs) injects a
+# current axe-core (4.14) into a current headless Chromium managed by
+# puppeteer, and checks every funnel page in both the light and dark color
+# schemes. It replaced `npx pa11y-ci@3`, which bundles axe-core 4.2 — an engine
+# old enough to report color-contrast false positives on modern CSS (color-mix
+# tints) that no current browser mis-renders. Using @axe-core/cli instead hit a
+# ChromeDriver/Chrome version mismatch; a puppeteer-managed browser avoids a
+# separate driver entirely. The checked URLs live in a11y/urls.json.
 
 on:
   pull_request:
@@ -17,8 +19,10 @@ on:
       - "**.html"
       - "**.css"
       - "**.js"
-      - ".pa11yci"
+      - "a11y/**"
       - ".github/workflows/accessibility.yml"
+  push:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -31,6 +35,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
 
+      - name: Install gate dependencies (puppeteer + axe-core)
+        working-directory: a11y
+        run: npm ci
+
       - name: Serve the static site
         run: |
           python3 -m http.server 8080 --directory . &
@@ -40,5 +48,8 @@ jobs:
           done
           curl -sf http://localhost:8080/ > /dev/null
 
-      - name: Run axe (pa11y-ci)
-        run: npx --yes pa11y-ci@3
+      - name: Run axe (WCAG 2.1 AA, light + dark)
+        working-directory: a11y
+        env:
+          BASE_URL: http://localhost:8080
+        run: node run-axe.mjs

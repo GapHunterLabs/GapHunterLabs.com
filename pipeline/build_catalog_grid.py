@@ -94,14 +94,18 @@ def card_html(p, renderer: PluginRenderer, src: Sources) -> str:
     downloads = ("Pending moderation" if is_pending else
                  '<span class="dl-icon">%s</span><span class="card-dl">%s</span> downloads'
                  % (src.icons["downloads"], thousands(p["downloads"])))
+    # No aria-label: the card's visible text (name, niche, pitch, downloads,
+    # "Details") is the accessible name, so it satisfies WCAG 2.5.3 (Label in
+    # Name). A short aria-label here would drop most of that visible text and
+    # axe flags the mismatch (label-content-name-mismatch).
     return (
-        '<a class="plugin-card" href="/catalog/%s/" aria-label="%s details" %s>'
+        '<a class="plugin-card" href="/catalog/%s/" %s>'
         '<div class="card-header">'
         '<span class="card-cat" style="--cat:%s" title="%s" aria-hidden="true">%s</span>%s</div>'
         '<div class="card-top"><div class="card-name">%s</div><div class="card-niche">%s</div></div>'
         '<p class="card-pitch">%s</p>'
         '<div class="card-metrics"><span class="card-dl-wrap">%s</span><span class="card-go">Details</span></div></a>'
-    ) % (esc(p["repo"]), esc(p["name"]), " ".join(attrs), color, esc(cat["label"]),
+    ) % (esc(p["repo"]), " ".join(attrs), color, esc(cat["label"]),
          renderer.cat_icon_html(p["categoryKey"]), price_badge, esc(p["name"]), esc(p.get("niche")),
          esc(pitch_text(p.get("pitch")) or ""), downloads)
 
@@ -243,15 +247,16 @@ def build(dry_run: bool = False) -> None:
         # 2026-09-27: enlaza a la ficha propia (/catalog/vscode/<name>/); mismo
         # markup que cardHtml() de js/catalog-vsx.js.
         n = e.get("installs") or 0
+        # No aria-label: visible text is the accessible name (WCAG 2.5.3).
         return (
-            '<a class="vsx-card" href="/catalog/vscode/%s/" aria-label="%s details">'
+            '<a class="vsx-card" href="/catalog/vscode/%s/">'
             '<div class="card-header"><span class="card-cat vsx-mark" aria-hidden="true">%s</span>'
             '<span class="price-badge price-free">Free</span></div>'
             '<div class="card-top"><div class="card-name">%s</div><div class="card-niche">%s</div></div>'
             '<p class="card-pitch">%s</p>'
             '<div class="card-metrics"><span class="card-dl-wrap">%s %s</span>'
             '<span class="card-go">Details</span></div></a>'
-            % (esc(e.get("name")), esc(e.get("displayName")), VS_ICON, esc(e.get("displayName")), esc(e.get("niche")),
+            % (esc(e.get("name")), VS_ICON, esc(e.get("displayName")), esc(e.get("niche")),
                esc(pitch_text(e.get("pitch"))), thousands(n), "install" if n == 1 else "installs"))
 
     html = inject(html, "<!-- PRERENDER:VSXSUB:START -->", "<!-- PRERENDER:VSXSUB:END -->",
