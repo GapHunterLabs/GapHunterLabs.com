@@ -55,7 +55,8 @@
              'Describe el problema o el trabajo. Antes de empezar cualquier trabajo, te envío por escrito el alcance, la fecha de entrega y el precio. Respondo personalmente por correo.'),
       submitLabel: t('Email me', 'Escríbeme'),
       fields: [
-        { name: 'org', label: t('Company or project', 'Empresa o proyecto'), type: 'text', required: true, placeholder: t('Your company, team or project', 'Tu empresa, equipo o proyecto') },
+        { name: 'org', label: t('Company or project', 'Empresa o proyecto'), type: 'text', required: true, half: true, placeholder: t('Your company, team or project', 'Tu empresa, equipo o proyecto') },
+        { name: 'email', label: t('Your email', 'Tu correo'), type: 'email', required: true, half: true, placeholder: t('So I can reply to you', 'Para poder responderte') },
         { name: 'service', label: t('What do you need?', '¿Qué necesitas?'), prompt: t('Select one', 'Elige una opción'), type: 'select', required: true,
           options: [t('Investigation of a specific problem (performance, security or reliability)', 'Investigación de un problema concreto (rendimiento, seguridad o fiabilidad)'),
                     t('Plugin performance audit', 'Auditoría de rendimiento de un plugin'),
@@ -75,17 +76,25 @@
              'Cuéntame sobre tu organización y lo que tienes en mente. Esto va por correo, nunca como un issue público.'),
       submitLabel: t('Send by email', 'Enviar por correo'),
       fields: [
-        { name: 'org', label: t('Organization', 'Organización'), type: 'text', required: true, placeholder: t('Your company or project', 'Tu empresa o proyecto') },
+        { name: 'org', label: t('Organization', 'Organización'), type: 'text', required: true, half: true, placeholder: t('Your company or project', 'Tu empresa o proyecto') },
+        { name: 'email', label: t('Your email', 'Tu correo'), type: 'email', required: true, half: true, placeholder: t('So I can reply to you', 'Para poder responderte') },
         { name: 'message', label: t('Message', 'Mensaje'), type: 'textarea', max: 1000, required: true, placeholder: t('What kind of partnership are you thinking of?', '¿Qué tipo de alianza tienes en mente?') }
       ]
     }
   };
   var CONTACT_EMAIL = 'contact@gaphunterlabs.com';
+  // Backend del formulario: Web3Forms (gratis, sin servidor propio). La access
+  // key es PUBLICA por diseno (va en el cliente), no es un secreto. Los envios
+  // de "hire"/"partnership" van por aqui -> correo a contact@gaphunterlabs.com.
+  // "gap"/"plugin" siguen abriendo un issue publico de GitHub a proposito.
+  var WEB3FORMS_KEY = 'afb6ebc1-d92b-46b6-ab6c-d78421e309cd';
+  var WEB3FORMS_ENDPOINT = 'https://api.web3forms.com/submit';
 
   var fieldsHost = document.getElementById('cfFields');
   var titleEl = document.getElementById('cfTitle');
   var subEl = document.getElementById('cfSub');
   var submitBtn = document.getElementById('cfSubmit');
+  var statusEl = document.getElementById('cfStatus');
   var form = document.getElementById('contactForm');
   var qaItems = document.querySelectorAll('.qa-item[data-target]');
   var currentKey = 'gap';
@@ -130,7 +139,9 @@
       body = '<textarea id="cf-' + esc(f.name) + '" name="' + esc(f.name) + '" data-max="' + Number(f.max) + '" placeholder="' + esc(f.placeholder || '') + '"' + (f.required ? ' required' : '') + '></textarea>' +
         '<span class="cf-counter" data-counter-for="cf-' + esc(f.name) + '">0/' + Number(f.max) + '</span>';
     } else {
-      body = '<input type="text" id="cf-' + esc(f.name) + '" name="' + esc(f.name) + '" placeholder="' + esc(f.placeholder || '') + '"' + (f.required ? ' required' : '') + '>';
+      var inputType = f.type === 'email' ? 'email' : 'text';
+      var auto = f.type === 'email' ? ' autocomplete="email" inputmode="email"' : '';
+      body = '<input type="' + inputType + '" id="cf-' + esc(f.name) + '" name="' + esc(f.name) + '"' + auto + ' placeholder="' + esc(f.placeholder || '') + '"' + (f.required ? ' required' : '') + '>';
     }
     return '<div class="cf-field">' + label + body + '</div>';
   }
@@ -203,6 +214,53 @@
     host.querySelector('[data-copy-kind="message"]').addEventListener('click', function (ev) { copyText(t('Subject: ', 'Asunto: ') + subject + '\n\n' + body, ev.currentTarget); track('contact-copy-message'); });
   }
 
+  function setStatus(kind, msg) {
+    if (!statusEl) return;
+    statusEl.hidden = false;
+    statusEl.className = 'cf-status is-' + kind;
+    statusEl.textContent = msg;
+  }
+
+  // Envio real por backend (Web3Forms) para los formularios de lead
+  // (hire/partnership). Sin cliente de correo: POST directo, confirmacion
+  // accesible en #cfStatus (role=status aria-live), y si algo falla se cae al
+  // respaldo de copiar/pegar hacia el correo.
+  function sendViaBackend(cfg, data, subject, body) {
+    var payload = new FormData();
+    payload.append('access_key', WEB3FORMS_KEY);
+    payload.append('subject', subject);
+    payload.append('from_name', 'Gap Hunter Labs — ' + cfg.title);
+    var email = data.get('email');
+    if (email) payload.append('replyto', String(email));
+    payload.append('botcheck', '');              // honeypot: un bot lo marca -> Web3Forms lo rechaza
+    payload.append('message', body);             // cuerpo legible con todos los campos
+    submitBtn.disabled = true;
+    setStatus('pending', t('Sending…', 'Enviando…'));
+    track('contact-' + cfg.label + '-send');
+    fetch(WEB3FORMS_ENDPOINT, { method: 'POST', body: payload })
+      .then(function (r) { return r.json(); })
+      .then(function (res) {
+        submitBtn.disabled = false;
+        if (res && res.success) {
+          setStatus('ok', t('Thanks — your message reached me. I reply personally by email.',
+                            'Gracias — tu mensaje me llegó. Respondo personalmente por correo.'));
+          form.reset();
+          fieldsHost.querySelectorAll('textarea[data-max]').forEach(function (ta) { ta.dispatchEvent(new Event('input')); });
+          track('contact-' + cfg.label + '-ok');
+        } else {
+          setStatus('error', t('Something went wrong sending the form. You can email me directly:',
+                               'Algo falló al enviar el formulario. Puedes escribirme directamente:'));
+          showFallback(subject, body);
+        }
+      })
+      .catch(function () {
+        submitBtn.disabled = false;
+        setStatus('error', t('Could not reach the form service. You can email me directly:',
+                             'No se pudo contactar el servicio del formulario. Puedes escribirme directamente:'));
+        showFallback(subject, body);
+      });
+  }
+
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     var cfg = CONFIGS[currentKey];
@@ -214,9 +272,7 @@
         var v = data.get(f.name);
         return f.label + ':\n' + (v ? String(v) : t('(not provided)', '(sin completar)'));
       }).join('\n\n');
-      showFallback(subject, body);
-      track('contact-' + cfg.label + '-send');
-      window.location.href = 'mailto:' + CONTACT_EMAIL + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+      sendViaBackend(cfg, data, subject, body);
       return;
     }
     var issueTitle = '[' + cfg.label + '] ' + String(titleSeed).slice(0, 80);

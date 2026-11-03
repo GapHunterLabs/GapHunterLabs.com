@@ -9,7 +9,7 @@
 <script src="/js/site-reveal.js?v=ee52008b" defer></script>
 <meta name="description" content="Write to me about audits and engineering work, plugin support or partnerships, by email, GitHub, JetBrains Marketplace or LinkedIn.">
 <meta name="referrer" content="strict-origin-when-cross-origin">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://gc.zgo.at; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; media-src 'self'; manifest-src 'self'; connect-src https://gaphunterlabs.goatcounter.com; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://gc.zgo.at; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; media-src 'self'; manifest-src 'self'; connect-src https://gaphunterlabs.goatcounter.com https://api.web3forms.com; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="theme-color" content="#F6F8FA" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0F1115" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="/favicon.ico" sizes="48x48">
@@ -48,7 +48,7 @@
 <meta name="twitter:image" content="https://gaphunterlabs.com/og-contact.png?v=4">
 <meta name="twitter:image:alt" content="Get in touch with Gap Hunter Labs">
 <link rel="stylesheet" href="/css/theme.css?v=b641a03e">
-<link rel="stylesheet" href="/css/base.css?v=a5a428ba">
+<link rel="stylesheet" href="/css/base.css?v=f5309b4e">
 <style>
   @font-face {
     font-family: "IBM Plex Sans";
@@ -281,6 +281,7 @@
           <button type="submit" class="cf-submit" id="cfSubmit">Email me <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></button>
         </div>
       </form>
+      <div class="cf-status" id="cfStatus" role="status" aria-live="polite" hidden></div>
       <div class="cf-fallback" id="cfFallback" hidden></div>
       <p class="cf-direct">Prefer email? Write to <a href="mailto:contact@gaphunterlabs.com">contact@gaphunterlabs.com</a> <button type="button" class="btn cf-copy" data-copy="contact@gaphunterlabs.com">Copy email</button></p>
     </div>
@@ -344,7 +345,7 @@
 </footer>
 <!-- CHROME:FOOTER:END -->
 <script src="/js/shell.js?v=9e040297" defer></script>
-<script src="/js/contact.js?v=00340d8f" defer></script>
+<script src="/js/contact.js?v=db017ac7" defer></script>
 <script data-goatcounter="https://gaphunterlabs.goatcounter.com/count"
         async src="https://gc.zgo.at/count.js"></script>
 </body>

@@ -50,7 +50,7 @@
 <meta name="twitter:image:alt" content="Plugin updates for new IDE versions, from USD 4.500 — Gap Hunter Labs">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"¿Cómo se actualiza un plugin de JetBrains a una nueva versión de la IntelliJ Platform sin romperlo?","acceptedAnswer":{"@type":"Answer","text":"Reemplazo las llamadas a API eliminadas u obsoletas en las versiones objetivo por su equivalente soportado, migro la compilación de Gradle al IntelliJ Platform Gradle Plugin vigente y a su nueva configuración, y compilo y pruebo el plugin con el nuevo modo del compilador de Kotlin donde las versiones objetivo lo exigen. Resuelvo o explico cada error y advertencia de Plugin Verifier para cada versión objetivo, y entrego los cambios como un pull request que compila en verde contra cada versión del IDE incluida en el alcance."}},{"@type":"Question","name":"¿Cuál es la diferencia entre una actualización menor y una mayor de un plugin?","acceptedAnswer":{"@type":"Answer","text":"Una actualización menor cubre las API obsoletas, el paso al plugin de Gradle vigente y las advertencias de Plugin Verifier. Una actualización mayor cubre las API eliminadas, el nuevo modo del compilador de Kotlin o un plugin con varios módulos. Entrego ambas como un pull request con el informe de Plugin Verifier de cada versión que soportas."}}]}</script>
 <link rel="stylesheet" href="/css/theme.css?v=b641a03e">
-<link rel="stylesheet" href="/css/base.css?v=a5a428ba">
+<link rel="stylesheet" href="/css/base.css?v=f5309b4e">
 <style>
   @font-face {
     font-family: "IBM Plex Sans";

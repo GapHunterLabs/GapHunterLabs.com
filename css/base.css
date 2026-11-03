@@ -410,6 +410,14 @@
 .writing-meta { margin: 0 0 6px; color: var(--text-dim); font: 500 12.5px/1.5 var(--mono); letter-spacing: 0.04em; }
 .writing-byline { margin: 12px 0 0; color: var(--text-dim); font: 500 13px/1.5 var(--mono); letter-spacing: 0.02em; }
 
+/* Contact form backend (Web3Forms) status. Text stays --text on a neutral/good
+   surface so contrast is safe in both themes; the semantic color is in the
+   border only. */
+.cf-status { margin-top: 16px; padding: 12px 14px; border-radius: var(--radius-md); border: 1px solid var(--border); background: var(--surface-2); color: var(--text); font: 500 14px/1.55 var(--sans); }
+.cf-status.is-ok { border-color: var(--good); background: var(--good-bg); }
+.cf-status.is-error { border-color: var(--signal); }
+.cf-status.is-pending { color: var(--text-dim); }
+
 .back-link {
     display: inline-block;
     margin-top: 8px;
