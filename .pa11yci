@@ -5,7 +5,7 @@
     "timeout": 60000,
     "wait": 500,
     "concurrency": 2,
-    "chromeLaunchConfig": { "args": ["--no-sandbox", "--disable-dev-shm-usage"] },
+    "chromeLaunchConfig": { "args": ["--no-sandbox", "--disable-dev-shm-usage", "--force-prefers-reduced-motion"] },
     "ignore": []
   },
   "urls": [
