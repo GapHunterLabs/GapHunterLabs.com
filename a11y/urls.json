@@ -5,6 +5,8 @@
     "/catalog/",
     "/catalog/ansible-companion/",
     "/methodology/",
+    "/writing/",
+    "/writing/background-readaction-freeze/",
     "/contact/",
     "/services/",
     "/plugin-performance-audit/",
@@ -23,6 +25,8 @@
     "/es/catalogo/",
     "/es/catalogo/ansible-companion/",
     "/es/metodologia/",
+    "/es/escritos/",
+    "/es/escritos/background-readaction-freeze/",
     "/es/contacto/",
     "/es/servicios/",
     "/es/ingenieria-y-evidencia/"
