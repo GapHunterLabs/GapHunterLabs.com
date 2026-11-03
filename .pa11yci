@@ -4,7 +4,7 @@
     "standard": "WCAG2AA",
     "timeout": 60000,
     "wait": 1000,
-    "concurrency": 2,
+    "concurrency": 1,
     "chromeLaunchConfig": { "args": ["--no-sandbox", "--disable-dev-shm-usage", "--force-prefers-reduced-motion"] },
     "ignore": []
   },
