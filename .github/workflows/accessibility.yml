@@ -34,5 +34,10 @@ jobs:
           done
           curl -sf http://localhost:8080/ > /dev/null
 
+      - name: Contrast detail (diagnostic)
+        run: |
+          npm install puppeteer axe-core >/dev/null 2>&1
+          node .github/diag-contrast.js || true
+
       - name: Run axe (pa11y-ci)
         run: npx --yes pa11y-ci@3
