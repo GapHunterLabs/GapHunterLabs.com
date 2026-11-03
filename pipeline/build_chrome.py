@@ -283,6 +283,7 @@ OLD_FOOTER_RE = re.compile(r'<footer class="site-footer[^"]*">.*?</footer>', re.
 HEAD_SCRIPTS = ('<script src="/js/theme-init.js"></script>\n'
                 '<script src="/js/site-chrome.js" defer></script>\n')
 REVEAL_SCRIPT = '<script src="/js/site-reveal.js" defer></script>\n'
+LANG_DETECT_SCRIPT = '<script src="/js/lang-detect.js"></script>\n'
 
 
 def replace_region(html, start, end, content, old_re, label, path):
@@ -324,6 +325,14 @@ def main() -> int:
                              lambda m: m.group(1) + REVEAL_SCRIPT, new, count=1)
             if n != 1:
                 sys.exit("[build_chrome] ERROR: sin site-chrome.js en %s" % rel)
+        # Redireccion por idioma del navegador (2026-11-02): antes de theme-init,
+        # sin defer, para redirigir la home EN a /es/ sin flash. Solo actua en la
+        # home; respeta la eleccion manual del selector. Tolera el ?v= de versionado.
+        if "/js/lang-detect.js" not in new:
+            new, n = re.subn(r'(<script src="/js/theme-init\.js[^"]*"></script>\n)',
+                             lambda m: LANG_DETECT_SCRIPT + m.group(1), new, count=1)
+            if n != 1:
+                sys.exit("[build_chrome] ERROR: sin theme-init.js para anclar lang-detect en %s" % rel)
         if new != html:
             stale += 1
             if not args.check:
