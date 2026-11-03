@@ -106,6 +106,7 @@ a:focus-visible, .btn:focus-visible { outline: none; box-shadow: var(--focus-rin
   letter-spacing: -0.03em;
 }
 .nb-lede { margin-top: 16px; max-width: 60ch; font-size: 16px; line-height: 1.65; color: var(--text-dim); }
+.nb-proof { margin-top: 16px; font: 600 13px/1.5 var(--mono); letter-spacing: 0.01em; color: var(--text); }
 .nb-hero .nb-actions { margin-top: 24px; }
 
 .nb-lede-more { margin-top: 12px; font-size: 14.5px; }

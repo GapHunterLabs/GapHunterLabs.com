@@ -1026,6 +1026,7 @@
  "write anywhere outside the project": "escribir en cualquier sitio fuera del proyecto",
  "yes": "sí",
  "{n} JetBrains plugins and {n} VS Code extensions, each with its own page and a clear price: free, freemium or paid. Figures are synced twice a day from public JetBrains Marketplace and GitHub data (last snapshot: {n}-{n}-{n}).": "{n} plugins para JetBrains y {n} extensiones para VS Code, cada uno con su propia página y un precio claro: gratis, freemium o de pago. Las cifras se sincronizan dos veces al día con datos públicos de JetBrains Marketplace y GitHub (última instantánea: {n}-{n}-{n}).",
+ "{n} JetBrains plugins &middot; {n} VS Code extensions &middot; {n}k+ downloads": "{n} plugins para JetBrains &middot; {n} extensiones para VS Code &middot; {n}k+ descargas",
  "{n} case studies": "{n} casos de estudio",
  "{n} downloads": "{n} descargas",
  "{n} extensions": "{n} extensiones",
