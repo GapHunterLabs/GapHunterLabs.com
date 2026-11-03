@@ -34,8 +34,10 @@ jobs:
           done
           curl -sf http://localhost:8080/ > /dev/null
 
-      - name: Run axe (pa11y-ci)
+      - name: Contrast detail (diagnostic)
         run: |
-          npx --yes pa11y-ci@3 --json > pa11y-report.json || true
-          node -e "const r=require('./pa11y-report.json'); let n=0; for (const [u,issues] of Object.entries(r.results||{})) { (issues||[]).forEach(i=>{ if (/contrast/i.test(i.message||'')) { n++; if (n<=30) console.log(u.replace('http://localhost:8080','')+'  '+i.selector); } }); } console.log('--- total contrast issues: '+n);"
-          node -e "const r=require('./pa11y-report.json'); const errs=Object.values(r.results||{}).reduce((a,x)=>a+(x?x.length:0),0); if (errs>0) { console.error('pa11y-ci found '+errs+' issue(s)'); process.exit(1); }"
+          echo '--- axe-core/cli color-contrast detail on / ---'
+          npx --yes @axe-core/cli@4 http://localhost:8080/ --rules color-contrast || true
+
+      - name: Run axe (pa11y-ci)
+        run: npx --yes pa11y-ci@3
