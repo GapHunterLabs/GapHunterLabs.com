@@ -1,0 +1,36 @@
+{
+  "defaults": {
+    "runners": ["axe"],
+    "standard": "WCAG2AA",
+    "timeout": 60000,
+    "wait": 500,
+    "concurrency": 2,
+    "chromeLaunchConfig": { "args": ["--no-sandbox", "--disable-dev-shm-usage"] },
+    "ignore": []
+  },
+  "urls": [
+    "http://localhost:8080/",
+    "http://localhost:8080/catalog/",
+    "http://localhost:8080/methodology/",
+    "http://localhost:8080/engineering-evidence/",
+    "http://localhost:8080/engineering-evidence/case-studies/",
+    "http://localhost:8080/engineering-evidence/jetbrains-platform-tickets/",
+    "http://localhost:8080/engineering-evidence/open-source-security-reports/",
+    "http://localhost:8080/engineering-evidence/third-party-plugin-audits/",
+    "http://localhost:8080/contact/",
+    "http://localhost:8080/services/",
+    "http://localhost:8080/plugin-performance-audit/",
+    "http://localhost:8080/security/",
+    "http://localhost:8080/privacy/",
+    "http://localhost:8080/terms/",
+    "http://localhost:8080/eula/",
+    "http://localhost:8080/sponsors/",
+    "http://localhost:8080/ghl-jail/",
+    "http://localhost:8080/catalog/ansible-companion/",
+    "http://localhost:8080/es/",
+    "http://localhost:8080/es/catalogo/",
+    "http://localhost:8080/es/contacto/",
+    "http://localhost:8080/es/servicios/",
+    "http://localhost:8080/es/ingenieria-y-evidencia/"
+  ]
+}

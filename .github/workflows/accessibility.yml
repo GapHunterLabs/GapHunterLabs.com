@@ -1,0 +1,38 @@
+name: Accessibility (axe)
+
+# Runs axe (via pa11y-ci) against the built static pages on every PR that
+# touches markup, styles or scripts, and fails if any WCAG 2 AA violation is
+# found. GitHub Pages deploys from main, so this is the gate that keeps the
+# live site free of accessibility regressions.
+
+on:
+  pull_request:
+    paths:
+      - "**.html"
+      - "**.css"
+      - "**.js"
+      - ".pa11yci"
+      - ".github/workflows/accessibility.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  axe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Serve the static site
+        run: |
+          python3 -m http.server 8080 --directory . &
+          for i in $(seq 1 30); do
+            curl -sf http://localhost:8080/ > /dev/null && break
+            sleep 1
+          done
+          curl -sf http://localhost:8080/ > /dev/null
+
+      - name: Run axe (pa11y-ci)
+        run: npx --yes pa11y-ci@3
