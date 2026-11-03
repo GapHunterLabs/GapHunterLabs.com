@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+  <title>Gap Hunter Labs — Writing</title>
+  <link href="https://gaphunterlabs.com/writing/feed.xml" rel="self"/>
+  <link href="https://gaphunterlabs.com/writing/"/>
+  <id>https://gaphunterlabs.com/writing/</id>
+  <updated>2026-11-03T00:00:00Z</updated>
+  <author><name>Joel Díaz</name></author>
+  <entry>
+    <title>A non-cancellable read action in IntelliJ’s test runner</title>
+    <link href="https://gaphunterlabs.com/writing/background-readaction-freeze/"/>
+    <id>https://gaphunterlabs.com/writing/background-readaction-freeze/</id>
+    <updated>2026-11-03T00:00:00Z</updated>
+    <summary>How I found a UI-freeze pattern in IntelliJ's own test runner (a blocking, non-cancellable read action with no checkCanceled), reported it, and how JetBrains fixed it on master.</summary>
+  </entry>
+</feed>

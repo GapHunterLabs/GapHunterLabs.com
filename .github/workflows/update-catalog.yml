@@ -109,6 +109,11 @@ jobs:
       - name: Build Spanish pages
         run: python pipeline/build_i18n.py
 
+      # 2026-11-03: feed propio de /writing (y su alterno ES). Corre DESPUES de
+      # build_i18n porque corrige el enlace de feed de la copia ES del indice.
+      - name: Build writing feed
+        run: python pipeline/build_writing_feed.py
+
       # 2026-10-05: indice del buscador del topbar (js/search-data.js) y las
       # URLs versionadas que site-chrome.js / site-search.js cargan al abrirlo.
       - name: Build site search index

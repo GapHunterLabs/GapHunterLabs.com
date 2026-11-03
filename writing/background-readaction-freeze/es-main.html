@@ -1,0 +1,36 @@
+<main id="main-content" tabindex="-1" class="methodology-main writing-article">
+  <div class="page-hero band-dark gh-page-header">
+    <p class="contact-kicker"><a href="/es/escritos/">Escritos</a> &middot; Congelamientos de la plataforma</p>
+    <h1>Una acción de lectura no cancelable en el propio ejecutor de pruebas de IntelliJ &mdash; y cómo se corrigió</h1>
+    <p class="contact-lead" style="margin-bottom:0">Una tarea en segundo plano envolvía la mitad de su trabajo en una acción de lectura cancelable y la otra mitad en una bloqueante, sin ninguna comprobación de cancelación entre ambas. Es un patrón de manual de congelamiento de la interfaz, y estaba en el propio ejecutor de pruebas de IntelliJ.</p>
+    <p class="writing-byline">Joel D&iacute;az &middot; <time datetime="2026-11-03">3&nbsp;de&nbsp;noviembre&nbsp;de&nbsp;2026</time></p>
+  </div>
+
+  <div class="disclosure-list">
+    <section class="disclosure" aria-labelledby="a-what">
+      <h2 id="a-what">Qué estaba buscando</h2>
+      <p>Uno de los plugins de mi catálogo, <a href="/es/catalogo/background-readaction-freeze-companion/">Background ReadAction Freeze Companion</a>, es una comprobación estática para un error concreto: una acción de lectura bloqueante en un hilo en segundo plano sin <code>checkCanceled()</code>. El propio Platform Blog de JetBrains señala ese patrón como una causa recurrente de congelamientos de la interfaz, porque una acción de escritura pendiente &mdash; tú escribiendo en el editor &mdash; tiene que esperar a que la acción de lectura termine. Corrí la misma comprobación como un escaneo sobre el propio <code>master</code> de IntelliJ Community.</p>
+    </section>
+
+    <section class="disclosure" aria-labelledby="a-found">
+      <h2 id="a-found">Qué encontró</h2>
+      <p><code>SearchForTestsTask</code> es un <code>Task.Backgroundable</code>. Su <code>run()</code> envolvía <code>search()</code> en un <code>ReadAction.nonBlocking()</code> cancelable &mdash; la llamada correcta &mdash; y luego, unas líneas más abajo, llamaba al <code>onFound()</code> hermano a través de un <code>ReadAction.run()</code> bloqueante, sin ningún <code>checkCanceled()</code> en toda la clase. Así que la mitad de la tarea se podía cancelar y la otra mitad no.</p>
+      <p>Lo reporté como <a href="https://youtrack.jetbrains.com/issue/IDEA-393501" target="_blank" rel="noopener">IDEA-393501</a> (originalmente IJPL-254654). JetBrains lo movió al proyecto IDEA, bajo Java &rsaquo; Tests, y se lo asignó a un desarrollador.</p>
+    </section>
+
+    <section class="disclosure" aria-labelledby="a-deeper">
+      <h2 id="a-deeper">La parte que lo hizo más difícil de lo que parecía</h2>
+      <p>Un arreglo tosco &mdash; cambiar la llamada bloqueante por una acción de lectura no bloqueante &mdash; habría introducido otro error. Una acción de lectura no bloqueante se puede reiniciar, y <code>onFound()</code> escribe archivos; en un reinicio los escribiría dos veces. En un comentario de seguimiento añadí dos puntos: que la rama por defecto en modo inteligente también bloqueaba, a través del obsoleto <code>DumbService.runReadActionInSmartMode()</code> (que usa <code>ReadAction.computeBlocking()</code> internamente), y que el arreglo real tenía que mantener segura la parte de escritura.</p>
+    </section>
+
+    <section class="disclosure" aria-labelledby="a-fixed">
+      <h2 id="a-fixed">Cómo lo corrigió JetBrains</h2>
+      <p>El 28&nbsp;de&nbsp;octubre&nbsp;de&nbsp;2026, el arreglo llegó a <code>master</code> (commit <code>4a88fdfa</code>): <code>onFound()</code> ahora se ejecuta en una acción de lectura no bloqueante en modo inteligente, los bucles que construyen las listas de pruebas llaman a <code>checkCanceled()</code>, y el paso de subida de JUnit se movió a <code>onSuccess()</code>. El ticket está marcado como Fixed.</p>
+    </section>
+
+    <section class="disclosure" aria-labelledby="a-why">
+      <h2 id="a-why">Por qué escribo esto</h2>
+      <p>Esta es toda la idea de Gap Hunter Labs en un solo ticket: un error real, en código del que mucha gente depende, encontrado por una comprobación que te puedo señalar, reportado con suficiente análisis para ser accionable, y corregido por las personas que son dueñas del código. El conjunto completo de tickets de plataforma está en <a href="/es/ingenieria-y-evidencia/tickets-jetbrains-platform/">Ingeniería y evidencia</a>.</p>
+    </section>
+  </div>
+</main>

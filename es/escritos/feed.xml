@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="es">
+  <title>Gap Hunter Labs — Escritos</title>
+  <link href="https://gaphunterlabs.com/es/escritos/feed.xml" rel="self"/>
+  <link href="https://gaphunterlabs.com/es/escritos/"/>
+  <id>https://gaphunterlabs.com/es/escritos/</id>
+  <updated>2026-11-03T00:00:00Z</updated>
+  <author><name>Joel Díaz</name></author>
+  <entry>
+    <title>Una acción de lectura no cancelable en el ejecutor de pruebas de IntelliJ</title>
+    <link href="https://gaphunterlabs.com/es/escritos/background-readaction-freeze/"/>
+    <id>https://gaphunterlabs.com/es/escritos/background-readaction-freeze/</id>
+    <updated>2026-11-03T00:00:00Z</updated>
+    <summary>Cómo encontré un patrón de congelamiento de la interfaz en el propio ejecutor de pruebas de IntelliJ (una acción de lectura bloqueante y no cancelable sin checkCanceled), lo reporté, y cómo JetBrains lo corrigió en master.</summary>
+  </entry>
+</feed>

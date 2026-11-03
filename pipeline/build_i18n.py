@@ -53,7 +53,11 @@ SKIP_CLASSES = {"card-pitch", "card-name", "card-niche", "hs-name", "hs-niche", 
                 # fichas de plugin (2026-10-05): datos del plugin y de los relacionados
                 "ph-niche", "ph-lead", "pb-text", "rel-name", "rel-niche", "rel-pitch", "fact-data",
                 # patrocinadores (2026-10-29): nombres propios que carga data/sponsors.json
-                "sp-name"}
+                "sp-name",
+                # writing (2026-11-03): el cuerpo del articulo se autora en ES
+                # directamente (flujo bilingue), no via diccionario. translate()
+                # salta este <main>; main() le inserta el <main> ES de es-main.html.
+                "writing-article"}
 SKIP_IDS = {"tbody"}
 SKIP_IN = {"paid-card": {"h3", "p"}, "fact": {"code"}, "fact-data": {"span"}}   # ancestro con clase -> etiquetas de datos adentro
 ATTRS = ("aria-label", "title", "placeholder", "alt")
@@ -438,6 +442,27 @@ def file_for(path):
     return ROOT / ("index.html" if path == "/" else path.strip("/") + "/index.html")
 
 
+WRITING_MAIN_RE = re.compile(r"<main\b[^>]*\bwriting-article\b[^>]*>.*?</main>", re.S)
+
+
+def apply_writing_es_body(out, en_path):
+    """Articulos de /writing (flujo bilingue): translate() salta el <main>
+    marcado writing-article; aqui se reemplaza ese <main> por el <main> en
+    espanol autorado a mano en writing/<slug>/es-main.html. El cuerpo del
+    articulo asi es bilingue de verdad y no vive en es.json (2026-11-03)."""
+    if not (en_path.startswith("/writing/") and en_path != "/writing/"):
+        return out
+    slug = en_path.strip("/").split("/", 1)[1]
+    body_file = ROOT / "writing" / slug / "es-main.html"
+    if not body_file.exists():
+        sys.exit("[build_i18n] falta el <main> ES autorado: %s" % body_file)
+    es_main = body_file.read_text(encoding="utf-8").strip()
+    out, n = WRITING_MAIN_RE.subn(lambda _m: es_main, out, count=1)
+    if n != 1:
+        sys.exit("[build_i18n] no pude insertar el <main> ES de %s (writing-article)" % en_path)
+    return out
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--strict", action="store_true")
@@ -448,6 +473,7 @@ def main() -> int:
     for en_path, es_path in list(ES_PATHS.items()) + list(PLUGIN_PAGES.items()):
         src = file_for(en_path).read_text(encoding="utf-8")
         out = structural(translate(src, table, missing, en_path), en_path, es_path, table)
+        out = apply_writing_es_body(out, en_path)
         if not args.extract:
             dest = file_for(es_path)
             dest.parent.mkdir(parents=True, exist_ok=True)
