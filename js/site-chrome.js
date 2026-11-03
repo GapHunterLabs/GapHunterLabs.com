@@ -121,4 +121,19 @@
     var slash = e.key === '/' && !typing && !e.ctrlKey && !e.metaKey;
     if (cmdK || slash) { e.preventDefault(); openSearch(searchButtons[0]); }
   });
+
+  // Outbound clicks to JetBrains Marketplace (the macro conversion: leaving the
+  // site for a plugin listing). GoatCounter's count.js already tracks links that
+  // carry data-goatcounter-click; this covers every other Marketplace link,
+  // including plugin detail pages, without double-counting the tagged ones.
+  document.addEventListener('click', function (e) {
+    var a = e.target && e.target.closest ? e.target.closest('a[href*="plugins.jetbrains.com"]') : null;
+    if (!a || a.hasAttribute('data-goatcounter-click')) return;
+    if (!(window.goatcounter && window.goatcounter.count)) return;
+    var p = '';
+    try { p = new URL(a.href).pathname; } catch (err) { p = ''; }
+    var bucket = p.indexOf('/vendor/') === 0 ? 'vendor'
+               : p.indexOf('/plugin/') === 0 ? 'plugin' : 'other';
+    try { window.goatcounter.count({ path: 'cta-marketplace-' + bucket, event: true }); } catch (err) { /* opcional */ }
+  });
 })();
