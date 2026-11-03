@@ -34,10 +34,5 @@ jobs:
           done
           curl -sf http://localhost:8080/ > /dev/null
 
-      - name: Contrast detail (diagnostic)
-        run: |
-          echo '--- axe-core/cli color-contrast detail on / ---'
-          npx --yes @axe-core/cli@4 http://localhost:8080/ --rules color-contrast || true
-
       - name: Run axe (pa11y-ci)
         run: npx --yes pa11y-ci@3
