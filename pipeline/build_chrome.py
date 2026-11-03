@@ -185,6 +185,7 @@ def header_html(active, en_path="/"):
         '<span class="gh-ico">%s</span>%s</button>' % (key, ICON[key], label)
         for key, label in THEMES)
     return (
+        '<a class="gh-skip-link" href="#main-content">Skip to content</a>\n'
         '<header class="gh-header" id="topbar">\n'
         '  <div class="gh-header-inner">\n'
         '    <a class="gh-brand" href="/" aria-label="Gap Hunter Labs home">%s<span class="gh-brand-name">Gap Hunter Labs</span></a>\n'
@@ -333,6 +334,11 @@ def main() -> int:
                              lambda m: LANG_DETECT_SCRIPT + m.group(1), new, count=1)
             if n != 1:
                 sys.exit("[build_chrome] ERROR: sin theme-init.js para anclar lang-detect en %s" % rel)
+        # Destino del skip-link (2026-11-02, a11y): el landmark <main> recibe id y
+        # foco programatico. Solo el <main> real lleva atributos (los de comentarios
+        # son <main> pelados), asi que exigimos un espacio tras "main".
+        if 'id="main-content"' not in new:
+            new = re.sub(r'<main (?![^>]*\bid=)', '<main id="main-content" tabindex="-1" ', new, count=1)
         if new != html:
             stale += 1
             if not args.check:

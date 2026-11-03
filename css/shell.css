@@ -543,6 +543,25 @@
 .gh-header.nav-open .gh-burger span::after { top: 0; transform: rotate(-45deg); background: var(--text); }
 :focus-visible { outline: none; box-shadow: var(--focus-ring); }
 
+/* Skip-link (a11y, WCAG 2.4.1 Bypass Blocks): off-screen until it takes
+   keyboard focus, then slides into the top-left over the header. */
+.gh-skip-link {
+  position: absolute;
+  left: 12px;
+  top: -56px;
+  z-index: 1000;
+  padding: .55rem .9rem;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--text);
+  border-radius: 6px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: top .15s ease;
+}
+.gh-skip-link:focus { top: 12px; }
+@media (prefers-reduced-motion: reduce) { .gh-skip-link { transition: none; } }
+
 @media (max-width: 960px) {
   .gh-burger { display: inline-block; }
   .gh-nav { display: none; position: absolute; top: 100%; left: 0; right: 0; flex-direction: column; align-items: stretch;
