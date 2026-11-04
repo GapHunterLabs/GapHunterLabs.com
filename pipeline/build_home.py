@@ -231,9 +231,19 @@ def sponsors_html(rows, home):
                           % (key, title, items))
     if groups:
         return '<div class="sp-wall">%s</div>' % "".join(groups)
-    chips = badge_row(SPONSOR_CHIPS) if home else ""
-    return '%s<p class="sp-empty">%s</p>' % (chips, SPONSOR_OPEN if home else
-                                            SPONSOR_OPEN + " Your name or logo could be the first one here.")
+    if home:
+        slots_pt = "".join(
+            '<div class="sp-slot sp-slot--pt" role="img" aria-label="Open Platinum sponsor slot"></div>'
+            for _ in range(3))
+        slots_gold = "".join(
+            '<div class="sp-slot sp-slot--gold" role="img" aria-label="Open Gold sponsor slot"></div>'
+            for _ in range(5))
+        return ('<div class="sp-slots">'
+                '<div class="sp-slots-row"><span class="sp-slots-tier">Platinum</span>%s</div>'
+                '<div class="sp-slots-row"><span class="sp-slots-tier">Gold</span>%s</div>'
+                '</div><p class="sp-slots-note">%s &mdash; <a href="/sponsors/">see levels</a></p>'
+                % (slots_pt, slots_gold, SPONSOR_OPEN))
+    return '<p class="sp-empty">%s</p>' % (SPONSOR_OPEN + " Your name or logo could be the first one here.")
 
 
 # Audience figures: copied by hand from GoatCounter and the LinkedIn page analytics (neither has a public API).

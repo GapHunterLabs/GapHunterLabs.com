@@ -359,68 +359,44 @@ a:focus-visible, .btn:focus-visible { outline: none; box-shadow: var(--focus-rin
   .nb-cat-counter { padding: 12px 14px; }
 }
 
-/* ---- Sponsors v2: pillars + tier cards + wall ----------------------------- */
-.nb-sponsors-v2 { padding: 72px 0; border-bottom: 1px solid var(--border); }
-.nb-sp-pillars { display: flex; gap: 10px; flex-wrap: wrap; margin: 0 0 32px; }
-.nb-sp-pillar {
-  display: flex; align-items: center; gap: 10px; padding: 12px 18px;
-  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
-  flex: 1; min-width: 160px;
+/* ---- Sponsors compact: logo placeholder slots ----------------------------- */
+.nb-sponsors-compact { padding: 56px 0 48px; border-bottom: 1px solid var(--border); }
+.nb-sp-chead {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 24px; margin-bottom: 32px; flex-wrap: wrap;
 }
-.nb-sp-pillar .b-ico { width: 18px; height: 18px; flex: none; fill: var(--signal); }
-.nb-sp-pillar-text { font: 600 13px/1.3 var(--sans); }
-.sp-group-title { font: 700 11px/1.4 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); margin: 0 0 12px; }
-.sp-tiers-community { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px; margin-bottom: 20px; }
-.sp-tiers-corporate { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 12px; margin-bottom: 32px; }
-.sp-tier-card {
-  display: grid; grid-template-rows: auto 1fr auto; padding: 20px;
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--radius-lg); gap: 14px; transition: border-color 0.15s;
+.nb-sp-chead h2 { margin: 0; font: 700 clamp(18px, 2.2vw, 24px)/1.2 var(--sans); }
+.nb-sponsors-wall { }
+.sp-slots { display: flex; flex-direction: column; gap: 12px; }
+.sp-slots-row { display: flex; align-items: stretch; gap: 10px; }
+.sp-slots-tier {
+  font: 700 10px/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--text-dim); width: 60px; flex: none;
+  display: flex; align-items: center;
 }
-.sp-tier-card:hover { border-color: var(--border-strong); }
-.sp-tier-badge {
-  width: 36px; height: 36px; border-radius: 50%; margin-bottom: 8px;
-  display: flex; align-items: center; justify-content: center;
+.sp-slot {
+  flex: 1; border: 1px dashed var(--border); border-radius: var(--radius);
+  background: var(--surface); position: relative; overflow: hidden;
 }
-.sp-tier-badge svg { width: 18px; height: 18px; }
-.sp-tier-name { font: 700 15px/1.2 var(--sans); margin: 0 0 4px; }
-.sp-tier-price { font: 700 clamp(20px, 2vw, 24px)/1.1 var(--sans); letter-spacing: -0.02em; }
-.sp-per-mo { font: 500 13px/1 var(--sans); color: var(--text-dim); letter-spacing: 0; }
-.sp-tier-cap { font: 600 10.5px/1.3 var(--mono); color: var(--signal); letter-spacing: 0.06em; text-transform: uppercase; margin-top: 4px; }
-.sp-tier-perks { list-style: none; margin: 0; padding: 0; display: grid; gap: 7px; }
-.sp-tier-perks li { font: 400 13px/1.4 var(--sans); color: var(--text-dim); padding-left: 18px; position: relative; }
-.sp-tier-perks li::before { content: ''; position: absolute; left: 0; top: 7px; width: 9px; height: 2px; background: var(--border-strong); border-radius: 2px; }
-.sp-tier-cta a { font-size: 12.5px; padding: 7px 14px; }
-/* per-tier colours */
-.sp-tier-card.is-supporter { border-color: color-mix(in srgb, var(--signal) 25%, var(--border)); }
-.sp-tier-card.is-supporter .sp-tier-badge { background: var(--signal-soft); color: var(--signal); }
-.sp-tier-card.is-supporter .sp-tier-price { color: var(--signal); }
-.sp-tier-card.is-supporter .sp-tier-perks li::before { background: var(--signal); }
-.sp-tier-card.is-backer .sp-tier-badge { background: #0D1F4D; color: #4D82FF; }
-.sp-tier-card.is-backer .sp-tier-price { color: #4D82FF; }
-.sp-tier-card.is-backer .sp-tier-perks li::before { background: #4D82FF; }
-.sp-tier-card.is-silver .sp-tier-badge { background: #1a1a1a; color: #A3A3A3; }
-.sp-tier-card.is-silver .sp-tier-price { color: #A3A3A3; }
-.sp-tier-card.is-gold { border-color: color-mix(in srgb, #D97706 25%, var(--border)); }
-.sp-tier-card.is-gold .sp-tier-badge { background: #1C1200; color: #D97706; }
-.sp-tier-card.is-gold .sp-tier-price { color: #D97706; }
-.sp-tier-card.is-gold .sp-tier-perks li::before { background: #D97706; }
-.sp-tier-card.is-platinum { background: var(--surface-2); border-color: color-mix(in srgb, #FFFFFF 20%, var(--border)); }
-.sp-tier-card.is-platinum .sp-tier-badge { background: #1F1F1F; color: #E5E5E5; }
-.sp-tier-card.is-platinum .sp-tier-price { color: var(--accent); }
-.sp-tier-card.is-platinum .sp-tier-perks li::before { background: var(--accent); }
-.nb-sponsors-wall { border-top: 1px solid var(--border); padding-top: 24px; margin-bottom: 24px; }
-.nb-sponsors-wall-title { font: 700 10.5px/1.4 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); margin: 0 0 10px; }
-.sp-wall-row { min-height: 40px; }
-@media (max-width: 960px) {
-  .sp-tiers-community { grid-template-columns: repeat(2, 1fr); }
-  .sp-tiers-corporate { grid-template-columns: repeat(2, 1fr); }
-  .sp-tier-card.is-platinum { grid-column: 1 / -1; }
+.sp-slot::after {
+  content: ''; position: absolute; inset: 0;
+  background: repeating-linear-gradient(
+    -45deg, transparent, transparent 7px,
+    var(--surface-2) 7px, var(--surface-2) 8px
+  );
 }
+.sp-slot--pt { height: 68px; }
+.sp-slot--gold { height: 52px; }
+.sp-slots-note {
+  font: 400 13px/1.5 var(--sans); color: var(--text-dim); margin: 16px 0 0;
+}
+.sp-slots-note a { color: var(--signal); text-decoration: none; }
+.sp-slots-note a:hover { text-decoration: underline; }
 @media (max-width: 600px) {
-  .sp-tiers-community { grid-template-columns: 1fr; }
-  .sp-tiers-corporate { grid-template-columns: 1fr; }
-  .nb-sp-pillars { gap: 8px; }
+  .nb-sp-chead { flex-direction: column; }
+  .sp-slots-tier { width: 48px; font-size: 9px; }
+  .sp-slot--pt { height: 52px; }
+  .sp-slot--gold { height: 40px; }
 }
 
 /* ---- Narrow screens -------------------------------------------------------- */
