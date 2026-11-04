@@ -90,19 +90,6 @@ def sync_html(data):
             '<span>Catalog synced</span> <time datetime="%s">%s</time>' % (snap, snap))
 
 
-def downloads_short(total):
-    """Descargas redondeadas hacia abajo al millar, estilo '13k+' (a prueba del
-    drift diario). Por debajo de 1000 se muestra el valor exacto."""
-    total = int(total or 0)
-    return ("%dk+" % (total // 1000)) if total >= 1000 else str(total)
-
-
-def proof_html(data, vscode_total):
-    """Prueba social cuantificada del hero (desglosada), arriba del pliegue."""
-    return ("%d JetBrains plugins &middot; %d VS Code extensions &middot; %s downloads"
-            % (data["totalPlugins"], vscode_total, downloads_short(data["totalDownloads"])))
-
-
 def metrics_html(data, research, vscode_total):
     trend = [d["totalDownloads"] for d in data.get("trend7d", []) if "totalDownloads" in d]
     pr = research["upstreamPullRequests"]
@@ -392,11 +379,7 @@ def build(dry_run: bool = False) -> None:
     html = inject(html, "<!-- PRERENDER:METRICS:START -->", "<!-- PRERENDER:METRICS:END -->",
                   metrics_html(data, research, vscode_total), "METRICS")
     html = inject(html, "<!-- PRERENDER:STACK:START -->", "<!-- PRERENDER:STACK:END -->", stack_html(), "STACK")
-    html = inject(html, "<!-- PRERENDER:HEROCOUNT:START -->", "<!-- PRERENDER:HEROCOUNT:END -->",
-                  str(data["totalPlugins"] + vscode_total), "HEROCOUNT")
     html = inject(html, "<!-- PRERENDER:CATALOG:START -->", "<!-- PRERENDER:CATALOG:END -->", esc(catalog_line), "CATALOG")
-    html = inject(html, "<!-- PRERENDER:PROOF:START -->", "<!-- PRERENDER:PROOF:END -->",
-                  proof_html(data, vscode_total), "PROOF")
 
     sponsors = load_sponsors()
     html = inject(html, "<!-- PRERENDER:SPONSORS:START -->", "<!-- PRERENDER:SPONSORS:END -->",

@@ -923,14 +923,15 @@ tr.row td[data-label]::before { font-family: var(--sans); font-size: 11px; lette
 .page-hero.gh-page-header::before {
   content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
   background:
-    radial-gradient(420px 160px at 18% 0%, color-mix(in srgb, var(--signal) 13%, transparent), transparent 70%),
+    radial-gradient(520px 220px at 30% 50%, color-mix(in srgb, var(--signal) 14%, transparent), transparent 70%),
     linear-gradient(var(--grid-line) 1px, transparent 1px),
     linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
   background-size: auto, 40px 40px, 40px 40px;
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 16%, #000 52%, transparent 100%), linear-gradient(180deg, #000 35%, transparent 100%);
-  -webkit-mask-composite: source-in;
-  mask-image: linear-gradient(90deg, transparent, #000 16%, #000 52%, transparent 100%), linear-gradient(180deg, #000 35%, transparent 100%);
-  mask-composite: intersect;
+  /* 2026-11-04: one soft ellipse whose edge lands exactly on the left, top and bottom of the box
+     (center x = horizontal radius), so the glow and the grid fade out before any edge instead of
+     ending on a hard line. The glow used to sit on the top edge, cut off by the box. */
+  -webkit-mask-image: radial-gradient(ellipse 38% 50% at 38% 50%, #000 35%, transparent 100%);
+  mask-image: radial-gradient(ellipse 38% 50% at 38% 50%, #000 35%, transparent 100%);
 }
 .gh-page-header .contact-kicker,
 .gh-page-header .ch-copy > .eyebrow {

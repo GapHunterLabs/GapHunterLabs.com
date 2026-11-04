@@ -78,8 +78,8 @@ a:focus-visible, .btn:focus-visible { outline: none; box-shadow: var(--focus-rin
 .nb-hero {
   position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 380px;
-  gap: 32px 56px;
+  grid-template-columns: minmax(0, 1fr) 440px;
+  gap: 32px 48px;
   padding: 64px 0 52px;
 }
 /* Grid + glow behind the headline: pure CSS, fades out toward the edges. */
@@ -100,10 +100,10 @@ a:focus-visible, .btn:focus-visible { outline: none; box-shadow: var(--focus-rin
 .nb-kicker { font: 600 12px/1.4 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--signal); }
 .nb-sync { display: inline-flex; align-items: center; gap: 8px; margin-top: 10px; font: 500 12px/1.4 var(--mono); color: var(--text-dim); }
 .nb-hero-title {
-  margin-top: 14px;
-  max-width: 24ch;
-  font: 700 clamp(28px, 3.7vw, 44px)/1.1 var(--sans);
-  letter-spacing: -0.03em;
+  margin-top: 16px;
+  max-width: 17em;
+  font: 700 clamp(32px, 4.2vw, 56px)/1.06 var(--sans);
+  letter-spacing: -0.035em;
 }
 .nb-lede { margin-top: 16px; max-width: 60ch; font-size: 16px; line-height: 1.65; color: var(--text-dim); }
 .nb-proof { margin-top: 16px; font: 600 13px/1.5 var(--mono); letter-spacing: 0.01em; color: var(--text); }
@@ -390,8 +390,8 @@ a:focus-visible, .btn:focus-visible { outline: none; box-shadow: var(--focus-rin
 .sp-slots-note {
   font: 400 13px/1.5 var(--sans); color: var(--text-dim); margin: 16px 0 0;
 }
-.sp-slots-note a { color: var(--signal); text-decoration: none; }
-.sp-slots-note a:hover { text-decoration: underline; }
+.sp-slots-note a { color: var(--signal); text-decoration: underline; text-underline-offset: 0.2em; text-decoration-thickness: 1px; }
+.sp-slots-note a:hover { text-decoration-thickness: 2px; }
 @media (max-width: 600px) {
   .nb-sp-chead { flex-direction: column; }
   .sp-slots-tier { width: 48px; font-size: 9px; }
@@ -432,49 +432,90 @@ a:focus-visible, .btn:focus-visible { outline: none; box-shadow: var(--focus-rin
   .btn, .inv, .tool { transition: none; }
 }
 
-/* ---- Hero: four areas of work (tabs on the left, one real case per area in the card) ---- */
-.nb-states { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; margin-top: 24px; max-width: 640px;
-  border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface); overflow: hidden; }
-.nb-state { display: grid; grid-template-columns: 18px 1fr; column-gap: 8px; align-content: start; text-align: left; padding: 12px 14px;
-  background: none; border: 0; border-right: 1px solid var(--border); color: var(--text-dim); font: inherit; cursor: pointer; }
-.nb-state:last-child { border-right: 0; }
-.nb-state .b-ico { grid-row: 1 / span 2; width: 18px; height: 18px; margin-top: 1px; fill: currentColor; }
-.nb-state-name { font: 600 13.5px/1.3 var(--sans); color: var(--text); }
-.nb-state-sub { font: 500 11.5px/1.35 var(--sans); }
-.nb-state:hover { background: var(--surface-2); }
-.nb-state[aria-selected="true"] { box-shadow: inset 0 -2px 0 var(--signal); }
-.nb-state[aria-selected="true"] .b-ico { color: var(--signal); }
-.nb-state:focus-visible, .nb-ctl:focus-visible { outline: 2px solid var(--signal); outline-offset: -2px; }
+/* ---- Hero: engagement-oriented (service tabs on the left, one real case per service in the card) ---- */
+.nb-sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
+.nb-ico { flex: none; width: 18px; height: 18px; fill: currentColor; }
 
-.nb-hero-card { display: flex; flex-direction: column; }
-.nb-card-head { display: flex; align-items: center; gap: 12px; padding: 14px 20px; border-bottom: 1px solid var(--border); }
-.nb-avatar { flex: none; width: 56px; height: 56px; border-radius: 50%; object-fit: cover; object-position: 50% 8%; border: 1px solid var(--border-strong); background: var(--surface-2); }
-.nb-card-id { display: grid; gap: 2px; min-width: 0; margin: 0; }
-.nb-card-id span:first-child { font: 600 14.5px/1.3 var(--sans); }
-.nb-card-id span:last-child { font: 600 11px/1.4 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-dim); }
-.nb-card-count { flex: none; white-space: nowrap; margin: 0 0 0 auto; font: 500 12px/1 var(--mono); color: var(--text-dim); }
-.nb-card-count b { color: var(--text); }
+.nb-kicker-row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
+.nb-avail { display: inline-flex; align-items: center; gap: 8px; padding: 5px 12px; border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--good) 45%, transparent); background: var(--good-bg); color: var(--good);
+  font: 500 13px/1.3 var(--sans); }
+.nb-accent { color: var(--signal); }
+.nb-services-label { margin-top: 28px; }
+.nb-hero-terms { display: flex; align-items: center; gap: 10px; margin-top: 16px; font: 500 14px/1.4 var(--sans); color: var(--text-dim); }
+.nb-hero-terms .nb-ico { width: 20px; height: 20px; color: var(--text-faint); }
 
-.nb-panels { padding: 18px 20px 4px; min-height: 322px; }
-.nb-panel[hidden] { display: none; }
-.nb-panel { animation: nb-panel-in 0.35s ease both; }
+.nb-states { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-top: 12px; }
+.nb-state { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; min-width: 0; text-align: left; padding: 14px;
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); color: var(--text-dim);
+  font: inherit; cursor: pointer; transition: border-color 0.15s, background 0.15s; }
+.nb-state .b-ico { width: 22px; height: 22px; margin-bottom: 8px; fill: currentColor; color: var(--signal); }
+.nb-state-name { font: 600 14px/1.3 var(--sans); color: var(--text); }
+.nb-state-sub { font: 500 12px/1.4 var(--sans); }
+.nb-state:hover { background: var(--surface-2); border-color: var(--border-strong); }
+.nb-state[aria-selected="true"] { border-color: var(--signal); background: color-mix(in srgb, var(--signal) 8%, var(--surface));
+  box-shadow: 0 0 0 1px var(--signal); }
+.nb-state:focus-visible, .nb-ctl:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
+
+.nb-hero-card { --face: 104px; position: relative; display: flex; flex-direction: column;
+  border-color: color-mix(in srgb, var(--signal) 60%, var(--border));
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--signal) 18%, transparent),
+    0 24px 64px -28px color-mix(in srgb, var(--signal) 55%, transparent); }
+/* The portrait sits in the card, not in a panel, so it stays put while the cases rotate. */
+.nb-hero-face { position: absolute; z-index: 1; top: 64px; right: 22px; display: grid; justify-items: center; gap: 8px; margin: 0; }
+.nb-avatar { display: block; width: var(--face); height: var(--face); border-radius: 50%; object-fit: cover; object-position: 50% 8%;
+  border: 2px solid var(--signal); background: var(--surface-2);
+  box-shadow: 0 0 0 6px color-mix(in srgb, var(--signal) 14%, transparent),
+    0 10px 30px -8px color-mix(in srgb, var(--signal) 50%, transparent); }
+.nb-hero-face figcaption { font: 600 11px/1.3 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-dim); }
+
+/* Every panel shares one grid cell, so the card is as tall as the tallest case and never jumps when it rotates. */
+.nb-panels { display: grid; padding: 20px 22px 6px; }
+.nb-panel { grid-area: 1 / 1; min-width: 0; }
+.nb-panel[hidden] { display: block; visibility: hidden; }
+.nb-panel:not([hidden]) { animation: nb-panel-in 0.35s ease both; }
 @keyframes nb-panel-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
-.nb-panel-label { margin: 0; font: 600 12px/1.4 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--signal); }
-.nb-panel-metric { margin: 12px 0 0; font: 700 clamp(24px, 2.4vw, 30px)/1.15 var(--sans); letter-spacing: -0.025em; }
-.nb-panel-metric .m-before, .nb-panel-metric .m-after { padding: 0; background: none; font: inherit; }
-.nb-panel-metric .nb-arrow { color: var(--text-dim); font-weight: 500; }
-.nb-panel-scope { margin: 8px 0 0; font: 500 12.5px/1.4 var(--mono); color: var(--text-dim); }
-.nb-panel-facts { display: grid; gap: 12px; margin: 18px 0 0; padding-top: 14px; border-top: 1px solid var(--border); }
-.nb-panel-facts dt { font: 600 11px/1.4 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-dim); }
-.nb-panel-facts dd { margin: 2px 0 0; font: 500 14px/1.45 var(--sans); }
-.nb-panel-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 12px; margin: 16px 0 0; padding-top: 14px; border-top: 1px solid var(--border); }
-.nb-panel-ref { font: 500 12.5px/1.4 var(--mono); }
-.nb-panel-ref a { text-decoration: underline; text-underline-offset: 0.2em; text-decoration-thickness: 1px; }
-.nb-panel-status { font: 700 10.5px/1 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; padding: 5px 9px; border-radius: 999px; }
-.nb-panel-status.is-open { color: var(--signal); border: 1px solid var(--signal); }
-.nb-panel-status.is-fixed { color: var(--good); background: var(--good-bg); }
 
-.nb-card-ctl { display: flex; align-items: center; gap: 8px; padding: 12px 20px 16px; }
+.nb-panel-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 30px; }
+.nb-panel-label { font: 600 12px/1.4 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--signal); }
+.nb-panel-status { display: inline-flex; align-items: center; gap: 6px; flex: none; padding: 6px 10px; border-radius: 999px;
+  font: 700 11px/1 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; }
+.nb-panel-status::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.nb-panel-status.is-open { color: var(--signal); border: 1px solid var(--signal); }
+.nb-panel-status.is-fixed { color: var(--good); background: var(--good-bg); border: 1px solid color-mix(in srgb, var(--good) 45%, transparent); }
+
+.nb-panel-hero { display: grid; align-content: center; gap: 6px; min-height: calc(var(--face) + 30px); margin-top: 6px;
+  padding-right: calc(var(--face) + 24px); }
+.nb-panel-metric { font: 700 clamp(36px, 3.6vw, 46px)/1.05 var(--sans); letter-spacing: -0.03em; }
+.nb-panel-metric .m-before, .nb-panel-metric .m-after { padding: 0; background: none; font: inherit; }
+.nb-panel-metric .m-before { color: var(--text); }
+.nb-panel-metric .m-after { color: var(--valid); }
+.nb-panel-metric .nb-arrow { color: var(--text-dim); font-weight: 500; }
+.nb-panel-metric--wide { font-size: 22px; line-height: 1.2; letter-spacing: -0.02em; }
+.nb-panel-metric--text { font-size: 27px; line-height: 1.15; letter-spacing: -0.025em; }
+.nb-panel-caption { font: 500 15px/1.4 var(--sans); }
+
+.nb-panel-facts { display: grid; gap: 14px; margin: 14px 0 0; padding-top: 16px; border-top: 1px solid var(--border); }
+.nb-panel-facts > div { display: grid; grid-template-columns: 24px minmax(0, 1fr); column-gap: 12px; }
+.nb-panel-facts .nb-ico { grid-row: 1 / span 2; width: 24px; height: 24px; color: var(--signal); }
+.nb-panel-facts dt { font: 600 12px/1.4 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--signal); }
+.nb-panel-facts dd { margin: 2px 0 0; font: 500 14px/1.45 var(--sans); color: var(--text-dim); }
+.nb-panel-facts > div:last-child dd { color: var(--text); font-weight: 600; }
+
+.nb-panel-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 0; list-style: none; margin: 16px 0 0; padding: 14px 0 0;
+  border-top: 1px solid var(--border); font: 500 12.5px/1.4 var(--sans); color: var(--text-dim); }
+.nb-panel-meta li { display: inline-flex; align-items: center; gap: 8px; padding-right: 10px; }
+.nb-panel-meta li + li { padding: 0 0 0 10px; border-left: 1px solid var(--border-strong); }
+.nb-panel-ref { display: flex; align-items: flex-start; gap: 8px; margin: 10px 0 0; font: 500 12.5px/1.45 var(--sans); color: var(--text-dim); }
+.nb-panel-ref .nb-ico { width: 16px; height: 16px; margin-top: 2px; }
+.nb-panel-ref a { color: var(--text); text-decoration: underline; text-underline-offset: 0.2em; text-decoration-thickness: 1px; }
+.nb-panel-svc { display: inline-block; margin: 12px 0 14px; font: 600 13.5px/1.3 var(--sans); color: var(--signal);
+  text-decoration: underline; text-underline-offset: 0.2em; text-decoration-thickness: 1px; }
+.nb-panel-svc:hover { text-decoration-thickness: 2px; }
+
+.nb-card-ctl { display: flex; align-items: center; gap: 8px; padding: 8px 22px 18px; }
+.nb-card-count { flex: none; margin: 0 4px 0 0; font: 500 12px/1 var(--mono); color: var(--text-dim); }
+.nb-card-count b { color: var(--text); }
 .nb-progress { flex: 1 1 auto; height: 3px; border-radius: 2px; background: var(--border); overflow: hidden; margin-right: 8px; }
 .nb-progress i { display: block; height: 100%; width: 100%; background: var(--signal); transform-origin: left; transform: scaleX(0); }
 .nb-progress.is-running i { animation: nb-progress var(--nb-dwell, 8s) linear forwards; }
@@ -482,16 +523,102 @@ a:focus-visible, .btn:focus-visible { outline: none; box-shadow: var(--focus-rin
 .nb-progress.is-static i { transform: scaleX(1); }
 @keyframes nb-progress { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 .nb-ctl { display: grid; place-items: center; width: 34px; height: 34px; padding: 0; border: 1px solid var(--border-strong); border-radius: 50%;
-  background: var(--surface); color: var(--text); cursor: pointer; }
+  background: none; color: var(--text); cursor: pointer; }
 .nb-ctl:hover { background: var(--surface-2); }
 .nb-ctl svg { width: 18px; height: 18px; fill: currentColor; }
 .nb-ctl[aria-pressed="false"] .i-play, .nb-ctl[aria-pressed="true"] .i-pause { display: none; }
 
-@media (prefers-reduced-motion: reduce) { .nb-panel { animation: none; } .nb-progress.is-running i { animation: none; transform: scaleX(1); } }
-@media (max-width: 960px) { .nb-hero-card { max-width: 520px; } }
+/* Commercial terms, right under the key figures. */
+.nb-assure { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px; list-style: none; margin: 20px 0 0; padding: 0;
+  overflow: hidden; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--border); }
+.nb-assure li { padding: 16px 18px; background: var(--surface); }
+.nb-assure-t { display: flex; align-items: center; gap: 8px; font: 600 14.5px/1.3 var(--sans); }
+.nb-assure-t .nb-ico { color: var(--signal); }
+.nb-assure-d { margin-top: 4px; padding-left: 26px; font: 500 13px/1.45 var(--sans); color: var(--text-dim); }
+.nb-foot-row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 18px; margin-top: 16px; }
+.nb-foot-row .nb-sync { margin-top: 0; }
+.nb-foot-link { font-size: 14px; text-decoration: underline; text-underline-offset: 0.2em; text-decoration-thickness: 1px; }
+.nb-foot-link:hover { text-decoration-thickness: 2px; }
+
+@media (prefers-reduced-motion: reduce) { .nb-panel:not([hidden]) { animation: none; } .nb-progress.is-running i { animation: none; transform: scaleX(1); } .nb-state { transition: none; } }
+@media (max-width: 960px) { .nb-hero-card { max-width: 520px; } .nb-assure { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 700px) {
   .nb-states { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .nb-state:nth-child(2) { border-right: 0; }
-  .nb-state:nth-child(-n+2) { border-bottom: 1px solid var(--border); }
-  .nb-panels { min-height: 0; }
+}
+@media (max-width: 520px) {
+  .nb-hero-card { --face: 72px; }
+  .nb-hero-face { top: 62px; right: 16px; }
+  .nb-panels { padding: 18px 16px 4px; }
+  .nb-panel-meta li + li { padding-left: 0; border-left: 0; }
+  .nb-card-ctl { padding: 8px 16px 16px; }
+  .nb-panel-metric { font-size: 32px; }
+  .nb-panel-metric--wide { font-size: 19px; }
+  .nb-panel-metric--text { font-size: 22px; }
+  .nb-assure { grid-template-columns: 1fr; }
+}
+
+/* ---- Hero: visual polish (styling only; markup and behavior unchanged) ---- */
+/* A second, warmer glow behind the case card, under the same grid as the headline. */
+.nb-hero::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  right: 0;
+  width: 55%;
+  height: 100%;
+  pointer-events: none;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--signal) 13%, transparent), transparent);
+  filter: blur(8px);
+}
+.nb-hero-title { text-wrap: balance; }
+.nb-lede { text-wrap: pretty; }
+
+/* Service tabs: the icon sits on a tinted tile; the selected one is lit from the top. */
+.nb-state { position: relative; overflow: hidden; padding: 14px 14px 13px;
+  transition: border-color 0.15s, background 0.15s, transform 0.15s; }
+.nb-state .b-ico { box-sizing: content-box; width: 18px; height: 18px; padding: 7px; margin-bottom: 10px; border-radius: 9px;
+  background: color-mix(in srgb, var(--signal) 12%, transparent); }
+.nb-state:hover { transform: translateY(-1px); }
+.nb-state[aria-selected="true"] { background:
+  linear-gradient(180deg, color-mix(in srgb, var(--signal) 14%, transparent), transparent 70%), var(--surface); }
+.nb-state[aria-selected="true"] .b-ico { background: color-mix(in srgb, var(--signal) 22%, transparent); }
+
+/* Hero buttons: a little larger than the page default, the arrow nudges on hover. */
+.nb-hero .btn { min-height: 48px; padding: 12px 22px; border-radius: var(--radius-lg); font-size: 15px; }
+.nb-hero .btn.primary { box-shadow: 0 10px 28px -14px color-mix(in srgb, var(--accent) 70%, transparent); }
+
+/* Case card: soft warm light in two corners, like the hero glow. */
+.nb-hero-card { border-radius: 16px; background:
+  radial-gradient(360px 240px at 100% 0%, color-mix(in srgb, var(--signal) 9%, transparent), transparent 70%),
+  radial-gradient(320px 220px at 0% 100%, color-mix(in srgb, var(--signal) 8%, transparent), transparent 70%),
+  var(--surface); }
+.nb-avatar { border-width: 2px; }
+
+/* Each panel is a column: the meta, evidence and service rows sit at the bottom of the card,
+   so a shorter case leaves its spare room above them instead of above the controls. */
+.nb-panel, .nb-panel[hidden] { display: flex; flex-direction: column; }
+.nb-panel-meta { margin-top: auto; }
+.nb-panel-facts { margin-bottom: 18px; }
+.nb-panel-metric { font-size: clamp(40px, 4vw, 54px); }
+.nb-panel-metric--wide { font-size: 23px; }
+.nb-panel-metric--text { font-size: 27px; }
+.nb-panel-facts .nb-ico { width: 22px; height: 22px; margin-top: 1px; }
+.nb-card-ctl { border-top: 1px solid var(--border); padding-top: 14px; margin-top: 4px; }
+
+/* Engagement terms: same tinted icon tile as the tabs. */
+.nb-assure li { background:
+  linear-gradient(180deg, color-mix(in srgb, var(--signal) 5%, transparent), transparent 60%), var(--surface); }
+.nb-assure-t .nb-ico { box-sizing: content-box; width: 14px; height: 14px; padding: 4px; border-radius: 6px;
+  background: color-mix(in srgb, var(--signal) 12%, transparent); }
+.nb-assure-d { padding-left: 30px; }
+
+@media (prefers-reduced-motion: reduce) { .nb-state:hover { transform: none; } }
+@media (max-width: 960px) { .nb-hero::after { top: 45%; right: 0; width: 100%; height: 60%; } }
+@media (max-width: 520px) {
+  .nb-hero-card { border-radius: 14px; }
+  .nb-panel-metric { font-size: 36px; }
+  .nb-panel-metric--wide { font-size: 19px; }
+  .nb-panel-metric--text { font-size: 22px; }
+  .nb-hero .btn { padding: 12px 18px; }
 }
