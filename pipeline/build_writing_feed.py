@@ -21,9 +21,9 @@ SITE = SITE_URL.rstrip("/")
 
 TREES = [
     {"lang": "en", "dir": ROOT / "writing", "base": "/writing/",
-     "feed": "/writing/feed.xml", "title": "Gap Hunter Labs — Writing"},
+     "feed": "/writing/feed.xml", "title": "Gap Hunter Labs — Blog"},
     {"lang": "es", "dir": ROOT / "es" / "escritos", "base": "/es/escritos/",
-     "feed": "/es/escritos/feed.xml", "title": "Gap Hunter Labs — Escritos"},
+     "feed": "/es/escritos/feed.xml", "title": "Gap Hunter Labs — Blog"},
 ]
 
 TITLE_RE = re.compile(r"<title>(.*?)</title>", re.S)

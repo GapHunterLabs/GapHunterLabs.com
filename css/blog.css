@@ -1,0 +1,105 @@
+/* Blog (/writing/): compact case cards in the language of the home hero card, and a month calendar
+   under them. Built by pipeline/build_blog.py from data/blog-cases.json; the calendar is js/blog.js. */
+
+.blog-sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
+.blog-body { display: grid; gap: 8px; }
+.blog-sec { padding: 36px 0 8px; }
+.blog-sec-head { display: grid; gap: 6px; max-width: 70ch; margin-bottom: 18px; }
+.blog-sec-head h2 { margin: 0; font: 700 clamp(22px, 2.4vw, 28px)/1.15 var(--sans); letter-spacing: -0.025em; }
+.blog-sec-head p { margin: 0; color: var(--text-dim); font-size: 15px; line-height: 1.6; }
+.blog-noscript { color: var(--text-dim); }
+
+/* ---- Cards ---------------------------------------------------------------- */
+.case-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); gap: 16px; align-items: stretch; }
+.case {
+  display: flex; flex-direction: column; min-width: 0; padding: 18px 18px 16px; scroll-margin-top: 96px;
+  border: 1px solid color-mix(in srgb, var(--signal) 32%, var(--border)); border-radius: 14px;
+  background:
+    radial-gradient(260px 160px at 100% 0%, color-mix(in srgb, var(--signal) 8%, transparent), transparent 70%),
+    var(--surface);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+/* The page styles give <p> a bottom margin; inside a card every gap is set below. */
+.case p, .case dl, .case ul { margin-bottom: 0; }
+.case:hover { border-color: color-mix(in srgb, var(--signal) 60%, var(--border)); }
+.case:target { border-color: var(--signal); box-shadow: 0 0 0 2px var(--signal), 0 16px 40px -24px color-mix(in srgb, var(--signal) 60%, transparent); }
+
+
+.case-ico { flex: none; width: 18px; height: 18px; fill: currentColor; }
+.case-ico-sm { width: 14px; height: 14px; }
+
+.case-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 26px; }
+.case-label { font: 600 11px/1.4 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--signal); }
+.case-status { display: inline-flex; align-items: center; gap: 5px; flex: none; padding: 4px 9px; border-radius: 999px;
+  font: 600 12px/1 var(--sans); }
+.case-status.is-fixed { color: var(--good); background: var(--good-bg); border: 1px solid color-mix(in srgb, var(--good) 45%, transparent); }
+.case-status.is-open { color: var(--signal); border: 1px solid var(--signal); }
+
+.case-title { margin: 10px 0 0; font: 700 16.5px/1.3 var(--sans); letter-spacing: -0.015em; }
+.case-title a { text-decoration: none; }
+.case-title a:hover { text-decoration: underline; text-underline-offset: 0.2em; }
+.case-summary { margin-top: 8px; font-size: 14px; line-height: 1.55; color: var(--text-dim); }
+
+.case-metric { margin-top: 10px; font: 700 24px/1.15 var(--sans); letter-spacing: -0.025em; }
+.case-metric .m-before { color: var(--text); }
+.case-metric .m-after { color: var(--valid); }
+.case-arrow { color: var(--text-dim); font-weight: 500; }
+.case-caption { margin-top: 2px; font-size: 12.5px; color: var(--text-dim); }
+
+.case-facts { display: grid; gap: 10px; margin: 14px 0 0; padding-top: 12px; border-top: 1px solid var(--border); }
+.case-facts dt { display: flex; align-items: center; gap: 8px; font: 600 10.5px/1.4 var(--mono); letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--signal); }
+.case-facts dd { margin: 3px 0 0 26px; font-size: 13.5px; line-height: 1.5; color: var(--text-dim); }
+.case-facts > div:last-child dd { color: var(--text); font-weight: 600; }
+.case-facts code { font-size: 0.85em; }
+
+.case-dates { display: flex; flex-wrap: wrap; gap: 4px 14px; list-style: none; margin: auto 0 0; padding: 12px 0 0;
+  border-top: 1px solid var(--border); font-size: 12.5px; color: var(--text-dim); }
+.case-dates li { display: inline-flex; align-items: center; gap: 6px; }
+.case-dates .case-ico { width: 14px; height: 14px; }
+/* Dates and links sit at the bottom, so cards in one row line up. */
+.case .case-facts, .case .case-summary { margin-bottom: 14px; }
+.case-refs { display: flex; align-items: flex-start; gap: 6px; margin-top: 8px; font-size: 12.5px; line-height: 1.5; color: var(--text-dim); }
+.case-refs .case-ico { width: 14px; height: 14px; margin-top: 2px; }
+.case-refs a { color: var(--text); text-decoration: underline; text-underline-offset: 0.2em; text-decoration-thickness: 1px; }
+.case-refs a:hover { text-decoration-thickness: 2px; }
+
+/* ---- Calendar ------------------------------------------------------------- */
+.cal { max-width: 720px; padding: 18px; border: 1px solid var(--border); border-radius: 14px; background: var(--surface); }
+.cal-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.cal-month { margin: 0; font: 700 17px/1.3 var(--sans); }
+.cal-nav { display: grid; place-items: center; width: 36px; height: 36px; padding: 0; border: 1px solid var(--border-strong);
+  border-radius: 50%; background: none; color: var(--text); cursor: pointer; }
+.cal-nav:hover:not(:disabled) { background: var(--surface-2); }
+.cal-nav:disabled { opacity: 0.35; cursor: default; }
+.cal-nav:focus-visible, .cal-daybtn:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
+.cal-ico { width: 18px; height: 18px; fill: currentColor; }
+
+.cal-grid { width: 100%; margin-top: 14px; border-collapse: separate; border-spacing: 4px; table-layout: fixed; }
+.cal-grid th { padding: 4px 0; font: 600 11px/1.4 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-dim); }
+.cal-grid td { padding: 0; text-align: center; }
+.cal-num, .cal-daybtn { display: grid; place-items: center; width: 100%; aspect-ratio: 1 / 1; max-height: 52px; border-radius: 10px;
+  font: 500 14px/1 var(--sans); }
+.cal-num { color: var(--text-faint); }
+.cal-daybtn { position: relative; padding: 0; border: 1px solid color-mix(in srgb, var(--signal) 45%, var(--border));
+  background: color-mix(in srgb, var(--signal) 12%, var(--surface)); color: var(--text); font-weight: 700; cursor: pointer; }
+.cal-daybtn:hover { background: color-mix(in srgb, var(--signal) 22%, var(--surface)); }
+.cal-daybtn .cal-count { position: absolute; top: 3px; right: 5px; font: 700 10px/1 var(--mono); color: var(--signal); }
+.cal-daybtn[aria-pressed="true"] { background: var(--signal); border-color: var(--signal); color: var(--bg); }
+.cal-daybtn[aria-pressed="true"] .cal-count { color: var(--bg); }
+
+.cal-day { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border); }
+.cal-day h4 { margin: 0; font: 700 15px/1.3 var(--sans); }
+.cal-day ul { display: grid; gap: 8px; list-style: none; margin: 10px 0 0; padding: 0; }
+.cal-day li { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; font-size: 14px; }
+.cal-ev { flex: none; padding: 2px 8px; border-radius: 999px; font: 600 11px/1.5 var(--mono); letter-spacing: 0.04em;
+  text-transform: uppercase; color: var(--signal); border: 1px solid color-mix(in srgb, var(--signal) 50%, transparent); }
+.cal-day a { text-decoration: underline; text-underline-offset: 0.2em; text-decoration-thickness: 1px; }
+
+@media (max-width: 520px) {
+  .case { padding: 16px 14px 14px; }
+  .cal { padding: 14px 10px; }
+  .cal-grid { border-spacing: 2px; }
+  .cal-num, .cal-daybtn { font-size: 13px; border-radius: 8px; }
+}
+@media (prefers-reduced-motion: reduce) { .case { transition: none; } }
