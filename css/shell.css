@@ -919,7 +919,7 @@ tr.row td[data-label]::before { font-family: var(--sans); font-size: 11px; lette
    Redesign v3 -- page header (.gh-page-header): the home hero language on every
    inner page: mono signal eyebrow, smaller headline and lede, faint grid and glow.
    ===================================================================== */
-.page-hero.gh-page-header { isolation: isolate; padding: clamp(24px, 3.4vw, 40px) 0 clamp(20px, 2.6vw, 28px); }
+.page-hero.gh-page-header { isolation: isolate; padding: 0 0 clamp(20px, 2.6vw, 28px); }
 .page-hero.gh-page-header::before {
   content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
   background:

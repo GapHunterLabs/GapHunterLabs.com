@@ -3,6 +3,21 @@
    cierre del menu movil al elegir un enlace. El burger lo siguen
    manejando los scripts de cada pagina (#topbar.nav-open). */
 (function () {
+  /* Scroll progress bar — created once, appended before body first child */
+  var bar = document.createElement('div');
+  bar.id = 'nb-scroll-bar';
+  bar.setAttribute('aria-hidden', 'true');
+  document.body.insertBefore(bar, document.body.firstChild);
+  if (!CSS.supports('animation-timeline', 'scroll()')) {
+    var update = function () {
+      var h = document.documentElement.scrollHeight - window.innerHeight;
+      bar.style.transform = 'scaleX(' + (h > 0 ? window.scrollY / h : 0) + ')';
+    };
+    window.addEventListener('scroll', update, { passive: true });
+    update();
+  }
+})();
+(function () {
   var root = document.documentElement;
   var KEY = 'ghl-theme';
 

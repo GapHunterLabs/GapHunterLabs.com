@@ -80,7 +80,7 @@ a:focus-visible, .btn:focus-visible { outline: none; box-shadow: var(--focus-rin
   display: grid;
   grid-template-columns: minmax(0, 1fr) 380px;
   gap: 32px 56px;
-  padding: 64px 0 52px;
+  padding: 0 0 52px;
 }
 /* Grid + glow behind the headline: pure CSS, fades out toward the edges. */
 .nb-hero::before {
@@ -409,7 +409,7 @@ a:focus-visible, .btn:focus-visible { outline: none; box-shadow: var(--focus-rin
 
 /* ---- Narrow screens -------------------------------------------------------- */
 @media (max-width: 960px) {
-  .nb-hero { grid-template-columns: 1fr; padding-top: 48px; }
+  .nb-hero { grid-template-columns: 1fr; padding-top: 0; }
   .nb-profile { max-width: 520px; }
   .tool { grid-template-columns: 1fr; }
   .inv-meta .inv-status { justify-self: start; }
@@ -421,7 +421,7 @@ a:focus-visible, .btn:focus-visible { outline: none; box-shadow: var(--focus-rin
 @media (max-width: 700px) {
   .wrap { padding: 0 16px 40px; }
   .nb-section { padding: 48px 0; }
-  .nb-hero { padding: 56px 0 40px; }
+  .nb-hero { padding: 0 0 40px; }
   .inv, .tool, .nb-steps li { padding: 20px; }
   .nb-lede { font-size: 15.5px; }
   .tool-facts { grid-template-columns: minmax(0, 1fr); }
