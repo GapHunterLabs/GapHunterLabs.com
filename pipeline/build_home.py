@@ -63,11 +63,6 @@ TOOLS = (
      "Working with Ansible Vault files in the IDE depended on the <code>ansible-vault</code> command "
      "being installed.",
      "Encrypt and decrypt Ansible Vault (1.1, AES256) directly in the editor."),
-    ("mermaid-companion",
-     "Reviews of existing Mermaid tooling for JetBrains IDEs report false warnings and errors on valid "
-     "diagrams, such as identifiers with non-ASCII characters.",
-     "Syntax highlighting and syntax validation for <code>.mmd</code> and <code>.mermaid</code> files: "
-     "flowchart, sequence and class diagrams."),
 )
 
 
@@ -152,13 +147,20 @@ def stack_html():
         ("Platforms", [dict(label="JetBrains IDEs", icon="jetbrains", variant="dark"),
                        dict(label="IntelliJ IDEA", icon="intellij-idea", variant="dark"),
                        dict(label="VS Code", icon="vscode", variant="brand", hex6="007ACC"),
-                       dict(label="Windows", icon="windows", variant="dark")]),
+                       dict(label="Windows", icon="windows", variant="dark"),
+                       dict(label="Linux", variant="dark")]),
         ("Languages", [dict(label="Kotlin", icon="kotlin"), dict(label="Java", icon="java", variant="soft"),
-                       dict(label="Python", icon="python")]),
-        ("Disciplines", DISCIPLINES),
+                       dict(label="Python", icon="python"),
+                       dict(label="TypeScript", variant="brand", hex6="3178C6"),
+                       dict(label="Go", icon="go"),
+                       dict(label="YAML", variant="dark")]),
+        ("Disciplines", DISCIPLINES + [dict(label="Dependency auditing", icon="shield", variant="dark"),
+                                       dict(label="Open-source contributions", icon="github", variant="dark")]),
         ("Tooling", [dict(label="Gradle", icon="gradle", variant="soft"), dict(label="JUnit", icon="junit"),
                      dict(label="Git", icon="git"), dict(label="GitHub", icon="github", variant="dark"),
-                     dict(label="GitHub Actions", icon="github-actions")]),
+                     dict(label="GitHub Actions", icon="github-actions"),
+                     dict(label="Plugin Verifier", variant="dark"),
+                     dict(label="Node.js", variant="dark")]),
     ]
     return badge_table("Platforms, languages and tooling", rows, "stackCaption")
 

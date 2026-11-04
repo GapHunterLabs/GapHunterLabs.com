@@ -312,9 +312,9 @@ a:focus-visible, .btn:focus-visible { outline: none; box-shadow: var(--focus-rin
 
 
 /* ---- Catalog v2: counters + category samples ------------------------------ */
-.nb-catalog-v2 { grid-template-columns: 1fr; gap: 0; padding: 64px 0 40px; }
+.nb-catalog-v2 { grid-template-columns: 1fr minmax(0, 420px); gap: 56px; padding: 64px 0 40px; }
 .nb-catalog-v2 h2 { font: 700 clamp(28px, 3vw, 38px)/1.1 var(--sans); letter-spacing: -0.03em; }
-.nb-catalog-left { display: grid; gap: 24px; }
+.nb-catalog-left { display: grid; gap: 24px; align-content: start; }
 .nb-cat-counters {
   display: flex; overflow: hidden;
   border: 1px solid var(--border); border-radius: var(--radius); background: var(--border);
@@ -338,6 +338,22 @@ a:focus-visible, .btn:focus-visible { outline: none; box-shadow: var(--focus-rin
 .nb-cat-s-sub { font: 500 11px/1.2 var(--mono); color: var(--text-dim); }
 .nb-price-tags { display: flex; gap: 6px; flex-wrap: wrap; }
 .nb-catalog-v2 .nb-actions { display: flex; flex-direction: row; gap: 12px; align-items: center; flex-wrap: wrap; }
+/* Catalog right column */
+.nb-catalog-right { display: flex; flex-direction: column; gap: 20px; padding-top: 6px; }
+.nb-cr-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.nb-cr-card {
+  display: flex; flex-direction: column; gap: 10px; padding: 14px 16px;
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+  text-decoration: none; transition: border-color 0.15s, background 0.15s;
+}
+.nb-cr-card:hover { border-color: var(--signal); background: var(--surface-2); }
+.nb-cr-name { font: 600 13px/1.35 var(--sans); color: var(--text); }
+.nb-cr-all { font: 600 13.5px/1 var(--sans); color: var(--signal); text-decoration: none; align-self: flex-start; }
+.nb-cr-all:hover { text-decoration: underline; }
+@media (max-width: 860px) {
+  .nb-catalog-v2 { grid-template-columns: 1fr; gap: 40px; }
+  .nb-catalog-right { display: none; }
+}
 @media (max-width: 700px) {
   .nb-cat-counters { max-width: 100%; }
   .nb-cat-counter { padding: 12px 14px; }

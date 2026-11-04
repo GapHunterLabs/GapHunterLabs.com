@@ -1051,8 +1051,8 @@ tr.row td[data-label]::before { font-family: var(--sans); font-size: 11px; lette
 .cf-sub { font-size: 14px; line-height: 1.6; }
 .cf-field label { font-size: 12.5px; }
 .cf-field label .req { color: var(--signal); }
-.cf-field input[type="text"], .cf-field select, .cf-field textarea { border-color: var(--border-strong); border-radius: var(--radius); font-size: 14px; }
-.cf-field input[type="text"], .cf-field select { min-height: 40px; }
+.cf-field input[type="text"], .cf-field input[type="email"], .cf-field select, .cf-field textarea { background: var(--surface-2); color: var(--text); border-color: var(--border-strong); border-radius: var(--radius); font-size: 14px; padding: 10px 12px; -webkit-appearance: none; appearance: none; }
+.cf-field input[type="text"], .cf-field input[type="email"], .cf-field select { min-height: 40px; }
 .cf-field input:focus, .cf-field select:focus, .cf-field textarea:focus { outline: none; border-color: var(--signal); box-shadow: var(--focus-ring); }
 .cf-counter { font-size: 11px; }
 .cf-submit { min-height: 40px; padding: 0 18px; border-radius: var(--radius); font-size: 13.5px; }
