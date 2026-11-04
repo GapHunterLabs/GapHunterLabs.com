@@ -65,7 +65,7 @@ ENG_ITEMS = (("/methodology/", "Methodology", "How problems are investigated and
              (EE + "third-party-plugin-audits/", "Third-party plugin audits", "Findings in other vendors&rsquo; plugins, fixed by them"),
              (EE + "case-studies/", "Plugin case studies", "Plugins with the strongest evidence"))
 NAV = (("/#work", "Work"), ("Engineering", ENG_ITEMS), ("/catalog/", "Tools"),
-       ("/writing/", "Writing"), ("/services/", "Services"), ("/contact/", "Contact"))
+       ("/writing/", "Blog"), ("/services/", "Services"), ("/contact/", "Contact"))
 
 LOGO = ('<svg class="gh-logo" viewBox="0 0 1024 1024" aria-hidden="true">'
         '<path d="M 511,81 L 847,283 L 725,351 L 508,223 L 296,348 L 296,588 L 463,691 L 342,765 L 173,665 L 172,281 Z" fill="#0151FC"/>'
