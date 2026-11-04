@@ -1139,10 +1139,10 @@ a.sp-person:hover { border-color: var(--signal); }
   pointer-events: none; will-change: transform;
   transition: background 0.3s;
 }
-:root:not([data-theme='dark']) #nb-scroll-bar { background: var(--signal, #FF6A1A); }
-:root[data-theme='dark'] #nb-scroll-bar { background: rgba(255,255,255,0.8); }
+:root:not([data-theme='dark']) #nb-scroll-bar { background: #0151FC; }
+:root[data-theme='dark'] #nb-scroll-bar { background: var(--signal, #FF6A1A); }
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) #nb-scroll-bar { background: rgba(255,255,255,0.8); }
+  :root:not([data-theme='light']) #nb-scroll-bar { background: var(--signal, #FF6A1A); }
 }
 @supports (animation-timeline: scroll()) {
   @keyframes nb-grow-bar { to { transform: scaleX(1); } }
