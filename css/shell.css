@@ -586,7 +586,8 @@
   .gh-burger { width: 34px; }
 }
 
-.site-footer.gh-footer { margin-top: 72px; padding: 56px 0 28px; padding-left: 0; border-top: 0; background: var(--bg); color: var(--text); }
+.site-footer.gh-footer { margin-top: 72px; padding: 56px 0 28px; padding-left: 0; border-top: 0; background: var(--bg); color: var(--text); position: relative; }
+.site-footer.gh-footer::before { content: ''; position: absolute; top: 0; left: var(--page-pad, 24px); right: var(--page-pad, 24px); height: 1px; background: linear-gradient(90deg, transparent 0%, var(--signal) 30%, var(--signal) 70%, transparent 100%); opacity: 0.5; pointer-events: none; }
 .gh-footer-inner { max-width: var(--page-max); margin: 0 auto; padding: 0 var(--page-pad); }
 /* Layout: one full-width card on top (brand + pitch + CTA | About), the six link columns below it. */
 .gh-footer-top { display: grid; grid-template-columns: minmax(0, 1fr); gap: 44px; padding-bottom: 40px; border-bottom: 1px solid var(--border); }
@@ -1129,4 +1130,21 @@ a.sp-person:hover { border-color: var(--signal); }
   .sp-card { padding: 20px; }
   .sp-level { grid-template-columns: minmax(0, 1fr); gap: 10px; }
   .sp-logo img { max-width: 100%; }
+}
+
+/* ---- Scroll progress bar (all pages) ------------------------------------- */
+#nb-scroll-bar {
+  position: fixed; top: 0; left: 0; right: 0; height: 3px;
+  z-index: 10000; transform-origin: 0 50%; transform: scaleX(0);
+  pointer-events: none; will-change: transform;
+  transition: background 0.3s;
+}
+:root:not([data-theme='dark']) #nb-scroll-bar { background: var(--signal, #FF6A1A); }
+:root[data-theme='dark'] #nb-scroll-bar { background: rgba(255,255,255,0.8); }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) #nb-scroll-bar { background: rgba(255,255,255,0.8); }
+}
+@supports (animation-timeline: scroll()) {
+  @keyframes nb-grow-bar { to { transform: scaleX(1); } }
+  #nb-scroll-bar { animation: nb-grow-bar linear both; animation-timeline: scroll(root); }
 }

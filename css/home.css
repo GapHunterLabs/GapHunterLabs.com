@@ -312,10 +312,10 @@ a:focus-visible, .btn:focus-visible { outline: none; box-shadow: var(--focus-rin
 
 
 /* ---- Catalog v2: counters + category samples ------------------------------ */
-.nb-catalog-v2 { grid-template-columns: 1fr auto; align-items: start; gap: 32px 56px; }
-.nb-catalog-v2 h2 { font: 700 clamp(24px, 2.6vw, 30px)/1.15 var(--sans); letter-spacing: -0.025em; }
-.nb-catalog-left { display: grid; gap: 20px; }
-.nb-catalog-right { display: flex; align-items: flex-start; padding-top: 48px; }
+.nb-catalog-v2 { grid-template-columns: 1fr auto; align-items: center; gap: 32px 56px; padding: 64px 0 40px; }
+.nb-catalog-v2 h2 { font: 700 clamp(28px, 3vw, 38px)/1.1 var(--sans); letter-spacing: -0.03em; }
+.nb-catalog-left { display: grid; gap: 24px; }
+.nb-catalog-right { display: flex; align-items: center; padding-top: 0; }
 .nb-cat-counters {
   display: flex; overflow: hidden;
   border: 1px solid var(--border); border-radius: var(--radius); background: var(--border);
