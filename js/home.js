@@ -92,7 +92,7 @@
     }
   })();
 
-  // Hero: cuatro areas de trabajo (rendimiento, seguridad, fiabilidad, herramientas).
+  // Hero: cuatro servicios (seguridad, rendimiento, herramientas a medida, ingenieria de plataforma), con un caso real cada uno.
   // Rotacion automatica; en pausa con el cursor o el foco dentro de la tarjeta, o con el
   // boton de pausa; sin rotacion automatica si el usuario pidio menos movimiento.
   (function initHeroStates() {
@@ -103,7 +103,7 @@
     var bar = document.getElementById('heroProgress');
     var count = document.getElementById('heroCount');
     var toggle = document.getElementById('heroToggle');
-    var DWELL = 8000;
+    var DWELL = 12000;
     if (!tabs.length || tabs.length !== panels.length || !bar) return;
     var index = 0, timer = null, userPaused = !!PREFERS_REDUCED_MOTION, hovering = false;
     var track = bar.parentNode;
