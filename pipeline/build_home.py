@@ -395,9 +395,6 @@ def build(dry_run: bool = False) -> None:
     html = inject(html, "<!-- PRERENDER:HEROCOUNT:START -->", "<!-- PRERENDER:HEROCOUNT:END -->",
                   str(data["totalPlugins"] + vscode_total), "HEROCOUNT")
     html = inject(html, "<!-- PRERENDER:CATALOG:START -->", "<!-- PRERENDER:CATALOG:END -->", esc(catalog_line), "CATALOG")
-    html = inject(html, "<!-- PRERENDER:PROOF:START -->", "<!-- PRERENDER:PROOF:END -->",
-                  proof_html(data, vscode_total), "PROOF")
-
     sponsors = load_sponsors()
     html = inject(html, "<!-- PRERENDER:SPONSORS:START -->", "<!-- PRERENDER:SPONSORS:END -->",
                   sponsors_html(sponsors, home=True), "SPONSORS")

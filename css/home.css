@@ -79,6 +79,7 @@ a:focus-visible, .btn:focus-visible { outline: none; box-shadow: var(--focus-rin
   position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1fr) 380px;
+  align-items: center;
   gap: 32px 56px;
   padding: 64px 0 52px;
 }
@@ -98,9 +99,9 @@ a:focus-visible, .btn:focus-visible { outline: none; box-shadow: var(--focus-rin
   mask-image: radial-gradient(ellipse at 30% 0%, #000 25%, transparent 78%);
 }
 .nb-kicker { font: 600 12px/1.4 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--signal); }
-.nb-sync { display: inline-flex; align-items: center; gap: 8px; margin-top: 10px; font: 500 12px/1.4 var(--mono); color: var(--text-dim); }
+.nb-sync { display: inline-flex; align-items: center; gap: 8px; margin-top: 0; font: 500 12px/1.4 var(--mono); color: var(--text-dim); }
 .nb-hero-title {
-  margin-top: 14px;
+  margin-top: 16px;
   max-width: 24ch;
   font: 700 clamp(28px, 3.7vw, 44px)/1.1 var(--sans);
   letter-spacing: -0.03em;
