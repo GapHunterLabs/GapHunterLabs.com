@@ -556,3 +556,69 @@ a:focus-visible, .btn:focus-visible { outline: none; box-shadow: var(--focus-rin
   .nb-panel-metric--text { font-size: 22px; }
   .nb-assure { grid-template-columns: 1fr; }
 }
+
+/* ---- Hero: visual polish (styling only; markup and behavior unchanged) ---- */
+/* A second, warmer glow behind the case card, under the same grid as the headline. */
+.nb-hero::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  right: 0;
+  width: 55%;
+  height: 100%;
+  pointer-events: none;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--signal) 13%, transparent), transparent);
+  filter: blur(8px);
+}
+.nb-hero-title { text-wrap: balance; }
+.nb-lede { text-wrap: pretty; }
+
+/* Service tabs: the icon sits on a tinted tile; the selected one is lit from the top. */
+.nb-state { position: relative; overflow: hidden; padding: 14px 14px 13px;
+  transition: border-color 0.15s, background 0.15s, transform 0.15s; }
+.nb-state .b-ico { box-sizing: content-box; width: 18px; height: 18px; padding: 7px; margin-bottom: 10px; border-radius: 9px;
+  background: color-mix(in srgb, var(--signal) 12%, transparent); }
+.nb-state:hover { transform: translateY(-1px); }
+.nb-state[aria-selected="true"] { background:
+  linear-gradient(180deg, color-mix(in srgb, var(--signal) 14%, transparent), transparent 70%), var(--surface); }
+.nb-state[aria-selected="true"] .b-ico { background: color-mix(in srgb, var(--signal) 22%, transparent); }
+
+/* Hero buttons: a little larger than the page default, the arrow nudges on hover. */
+.nb-hero .btn { min-height: 48px; padding: 12px 22px; border-radius: var(--radius-lg); font-size: 15px; }
+.nb-hero .btn.primary { box-shadow: 0 10px 28px -14px color-mix(in srgb, var(--accent) 70%, transparent); }
+
+/* Case card: soft warm light in two corners, like the hero glow. */
+.nb-hero-card { border-radius: 16px; background:
+  radial-gradient(360px 240px at 100% 0%, color-mix(in srgb, var(--signal) 9%, transparent), transparent 70%),
+  radial-gradient(320px 220px at 0% 100%, color-mix(in srgb, var(--signal) 8%, transparent), transparent 70%),
+  var(--surface); }
+.nb-avatar { border-width: 2px; }
+
+/* Each panel is a column: the meta, evidence and service rows sit at the bottom of the card,
+   so a shorter case leaves its spare room above them instead of above the controls. */
+.nb-panel, .nb-panel[hidden] { display: flex; flex-direction: column; }
+.nb-panel-meta { margin-top: auto; }
+.nb-panel-facts { margin-bottom: 18px; }
+.nb-panel-metric { font-size: clamp(40px, 4vw, 54px); }
+.nb-panel-metric--wide { font-size: 23px; }
+.nb-panel-metric--text { font-size: 27px; }
+.nb-panel-facts .nb-ico { width: 22px; height: 22px; margin-top: 1px; }
+.nb-card-ctl { border-top: 1px solid var(--border); padding-top: 14px; margin-top: 4px; }
+
+/* Engagement terms: same tinted icon tile as the tabs. */
+.nb-assure li { background:
+  linear-gradient(180deg, color-mix(in srgb, var(--signal) 5%, transparent), transparent 60%), var(--surface); }
+.nb-assure-t .nb-ico { box-sizing: content-box; width: 14px; height: 14px; padding: 4px; border-radius: 6px;
+  background: color-mix(in srgb, var(--signal) 12%, transparent); }
+.nb-assure-d { padding-left: 30px; }
+
+@media (prefers-reduced-motion: reduce) { .nb-state:hover { transform: none; } }
+@media (max-width: 960px) { .nb-hero::after { top: 45%; right: 0; width: 100%; height: 60%; } }
+@media (max-width: 520px) {
+  .nb-hero-card { border-radius: 14px; }
+  .nb-panel-metric { font-size: 36px; }
+  .nb-panel-metric--wide { font-size: 19px; }
+  .nb-panel-metric--text { font-size: 22px; }
+  .nb-hero .btn { padding: 12px 18px; }
+}
