@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-03 17:16:54 UTC",
+  "generatedAt": "2026-11-04 01:49:53 UTC",
   "totalPlugins": 146,
   "totalDownloads": 13248,
   "pending": 0,
@@ -7,10 +7,6 @@
   "totalReviews": 0,
   "avgRating": null,
   "trend7d": [
-    {
-      "date": "2026-10-28",
-      "totalDownloads": 12684
-    },
     {
       "date": "2026-10-29",
       "totalDownloads": 12770
@@ -34,45 +30,13 @@
     {
       "date": "2026-11-03",
       "totalDownloads": 13248
+    },
+    {
+      "date": "2026-11-04",
+      "totalDownloads": 13248
     }
   ],
-  "recentChanges": [
-    {
-      "date": "2026-11-03",
-      "type": "growth",
-      "name": "Mermaid Companion",
-      "niche": "Diagrams",
-      "delta": 94
-    },
-    {
-      "date": "2026-11-03",
-      "type": "growth",
-      "name": "React Native Companion",
-      "niche": "React Native Tooling",
-      "delta": 12
-    },
-    {
-      "date": "2026-11-03",
-      "type": "growth",
-      "name": "OpenAPI Companion",
-      "niche": "OpenAPI/Swagger Tooling",
-      "delta": 7
-    },
-    {
-      "date": "2026-11-03",
-      "type": "growth",
-      "name": "Import Cost Companion",
-      "niche": "JS/TS Tooling",
-      "delta": 6
-    },
-    {
-      "date": "2026-11-03",
-      "type": "growth",
-      "name": "XSD Companion",
-      "niche": "XSD/WSDL Tooling",
-      "delta": 3
-    }
-  ],
+  "recentChanges": [],
   "plugins": [
     {
       "xmlId": "dev.gaphunter.mermaidcompanion",
