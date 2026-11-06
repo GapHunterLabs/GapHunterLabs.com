@@ -913,12 +913,12 @@
     <lastmod>2026-09-28</lastmod>
   </url>
   <url>
-    <loc>https://gaphunterlabs.com/catalog/refactor-simulator/</loc>
-    <lastmod>2026-09-22</lastmod>
-  </url>
-  <url>
     <loc>https://gaphunterlabs.com/catalog/firestore-companion/</loc>
     <lastmod>2026-09-28</lastmod>
+  </url>
+  <url>
+    <loc>https://gaphunterlabs.com/catalog/refactor-simulator/</loc>
+    <lastmod>2026-09-22</lastmod>
   </url>
   <url>
     <loc>https://gaphunterlabs.com/catalog/dependency-vulnerability-companion/</loc>
@@ -937,12 +937,12 @@
     <lastmod>2026-09-22</lastmod>
   </url>
   <url>
-    <loc>https://gaphunterlabs.com/catalog/asyncapi-companion/</loc>
-    <lastmod>2026-09-28</lastmod>
-  </url>
-  <url>
     <loc>https://gaphunterlabs.com/catalog/import-cost-companion/</loc>
     <lastmod>2026-09-22</lastmod>
+  </url>
+  <url>
+    <loc>https://gaphunterlabs.com/catalog/asyncapi-companion/</loc>
+    <lastmod>2026-09-28</lastmod>
   </url>
   <url>
     <loc>https://gaphunterlabs.com/catalog/unused-npm-script-companion/</loc>
@@ -981,11 +981,11 @@
     <lastmod>2026-09-28</lastmod>
   </url>
   <url>
-    <loc>https://gaphunterlabs.com/catalog/prometheus-metric-naming-companion/</loc>
+    <loc>https://gaphunterlabs.com/catalog/spreadsheet-companion/</loc>
     <lastmod>2026-09-22</lastmod>
   </url>
   <url>
-    <loc>https://gaphunterlabs.com/catalog/spreadsheet-companion/</loc>
+    <loc>https://gaphunterlabs.com/catalog/prometheus-metric-naming-companion/</loc>
     <lastmod>2026-09-22</lastmod>
   </url>
   <url>
@@ -1029,6 +1029,10 @@
     <lastmod>2026-09-22</lastmod>
   </url>
   <url>
+    <loc>https://gaphunterlabs.com/catalog/graphql-companion/</loc>
+    <lastmod>2026-09-28</lastmod>
+  </url>
+  <url>
     <loc>https://gaphunterlabs.com/catalog/nginx-companion/</loc>
     <lastmod>2026-09-22</lastmod>
   </url>
@@ -1037,16 +1041,12 @@
     <lastmod>2026-09-22</lastmod>
   </url>
   <url>
-    <loc>https://gaphunterlabs.com/catalog/graphql-companion/</loc>
+    <loc>https://gaphunterlabs.com/catalog/git-hygiene-companion/</loc>
     <lastmod>2026-09-28</lastmod>
   </url>
   <url>
     <loc>https://gaphunterlabs.com/catalog/n-plus-one-query-companion/</loc>
     <lastmod>2026-09-22</lastmod>
-  </url>
-  <url>
-    <loc>https://gaphunterlabs.com/catalog/git-hygiene-companion/</loc>
-    <lastmod>2026-09-28</lastmod>
   </url>
   <url>
     <loc>https://gaphunterlabs.com/catalog/review-companion/</loc>
@@ -1077,15 +1077,15 @@
     <lastmod>2026-09-28</lastmod>
   </url>
   <url>
+    <loc>https://gaphunterlabs.com/catalog/circular-dependency-companion/</loc>
+    <lastmod>2026-09-22</lastmod>
+  </url>
+  <url>
     <loc>https://gaphunterlabs.com/catalog/github-actions-pwn-request-companion/</loc>
     <lastmod>2026-10-04</lastmod>
   </url>
   <url>
     <loc>https://gaphunterlabs.com/catalog/terraform-iam-wildcard-companion/</loc>
-    <lastmod>2026-09-22</lastmod>
-  </url>
-  <url>
-    <loc>https://gaphunterlabs.com/catalog/circular-dependency-companion/</loc>
     <lastmod>2026-09-22</lastmod>
   </url>
   <url>
@@ -1129,11 +1129,11 @@
     <lastmod>2026-09-22</lastmod>
   </url>
   <url>
-    <loc>https://gaphunterlabs.com/catalog/gradle-task-graph-companion/</loc>
+    <loc>https://gaphunterlabs.com/catalog/k8s-resource-limit-companion/</loc>
     <lastmod>2026-09-22</lastmod>
   </url>
   <url>
-    <loc>https://gaphunterlabs.com/catalog/k8s-resource-limit-companion/</loc>
+    <loc>https://gaphunterlabs.com/catalog/gradle-task-graph-companion/</loc>
     <lastmod>2026-09-22</lastmod>
   </url>
   <url>
@@ -1141,11 +1141,11 @@
     <lastmod>2026-09-22</lastmod>
   </url>
   <url>
-    <loc>https://gaphunterlabs.com/catalog/json-to-code-companion/</loc>
+    <loc>https://gaphunterlabs.com/catalog/k8s-label-selector-exposure-companion/</loc>
     <lastmod>2026-09-22</lastmod>
   </url>
   <url>
-    <loc>https://gaphunterlabs.com/catalog/k8s-label-selector-exposure-companion/</loc>
+    <loc>https://gaphunterlabs.com/catalog/json-to-code-companion/</loc>
     <lastmod>2026-09-22</lastmod>
   </url>
   <url>
@@ -1293,6 +1293,10 @@
     <lastmod>2026-09-22</lastmod>
   </url>
   <url>
+    <loc>https://gaphunterlabs.com/catalog/rabbitmq-channel-reuse-companion/</loc>
+    <lastmod>2026-09-22</lastmod>
+  </url>
+  <url>
     <loc>https://gaphunterlabs.com/catalog/ruby-nethttp-reuse-companion/</loc>
     <lastmod>2026-09-22</lastmod>
   </url>
@@ -1306,10 +1310,6 @@
   </url>
   <url>
     <loc>https://gaphunterlabs.com/catalog/php-open-redirect-companion/</loc>
-    <lastmod>2026-09-22</lastmod>
-  </url>
-  <url>
-    <loc>https://gaphunterlabs.com/catalog/rabbitmq-channel-reuse-companion/</loc>
     <lastmod>2026-09-22</lastmod>
   </url>
   <url>
