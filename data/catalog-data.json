@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-05 12:51:21 UTC",
+  "generatedAt": "2026-11-06 01:58:12 UTC",
   "totalPlugins": 146,
   "totalDownloads": 13480,
   "pending": 0,
@@ -7,10 +7,6 @@
   "totalReviews": 0,
   "avgRating": null,
   "trend7d": [
-    {
-      "date": "2026-10-29",
-      "totalDownloads": 12770
-    },
     {
       "date": "2026-10-30",
       "totalDownloads": 12965
@@ -34,45 +30,13 @@
     {
       "date": "2026-11-05",
       "totalDownloads": 13480
+    },
+    {
+      "date": "2026-11-06",
+      "totalDownloads": 13480
     }
   ],
-  "recentChanges": [
-    {
-      "date": "2026-11-05",
-      "type": "growth",
-      "name": "Mermaid Companion",
-      "niche": "Diagrams",
-      "delta": 26
-    },
-    {
-      "date": "2026-11-05",
-      "type": "growth",
-      "name": "Test Scaffold Companion",
-      "niche": "Testing / Codegen",
-      "delta": 3
-    },
-    {
-      "date": "2026-11-05",
-      "type": "growth",
-      "name": "AWS S3 Public ACL via SDK Companion",
-      "niche": "AWS Security",
-      "delta": 3
-    },
-    {
-      "date": "2026-11-05",
-      "type": "growth",
-      "name": "React Native Companion",
-      "niche": "React Native Tooling",
-      "delta": 2
-    },
-    {
-      "date": "2026-11-05",
-      "type": "growth",
-      "name": "JSON Schema Companion",
-      "niche": "JSON Schema Tooling",
-      "delta": 2
-    }
-  ],
+  "recentChanges": [],
   "plugins": [
     {
       "xmlId": "dev.gaphunter.mermaidcompanion",
