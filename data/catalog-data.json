@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-06 12:35:35 UTC",
+  "generatedAt": "2026-11-07 01:31:31 UTC",
   "totalPlugins": 146,
   "totalDownloads": 13529,
   "pending": 0,
@@ -7,10 +7,6 @@
   "totalReviews": 0,
   "avgRating": null,
   "trend7d": [
-    {
-      "date": "2026-10-30",
-      "totalDownloads": 12965
-    },
     {
       "date": "2026-10-31",
       "totalDownloads": 13044
@@ -34,45 +30,13 @@
     {
       "date": "2026-11-06",
       "totalDownloads": 13529
+    },
+    {
+      "date": "2026-11-07",
+      "totalDownloads": 13529
     }
   ],
-  "recentChanges": [
-    {
-      "date": "2026-11-06",
-      "type": "growth",
-      "name": "Mermaid Companion",
-      "niche": "Diagrams",
-      "delta": 17
-    },
-    {
-      "date": "2026-11-06",
-      "type": "growth",
-      "name": "Firestore Companion",
-      "niche": "Firestore / Database",
-      "delta": 8
-    },
-    {
-      "date": "2026-11-06",
-      "type": "growth",
-      "name": "Import Cost Companion",
-      "niche": "JS/TS Tooling",
-      "delta": 4
-    },
-    {
-      "date": "2026-11-06",
-      "type": "growth",
-      "name": "React Native Companion",
-      "niche": "React Native Tooling",
-      "delta": 2
-    },
-    {
-      "date": "2026-11-06",
-      "type": "growth",
-      "name": "JWT Companion",
-      "niche": "JWT / Auth Tooling",
-      "delta": 2
-    }
-  ],
+  "recentChanges": [],
   "plugins": [
     {
       "xmlId": "dev.gaphunter.mermaidcompanion",
