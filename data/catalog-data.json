@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-07 11:24:38 UTC",
+  "generatedAt": "2026-11-08 01:01:27 UTC",
   "totalPlugins": 146,
   "totalDownloads": 13686,
   "pending": 0,
@@ -7,10 +7,6 @@
   "totalReviews": 0,
   "avgRating": null,
   "trend7d": [
-    {
-      "date": "2026-10-31",
-      "totalDownloads": 13044
-    },
     {
       "date": "2026-11-01",
       "totalDownloads": 13073
@@ -34,45 +30,13 @@
     {
       "date": "2026-11-07",
       "totalDownloads": 13686
+    },
+    {
+      "date": "2026-11-08",
+      "totalDownloads": 13686
     }
   ],
-  "recentChanges": [
-    {
-      "date": "2026-11-07",
-      "type": "growth",
-      "name": "Mermaid Companion",
-      "niche": "Diagrams",
-      "delta": 27
-    },
-    {
-      "date": "2026-11-07",
-      "type": "growth",
-      "name": "Prometheus Metric Naming Companion",
-      "niche": "Observability Tooling",
-      "delta": 4
-    },
-    {
-      "date": "2026-11-07",
-      "type": "growth",
-      "name": "Kafka Producer Reuse Companion",
-      "niche": "Messaging Client Reuse",
-      "delta": 4
-    },
-    {
-      "date": "2026-11-07",
-      "type": "growth",
-      "name": "AWS SDK Client Reuse Companion",
-      "niche": "Cloud SDK Client Reuse",
-      "delta": 4
-    },
-    {
-      "date": "2026-11-07",
-      "type": "growth",
-      "name": "SQL String Concatenation Companion",
-      "niche": "SQL Injection Detection",
-      "delta": 3
-    }
-  ],
+  "recentChanges": [],
   "plugins": [
     {
       "xmlId": "dev.gaphunter.mermaidcompanion",
