@@ -44,8 +44,10 @@ jobs:
       # 2026-11-09: css/tw.css is compiled by the Tailwind CLI from the classes in the pages, the scripts and the
       # Python generators. It is not part of regenerate.py (it needs npm), so it is checked here: text in a generator
       # once added CSS rules nobody uses, and nothing ran this check.
+      # --ignore-scripts: no package runs code at install time; the Tailwind CLI 3 is plain JavaScript and builds the
+      # same css/tw.css without them (checked locally on 2026-11-09).
       - name: Install the Tailwind CLI (pipeline/package-lock.json)
-        run: npm ci --prefix pipeline --no-audit --no-fund
+        run: npm ci --prefix pipeline --ignore-scripts --no-audit --no-fund
 
       - name: css/tw.css is what the Tailwind CLI builds
         run: python3 _review/verify_tailwind.py

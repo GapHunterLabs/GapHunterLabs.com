@@ -10,10 +10,11 @@ _review/*.png
 
 # OG rendering (home/services via _review/render_og.py, per-plugin catalog
 # via pipeline/build_og_images.py) uses Playwright now; its Chromium lives
-# in the user cache, not the repo. These stay ignored defensively as
-# leftovers from the old puppeteer-core/Edge renderer.
+# in the user cache, not the repo. The modules stay ignored.
+# 2026-11-09: pipeline/package-lock.json is committed (it was ignored as a
+# leftover of the old renderer): site-checks.yml runs `npm ci` from it to
+# build css/tw.css with the exact Tailwind version, like a11y/ does.
 pipeline/node_modules/
-pipeline/package-lock.json
 
 # Accessibility gate (a11y/run-axe.mjs): puppeteer + axe-core installed in CI.
 # The lockfile is committed for reproducible `npm ci`; the modules are not.

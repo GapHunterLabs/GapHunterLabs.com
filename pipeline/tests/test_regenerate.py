@@ -3,6 +3,7 @@
     python -m unittest discover -s pipeline/tests -v
 """
 import re
+import subprocess
 import sys
 import unittest
 from pathlib import Path
@@ -91,8 +92,12 @@ class WorkflowWiringTest(unittest.TestCase):
         self.assertIn("python3 pipeline/regenerate.py --strict --check", text)
         self.assertIn("python3 -m unittest discover -s pipeline/tests", text)
         self.assertIn("python3 _review/verify_tailwind.py", text)
-        self.assertIn("npm ci --prefix pipeline", text)
+        self.assertIn("npm ci --prefix pipeline --ignore-scripts", text)
         self.assertIn("pull_request:", text)
+        # npm ci needs the lockfile in the repository, not only on disk (the first run of this check failed on that)
+        tracked = subprocess.run(["git", "ls-files", "--error-unmatch", "pipeline/package-lock.json"], cwd=ROOT,
+                                 capture_output=True, text=True)
+        self.assertEqual(tracked.returncode, 0, "pipeline/package-lock.json must be committed for npm ci")
 
     def test_tailwind_ignores_python_slices_and_translation_keys(self):
         # The case of 2026-11-09: text[line_start:at] and "[ctx:gh-nav-link]" in the generators became CSS rules.
