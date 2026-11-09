@@ -391,7 +391,11 @@ def load_prices(path, plugins):
     """
     if not path.exists():
         return {}
-    raw = json.loads(path.read_text(encoding="utf-8"))
+    try:
+        # utf-8-sig: PowerShell 5.1's Set-Content -Encoding utf8 and Notepad write a BOM, which plain utf-8 rejects
+        raw = json.loads(path.read_text(encoding="utf-8-sig"))
+    except ValueError as exc:  # JSONDecodeError and UnicodeDecodeError; neither message repeats the file's text
+        die("%s: not valid UTF-8 JSON (%s)" % (path.name, exc))
     prices = raw.get("prices") if isinstance(raw, dict) else None
     if not isinstance(prices, dict):
         die("%s: expected an object with a \"prices\" object" % path.name)
