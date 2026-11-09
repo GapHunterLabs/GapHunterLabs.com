@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-08 11:36:37 UTC",
+  "generatedAt": "2026-11-09 01:22:35 UTC",
   "totalPlugins": 146,
   "totalDownloads": 13715,
   "pending": 0,
@@ -7,10 +7,6 @@
   "totalReviews": 0,
   "avgRating": null,
   "trend7d": [
-    {
-      "date": "2026-11-01",
-      "totalDownloads": 13073
-    },
     {
       "date": "2026-11-02",
       "totalDownloads": 13101
@@ -34,45 +30,13 @@
     {
       "date": "2026-11-08",
       "totalDownloads": 13715
+    },
+    {
+      "date": "2026-11-09",
+      "totalDownloads": 13715
     }
   ],
-  "recentChanges": [
-    {
-      "date": "2026-11-08",
-      "type": "growth",
-      "name": "Mermaid Companion",
-      "niche": "Diagrams",
-      "delta": 9
-    },
-    {
-      "date": "2026-11-08",
-      "type": "growth",
-      "name": "OpenAPI Companion",
-      "niche": "OpenAPI/Swagger Tooling",
-      "delta": 3
-    },
-    {
-      "date": "2026-11-08",
-      "type": "growth",
-      "name": "React Native Companion",
-      "niche": "React Native Tooling",
-      "delta": 2
-    },
-    {
-      "date": "2026-11-08",
-      "type": "growth",
-      "name": "Terraform IAM Wildcard Companion",
-      "niche": "IAM / Cloud Security",
-      "delta": 1
-    },
-    {
-      "date": "2026-11-08",
-      "type": "growth",
-      "name": "Terraform IAM Privesc Companion",
-      "niche": "IAM / Cloud Security",
-      "delta": 1
-    }
-  ],
+  "recentChanges": [],
   "plugins": [
     {
       "xmlId": "dev.gaphunter.mermaidcompanion",
