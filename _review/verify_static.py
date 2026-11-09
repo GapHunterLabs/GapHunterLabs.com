@@ -174,12 +174,14 @@ for slug in ("catalog", "methodology", "contact", "security", "engineering-evide
 # 2026-10-19 (rediseno): Work / Engineering / Tools / Services / Contact.
 # Methodology y las paginas de evidencia pasan al submenu de Engineering
 # (6 items); las rutas no cambian. Ver pipeline/build_chrome.py.
+# 2026-11-09 (D6/D9): Services / Evidence / Plugins / Sponsors / Blog / Contact; Methodology goes last in the
+# Evidence menu. This list had been failing since 2026-11-04, when Blog joined the header without it.
 import html as _html
-TOP_LABELS = ["Work", "Engineering", "Tools", "Services", "Contact"]
-SUB_LABELS = ["Methodology", "Evidence overview", "JetBrains Platform tickets", "Open-source security reports", "Third-party plugin audits", "Plugin case studies"]
+TOP_LABELS = ["Services", "Evidence", "Plugins", "Sponsors", "Blog", "Contact"]
+SUB_LABELS = ["Evidence overview", "JetBrains Platform tickets", "Open-source security reports", "Third-party plugin audits", "Plugin case studies", "Methodology"]
 for display_name, rel_path, active, footer_active in (
     ("index.html", "index.html", None, None),
-    ("catalog.html", "catalog/index.html", "Tools", None),
+    ("catalog.html", "catalog/index.html", "Plugins", None),
     ("methodology.html", "methodology/index.html", "Methodology", None),
     ("engineering-evidence", "engineering-evidence/index.html", "Evidence overview", None),
     ("case-studies", "engineering-evidence/case-studies/index.html", "Plugin case studies", None),

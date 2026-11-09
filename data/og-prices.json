@@ -1,0 +1,31 @@
+{
+ "about": "Prices and delivery times the social images show, written by build_page_og.py after a full render. build_services.py --check compares it with data/services.json.",
+ "texts": [
+  "og-audit.en.amount=10,500",
+  "og-audit.en.ext_note=Extended: USD 15,000 · 15 business days",
+  "og-audit.en.price_note=Fixed price. One plugin, up to 3 IDE versions, 10 business days.",
+  "og-audit.es.amount=10.500",
+  "og-audit.es.ext_note=Extendida: USD 15.000 · 15 días hábiles",
+  "og-audit.es.price_note=Precio fijo. Un plugin, hasta 3 versiones del IDE, 10 días hábiles.",
+  "og-custom-plugins.en.note=Fixed price from USD 7,500",
+  "og-custom-plugins.es.note=Precio fijo desde USD 7.500",
+  "og-dependency-security.en.note=Fixed price from USD 4,800",
+  "og-dependency-security.es.note=Precio fijo desde USD 4.800",
+  "og-eula.en.note=Paid plugins · Apache-2.0 source",
+  "og-eula.es.note=Plugins de pago · Código Apache-2.0",
+  "og-image.en.note=Fixed-scope engagements from USD 4,500",
+  "og-image.es.note=Proyectos de alcance fijo desde USD 4.500",
+  "og-plugin-updates.en.note=Fixed price from USD 4,500",
+  "og-plugin-updates.es.note=Precio fijo desde USD 4.500",
+  "og-services.en.note=Written deliverables · 50% on start, 50% on delivery",
+  "og-services.en.row=Custom plugins and inspections | from USD 7,500 | 10 business days",
+  "og-services.en.row=Dependency and CI/CD security review | from USD 4,800 | 5 business days",
+  "og-services.en.row=Plugin performance audit | USD 10,500 | 10 business days",
+  "og-services.en.row=Plugin updates for new IDE versions | from USD 4,500 | 5 business days",
+  "og-services.es.note=Entregables por escrito · 50% al iniciar, 50% al entregar",
+  "og-services.es.row=Actualización de plugins para nuevos IDE | desde USD 4.500 | 5 días hábiles",
+  "og-services.es.row=Auditoría de rendimiento de plugins | USD 10.500 | 10 días hábiles",
+  "og-services.es.row=Plugins e inspecciones a medida | desde USD 7.500 | 10 días hábiles",
+  "og-services.es.row=Seguridad de dependencias y CI/CD | desde USD 4.800 | 5 días hábiles"
+ ]
+}

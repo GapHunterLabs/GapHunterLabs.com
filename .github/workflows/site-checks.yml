@@ -1,0 +1,34 @@
+name: Site checks
+
+# Runs on every pull request that touches the generators, the data or the pages:
+# - the unit tests of the build scripts (pipeline/tests): the prices file of the plugin pages, the contextual keys of
+#   the Spanish translation, and data/services.json with the pages it drives;
+# - build_services.py --check: every service price and delivery time on the site, the social images included,
+#   matches data/services.json.
+# Nothing is written or published; the job only reads the checkout.
+
+on:
+  pull_request:
+    paths:
+      - "pipeline/**"
+      - "data/**"
+      - "**.html"
+      - "js/**"
+      - ".github/workflows/site-checks.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Unit tests of the build scripts
+        run: python3 -m unittest discover -s pipeline/tests -v
+
+      - name: Service prices match data/services.json
+        run: python3 pipeline/build_services.py --check

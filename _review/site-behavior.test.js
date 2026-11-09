@@ -325,6 +325,47 @@ test('phone header: the primary action stays visible on one row from 320 to 560 
   assert(!bad.length, bad.join('; '));
 });
 
+// 2026-11-09 (D6/D9). Headless Chromium draws no scrollbar, but Chrome on Windows takes about 17 px of the window
+// for a classic one while the media queries still see the full window. The pass with "sb" narrows the page by
+// 17 px to reproduce that. Wherever the links are shown (no burger), they must be the six labels in order, on one
+// row, and at least 8 px clear of the buttons.
+test('desktop header: six links in order, on one row, clear of the buttons (EN and ES, with a 17 px scrollbar)', async ({ b, base }) => {
+  const LABELS = {
+    en: ['Services', 'Evidence', 'Plugins', 'Sponsors', 'Blog', 'Contact'],
+    es: ['Servicios', 'Evidencia', 'Herramientas', 'Patrocinio', 'Blog', 'Contacto'],
+  };
+  const pages = [['/', 'en'], ['/sponsors/', 'en'], ['/es/', 'es'], ['/es/catalogo/', 'es'], ['/es/servicios/', 'es'], ['/es/patrocinadores/', 'es']];
+  const bad = [];
+  let shownAt = null;
+  try {
+    for (const w of [961, 1001, 1024, 1280]) {   // 961: the first width with links if the burger ever starts at 960 again
+      await b.viewport(w, 800, false);
+      for (const [p, lang] of pages) {
+        for (const sb of [0, 17]) {
+          await b.navigate(base + p);
+          const r = await b.evaluate("((sb)=>{if(sb)document.documentElement.style.width='calc(100% - '+sb+'px)';" +
+            "const burger=document.querySelector('.gh-burger');if(getComputedStyle(burger).display!=='none')return {burger:true};" +
+            "const nav=document.getElementById('siteNav');const items=[...nav.children].filter(el=>el.offsetParent!==null);" +
+            "const labels=items.map(el=>((el.matches('a')?el:el.querySelector('button'))||el).textContent.trim());" +
+            "const tops=new Set(items.map(el=>Math.round(el.getBoundingClientRect().top)));" +
+            "const gap=document.querySelector('.gh-tools').getBoundingClientRect().left-items[items.length-1].getBoundingClientRect().right;" +
+            "return {burger:false,labels,rows:tops.size,gap:Math.round(gap)}})(" + sb + ")");
+          if (r.burger) continue;
+          if (shownAt === null || w < shownAt) shownAt = w;
+          const where = w + (sb ? '+sb ' : ' ') + p;
+          if (JSON.stringify(r.labels) !== JSON.stringify(LABELS[lang])) bad.push(where + ' labels ' + r.labels.join('|'));
+          if (r.rows !== 1) bad.push(where + ' links on ' + r.rows + ' rows');
+          if (r.gap < 8) bad.push(where + ' only ' + r.gap + 'px clear of the buttons');
+        }
+      }
+    }
+  } finally {
+    await b.viewport(1280, 800, false);
+  }
+  assert(shownAt !== null, 'the header links never showed, even at 1280 px');
+  assert(!bad.length, bad.join('; '));
+});
+
 test('sponsors: an action above the fold, levels before the empty sponsor wall', async ({ b, base }) => {
   await b.viewport(390, 844, true);
   await b.navigate(base + '/sponsors/');

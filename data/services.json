@@ -1,0 +1,56 @@
+{
+  "about": "Single source for the published services: names, URLs, levels, prices in whole US dollars and delivery in business days. Edit here, then run python pipeline/build_services.py. Page text binds each figure with <!--svc:<key>.<level>.<usd|days>-->.",
+  "services": [
+    {
+      "key": "audit",
+      "name": "Plugin performance audit",
+      "shortName": "Performance audit",
+      "path": "/plugin-performance-audit/",
+      "group": "jetbrains",
+      "contactLabel": {"en": "Plugin performance audit", "es": "Auditoría de rendimiento de un plugin"},
+      "tiers": [
+        {"id": "base", "usd": 10500, "days": 10},
+        {"id": "extended", "usd": 15000, "days": 15}
+      ]
+    },
+    {
+      "key": "updates",
+      "name": "Plugin updates for new IDE versions",
+      "shortName": "Plugin updates",
+      "path": "/plugin-updates/",
+      "group": "jetbrains",
+      "contactLabel": {"en": "Plugin update for new IDE versions", "es": "Actualización de un plugin para versiones nuevas del IDE"},
+      "tiers": [
+        {"id": "minor", "usd": 4500, "days": 5},
+        {"id": "major", "usd": 9000, "days": 10}
+      ]
+    },
+    {
+      "key": "depsec",
+      "name": "Dependency and CI/CD security review",
+      "shortName": "Dependency and CI/CD security",
+      "path": "/dependency-security-review/",
+      "group": "any",
+      "contactLabel": {"en": "Dependency and CI/CD security review", "es": "Revisión de seguridad de dependencias y CI/CD"},
+      "tiers": [
+        {"id": "one-repo", "usd": 4800, "days": 5},
+        {"id": "five-repos", "usd": 12000, "days": 10}
+      ],
+      "addOns": [
+        {"id": "cra", "usd": 1500, "days": 2}
+      ]
+    },
+    {
+      "key": "custom",
+      "name": "Custom plugins and inspections",
+      "shortName": "Custom plugins and inspections",
+      "path": "/custom-plugins-inspections/",
+      "group": "jetbrains",
+      "contactLabel": {"en": "Custom plugins and inspections", "es": "Plugins e inspecciones a medida"},
+      "tiers": [
+        {"id": "inspections", "usd": 7500, "days": 10},
+        {"id": "full-plugin", "usd": 15000, "days": null, "openEnded": true}
+      ]
+    }
+  ]
+}

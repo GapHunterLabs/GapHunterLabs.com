@@ -57,15 +57,24 @@ PAGES = (
 # Un item con submenu es (etiqueta, [(href, texto), ...]); el resto (href, texto).
 # 2026-10-19 (rediseno): Work / Engineering / Tools / Services / Contact. Las
 # rutas no cambian; Methodology y las paginas de evidencia van bajo Engineering.
+# 2026-11-09 (decisions D6 and D9): Services / Evidence / Plugins / Sponsors / Blog / Contact.
+# - "Work" (an anchor on the home) and the "Engineering" menu led to the same evidence pages under two labels;
+#   they are one menu now, "Evidence", named like the page it opens.
+# - Services goes first: it is the line of business that pays the year. Sponsors joins the header.
+# - "Plugins" is the word of the catalog's own title and of the searches that bring visitors. In Spanish the
+#   header link reads "Herramientas" and "Sponsors" reads "Patrocinio": both come from contextual keys in
+#   es.json ("[ctx:gh-nav-link] ..."), because the plain keys are used elsewhere with other translations.
+# - No URL changes. Measured before the change: at 961 px (the narrowest width before the burger menu) this
+#   leaves 40 px free in English and 8 px in Spanish; _review/site-behavior.test.js fails if it ever overlaps.
 EE = "/engineering-evidence/"
-ENG_ITEMS = (("/methodology/", "Methodology", "How problems are investigated and fixed"),
-             (EE, "Evidence overview", "Everything that backs the work"),
-             (EE + "jetbrains-platform-tickets/", "JetBrains Platform tickets", "Root-cause reports and fixes in the IntelliJ Platform"),
-             (EE + "open-source-security-reports/", "Open-source security reports", "Vulnerable dependencies fixed by maintainers"),
-             (EE + "third-party-plugin-audits/", "Third-party plugin audits", "Findings in other vendors&rsquo; plugins, fixed by them"),
-             (EE + "case-studies/", "Plugin case studies", "Plugins with the strongest evidence"))
-NAV = (("/#work", "Work"), ("Engineering", ENG_ITEMS), ("/catalog/", "Tools"),
-       ("/writing/", "Blog"), ("/services/", "Services"), ("/contact/", "Contact"))
+EVIDENCE_ITEMS = ((EE, "Evidence overview", "Everything that backs the work"),
+                  (EE + "jetbrains-platform-tickets/", "JetBrains Platform tickets", "Root-cause reports and fixes in the IntelliJ Platform"),
+                  (EE + "open-source-security-reports/", "Open-source security reports", "Vulnerable dependencies fixed by maintainers"),
+                  (EE + "third-party-plugin-audits/", "Third-party plugin audits", "Findings in other vendors&rsquo; plugins, fixed by them"),
+                  (EE + "case-studies/", "Plugin case studies", "Plugins with the strongest evidence"),
+                  ("/methodology/", "Methodology", "How problems are investigated and fixed"))
+NAV = (("/services/", "Services"), ("Evidence", EVIDENCE_ITEMS), ("/catalog/", "Plugins"),
+       ("/sponsors/", "Sponsors"), ("/writing/", "Blog"), ("/contact/", "Contact"))
 
 LOGO = ('<svg class="gh-logo" viewBox="0 0 1024 1024" aria-hidden="true">'
         '<path d="M 511,81 L 847,283 L 725,351 L 508,223 L 296,348 L 296,588 L 463,691 L 342,765 L 173,665 L 172,281 Z" fill="#0151FC"/>'
@@ -227,23 +236,42 @@ def header_html(active, en_path="/"):
          ICON["system"], ICON["light"], ICON["dark"], theme_items)
 
 
+_SERVICES = None
+
+
+def _services():
+    """data/services.json, read once and checked by services_data.load (the build stops on a bad file)."""
+    global _SERVICES
+    if _SERVICES is None:
+        import services_data
+        try:
+            _SERVICES = services_data.load()
+        except services_data.ServicesError as exc:
+            _sys.exit("[build_chrome] ERROR: %s" % exc)
+    return _SERVICES
+
+
 def footer_html(active):
     def link(href, label, external=False):
         cur = ' aria-current="page"' if href == active else ""
         ext = ' target="_blank" rel="noopener"' if external else ""
         return '<a href="%s"%s%s>%s</a>' % (href, cur, ext, label)
 
+    # 2026-11-09 (D6): 6 columns. "Work" and "Engineering" were the same evidence pages under two titles, and three
+    # of the four service pages and the Blog had no footer link at all.
+    # The service links come from data/services.json (decision D11), in its order, with their footer labels.
     cols = (
-        ("Work", [link("/#work", "Selected investigations"),
-                  link(EE + "jetbrains-platform-tickets/", "JetBrains Platform tickets"),
-                  link(EE + "open-source-security-reports/", "Open-source security reports"),
-                  link(EE + "third-party-plugin-audits/", "Third-party plugin audits"),
-                  link(EE + "case-studies/", "Plugin case studies")]),
-        ("Engineering", [link("/methodology/", "Methodology"), link(EE, "Evidence overview")]),
+        ("Services", [link("/services/", "Work with me")]
+                     + [link(s["path"], s["shortName"]) for s in _services()["services"]]
+                     + [link("/contact/", "Contact")]),
+        ("Evidence", [link(EE, "Evidence overview"),
+                      link(EE + "jetbrains-platform-tickets/", "JetBrains Platform tickets"),
+                      link(EE + "open-source-security-reports/", "Open-source security reports"),
+                      link(EE + "third-party-plugin-audits/", "Third-party plugin audits"),
+                      link(EE + "case-studies/", "Plugin case studies"),
+                      link("/methodology/", "Methodology"), link("/writing/", "Blog")]),
         ("Tools", [link("/catalog/", "Plugin catalog"), link("/catalog/?pricing=paid", "Paid &amp; Pro plugins"),
                    link("/catalog/?platform=vscode", "VS Code extensions"), link("/ghl-jail/", "ghl-jail (Windows sandbox)")]),
-        ("Services", [link("/services/", "Work with me"), link("/plugin-performance-audit/", "Performance audit"),
-                      link("/contact/", "Contact")]),
         # 2026-11-08: sponsorship is its own line of support, not a service (a service has a fixed scope and date).
         ("Sponsorship", [link("/sponsors/", "Sponsor the work"), link("/sponsors/#sec-levels", "Sponsorship levels"),
                          link("/contact/?intent=sponsor", "Company sponsorship")]),

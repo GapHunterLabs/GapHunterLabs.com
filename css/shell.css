@@ -562,7 +562,11 @@
 .gh-skip-link:focus { top: 12px; }
 @media (prefers-reduced-motion: reduce) { .gh-skip-link { transition: none; } }
 
-@media (max-width: 960px) {
+/* 2026-11-09: the burger menu starts at 1000px instead of 960px. With the six links of the header (D6) the
+   Spanish row ("Herramientas", D9) needs about 953px of layout, and Chrome on Windows takes about 17px of the
+   window for a classic scrollbar while this media query still sees the full window: at 961-977px the links
+   would run under the buttons. From 1001px there are about 31px left with that scrollbar (48px without). */
+@media (max-width: 1000px) {
   .gh-burger { display: inline-block; }
   .gh-nav { display: none; position: absolute; top: 100%; left: 0; right: 0; flex-direction: column; align-items: stretch;
     gap: 2px; padding: 12px var(--page-pad) 18px; background: var(--surface); border-bottom: 1px solid var(--border);
@@ -614,7 +618,7 @@
 .gh-footer-about-title { margin: 0 0 4px; color: var(--signal) !important; font: 600 11px/1.4 var(--mono) !important; letter-spacing: 0.1em; text-transform: uppercase; }
 .gh-footer-about-links { display: flex; flex-wrap: wrap; gap: 4px 14px; margin-top: 8px !important; }
 .gh-footer-about-links a { color: var(--text); font-size: 13px; text-decoration: underline; text-underline-offset: 0.18em; }
-.gh-footer-cols { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 24px; }
+.gh-footer-cols { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 24px; }
 .gh-footer-col { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
 .gh-footer-title { margin: 0 0 4px; color: var(--text); font: 600 13.5px var(--sans); }
 .gh-footer-col a { color: var(--text-dim); font-size: 14px; text-decoration: none; }
