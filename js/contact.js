@@ -10,7 +10,9 @@
 // prellenados en título/cuerpo -- llega por notificación default de
 // GitHub a la cuenta que ya opera el repo (contact@gaphunterlabs.com).
 (function () {
-  var REPO_ISSUES = 'https://github.com/GapHunterLabs/GapHunterLabs.github.io/issues/new';
+  // 2026-11-09: the site repository was renamed from GapHunterLabs.github.io to GapHunterLabs.com. GitHub redirects
+  // the old URL only while no repository takes the old name again, so the form uses the current one.
+  var REPO_ISSUES = 'https://github.com/GapHunterLabs/GapHunterLabs.com/issues/new';
   // 2026-09-27: bilingue -- la version en espanol (/es/contacto/) usa este
   // mismo script; el idioma sale de <html lang>.
   var ES = document.documentElement.lang === 'es';
