@@ -22,8 +22,16 @@ const axeSource = axe.source;
 
 const here = dirname(fileURLToPath(import.meta.url));
 const BASE = process.env.BASE_URL || "http://localhost:8080";
-const TAGS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"];
+const TAGS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"];
 const THEMES = ["light", "dark"];
+// 2026-11-08: the gate used to leave the window at puppeteer's 800x600 and to choose the theme with
+// prefers-color-scheme alone. Since 2026-10-28 js/theme-init.js makes a first visit dark whatever the OS says,
+// so both passes were dark and neither the phone nor the wide desktop layout was ever checked. The theme is now
+// stored the way the site's own switcher stores it, and a page that does not end up in that theme fails the gate.
+const VIEWPORTS = [
+  { name: "390", width: 390, height: 844, isMobile: true, hasTouch: true, deviceScaleFactor: 1 },
+  { name: "1280", width: 1280, height: 800, deviceScaleFactor: 1 },
+];
 
 const { paths } = JSON.parse(await readFile(join(here, "urls.json"), "utf8"));
 
@@ -37,12 +45,25 @@ const failed = [];
 
 for (const path of paths) {
   const url = BASE + path;
-  for (const theme of THEMES) {
+  for (const theme of THEMES) for (const viewport of VIEWPORTS) {
+    const label = `${theme} ${viewport.name}px`;
     const page = await browser.newPage();
+    await page.setViewport(viewport);
+    await page.evaluateOnNewDocument((t) => {
+      try { localStorage.setItem("ghl-theme", t); } catch (e) { /* the theme check below reports it */ }
+    }, theme);
     await page.emulateMediaFeatures([{ name: "prefers-color-scheme", value: theme }]);
     await page.goto(url, { waitUntil: "networkidle0", timeout: 60000 });
     // Let scroll-reveal / deferred chrome settle, mirroring the old `wait: 1000`.
     await new Promise((r) => setTimeout(r, 1000));
+    const shown = await page.evaluate(() => document.documentElement.getAttribute("data-theme"));
+    if (shown !== theme) {
+      console.log(`✘ ${path} [${label}] — asked for the ${theme} theme, the page shows "${shown}"`);
+      totalViolations += 1;
+      failed.push({ path, theme: label });
+      await page.close();
+      continue;
+    }
     await page.evaluate(axeSource);
     const results = await page.evaluate(async (tags) => {
       return await axe.run(document, {
@@ -55,8 +76,8 @@ for (const path of paths) {
     const count = results.violations.reduce((a, v) => a + v.nodes.length, 0);
     if (count > 0) {
       totalViolations += count;
-      failed.push({ path, theme });
-      console.log(`✘ ${path} [${theme}] — ${count} violation node(s)`);
+      failed.push({ path, theme: label });
+      console.log(`✘ ${path} [${label}] — ${count} violation node(s)`);
       for (const v of results.violations) {
         console.log(`    ${v.id} (${v.impact}): ${v.help}`);
         for (const n of v.nodes.slice(0, 8)) {
@@ -69,7 +90,7 @@ for (const path of paths) {
         }
       }
     } else {
-      console.log(`✓ ${path} [${theme}]`);
+      console.log(`✓ ${path} [${label}]`);
     }
   }
 }
@@ -84,5 +105,5 @@ if (totalViolations > 0) {
   process.exit(1);
 }
 console.log(
-  `Accessibility gate passed: ${paths.length} pages × ${THEMES.length} themes, 0 WCAG 2.1 AA violations.`
+  `Accessibility gate passed: ${paths.length} pages × ${THEMES.length} themes × ${VIEWPORTS.length} widths, 0 WCAG 2.2 AA violations.`
 );

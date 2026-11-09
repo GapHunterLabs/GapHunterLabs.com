@@ -202,10 +202,16 @@ def header_html(active, en_path="/"):
         '<a class="btn primary gh-nav-cta" href="/services/" data-goatcounter-click="cta-nav-hire-mobile">Work with me</a></nav>\n'
         '    <div class="gh-tools">\n'
         # 2026-10-05: buscador del sitio (js/site-search.js, se carga al abrirlo)
-        '      <button type="button" class="gh-search-btn" data-search-open aria-haspopup="dialog" aria-expanded="false"'
-        ' aria-label="Search plugins and pages"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5"/>'
-        '<path d="M12.6 12.6 17 17"/></svg><span class="gh-search-label">Search</span>'
-        '<kbd class="gh-search-kbd">Ctrl K</kbd></button>\n'
+        # 2026-11-08 (WCAG 2.5.3, Label in Name): with an aria-label, axe compared it with the visible text
+        # "Search Ctrl K" and failed at desktop widths, even with the hint hidden. The button is now named by its
+        # content: a screen-reader-only phrase that starts with the visible word "Search". The visible word and the
+        # shortcut hint are hidden from the accessibility tree so the name is not read twice, and the phrase stays
+        # when the visible label is collapsed below 1180px.
+        '      <button type="button" class="gh-search-btn" data-search-open aria-haspopup="dialog" aria-expanded="false">'
+        '<svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5"/>'
+        '<path d="M12.6 12.6 17 17"/></svg><span class="gh-search-label" aria-hidden="true">Search</span>'
+        '<span class="sr-only">Search plugins and pages</span>'
+        '<kbd class="gh-search-kbd" aria-hidden="true">Ctrl K</kbd></button>\n'
         '      %s\n'
         '      <div class="gh-menu">\n'
         '        <button type="button" class="gh-icon-btn" data-menu-toggle aria-expanded="false" aria-label="Color theme">'
@@ -237,7 +243,10 @@ def footer_html(active):
         ("Tools", [link("/catalog/", "Plugin catalog"), link("/catalog/?pricing=paid", "Paid &amp; Pro plugins"),
                    link("/catalog/?platform=vscode", "VS Code extensions"), link("/ghl-jail/", "ghl-jail (Windows sandbox)")]),
         ("Services", [link("/services/", "Work with me"), link("/plugin-performance-audit/", "Performance audit"),
-                      link("/sponsors/", "Sponsor the work"), link("/contact/", "Contact")]),
+                      link("/contact/", "Contact")]),
+        # 2026-11-08: sponsorship is its own line of support, not a service (a service has a fixed scope and date).
+        ("Sponsorship", [link("/sponsors/", "Sponsor the work"), link("/sponsors/#sec-levels", "Sponsorship levels"),
+                         link("/contact/?intent=sponsor", "Company sponsorship")]),
         ("Marketplaces", [link("https://plugins.jetbrains.com/vendor/gap-hunter-labs", "JetBrains Marketplace", True),
                           link("https://marketplace.visualstudio.com/publishers/GapHunterLabs", "VS Code Marketplace", True),
                           link("https://github.com/GapHunterLabs", "GitHub", True)]),

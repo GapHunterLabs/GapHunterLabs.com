@@ -66,13 +66,16 @@ TOOLS = (
 )
 
 
-def sparkline(values, w=140, h=28):
-    """Polilinea SVG (en linea, sin librerias) de una serie corta de enteros."""
+def sparkline(values, first_date, last_date, w=140, h=28):
+    """Polilinea SVG (en linea, sin librerias) de una serie corta de enteros.
+
+    2026-11-08: the label names the real dates of the first and last snapshot. The series is the last 7
+    snapshots, and a day without a snapshot made "the last 7 days" untrue."""
     lo, hi = min(values), max(values)
     span = (hi - lo) or 1
     step = w / (len(values) - 1)
     pts = " ".join("%.0f,%.0f" % (i * step, h - 2 - (v - lo) * (h - 4) / span) for i, v in enumerate(values))
-    label = "Downloads over the last %d days: %s to %s" % (len(values), format(values[0], ","), format(values[-1], ","))
+    label = "Total downloads from %s to %s: %s to %s" % (first_date, last_date, format(values[0], ","), format(values[-1], ","))
     return ('<svg class="tw-mt-2 tw-h-7 tw-w-full" viewBox="0 0 %d %d" preserveAspectRatio="none" role="img" '
             'aria-label="%s"><polyline fill="none" stroke="var(--signal)" stroke-width="2" '
             'stroke-linejoin="round" stroke-linecap="round" points="%s"/></svg>' % (w, h, esc(label), pts))
@@ -91,12 +94,20 @@ def sync_html(data):
 
 
 def metrics_html(data, research, vscode_total):
-    trend = [d["totalDownloads"] for d in data.get("trend7d", []) if "totalDownloads" in d]
+    points = [d for d in data.get("trend7d", []) if "totalDownloads" in d and d.get("date")]
+    trend = [d["totalDownloads"] for d in points]
     pr = research["upstreamPullRequests"]
     adv = research["advisoriesClosedUpstream"]
+    # 2026-11-08: the figure is the all-time total; the line under it used to read "Last 7 days", as if the total
+    # were a weekly count. It now states what the sparkline shows: the gain since the first snapshot of the series.
+    if len(trend) >= 2:
+        since = points[0]["date"]
+        dl_sub = '<b>+%s</b> <span>since</span> <time datetime="%s">%s</time>' % (format(trend[-1] - trend[0], ","), since, since)
+        dl_extra = sparkline(trend, since, points[-1]["date"])
+    else:
+        dl_sub, dl_extra = "<span>All-time total</span>", ""
     tiles = [
-        tile("JetBrains Marketplace downloads", format(data["totalDownloads"], ","),
-             "Last 7 days", sparkline(trend) if len(trend) >= 2 else ""),
+        tile("JetBrains Marketplace downloads", format(data["totalDownloads"], ","), dl_sub, dl_extra),
         tile("Tools in the catalog", str(data["totalPlugins"] + vscode_total),
              "<span>%d JetBrains plugins</span> &middot; <span>%d VS Code extensions</span>" % (data["totalPlugins"], vscode_total)),
         tile("Pull requests to IntelliJ", str(pr["total"]),
@@ -112,9 +123,16 @@ def metrics_html(data, research, vscode_total):
         dict(label="GitHub", icon="github", variant="dark", href="https://github.com/GapHunterLabs"),
         dict(label="VS Code Marketplace", icon="vscode", variant="dark"),
     ])
+    # Each source keeps its own date: downloads and tool counts come from the twice-daily sync, the pull requests
+    # and advisories from research.json, which is checked by hand.
     asof = research["asOf"]
-    foot = ('<p class="tw-mt-3 tw-font-mono tw-text-xs tw-text-faint"><span>Counts as of</span> '
-            '<time datetime="%s">%s</time></p>' % (asof, asof))
+    snap = (data.get("generatedAt") or "")[:10]
+    # Two lines, one label each: a label and its <time> in one element is what build_i18n keys on (a date inside
+    # a longer text would change the translation key every day).
+    foot = ('<p class="tw-mt-3 tw-font-mono tw-text-xs tw-text-faint"><span>Downloads and tools as of</span> '
+            '<time datetime="%s">%s</time></p>'
+            '<p class="tw-mt-1 tw-font-mono tw-text-xs tw-text-faint"><span>Pull requests and advisories as of</span> '
+            '<time datetime="%s">%s</time></p>' % (snap, snap, asof, asof))
     return grid + '<div class="tw-mt-4">' + chips + "</div>" + foot
 
 
