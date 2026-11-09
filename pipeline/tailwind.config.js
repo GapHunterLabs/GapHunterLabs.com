@@ -5,12 +5,22 @@
  */
 module.exports = {
   prefix: 'tw-',
-  content: [
-    '../**/*.html', '../js/*.js', './*.py',
-    '!../node_modules/**', '!./node_modules/**', '!../_review/**',
-    // generated copies: their classes come from the .py generators scanned above
-    '!../catalog/**', '!../es/**',
-  ],
+  content: {
+    files: [
+      '../**/*.html', '../js/*.js', './*.py',
+      '!../node_modules/**', '!./node_modules/**', '!../_review/**',
+      // generated copies: their classes come from the .py generators scanned above
+      '!../catalog/**', '!../es/**',
+    ],
+    // 2026-11-09: Tailwind reads the Python generators as if they were markup, so Python text shaped like an
+    // arbitrary property, "[name:value]" (a slice such as text[line_start:at], or the "[ctx:gh-nav-link]"
+    // translation keys), became CSS rules such as .\[line_start\:at\]{line_start:at}. No page uses those classes;
+    // they only made css/tw.css drift. A real arbitrary property on this site would be written tw-[name:value]
+    // (none exists today), so that form is kept.
+    transform: {
+      py: (content) => content.replace(/(?<!tw-)\[[a-z_<][^\]\s"']*:[^\]\s"']*\]/gi, ' '),
+    },
+  },
   corePlugins: { preflight: false },
   theme: {
     extend: {

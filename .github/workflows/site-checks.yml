@@ -40,3 +40,12 @@ jobs:
       # step would have stopped #29 (a generator change with no page rebuilt) and #30 (a rebuild in a short order).
       - name: Generated files are up to date
         run: python3 pipeline/regenerate.py --strict --check
+
+      # 2026-11-09: css/tw.css is compiled by the Tailwind CLI from the classes in the pages, the scripts and the
+      # Python generators. It is not part of regenerate.py (it needs npm), so it is checked here: text in a generator
+      # once added CSS rules nobody uses, and nothing ran this check.
+      - name: Install the Tailwind CLI (pipeline/package-lock.json)
+        run: npm ci --prefix pipeline --no-audit --no-fund
+
+      - name: css/tw.css is what the Tailwind CLI builds
+        run: python3 _review/verify_tailwind.py

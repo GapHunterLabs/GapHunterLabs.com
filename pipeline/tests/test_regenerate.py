@@ -90,7 +90,16 @@ class WorkflowWiringTest(unittest.TestCase):
         text = workflow("site-checks.yml")
         self.assertIn("python3 pipeline/regenerate.py --strict --check", text)
         self.assertIn("python3 -m unittest discover -s pipeline/tests", text)
+        self.assertIn("python3 _review/verify_tailwind.py", text)
+        self.assertIn("npm ci --prefix pipeline", text)
         self.assertIn("pull_request:", text)
+
+    def test_tailwind_ignores_python_slices_and_translation_keys(self):
+        # The case of 2026-11-09: text[line_start:at] and "[ctx:gh-nav-link]" in the generators became CSS rules.
+        config = (R.PIPELINE / "tailwind.config.js").read_text(encoding="utf-8")
+        self.assertRegex(config, r"transform:\s*\{\s*py:")
+        self.assertNotIn(r"\[ctx", (ROOT / "css" / "tw.css").read_text(encoding="utf-8"))
+        self.assertNotIn(r"\[line_start", (ROOT / "css" / "tw.css").read_text(encoding="utf-8"))
 
     def test_actions_are_pinned_to_a_full_sha_and_not_to_node20(self):
         for wf in sorted(WORKFLOWS.glob("*.yml")):
