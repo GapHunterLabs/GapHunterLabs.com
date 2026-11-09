@@ -3,25 +3,18 @@ from __future__ import annotations
 
 import re
 import subprocess
+import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-# 2026-09-10 (clean-URL migration): the content pages now live at
-# <page>/index.html so GitHub Pages serves them at /<page>/ with no
-# ".html" in the address bar; the old top-level *.html files are now
-# tiny redirect stubs (checked separately in verify_static.py), not
-# real content anymore.
-PAGES = [
-    ROOT / n
-    for n in (
-        "index.html",
-        "catalog/index.html",
-        "methodology/index.html",
-        "contact/index.html",
-        "security/index.html",
-        "laboratorio/index.html",
-    )
-]
+sys.path.insert(0, str(ROOT / "pipeline"))
+from design_budget import english_pages  # noqa: E402
+
+# 2026-11-09: the pages come from git (every English page, the catalog pages through the first one, the Spanish pages
+# are copies), the same set the design budget measures. The fixed list of 2026-09-10 still checked laboratorio/, which
+# is a redirect now, and missed every page added since. The old top-level *.html files are redirect stubs, checked in
+# verify_static.py.
+PAGES = [p for p in english_pages() if p.name == "index.html"]
 
 RADIUS_LEFTOVER = re.compile(r"border-radius:\s*(4|5|6|7|8|9|10)px")
 DURATION_LEFTOVER = re.compile(r"(?<![\d.])(0\.15s|0\.12s|0\.3s|0\.25s|0\.18s|0\.2s|0\.1s|\.4s|\.9s|\.12s|\.24s)")

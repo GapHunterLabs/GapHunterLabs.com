@@ -452,6 +452,59 @@ test('phone (390 px): no horizontal overflow on the main pages; methodology diag
   assert(w > 0 && w <= 390, 'diagram width ' + w);
 });
 
+const pressKey = async (b, key, code, keyCode) => {
+  await b.send('Input.dispatchKeyEvent', { type: 'keyDown', key, code, windowsVirtualKeyCode: keyCode });
+  await b.send('Input.dispatchKeyEvent', { type: 'keyUp', key, code, windowsVirtualKeyCode: keyCode });
+};
+
+// 2026-11-09: two stacked headings put the catalog search at y = 864 on a 390 x 844 phone.
+test('catalog on a phone: search and filters in the first screen, before the panel heading, for the keyboard too', async ({ b, base }) => {
+  const measure = "(()=>{const p=[...document.querySelectorAll('.platform-panel')].find(x=>!x.hidden);" +
+    "const c=p.querySelector(':scope > .controls'),h=p.querySelector(':scope > .cv-head'),pw=p.getBoundingClientRect().width;" +
+    "return {panel:p.id,controlsTop:c.getBoundingClientRect().top+scrollY,controlsBottom:c.getBoundingClientRect().bottom+scrollY," +
+    "headTop:h.getBoundingClientRect().top+scrollY," +
+    "narrow:[...p.children].filter(k=>getComputedStyle(k).display!=='none'&&k.getBoundingClientRect().height>0&&" +
+    "Math.abs(k.getBoundingClientRect().width-pw)>1).map(k=>k.className||k.id)," +
+    "over:document.documentElement.scrollWidth-document.documentElement.clientWidth}})()";
+  // Tab from the selected tab until the focus is inside the open panel; report where it landed first.
+  const firstFocusInPanel = async () => {
+    await b.evaluate("document.querySelector('.platform-tab[aria-selected=\"true\"]').focus()");
+    for (let i = 0; i < 4; i += 1) {
+      await pressKey(b, 'Tab', 'Tab', 9);
+      const at = await b.evaluate("(()=>{const a=document.activeElement,p=[...document.querySelectorAll('.platform-panel')].find(x=>!x.hidden);" +
+        "if(!p.contains(a)||a===p)return null;return a.closest('.controls')?'controls':a.closest('.cv-head')?'heading':(a.className||a.tagName)})()");
+      if (at) return at;
+    }
+    return 'never entered the panel';
+  };
+  try {
+    await b.viewport(390, 844, true);
+    for (const page of ['/catalog/', '/es/catalogo/']) {
+      await b.navigate(base + page);
+      for (const platform of ['jetbrains', 'vscode']) {
+        if (platform === 'vscode') {
+          await b.evaluate("document.querySelector('.platform-tab[data-platform=vscode]').click()");
+          await delay(300);
+        }
+        const r = await b.evaluate(measure);
+        const where = page + ' ' + r.panel;
+        assert(r.controlsTop < r.headTop, where + ': controls at ' + r.controlsTop + ', heading at ' + r.headTop);
+        assert(r.controlsBottom <= 844, where + ': controls end at y = ' + r.controlsBottom);
+        equal(r.narrow.join(','), '', where + ': children narrower than the panel');
+        equal(r.over, 0, where + ': horizontal overflow');
+        equal(await firstFocusInPanel(), 'controls', where + ': first focus inside the panel');
+      }
+    }
+    await b.viewport(1280, 800, false);
+    await b.navigate(base + '/catalog/');
+    const wide = await b.evaluate(measure);
+    assert(wide.headTop < wide.controlsTop, 'desktop keeps the heading above the controls');
+    equal(await firstFocusInPanel(), 'heading', 'desktop focus order is the markup order');
+  } finally {
+    await b.viewport(1280, 800, false);
+  }
+});
+
 // -------------------------------------------------------------------------------------- runner
 async function run() {
   const server = makeServer();
@@ -461,7 +514,9 @@ async function run() {
   try {
     b = await openBrowser();
     console.log('site: ' + base + ' | browser: ' + path.basename(b.exe) + ' | tests: ' + tests.length);
+    const only = process.env.ONLY; // optional: run only the tests whose name contains this text
     for (const t of tests) {
+      if (only && !t.name.includes(only)) continue;
       const started = Date.now();
       try {
         await t.fn({ b, base });

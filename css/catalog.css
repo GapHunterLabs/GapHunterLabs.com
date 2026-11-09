@@ -451,10 +451,11 @@
     transform: rotate(45deg);
   }
 
+  /* --border-strong (2026-11-09): every form control has a 3:1 border, like the fields of /contact/. */
   select#pricingFilter, select#categoryFilter {
     height: var(--control-h);
     background: var(--surface);
-    border: 1px solid var(--border);
+    border: 1px solid var(--border-strong);
     border-radius: var(--radius-md);
     padding: 0 10px;
     color: var(--text);
@@ -1584,3 +1585,12 @@
 .catalog-services .svc-card { border-radius: var(--radius-lg); box-shadow: none; }
 .catalog-services .svc-kicker { font: 600 11.5px/1.4 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--signal); }
 .catalog-services .svc-band { border-color: var(--border-strong); border-radius: var(--radius-lg); }
+
+/* 2026-11-09: on a phone the search and the filters come before the panel heading, so they show in the first
+   screen (the tab above already names the platform; before, two stacked headings pushed them to y = 864 at 390 x 844).
+   reading-flow makes the keyboard follow the same order (Chromium 137+). Where it is not supported the focus order is
+   the markup's: heading link, then the controls. */
+@media (max-width: 640px) {
+  .platform-panel:not([hidden]) { display: flex; flex-direction: column; reading-flow: flex-visual; }
+  .platform-panel > .controls { order: -1; }
+}
