@@ -672,13 +672,11 @@ class PluginRenderer:
         m = re.search(r"/plugin/(\d+)-", p["marketplaceUrl"])
         return m.group(1) if m else None
 
-    def growth_fact_line(self, p):
-        if p.get("growth") is None or p.get("growthFrom") is None or p.get("downloads") is None:
-            return "New listing"
-        arrow = "▲ +" if p["growth"] > 0 else ("▼ " if p["growth"] < 0 else "")
-        return "%s%.1f%% since %s (%s→%s)" % (
-            arrow, p["growth"], p.get("growthSince"), p["growthFrom"], p["downloads"])
-
+    # 2026-11-08: the plugin pages no longer show a "Growth" fact. Download
+    # counts are now the raw Marketplace figure, so most plugins' first
+    # stored value is the single review install, and a percentage over it
+    # reads as thousands of percent. The catalog cards keep growth_markup(),
+    # which already shows an absolute delta below GROWTH_PERCENT_MIN_BASELINE.
     def growth_markup(self, p):
         g = p.get("growth")
         title = ("Since %s: %s → %s" % (p.get("growthSince"), p.get("growthFrom"), p.get("downloads"))
@@ -857,7 +855,6 @@ class PluginRenderer:
                      fact("Marketplace ID", ("#" + esc(mp_id)) if mp_id else ("Pending" if is_pending else "—")),
                      fact("Repository", '<code>%s</code><button type="button" class="copy-btn" data-copy="%s" '
                                         'aria-label="Copy repository name">%s</button>' % (esc(p["repo"]), esc(p["repo"]), icons["copy"])),
-                     fact("Growth", esc(self.growth_fact_line(p))),
                  ))))
 
         if similar:

@@ -107,6 +107,60 @@ def save_history(history):
         json.dump(history, f, indent=2, ensure_ascii=False)
 
 
+# Download counts are published exactly as the JetBrains Marketplace API
+# reports them (decision of 2026-11-08). Until then this script subtracted 1
+# per plugin, the install JetBrains' review team makes during approval, and
+# the same -1 had been applied by hand to every snapshot already stored in
+# catalog_daily_history.json (its 3698 total on 2026-09-03 is the corrected
+# figure). The history carries a basis marker so that correction is undone
+# exactly once, whenever this version first runs.
+HISTORY_BASIS_KEY = "downloadsBasis"
+HISTORY_BASIS = "marketplace"
+
+
+def marketplace_downloads(raw):
+    """The Marketplace `downloads` figure, unchanged.
+
+    None stays None (plugin not indexed yet). Anything that is not a
+    non-negative int is treated as missing, with a warning, the same way
+    resolve_numeric_id() treats a malformed `id`.
+    """
+    if raw is None:
+        return None
+    if isinstance(raw, bool) or not isinstance(raw, int) or raw < 0:
+        print(f"  [warn] downloads no valido en la API (tipo {type(raw).__name__}), tratado como sin dato",
+              file=sys.stderr)
+        return None
+    return raw
+
+
+def migrate_history_to_marketplace_counts(history):
+    """Add back the 1 download subtracted from every stored snapshot, once.
+
+    Keeps the 7-day trend, the recent-changes deltas and the growth
+    baselines on the same basis as the live figure, so the switch does not
+    show up as a one-day jump of one download per plugin. Returns True when
+    it changed the history. A history with an unknown basis aborts the run
+    rather than being guessed at.
+
+    Known gap: a stored 0 could also come from a Marketplace 0 that the old
+    rule floored; it becomes 1.
+    """
+    basis = history.get(HISTORY_BASIS_KEY)
+    if basis == HISTORY_BASIS:
+        return False
+    if basis is not None:
+        sys.exit("[auto_update] ERROR: %s=%r in catalog_daily_history.json is not %r; "
+                 "refusing to guess how its downloads were counted" % (HISTORY_BASIS_KEY, basis, HISTORY_BASIS))
+    for snap in history.get("snapshots", []):
+        for entry in (snap.get("plugins") or {}).values():
+            value = entry.get("downloads")
+            if isinstance(value, int) and not isinstance(value, bool):
+                entry["downloads"] = value + 1
+    history[HISTORY_BASIS_KEY] = HISTORY_BASIS
+    return True
+
+
 def earliest_datapoint(history, xml_id):
     for snap in history.get("snapshots", []):
         if xml_id in snap.get("plugins", {}):
@@ -290,6 +344,8 @@ def main():
         static = json.load(f)["plugins"]
 
     history = load_history()
+    if migrate_history_to_marketplace_counts(history):
+        print("[auto_update] historico pasado a conteos de Marketplace (+1 por plugin en cada snapshot)")
     today = str(date.today())
 
     results = {}
@@ -327,17 +383,8 @@ def main():
             continue
 
         numeric_id = p.get("id")
-        # -1, floored at 0: JetBrains' own review/approval step
-        # registers exactly 1 phantom download per plugin (their team
-        # installing it once during manual review), counted in the raw
-        # API `downloads` figure from day one -- confirmed real by the
-        # user 2026-09-03, consistent with many freshly-approved
-        # plugins in this catalog sitting at exactly 1 raw download
-        # with zero real users yet. Never applied retroactively to
-        # already-recorded history snapshots (catalog_daily_history.json)
-        # -- only the live figure going forward.
-        raw_downloads = p.get("downloads")
-        downloads = max(0, raw_downloads - 1) if raw_downloads is not None else None
+        # The Marketplace figure as published: see marketplace_downloads().
+        downloads = marketplace_downloads(p.get("downloads"))
         pricing = p.get("pricingModel")
         reviews, rating = fetch_reviews(numeric_id)
         stars = github_stars(repo)
