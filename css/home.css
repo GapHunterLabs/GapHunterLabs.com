@@ -111,9 +111,10 @@ a:focus-visible, .btn:focus-visible { outline: none; box-shadow: var(--focus-rin
 
 .nb-lede-more { margin-top: 12px; font-size: 14.5px; }
 
-/* Profile card: photo, method and focus areas in one surface (replaces the loose photo, margin note and rule). */
+/* Profile card: photo, method and focus areas in one surface (replaces the loose photo, margin note and rule).
+   2026-11-09: no blue rule on top any more; the logo colors live only in the logo, the favicon and the social images. */
 .nb-profile { align-self: start; min-width: 0; overflow: hidden; border: 1px solid var(--border); border-radius: var(--radius-lg);
-  background: var(--surface); box-shadow: inset 0 2px 0 var(--brand-blue); }
+  background: var(--surface); }
 .nb-portrait { margin: 0; }
 .nb-portrait img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 11; object-fit: cover; object-position: 50% 3%;
   border-bottom: 1px solid var(--border); background: var(--surface-2); }
@@ -186,7 +187,9 @@ a:focus-visible, .btn:focus-visible { outline: none; box-shadow: var(--focus-rin
 .inv-facts { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; margin-top: 4px; }
 .inv-facts > div { padding: 16px 18px; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface-2); }
 .inv-facts > div:last-child { border-color: color-mix(in srgb, var(--valid) 32%, var(--border)); }
-.inv-facts dt { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font: 600 11.5px/1.4 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-dim); }
+/* 2026-11-09: a label that opens a paragraph is a small heading in sentence case, as on the Blog; Mono capitals
+   stay for data and section labels. */
+.inv-facts dt { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font: 600 13px/1.4 var(--sans); color: var(--text); }
 .inv-facts dt::before { content: ""; flex: none; width: 7px; height: 7px; border-radius: 50%; background: var(--dot, var(--pending)); }
 .inv-facts > div:nth-child(1) dt { --dot: var(--inspect); }
 .inv-facts > div:nth-child(2) dt { --dot: var(--cyan); }
@@ -294,7 +297,7 @@ a:focus-visible, .btn:focus-visible { outline: none; box-shadow: var(--focus-rin
 /* The label column is as wide as the longest label ("Corrección" in /es/ needs ~79px), shared by both rows. */
 .tool-facts { display: grid; grid-template-columns: minmax(48px, max-content) minmax(0, 1fr); gap: 10px 16px; }
 .tool-facts > div { display: grid; grid-column: 1 / -1; grid-template-columns: subgrid; }
-.tool-facts dt { font: 600 12px/1.9 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; }
+.tool-facts dt { font: 600 13px/1.9 var(--sans); }
 .tool-facts dt.is-gap { color: var(--inspect); }
 .tool-facts dt.is-fix { color: var(--valid); }
 .tool-facts dd { max-width: 70ch; color: var(--text-dim); }
@@ -467,7 +470,7 @@ a:focus-visible, .btn:focus-visible { outline: none; box-shadow: var(--focus-rin
   border: 2px solid var(--signal); background: var(--surface-2);
   box-shadow: 0 0 0 6px color-mix(in srgb, var(--signal) 14%, transparent),
     0 10px 30px -8px color-mix(in srgb, var(--signal) 50%, transparent); }
-.nb-hero-face figcaption { font: 600 11px/1.3 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-dim); }
+.nb-hero-face figcaption { font: 600 13px/1.3 var(--sans); color: var(--text-dim); } /* a name, not a label */
 
 /* Every panel shares one grid cell, so the card is as tall as the tallest case and never jumps when it rotates. */
 .nb-panels { display: grid; padding: 20px 22px 6px; }
@@ -498,7 +501,7 @@ a:focus-visible, .btn:focus-visible { outline: none; box-shadow: var(--focus-rin
 .nb-panel-facts { display: grid; gap: 14px; margin: 14px 0 0; padding-top: 16px; border-top: 1px solid var(--border); }
 .nb-panel-facts > div { display: grid; grid-template-columns: 24px minmax(0, 1fr); column-gap: 12px; }
 .nb-panel-facts .nb-ico { grid-row: 1 / span 2; width: 24px; height: 24px; color: var(--signal); }
-.nb-panel-facts dt { font: 600 12px/1.4 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--signal); }
+.nb-panel-facts dt { font: 600 13px/1.4 var(--sans); color: var(--text); }
 .nb-panel-facts dd { margin: 2px 0 0; font: 500 14px/1.45 var(--sans); color: var(--text-dim); }
 .nb-panel-facts > div:last-child dd { color: var(--text); font-weight: 600; }
 

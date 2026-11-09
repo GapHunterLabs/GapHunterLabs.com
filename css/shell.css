@@ -371,12 +371,13 @@
    sin alinear con el sidebar), y en las paginas con rail (methodology,
    security, privacy, terms) el grid 1fr+300px no tenia tope y estiraba el
    texto a ~2000px de ancho.
-   Ahora: --page-max sube a 1600px, el contenido (y el grid contenido+rail)
+   Ahora: el contenido (y el grid contenido+rail)
    se centra en el area a la derecha del sidebar, y el topbar ocupa el ancho
    completo (marca a la izquierda, sobre el sidebar; links al borde derecho).
    Ojo: un hijo con margin auto dentro de .app-main (flex en columna) deja
    de estirarse, por eso el width:100% explicito. */
-:root { --page-max: 1600px; }
+/* 2026-11-09: the 1600px --page-max that stood here was dead (the :root rule further down sets 1280px and wins);
+   it is gone. The page width is the single --page-max of 1280px. */
 .app-shell .topbar-inner { max-width: none; }
 .app-main > .wrap,
 .app-main > .main-with-rail {
@@ -1066,7 +1067,8 @@ tr.row td[data-label]::before { font-family: var(--sans); font-size: 11px; lette
    fields focus with the signal color. Same markup and form behavior as before.
    ===================================================================== */
 .quick-actions { gap: 8px; border-top: 0; }
-.qa-item { padding: 14px 16px; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface);
+/* font: inherit (2026-11-09): a <button> does not inherit the page font, so the cards used the browser's 13.333px. */
+.qa-item { font: inherit; padding: 14px 16px; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface);
   transition: border-color 120ms ease, background-color 120ms ease; }
 .qa-item:hover { border-color: var(--border-strong); background: var(--surface-2); }
 .qa-item.is-active { border-color: var(--signal); background: color-mix(in srgb, var(--signal) 8%, var(--surface)); }
@@ -1119,7 +1121,8 @@ tr.row td[data-label]::before { font-family: var(--sans); font-size: 11px; lette
 .sp-home { display: grid; gap: 14px; margin-bottom: 24px; }
 .sp-home .sp-empty { font: 500 13px / 1.5 var(--mono); }
 .sp-wall { display: grid; gap: 22px; }
-.sp-tier-title { margin: 0 0 10px; font: 600 11.5px / 1.4 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--signal); }
+/* 2026-11-09: titles in sentence case; capitals are for data and section labels only. */
+.sp-tier-title { margin: 0 0 10px; font: 600 15px / 1.4 var(--sans); color: var(--text); }
 .sp-logos, .sp-names { display: flex; flex-wrap: wrap; gap: 12px; margin: 0; padding: 0; list-style: none; }
 .sp-logos li, .sp-names li { margin: 0; }
 /* Logos sit on a light tile in both themes: most brand marks are drawn for a white page. */
@@ -1135,7 +1138,7 @@ a.sp-logo:focus-visible, a.sp-person:focus-visible { outline: 2px solid var(--si
 .sp-card a.sp-person { text-decoration: none; }
 a.sp-person:hover { border-color: var(--signal); }
 
-.disclosure .sp-group-title { margin: 24px 0 10px; font: 600 11.5px / 1.4 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); }
+.disclosure .sp-group-title { margin: 24px 0 10px; font: 600 15px / 1.4 var(--sans); color: var(--text); }
 .sp-levels { display: grid; overflow: hidden; border: 1px solid var(--border); border-radius: var(--radius-lg); }
 .sp-level { display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 6px 28px; padding: 18px 20px; border-top: 1px solid var(--border); }
 .sp-level:first-child { border-top: 0; }
@@ -1167,11 +1170,8 @@ a.sp-person:hover { border-color: var(--signal); }
   pointer-events: none; will-change: transform;
   transition: background 0.3s;
 }
-:root:not([data-theme='dark']) #nb-scroll-bar { background: #0151FC; }
-:root[data-theme='dark'] #nb-scroll-bar { background: var(--signal, #FF6A1A); }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) #nb-scroll-bar { background: var(--signal, #FF6A1A); }
-}
+/* 2026-11-09: the signal color in both themes; it was the logo blue in the light theme. */
+#nb-scroll-bar { background: var(--signal); }
 @supports (animation-timeline: scroll()) {
   @keyframes nb-grow-bar { to { transform: scaleX(1); } }
   #nb-scroll-bar { animation: nb-grow-bar linear both; animation-timeline: scroll(root); }
