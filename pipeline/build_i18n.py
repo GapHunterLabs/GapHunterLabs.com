@@ -254,26 +254,73 @@ def has_direct_text(node, text):
 
 
 def collect(node, text, units):
+    """Units are (start, end, element): element is the node that holds the whole text, or None for loose text
+    inside a mixed block (that text has no element of its own, so it gets no contextual key)."""
     if node.tag in OPAQUE or skipped(node):
         return
     if node.tag != "#root" and node.tag not in VOID and has_direct_text(node, text) and not has_block(node):
-        units.append((node.open_end, node.close_start))
+        units.append((node.open_end, node.close_start, node))
         return
     if node.tag != "#root" and node.tag not in VOID and has_direct_text(node, text):
         for a, b in direct_segments(node, text):          # texto suelto en un bloque mixto
             if re.sub(r"<!--.*?-->", "", text[a:b], flags=re.S).strip():
-                units.append((a, b))
+                units.append((a, b, None))
     for c in node.children:
         collect(c, text, units)
 
 
+# ---- claves con contexto (2026-11-09) ---------------------------------------
+# The table is keyed by text alone, so one English string gets one Spanish string everywhere. A key written
+# "[ctx:<class>] <text>" applies only to an element that has that class, and wins over the plain key there.
+# Case: the header link "Sponsors" must read "Patrocinio" (it has to fit the header at 961 px), while the sponsor
+# wall headings keep "Patrocinadores"; the header link "Plugins" reads "Herramientas".
+# The prefix is one no page text starts with ("::" was the first choice and is real text: Class::method).
+CONTEXT_PREFIX = "[ctx:"
+CONTEXT_KEY_RE = re.compile(r"^\[ctx:([a-z0-9][a-z0-9_-]*)\] (\S.*)$", re.S)
+
+
+def context_key(cls, key):
+    return "%s%s] %s" % (CONTEXT_PREFIX, cls, key)
+
+
+def check_table(table):
+    """Fail fast on a malformed contextual key, naming it, before any page is translated."""
+    bad = [k for k in table if k.startswith(CONTEXT_PREFIX) and not CONTEXT_KEY_RE.match(k)]
+    if bad:
+        sys.exit("[build_i18n] ERROR: contextual keys must look like \"[ctx:<class>] <text>\": %s"
+                 % ", ".join(repr(k[:60]) for k in bad))
+    empty = [k for k in table if CONTEXT_KEY_RE.match(k) and not str(table[k]).strip()]
+    if empty:
+        sys.exit("[build_i18n] ERROR: contextual keys without a translation: %s" % ", ".join(repr(k[:60]) for k in empty))
+
+
+def stale_context_keys(table, used):
+    """Contextual keys no page used. That means the class was renamed or removed: the element now falls back to
+    the plain key without any warning, which is what the contextual key was there to prevent. --strict fails."""
+    return sorted(k for k in table if CONTEXT_KEY_RE.match(k) and k not in used)
+
+
+def lookup_in_context(key, node, table, used):
+    """The contextual translation for this element, or None. Classes are tried in sorted order so the result
+    does not depend on the order they are written in the HTML."""
+    if node is None:
+        return None
+    for cls in sorted(node.classes()):
+        ck = context_key(cls, key)
+        if table.get(ck):
+            used.add(ck)
+            return table[ck]
+    return None
+
+
 # ---- traduccion de una pagina ------------------------------------------------
-def translate(text, table, missing, page):
+def translate(text, table, missing, page, used_context=None):
+    used_context = set() if used_context is None else used_context
     root = parse(text)
     units = []
     collect(root, text, units)
     edits = []
-    for a, b in units:
+    for a, b, node in units:
         frag = text[a:b]
         key, vals = normalize(frag)
         if not key or not has_letters(key):
@@ -281,7 +328,9 @@ def translate(text, table, missing, page):
             if GROUPED_RE.fullmatch(lone):      # a figure on its own ("12,770") takes the Spanish separator too
                 edits.append((a, b, frag.replace(lone, es_number(lone))))
             continue
-        tr = lookup(key, table)
+        tr = lookup_in_context(key, node, table, used_context)
+        if tr is None:
+            tr = lookup(key, table)
         if tr is not None:
             lead = re.match(r"\s*", frag).group(0)
             trail = re.search(r"\s*$", frag).group(0)
@@ -469,10 +518,12 @@ def main() -> int:
     ap.add_argument("--extract", action="store_true")
     args = ap.parse_args()
     table = json.loads(DICT_PATH.read_text(encoding="utf-8")) if DICT_PATH.exists() else {}
+    check_table(table)
     missing: dict[str, set] = {}
+    used_context: set = set()
     for en_path, es_path in list(ES_PATHS.items()) + list(PLUGIN_PAGES.items()):
         src = file_for(en_path).read_text(encoding="utf-8")
-        out = structural(translate(src, table, missing, en_path), en_path, es_path, table)
+        out = structural(translate(src, table, missing, en_path, used_context), en_path, es_path, table)
         out = apply_writing_es_body(out, en_path)
         if not args.extract:
             dest = file_for(es_path)
@@ -490,7 +541,10 @@ def main() -> int:
     if missing:
         for k in sorted(missing)[:15]:
             print("   sin traducir:", k[:110])
-    return 1 if (args.strict and missing) else 0
+    stale = stale_context_keys(table, used_context)
+    for k in stale:
+        print("   clave de contexto sin uso:", k[:110])
+    return 1 if (args.strict and (missing or stale)) else 0
 
 
 if __name__ == "__main__":

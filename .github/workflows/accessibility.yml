@@ -1,6 +1,6 @@
 name: Accessibility (axe)
 
-# Runs axe-core over the built static pages and fails on any WCAG 2.1 AA
+# Runs axe-core over the built static pages and fails on any WCAG 2.2 AA
 # violation. GitHub Pages deploys from main, so this gate keeps the live site
 # free of accessibility regressions.
 #
@@ -33,7 +33,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1 (Node 24)
 
       - name: Install gate dependencies (puppeteer + axe-core)
         working-directory: a11y
@@ -48,7 +48,8 @@ jobs:
           done
           curl -sf http://localhost:8080/ > /dev/null
 
-      - name: Run axe (WCAG 2.1 AA, light + dark)
+      # Since 2026-11-08: WCAG 2.2 AA, both themes set the way the site stores them, at 390 and 1280 px.
+      - name: Run axe (WCAG 2.2 AA, light + dark, 390 and 1280 px)
         working-directory: a11y
         env:
           BASE_URL: http://localhost:8080

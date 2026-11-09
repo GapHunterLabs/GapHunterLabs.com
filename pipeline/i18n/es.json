@@ -1851,5 +1851,11 @@
   "Silver, Gold or Platinum, with an invoice if you need one.": "Silver, Gold o Platinum, con factura si la necesitas.",
   "Sponsorship": "Patrocinio",
   "since": "desde",
-  "From USD {n} a year on JetBrains Marketplace, with a free trial. <a href=\"/eula/\">License terms (EULA)</a>": "Desde USD {n} al año en JetBrains Marketplace, con prueba gratis. <a href=\"/eula/\">Términos de la licencia (EULA)</a>"
+  "From USD {n} a year on JetBrains Marketplace, with a free trial. <a href=\"/eula/\">License terms (EULA)</a>": "Desde USD {n} al año en JetBrains Marketplace, con prueba gratis. <a href=\"/eula/\">Términos de la licencia (EULA)</a>",
+  "Dependency and CI/CD security": "Seguridad de dependencias y CI/CD",
+  "Evidence": "Evidencia",
+  "Evidence{svg}": "Evidencia{svg}",
+  "Plugin updates": "Actualización de plugins",
+  "[ctx:gh-nav-link] Plugins": "Herramientas",
+  "[ctx:gh-nav-link] Sponsors": "Patrocinio"
 }

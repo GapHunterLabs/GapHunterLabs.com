@@ -32,6 +32,8 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import json
+import re
 import sys
 from pathlib import Path
 
@@ -41,6 +43,7 @@ sys.path.insert(0, str(HERE))
 import og_kit as K  # noqa: E402
 
 ROOT = HERE.parent
+OG_STAMP = ROOT / "data" / "og-prices.json"
 NL = "\n"
 
 CSS_HERO = """
@@ -127,6 +130,45 @@ def page(stem, layout, en, es):
     return dict(stem=stem, layout=layout, en=en, es=es)
 
 
+# 2026-11-09: prices and delivery times come from data/services.json. A changed price changes the
+# text of these images, so they must be rendered again (and OG_VERSION bumped); build_services.py --check fails
+# until data/og-prices.json, written at the end of a full render, matches the prices below.
+import services_data as _S  # noqa: E402
+try:
+    _SV = _S.load()
+except _S.ServicesError as _exc:
+    sys.exit("[build_page_og] ERROR: %s" % _exc)
+
+
+def _usd(ref, lang="en"):
+    return _S.usd(_S.value(_SV, ref + ".usd"), lang)
+
+
+def _days(ref):
+    return _S.value(_SV, ref + ".days")
+
+
+def _from(key, lang="en"):
+    return _S.usd(_S.min_usd(_S.by_key(_SV)[key]), lang)
+
+
+_LOWEST = min(_S.min_usd(s) for s in _SV["services"])
+
+
+def og_price_texts():
+    """Every price or delivery figure these images show, as rendered: the stamp in data/og-prices.json."""
+    out = []
+    for p in PAGES:
+        for lang in ("en", "es"):
+            block = p[lang]
+            for k in ("note", "amount", "price_note", "ext_note"):
+                if k in block:
+                    out.append("%s.%s.%s=%s" % (p["stem"], lang, k, block[k]))
+            for row in block.get("rows", []):
+                out.append("%s.%s.row=%s" % (p["stem"], lang, " | ".join(row)))
+    return sorted(t for t in out if re.search(r"\d", t.split("=", 1)[1]))
+
+
 # Each entry has an English and a Spanish block. `label` is the mono eyebrow (what the page is), `h1` the headline
 # (\n = line break), `lede` one short line of purpose, `badges` keys from og_kit.REG, `note` the footer line.
 PAGES = [
@@ -136,52 +178,60 @@ PAGES = [
               badges=["static", "perf", "security", "reliability"], gap_label="GAP", fix_label="FIX",
               gap_ref="lsp4ij#1540", gap_text="A UI-thread violation in Red Hat's LSP4IJ",
               fix_ref="commit f38259550e", fix_text="Fixed by the maintainer after the report",
-              note="Fixed-scope engagements from USD 4,500"),
+              note="Fixed-scope engagements from USD %s" % _S.usd(_LOWEST)),
          dict(label="Estudio de ingeniería de Joel Díaz", h1="Encuentro la brecha.\nRastreo la causa.\nConstruyo la corrección.",
               lede="Investigo fallas de rendimiento, seguridad y fiabilidad en herramientas de desarrollo y código abierto, y las corrijo en su causa raíz.",
               badges=["static", "perf", "security", "reliability"], gap_label="BRECHA", fix_label="SOLUCIÓN",
               gap_ref="lsp4ij#1540", gap_text="Una violación del hilo de UI en LSP4IJ de Red Hat",
               fix_ref="commit f38259550e", fix_text="Corregido por el mantenedor tras el reporte",
-              note="Proyectos de alcance fijo desde USD 4.500")),
+              note="Proyectos de alcance fijo desde USD %s" % _S.usd(_LOWEST, "es"))),
     page("og-services", "services",
          dict(label="Engineering services", h1="Fixed scope. Published prices.", badges=["jetbrains", "kotlin", "gradle", "actions", "gitlab"],
-              rows=[("Plugin performance audit", "USD 10,500", "10 business days"), ("Plugin updates for new IDE versions", "from USD 4,500", "5 business days"),
-                    ("Custom plugins and inspections", "from USD 7,500", "10 business days"), ("Dependency and CI/CD security review", "from USD 4,800", "5 business days")],
+              rows=[("Plugin performance audit", "USD %s" % _usd("audit.base"), "%d business days" % _days("audit.base")),
+                    ("Plugin updates for new IDE versions", "from USD %s" % _from("updates"), "%d business days" % _days("updates.minor")),
+                    ("Custom plugins and inspections", "from USD %s" % _from("custom"), "%d business days" % _days("custom.inspections")),
+                    ("Dependency and CI/CD security review", "from USD %s" % _from("depsec"), "%d business days" % _days("depsec.one-repo"))],
               note="Written deliverables · 50% on start, 50% on delivery"),
          dict(label="Servicios de ingeniería", h1="Alcance fijo. Precios publicados.", badges=["jetbrains", "kotlin", "gradle", "actions", "gitlab"],
-              rows=[("Auditoría de rendimiento de plugins", "USD 10.500", "10 días hábiles"), ("Actualización de plugins para nuevos IDE", "desde USD 4.500", "5 días hábiles"),
-                    ("Plugins e inspecciones a medida", "desde USD 7.500", "10 días hábiles"), ("Seguridad de dependencias y CI/CD", "desde USD 4.800", "5 días hábiles")],
+              rows=[("Auditoría de rendimiento de plugins", "USD %s" % _usd("audit.base", "es"), "%d días hábiles" % _days("audit.base")),
+                    ("Actualización de plugins para nuevos IDE", "desde USD %s" % _from("updates", "es"), "%d días hábiles" % _days("updates.minor")),
+                    ("Plugins e inspecciones a medida", "desde USD %s" % _from("custom", "es"), "%d días hábiles" % _days("custom.inspections")),
+                    ("Seguridad de dependencias y CI/CD", "desde USD %s" % _from("depsec", "es"), "%d días hábiles" % _days("depsec.one-repo"))],
               note="Entregables por escrito · 50% al iniciar, 50% al entregar")),
     page("og-audit", "audit",
          dict(label="Plugin performance audit", h1="Your plugin freezes.\nI find the cause and patch it.", badges=["jetbrains", "perf"],
               bullets=["Reproduction on each IDE version you support", "UI-thread measurements, cold and warm", "Patches with before-and-after measurements"],
-              cur="USD", amount="10,500", price_note="Fixed price. One plugin, up to 3 IDE versions, 10 business days.",
-              ext_note="Extended: USD 15,000 · 15 business days", note="The same method found freeze bugs in the IntelliJ Platform"),
+              cur="USD", amount=_usd("audit.base"),
+              price_note="Fixed price. One plugin, up to 3 IDE versions, %d business days." % _days("audit.base"),
+              ext_note="Extended: USD %s · %d business days" % (_usd("audit.extended"), _days("audit.extended")),
+              note="The same method found freeze bugs in the IntelliJ Platform"),
          dict(label="Auditoría de rendimiento de plugins", h1="Tu plugin se congela.\nEncuentro la causa y lo parcheo.", badges=["jetbrains", "perf"],
               bullets=["Reproducción en cada versión del IDE que soportas", "Mediciones del hilo de UI, en frío y en caliente", "Parches con mediciones antes y después"],
-              cur="USD", amount="10.500", price_note="Precio fijo. Un plugin, hasta 3 versiones del IDE, 10 días hábiles.",
-              ext_note="Extendida: USD 15.000 · 15 días hábiles", note="El mismo método halló congelamientos en IntelliJ Platform")),
+              cur="USD", amount=_usd("audit.base", "es"),
+              price_note="Precio fijo. Un plugin, hasta 3 versiones del IDE, %d días hábiles." % _days("audit.base"),
+              ext_note="Extendida: USD %s · %d días hábiles" % (_usd("audit.extended", "es"), _days("audit.extended")),
+              note="El mismo método halló congelamientos en IntelliJ Platform")),
     page("og-dependency-security", "hero",
          dict(label="Security review", h1="Dependency and CI/CD\nsecurity review",
               lede="I review your dependencies and CI/CD workflows, read-only: known CVEs, dependency confusion and workflow permissions.",
-              badges=["security"], note="Fixed price from USD 4,800"),
+              badges=["security"], note="Fixed price from USD %s" % _from("depsec")),
          dict(label="Revisión de seguridad", h1="Revisión de seguridad de\ndependencias y CI/CD",
               lede="Reviso tus dependencias y flujos de CI/CD, en solo lectura: CVE conocidos, confusión de dependencias y permisos de workflows.",
-              badges=["security"], note="Precio fijo desde USD 4.800")),
+              badges=["security"], note="Precio fijo desde USD %s" % _from("depsec", "es"))),
     page("og-custom-plugins", "hero",
          dict(label="Custom plugins", h1="Custom plugins and\ninspections",
               lede="I build static-analysis inspections for your codebase as a plugin your team installs and runs in CI.",
-              badges=["static", "actions", "gitlab"], note="Fixed price from USD 7,500"),
+              badges=["static", "actions", "gitlab"], note="Fixed price from USD %s" % _from("custom")),
          dict(label="Plugins a medida", h1="Plugins e inspecciones\na medida",
               lede="Construyo inspecciones de análisis estático para tu código como un plugin que tu equipo instala y corre en CI.",
-              badges=["static", "actions", "gitlab"], note="Precio fijo desde USD 7.500")),
+              badges=["static", "actions", "gitlab"], note="Precio fijo desde USD %s" % _from("custom", "es"))),
     page("og-plugin-updates", "hero",
          dict(label="IDE compatibility", h1="Plugin updates for\nnew IDE versions",
               lede="I build and verify your JetBrains plugin against the IDE versions you support: removed APIs, Kotlin K2 and Plugin Verifier failures.",
-              badges=["jetbrains", "kotlin", "gradle"], note="Fixed price from USD 4,500"),
+              badges=["jetbrains", "kotlin", "gradle"], note="Fixed price from USD %s" % _from("updates")),
          dict(label="Compatibilidad del IDE", h1="Actualización de plugins\npara nuevos IDE",
               lede="Compilo y verifico tu plugin de JetBrains contra las versiones del IDE que soportas: API removidas, Kotlin K2 y fallos del Plugin Verifier.",
-              badges=["jetbrains", "kotlin", "gradle"], note="Precio fijo desde USD 4.500")),
+              badges=["jetbrains", "kotlin", "gradle"], note="Precio fijo desde USD %s" % _from("updates", "es"))),
     page("og-catalog", "hero",
          dict(label="Plugin catalog", h1="JetBrains & VS Code plugins\nfor real developer gaps",
               lede="Every plugin I build for JetBrains IDEs and VS Code: filter by category and price and see the gap each one fixes.",
@@ -318,6 +368,13 @@ def main() -> int:
     for out in written:
         print("  %-42s %6.0f KB" % (out.name, out.stat().st_size / 1024))
     print("\nOK -- %d image(s)." % len(written))
+    if not args.only and out_dir.resolve() == ROOT.resolve() and len(written) == len(all_jobs):
+        # Only a full render into the site records which prices the images now show (see og_price_texts).
+        OG_STAMP.write_text(json.dumps({"about": "Prices and delivery times the social images show, written by "
+                                        "build_page_og.py after a full render. build_services.py --check compares it "
+                                        "with data/services.json.", "texts": og_price_texts()},
+                                       ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+        print("[build_page_og] %s updated" % OG_STAMP.relative_to(ROOT).as_posix())
     return 0
 
 

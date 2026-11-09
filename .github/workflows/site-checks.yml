@@ -1,0 +1,53 @@
+name: Site checks
+
+# Runs on every pull request that touches the generators, the data or the pages:
+# - the unit tests of the build scripts (pipeline/tests): the prices file of the plugin pages, the contextual keys of
+#   the Spanish translation, and data/services.json with the pages it drives;
+# - build_services.py --check: every service price and delivery time on the site, the social images included,
+#   matches data/services.json;
+# - regenerate.py --check: rebuilding every generated file in the runner changes nothing.
+# Nothing is published; the job only reads the checkout (the rebuild writes into the runner's copy).
+
+on:
+  pull_request:
+    paths:
+      - "pipeline/**"
+      - "data/**"
+      - "**.html"
+      - "js/**"
+      - "css/**"
+      - "sitemap.xml"
+      - ".github/workflows/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1 (Node 24)
+
+      - name: Unit tests of the build scripts
+        run: python3 -m unittest discover -s pipeline/tests -v
+
+      - name: Service prices match data/services.json
+        run: python3 pipeline/build_services.py --check
+
+      # 2026-11-09: the committed pages must be exactly what the generators produce from the committed sources. This
+      # step would have stopped #29 (a generator change with no page rebuilt) and #30 (a rebuild in a short order).
+      - name: Generated files are up to date
+        run: python3 pipeline/regenerate.py --strict --check
+
+      # 2026-11-09: css/tw.css is compiled by the Tailwind CLI from the classes in the pages, the scripts and the
+      # Python generators. It is not part of regenerate.py (it needs npm), so it is checked here: text in a generator
+      # once added CSS rules nobody uses, and nothing ran this check.
+      # --ignore-scripts: no package runs code at install time; the Tailwind CLI 3 is plain JavaScript and builds the
+      # same css/tw.css without them (checked locally on 2026-11-09).
+      - name: Install the Tailwind CLI (pipeline/package-lock.json)
+        run: npm ci --prefix pipeline --ignore-scripts --no-audit --no-fund
+
+      - name: css/tw.css is what the Tailwind CLI builds
+        run: python3 _review/verify_tailwind.py

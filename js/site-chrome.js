@@ -111,7 +111,7 @@
   // ---- buscador del topbar (2026-10-05) --------------------------------
   // site-search.js y el indice se cargan recien al abrir el buscador (clic,
   // Ctrl/Cmd+K o "/"). build_search_index.py escribe la URL con su hash.
-  var SEARCH_SRC = /*SEARCH_SRC*/'/js/site-search.js?v=f37adf83'/*ENDSEARCH_SRC*/;
+  var SEARCH_SRC = /*SEARCH_SRC*/'/js/site-search.js?v=0df2970a'/*ENDSEARCH_SRC*/;
   var searchLoading = false;
   function openSearch(trigger) {
     if (window.GHLSearch) { window.GHLSearch.open(trigger); return; }
@@ -134,7 +134,10 @@
     var typing = t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName));
     var cmdK = (e.key === 'k' || e.key === 'K') && (e.ctrlKey || e.metaKey);
     var slash = e.key === '/' && !typing && !e.ctrlKey && !e.metaKey;
-    if (cmdK || slash) { e.preventDefault(); openSearch(searchButtons[0]); }
+    // 2026-11-09: the first *visible* button is the trigger (focus returns to it on close). The menu's search
+    // button comes first in the page but is hidden outside phones; focus must not go back to a hidden element.
+    var visible = Array.prototype.filter.call(searchButtons, function (b) { return b.offsetParent !== null; });
+    if (cmdK || slash) { e.preventDefault(); openSearch(visible[0] || searchButtons[0]); }
   });
 
   // Outbound clicks to JetBrains Marketplace (the macro conversion: leaving the

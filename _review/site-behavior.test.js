@@ -309,19 +309,110 @@ test('phone header: the primary action stays visible on one row from 320 to 560 
   const bad = [];
   for (const w of [320, 360, 390, 430, 560]) {
     await b.viewport(w, 800, true);
-    for (const p of ['/', '/services/', '/sponsors/']) {
+    for (const p of ['/', '/services/', '/sponsors/', '/es/', '/es/servicios/']) {
       await b.navigate(base + p);
       const h = await b.evaluate("(()=>{const c=document.querySelector('.gh-header .gh-cta');const r=c.getBoundingClientRect();" +
         "const hd=document.querySelector('.gh-header-inner').getBoundingClientRect();" +
+        "const nm=document.querySelector('.gh-brand-name').getBoundingClientRect();" +
+        "const tl=document.querySelector('.gh-tools').getBoundingClientRect();" +
         "return {visible:r.width>0&&getComputedStyle(c).display!=='none',right:r.right,top:r.top,headerH:hd.height," +
+        "nameW:Math.round(nm.width),nameClear:Math.round(tl.left-nm.right)," +
         "over:document.documentElement.scrollWidth-document.documentElement.clientWidth}})()");
       if (!h.visible) bad.push(w + p + ' CTA hidden');
       if (h.right > w) bad.push(w + p + ' CTA ends at ' + h.right);
       if (h.over > 0) bad.push(w + p + ' overflow +' + h.over);
       if (h.headerH > 72) bad.push(w + p + ' header ' + h.headerH + 'px tall');
+      // 2026-11-09: the brand name stays visible on phones (it was hidden below 480px) and clear of the buttons.
+      if (h.nameW < 60) bad.push(w + p + ' brand name hidden (' + h.nameW + 'px)');
+      if (h.nameClear < 0) bad.push(w + p + ' brand name under the buttons (' + h.nameClear + 'px)');
     }
   }
   await b.viewport(1280, 800, false);
+  assert(!bad.length, bad.join('; '));
+});
+
+// 2026-11-09: below 480px the search button leaves the header (room for the brand name) and opens from the menu.
+test('phone search: from the open menu below 480 px, from the header above; Ctrl+K never targets a hidden button', async ({ b, base }) => {
+  const bad = [];
+  try {
+    for (const [w, p] of [[320, '/'], [390, '/es/'], [479, '/'], [480, '/'], [1280, '/']]) {
+      await b.viewport(w, 800, w < 1001);
+      await b.navigate(base + p);
+      const s = await b.evaluate("(()=>{const shown=el=>!!el&&el.offsetParent!==null&&getComputedStyle(el).display!=='none';" +
+        "return {header:shown(document.querySelector('.gh-tools > .gh-search-btn')),menu:shown(document.querySelector('.gh-nav-search'))}})()");
+      const phone = w < 480;
+      if (s.header === phone) bad.push(w + p + ' header search ' + (s.header ? 'shown' : 'hidden'));
+      if (s.menu) bad.push(w + p + ' menu search shown while the menu is closed');
+      if (phone) {
+        await b.evaluate("document.getElementById('topbarBurger').click()");
+        await delay(150);
+        const m = await b.evaluate("(()=>{const el=document.querySelector('.gh-nav-search');return {shown:el.offsetParent!==null," +
+          "first:document.getElementById('siteNav').firstElementChild===el,label:el.textContent.trim()}})()");
+        if (!m.shown) bad.push(w + p + ' menu search hidden in the open menu');
+        if (!m.first) bad.push(w + p + ' menu search is not the first item');
+        if (!/^(Search plugins and pages|Buscar plugins y páginas)$/.test(m.label)) bad.push(w + p + ' menu search label ' + m.label);
+        await b.evaluate("document.querySelector('.gh-nav-search').click()");
+      } else {
+        await b.evaluate("document.dispatchEvent(new KeyboardEvent('keydown',{key:'k',ctrlKey:true,bubbles:true}))");
+      }
+      let opened = false;
+      for (let i = 0; i < 30 && !opened; i++) { await delay(100); opened = await b.evaluate("!!document.getElementById('ghsInput')"); }
+      if (!opened) { bad.push(w + p + ' search did not open'); continue; }
+      const trig = await b.evaluate("document.querySelectorAll('[data-search-open][aria-expanded=\"true\"]').length + ' trigger(s) expanded'");
+      // Escape from the focused field, as a keyboard user would; the check below only means something once the
+      // search is really closed (a first version sent Escape to document, the dialog stayed open and the
+      // focus was still in its visible input, so the test could not fail).
+      await b.evaluate("document.activeElement.dispatchEvent(new KeyboardEvent('keydown',{key:'Escape',bubbles:true}))");
+      await delay(150);
+      const back = await b.evaluate("(()=>{const i=document.getElementById('ghsInput');const a=document.activeElement;" +
+        "return {closed:!i||i.offsetParent===null,tag:a&&a.tagName,cls:a&&a.className,visible:!!a&&a.offsetParent!==null}})()");
+      if (!back.closed) { bad.push(w + p + ' Escape did not close the search'); continue; }
+      if (!back.visible) bad.push(w + p + ' focus went back to a hidden element (' + back.tag + ' ' + back.cls + ', ' + trig + ')');
+    }
+  } finally {
+    await b.viewport(1280, 800, false);
+  }
+  assert(!bad.length, bad.join('; '));
+});
+
+// 2026-11-09. Headless Chromium draws no scrollbar, but Chrome on Windows takes about 17 px of the window
+// for a classic one while the media queries still see the full window. The pass with "sb" narrows the page by
+// 17 px to reproduce that. Wherever the links are shown (no burger), they must be the six labels in order, on one
+// row, and at least 8 px clear of the buttons.
+test('desktop header: six links in order, on one row, clear of the buttons (EN and ES, with a 17 px scrollbar)', async ({ b, base }) => {
+  const LABELS = {
+    en: ['Services', 'Evidence', 'Plugins', 'Sponsors', 'Blog', 'Contact'],
+    es: ['Servicios', 'Evidencia', 'Herramientas', 'Patrocinio', 'Blog', 'Contacto'],
+  };
+  const pages = [['/', 'en'], ['/sponsors/', 'en'], ['/es/', 'es'], ['/es/catalogo/', 'es'], ['/es/servicios/', 'es'], ['/es/patrocinadores/', 'es']];
+  const bad = [];
+  let shownAt = null;
+  try {
+    for (const w of [961, 1001, 1024, 1280]) {   // 961: the first width with links if the burger ever starts at 960 again
+      await b.viewport(w, 800, false);
+      for (const [p, lang] of pages) {
+        for (const sb of [0, 17]) {
+          await b.navigate(base + p);
+          const r = await b.evaluate("((sb)=>{if(sb)document.documentElement.style.width='calc(100% - '+sb+'px)';" +
+            "const burger=document.querySelector('.gh-burger');if(getComputedStyle(burger).display!=='none')return {burger:true};" +
+            "const nav=document.getElementById('siteNav');const items=[...nav.children].filter(el=>el.offsetParent!==null);" +
+            "const labels=items.map(el=>((el.matches('a')?el:el.querySelector('button'))||el).textContent.trim());" +
+            "const tops=new Set(items.map(el=>Math.round(el.getBoundingClientRect().top)));" +
+            "const gap=document.querySelector('.gh-tools').getBoundingClientRect().left-items[items.length-1].getBoundingClientRect().right;" +
+            "return {burger:false,labels,rows:tops.size,gap:Math.round(gap)}})(" + sb + ")");
+          if (r.burger) continue;
+          if (shownAt === null || w < shownAt) shownAt = w;
+          const where = w + (sb ? '+sb ' : ' ') + p;
+          if (JSON.stringify(r.labels) !== JSON.stringify(LABELS[lang])) bad.push(where + ' labels ' + r.labels.join('|'));
+          if (r.rows !== 1) bad.push(where + ' links on ' + r.rows + ' rows');
+          if (r.gap < 8) bad.push(where + ' only ' + r.gap + 'px clear of the buttons');
+        }
+      }
+    }
+  } finally {
+    await b.viewport(1280, 800, false);
+  }
+  assert(shownAt !== null, 'the header links never showed, even at 1280 px');
   assert(!bad.length, bad.join('; '));
 });
 
