@@ -52,6 +52,13 @@ jobs:
         with:
           python-version: "3.x"
 
+      # 2026-11-08: download counts are published exactly as the JetBrains
+      # Marketplace reports them, and the stored history is moved to that
+      # basis once (auto_update_catalog.py). These tests guard both rules;
+      # a failure stops the run before any data is written or committed.
+      - name: Test catalog download counts
+        run: python -m unittest discover -s pipeline/tests -v
+
       # 2026-08-28: GH_TOKEN agregado -- bug real encontrado en auditoria
       # (hallazgo critico #25/#24 en la sesion que lo encontro): sin esta
       # env var, el `gh` CLI que pipeline/auto_update_catalog.py usa para
