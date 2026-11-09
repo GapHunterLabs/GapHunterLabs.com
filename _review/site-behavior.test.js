@@ -214,8 +214,9 @@ async function unreachableData({ b, base }) {
   assert((await b.evaluate(visibleCards + '.length')) >= 1, 'search should work without data');
   equal(b.exceptions.length, 0, 'catalog JavaScript exceptions: ' + b.exceptions.join(' | '));
   await b.navigate(base + '/');
-  equal(await b.evaluate("document.querySelectorAll('article.inv').length"), 5, 'investigations without data');
-  equal(await b.evaluate("document.querySelectorAll('article.tool').length"), 4, 'tools without data');
+  // 2026-11-08: the hire-oriented home of 2026-11-04 shows 3 investigations and 3 selected tools (was 5 and 4).
+  equal(await b.evaluate("document.querySelectorAll('article.inv').length"), 3, 'investigations without data');
+  equal(await b.evaluate("document.querySelectorAll('article.tool').length"), 3, 'tools without data');
   equal(b.exceptions.length, 0, 'home JavaScript exceptions: ' + b.exceptions.join(' | '));
 }
 
@@ -223,10 +224,14 @@ test('home: hero, profile card, figures, investigations, tools, stack', async ({
   const data = readData('catalog-data.json');
   await b.viewport(1440, 900);
   await b.navigate(base + '/');
-  const facts = await b.evaluate("({h1: document.querySelector('h1.nb-hero-title').textContent.trim().length, lede: document.querySelectorAll('.nb-hero .nb-lede').length, img: document.querySelector('.nb-profile img').naturalWidth, steps: document.querySelectorAll('.nb-method-mini li').length, focus: document.querySelectorAll('.nb-focus .badge svg').length, inv: document.querySelectorAll('article.inv').length, facts: [...document.querySelectorAll('article.inv')].map(a => a.querySelectorAll('dt').length), tools: [...document.querySelectorAll('article.tool')].map(t => t.querySelectorAll('.tool-badges .badge').length), stack: document.querySelectorAll('#stack .badge-table tr').length, stackImgs: document.querySelectorAll('#stack img').length, impact: document.querySelector('.nb-impact').innerText})");
-  assert(facts.h1 > 20 && facts.lede === 2 && facts.img > 0 && facts.steps === 3 && facts.focus === 4, 'hero: ' + JSON.stringify(facts));
-  assert(facts.inv === 5 && facts.facts.every((n) => n === 3), 'investigations: ' + JSON.stringify(facts.facts));
-  assert(facts.tools.length === 4 && facts.tools.every((n) => n === 2), 'tool badges: ' + JSON.stringify(facts.tools));
+  // 2026-11-08: expectations moved to the hire-oriented home of 2026-11-04 (PR #27): one lede, four service tabs
+  // with one real case each, 3 investigations and 3 selected tools. The old method list and focus badges are gone.
+  const facts = await b.evaluate("({h1: document.querySelector('h1.nb-hero-title').textContent.trim().length, lede: document.querySelectorAll('.nb-hero .nb-lede').length, img: document.querySelector('.nb-profile img').naturalWidth, tabs: document.querySelectorAll('.nb-states [role=tab]').length, panels: document.querySelectorAll('.nb-panels [role=tabpanel]').length, inv: document.querySelectorAll('article.inv').length, facts: [...document.querySelectorAll('article.inv')].map(a => a.querySelectorAll('dt').length), tools: [...document.querySelectorAll('article.tool')].map(t => t.querySelectorAll('.tool-badges .badge').length), stack: document.querySelectorAll('#stack .badge-table tr').length, stackImgs: document.querySelectorAll('#stack img').length, impact: document.querySelector('.nb-impact').innerText})");
+  assert(facts.h1 > 20 && facts.lede === 1 && facts.img > 0 && facts.tabs === 4 && facts.panels === 4, 'hero: ' + JSON.stringify(facts));
+  assert(facts.inv === 3 && facts.facts.every((n) => n === 3), 'investigations: ' + JSON.stringify(facts.facts));
+  assert(facts.tools.length === 3 && facts.tools.every((n) => n === 2), 'tool badges: ' + JSON.stringify(facts.tools));
+  assert(!/Last 7 days/.test(facts.impact) && /\+[\d,]+ since \d{4}-\d{2}-\d{2}/.test(facts.impact),
+    'the downloads figure must say what the gain is measured from: ' + facts.impact.slice(0, 160));
   assert(facts.stack === 4 && facts.stackImgs === 0, 'stack rows ' + facts.stack + ', images ' + facts.stackImgs);
   assert(facts.impact.includes(data.totalDownloads.toLocaleString('en-US')), 'downloads ' + data.totalDownloads + ' not shown in: ' + facts.impact.slice(0, 120));
 });
@@ -259,6 +264,84 @@ test('contact: each request type has its own form; the counter counts', async ({
   await b.evaluate("document.querySelector('.qa-item[data-target=hire]').click()");
   await b.evaluate("(()=>{const t=document.querySelector('#cfFields [name=message]');t.value='hello';t.dispatchEvent(new Event('input',{bubbles:true}))})()");
   assert(/5\s*\/\s*1500/.test(await b.evaluate("document.querySelector('.cf-counter').textContent")), 'counter should read 5/1500');
+});
+
+// 2026-11-08: one form per line of business, and the URL parameters that pre-fill them. Unknown or hostile values
+// must fall back to a safe default and never become markup.
+test('contact: URL parameters pick the form and pre-fill it, and bad values are ignored', async ({ b, base }) => {
+  const form = async (query) => {
+    await b.navigate(base + '/contact/' + query);
+    return b.evaluate("(()=>{const f=n=>{const e=document.querySelector('#cfFields [name='+n+']');return e?e.value:null};" +
+      "return {title:document.getElementById('cfTitle').textContent,service:f('service'),plugin:f('plugin'),message:f('message')," +
+      "active:[...document.querySelectorAll('.qa-item.is-active')].map(x=>x.dataset.target).join(),injected:!!document.getElementById('pwn')}})()");
+  };
+  let r = await form('?intent=hire&service=audit');
+  equal(r.title, 'Start an engagement', 'hire title');
+  equal(r.service, 'Plugin performance audit', 'service=audit pre-selects the audit');
+  for (const [key, label] of [['updates', 'Plugin update for new IDE versions'], ['depsec', 'Dependency and CI/CD security review'],
+    ['custom', 'Custom plugins and inspections'], ['other', 'Something else']]) {
+    equal((await form('?intent=hire&service=' + key)).service, label, 'service=' + key);
+  }
+  equal((await form('?intent=hire&service=bogus')).service, '', 'an unknown service leaves the choice empty');
+  equal((await form('?intent=hire&service=')).service, '', 'an empty service leaves the choice empty');
+  r = await form('?intent=hire&plugin=cert-companion');
+  equal(r.service, '', 'a plugin page does not pre-select team licenses any more');
+  assert(/About the plugin: cert-companion/.test(r.message), 'plugin prefill: ' + r.message);
+  r = await form('?intent=license&plugin=openapi-companion');
+  equal(r.title, 'Team licenses', 'license title');
+  equal(r.plugin, 'openapi-companion', 'license plugin prefill');
+  equal(r.active, 'license', 'license quick action active');
+  r = await form('?intent=license&plugin=%3Cimg%20id%3Dpwn%20src%3Dx%3E');
+  equal(r.plugin, '', 'a malformed slug is ignored');
+  assert(!r.injected, 'no markup injected from ?plugin=');
+  r = await form('?intent=hire&need=%3Cimg%20id%3Dpwn%20src%3Dx%3E');
+  assert(!r.injected, 'no markup injected from ?need=');
+  assert(r.message.indexOf('<img') !== -1, 'the search text is kept as plain text');
+  equal((await form('?intent=sponsor')).title, 'Company sponsorship', 'sponsor title');
+  for (const bad of ['constructor', '__proto__', 'toString', 'HIRE', '']) {
+    r = await form('?intent=' + bad);
+    equal(r.title, 'Start an engagement', 'intent=' + bad + ' falls back to hire');
+    assert(!b.exceptions.length, 'intent=' + bad + ' threw: ' + b.exceptions[0]);
+  }
+});
+
+test('phone header: the primary action stays visible on one row from 320 to 560 px', async ({ b, base }) => {
+  const bad = [];
+  for (const w of [320, 360, 390, 430, 560]) {
+    await b.viewport(w, 800, true);
+    for (const p of ['/', '/services/', '/sponsors/']) {
+      await b.navigate(base + p);
+      const h = await b.evaluate("(()=>{const c=document.querySelector('.gh-header .gh-cta');const r=c.getBoundingClientRect();" +
+        "const hd=document.querySelector('.gh-header-inner').getBoundingClientRect();" +
+        "return {visible:r.width>0&&getComputedStyle(c).display!=='none',right:r.right,top:r.top,headerH:hd.height," +
+        "over:document.documentElement.scrollWidth-document.documentElement.clientWidth}})()");
+      if (!h.visible) bad.push(w + p + ' CTA hidden');
+      if (h.right > w) bad.push(w + p + ' CTA ends at ' + h.right);
+      if (h.over > 0) bad.push(w + p + ' overflow +' + h.over);
+      if (h.headerH > 72) bad.push(w + p + ' header ' + h.headerH + 'px tall');
+    }
+  }
+  await b.viewport(1280, 800, false);
+  assert(!bad.length, bad.join('; '));
+});
+
+test('sponsors: an action above the fold, levels before the empty sponsor wall', async ({ b, base }) => {
+  await b.viewport(390, 844, true);
+  await b.navigate(base + '/sponsors/');
+  let r;
+  try {
+    r = await b.evaluate("(()=>{const a=document.querySelector('.page-hero .hero-actions a');" +
+      "const lvEl=document.getElementById('sec-levels'),nowEl=document.getElementById('sec-now');" +
+      "if(!a||!lvEl||!nowEl)return {missing:[!a&&'.page-hero .hero-actions a',!lvEl&&'#sec-levels',!nowEl&&'#sec-now'].filter(Boolean)};" +
+      "return {top:a.getBoundingClientRect().top+scrollY,href:a.getAttribute('href')," +
+      "levelsFirst:lvEl.getBoundingClientRect().top<nowEl.getBoundingClientRect().top}})()");
+  } finally {
+    await b.viewport(1280, 800, false);
+  }
+  assert(!r.missing, 'missing on /sponsors/: ' + (r.missing || []).join(', '));
+  assert(r.top < 844, 'first sponsor action at ' + r.top + 'px');
+  equal(r.href, '#sec-levels', 'hero action points to the levels');
+  assert(r.levelsFirst, 'levels come before the sponsor wall');
 });
 
 test('phone (390 px): no horizontal overflow on the main pages; methodology diagram fits', async ({ b, base }) => {

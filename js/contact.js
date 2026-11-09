@@ -19,7 +19,17 @@
     ? ['API', 'DevOps', 'Seguridad', 'Datos', 'Calidad de código', 'Generación de código', 'Pruebas', 'Editor', 'Otra']
     : ['API', 'DevOps', 'Security', 'Data', 'Code Quality', 'Codegen', 'Testing', 'Editor', 'Other'];
   var PLATFORM_OPTIONS = [t('JetBrains (IntelliJ family)', 'JetBrains (familia IntelliJ)'), 'VS Code', t('Other', 'Otra')];
-  var TEAM_OPTION = t('Team licenses for a paid plugin', 'Licencias de equipo para un plugin de pago');
+  // 2026-11-08: the "What do you need?" options are the four published services plus a way out. The keys are
+  // what a service page passes as ?service= so the visitor does not pick the service twice.
+  var SERVICES = [
+    ['audit', t('Plugin performance audit', 'Auditoría de rendimiento de un plugin')],
+    ['updates', t('Plugin update for new IDE versions', 'Actualización de un plugin para versiones nuevas del IDE')],
+    ['depsec', t('Dependency and CI/CD security review', 'Revisión de seguridad de dependencias y CI/CD')],
+    ['custom', t('Custom plugins and inspections', 'Plugins e inspecciones a medida')],
+    ['other', t('Something else', 'Otra cosa')]
+  ];
+  var SPONSOR_LEVELS = ['Silver', 'Gold', 'Platinum', t('Not sure yet', 'Aún no lo sé')];
+  var SLUG_RE = /^[a-z0-9][a-z0-9-]{0,80}$/;
 
   var CONFIGS = {
     gap: {
@@ -50,27 +60,57 @@
     hire: {
       label: 'hire',
       mail: true,
+      subjectPrefix: t('Engagement: ', 'Encargo: '),
       title: t('Start an engagement', 'Iniciar un encargo'),
-      sub: t('Describe the problem or the work. Before any work starts, I send you the scope, delivery date and price in writing. I reply personally by email.',
-             'Describe el problema o el trabajo. Antes de empezar cualquier trabajo, te envío por escrito el alcance, la fecha de entrega y el precio. Respondo personalmente por correo.'),
+      sub: t('Describe the problem or the work. Within 2 business days I reply in writing with the scope, delivery date and price, before any work starts.',
+             'Describe el problema o el trabajo. En 2 días hábiles te respondo por escrito con el alcance, la fecha de entrega y el precio, antes de empezar cualquier trabajo.'),
       submitLabel: t('Email me', 'Escríbeme'),
       fields: [
         { name: 'org', label: t('Company or project', 'Empresa o proyecto'), type: 'text', required: true, half: true, placeholder: t('Your company, team or project', 'Tu empresa, equipo o proyecto') },
         { name: 'email', label: t('Your email', 'Tu correo'), type: 'email', required: true, half: true, placeholder: t('So I can reply to you', 'Para poder responderte') },
         { name: 'service', label: t('What do you need?', '¿Qué necesitas?'), prompt: t('Select one', 'Elige una opción'), type: 'select', required: true,
-          options: [t('Investigation of a specific problem (performance, security or reliability)', 'Investigación de un problema concreto (rendimiento, seguridad o fiabilidad)'),
-                    t('Plugin performance audit', 'Auditoría de rendimiento de un plugin'),
-                    t('Plugin update for new IDE versions', 'Actualización de un plugin para versiones nuevas del IDE'),
-                    t('Dependency and CI/CD security review', 'Revisión de seguridad de dependencias y CI/CD'),
-                    t('Custom static-analysis rules', 'Reglas de análisis estático a medida'), t('CI/CD integration', 'Integración en CI/CD'),
-                    t('Private plugin distribution', 'Distribución privada de plugins'), TEAM_OPTION, t('Something else', 'Otra cosa')] },
+          options: SERVICES.map(function (s) { return s[1]; }) },
         { name: 'target', label: t('Plugin, repository or system', 'Plugin, repositorio o sistema'), type: 'text', required: false, placeholder: t('A name or a URL', 'Un nombre o una URL') },
         { name: 'message', label: t('What you are seeing', 'Qué estás viendo'), type: 'textarea', max: 1500, required: true, placeholder: t('Symptoms, versions, links to tickets or reports, and any deadline…', 'Síntomas, versiones, enlaces a tickets o reportes, y cualquier fecha límite…') }
+      ]
+    },
+    // 2026-11-08: team licenses and company sponsorships had no form of their own (they went through "hire" and
+    // "partnership"). Both are private leads, so they go by email like those two.
+    license: {
+      label: 'license',
+      mail: true,
+      subjectPrefix: t('Team licenses: ', 'Licencias de equipo: '),
+      title: t('Team licenses', 'Licencias de equipo'),
+      sub: t('Seats of a paid plugin for your whole team. JetBrains Marketplace sells the licenses and handles quotes, invoices and keys; tell me the plugin and how many seats you need, and I reply personally by email.',
+             'Licencias de un plugin de pago para todo tu equipo. JetBrains Marketplace vende las licencias y se encarga de cotizaciones, facturas y claves; dime el plugin y cuántas licencias necesitas, y te respondo personalmente por correo.'),
+      submitLabel: t('Send by email', 'Enviar por correo'),
+      fields: [
+        { name: 'org', label: t('Company or team', 'Empresa o equipo'), type: 'text', required: true, half: true, placeholder: t('Your company or team', 'Tu empresa o equipo') },
+        { name: 'email', label: t('Your email', 'Tu correo'), type: 'email', required: true, half: true, placeholder: t('So I can reply to you', 'Para poder responderte') },
+        { name: 'plugin', label: t('Plugin', 'Plugin'), type: 'text', required: true, half: true, placeholder: t('e.g. openapi-companion', 'p. ej. openapi-companion') },
+        { name: 'seats', label: t('How many people?', '¿Cuántas personas?'), type: 'text', required: false, half: true, placeholder: t('e.g. 12', 'p. ej. 12') },
+        { name: 'message', label: t('Anything else', 'Algo más'), type: 'textarea', max: 1000, required: false, placeholder: t('Billing country, renewal date, questions…', 'País de facturación, fecha de renovación, preguntas…') }
+      ]
+    },
+    sponsor: {
+      label: 'sponsor',
+      mail: true,
+      subjectPrefix: t('Sponsorship: ', 'Patrocinio: '),
+      title: t('Company sponsorship', 'Patrocinio de empresa'),
+      sub: t('Tell me the level you have in mind and whether your company needs an invoice. This goes by email, never as a public issue.',
+             'Cuéntame qué nivel tienes en mente y si tu empresa necesita factura. Esto va por correo, nunca como un issue público.'),
+      submitLabel: t('Send by email', 'Enviar por correo'),
+      fields: [
+        { name: 'org', label: t('Company', 'Empresa'), type: 'text', required: true, half: true, placeholder: t('Your company or project', 'Tu empresa o proyecto') },
+        { name: 'email', label: t('Your email', 'Tu correo'), type: 'email', required: true, half: true, placeholder: t('So I can reply to you', 'Para poder responderte') },
+        { name: 'level', label: t('Level', 'Nivel'), prompt: t('Select one', 'Elige una opción'), type: 'select', required: true, options: SPONSOR_LEVELS },
+        { name: 'message', label: t('Anything else', 'Algo más'), type: 'textarea', max: 1000, required: false, placeholder: t('Invoice details, the plugin you care about, questions…', 'Datos de factura, el plugin que te interesa, preguntas…') }
       ]
     },
     partnership: {
       label: 'partnership',
       mail: true,
+      subjectPrefix: t('Partnership: ', 'Alianza: '),
       title: t('Partnership', 'Alianzas'),
       sub: t('Tell me about your organization and what you have in mind. This goes by email, never as a public issue.',
              'Cuéntame sobre tu organización y lo que tienes en mente. Esto va por correo, nunca como un issue público.'),
@@ -267,7 +307,7 @@
     var data = new FormData(form);
     var titleSeed = data.get(cfg.fields[0].name) || cfg.title;
     if (cfg.mail) {
-      var subject = (cfg.label === 'hire' ? t('Engagement: ', 'Encargo: ') : t('Partnership: ', 'Alianza: ')) + String(titleSeed).slice(0, 80);
+      var subject = cfg.subjectPrefix + String(titleSeed).slice(0, 80);
       var body = cfg.fields.map(function (f) {
         var v = data.get(f.name);
         return f.label + ':\n' + (v ? String(v) : t('(not provided)', '(sin completar)'));
@@ -292,20 +332,29 @@
     btn.addEventListener('click', function () { copyText(btn.getAttribute('data-copy'), btn); track('contact-copy-email'); });
   });
 
-  // ?intent=hire|partnership|plugin|gap, con ?plugin=<slug> o ?need=<texto>
-  // para precargar el mensaje (llegan desde la home, las fichas y la
-  // busqueda sin resultados del catalogo).
+  // ?intent=hire|license|sponsor|partnership|plugin|gap, with ?service=<key> (a service page), ?plugin=<slug>
+  // (a plugin page) or ?need=<text> (a catalog search with no results). Only known values are used: an unknown
+  // intent opens "hire", an unknown service or a malformed slug is ignored, and every value is written as text,
+  // never as markup.
   var params = new URLSearchParams(window.location.search);
   var intent = params.get('intent');
-  activate(CONFIGS[intent] ? intent : 'hire');
-  var prefill = params.get('plugin') ? t('About the plugin: ', 'Sobre el plugin: ') + params.get('plugin') + '\n\n'
-    : params.get('need') ? t('I searched the catalog for "', 'Busqué en el catálogo "') + params.get('need').slice(0, 120) + t('" and found nothing.\n\n', '" y no encontré nada.\n\n') : '';
-  if (prefill) {
-    var ta = fieldsHost.querySelector('textarea');
-    if (ta) { ta.value = prefill; ta.dispatchEvent(new Event('input')); }
-    if (params.get('plugin') && intent === 'hire') {
-      var sel = fieldsHost.querySelector('select[name="service"]');
-      if (sel) sel.value = TEAM_OPTION;
-    }
+  var key = intent && Object.prototype.hasOwnProperty.call(CONFIGS, intent) ? intent : 'hire';
+  activate(key);
+  var slug = params.get('plugin');
+  if (slug && !SLUG_RE.test(slug)) slug = null;
+  var need = params.get('need');
+
+  function field(name) { return fieldsHost.querySelector('[name="' + name + '"]'); }
+  function fill(el, value) { if (el && value) { el.value = value; el.dispatchEvent(new Event('input')); } }
+
+  if (key === 'license' || key === 'plugin') {
+    fill(field('plugin'), slug);
+  } else if (key === 'hire') {
+    var service = params.get('service');
+    var match = SERVICES.filter(function (s) { return s[0] === service; })[0];
+    if (match) field('service').value = match[1];
+    var prefill = slug ? t('About the plugin: ', 'Sobre el plugin: ') + slug + '\n\n'
+      : need ? t('I searched the catalog for "', 'Busqué en el catálogo "') + need.slice(0, 120) + t('" and found nothing.\n\n', '" y no encontré nada.\n\n') : '';
+    fill(field('message'), prefill);
   }
 })();

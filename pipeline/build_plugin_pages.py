@@ -60,6 +60,9 @@ CATALOG_URL = SITE + "/catalog/"
 DATA_FILE = ROOT / "data" / "catalog-data.json"
 VSX_DATA_FILE = ROOT / "data" / "vscode-catalog-data.json"
 SHARED_JS = ROOT / "js" / "catalog-shared.js"
+# Optional (2026-11-08): the yearly price of a paid plugin, as listed on JetBrains Marketplace. The public API does
+# not expose prices, so the owner fills this file by hand; a plugin without an entry shows no amount (never a guess).
+PRICES_FILE = ROOT / "data" / "plugin-prices.json"
 CATALOG_PAGE = ROOT / "catalog" / "index.html"
 INDEX_PAGE = ROOT / "index.html"
 CATALOG_STUB = ROOT / "catalog.html"
@@ -380,6 +383,34 @@ def truncate(text: str, limit: int) -> str:
 # 3. Fuentes: datos + mapas + shell
 # =============================================================================
 
+def load_prices(path, plugins):
+    """{repo: yearly USD price} from data/plugin-prices.json, or {} when the file does not exist.
+
+    The file is checked when it is read, so a typo fails the build instead of printing a wrong price: every key
+    must be a PAID or FREEMIUM plugin of the catalog and every value a positive whole number of US dollars.
+    """
+    if not path.exists():
+        return {}
+    try:
+        # utf-8-sig: PowerShell 5.1's Set-Content -Encoding utf8 and Notepad write a BOM, which plain utf-8 rejects
+        raw = json.loads(path.read_text(encoding="utf-8-sig"))
+    except ValueError as exc:  # JSONDecodeError and UnicodeDecodeError; neither message repeats the file's text
+        die("%s: not valid UTF-8 JSON (%s)" % (path.name, exc))
+    prices = raw.get("prices") if isinstance(raw, dict) else None
+    if not isinstance(prices, dict):
+        die("%s: expected an object with a \"prices\" object" % path.name)
+    paid = {p.get("repo") for p in plugins if p.get("pricing") in ("PAID", "FREEMIUM")}
+    out = {}
+    for repo, entry in prices.items():
+        if repo not in paid:
+            die("%s: \"%s\" is not a paid or freemium plugin of the catalog" % (path.name, repo))
+        usd = entry.get("yearUSD") if isinstance(entry, dict) else None
+        if isinstance(usd, bool) or not isinstance(usd, int) or usd <= 0:
+            die("%s: \"%s\".yearUSD must be a positive whole number of dollars" % (path.name, repo))
+        out[repo] = usd
+    return out
+
+
 class Sources:
     def __init__(self):
         self.data = json.loads(DATA_FILE.read_text(encoding="utf-8"))
@@ -405,6 +436,8 @@ class Sources:
         wrong_demo = sorted(k for k, v in self.demo_media.items() if not isinstance(v, dict))
         if wrong_demo:
             die("DEMO_MEDIA debe tener solo objetos {poster, mp4, webm}; no lo es en: %s" % ", ".join(wrong_demo))
+
+        self.prices = load_prices(PRICES_FILE, self.plugins)
 
         # Cross-reference real a VS Code, por el mismo slug de repo.
         self.vsx_by_repo = {}
@@ -532,6 +565,7 @@ PLUGIN_PAGE_CSS = """
 .ph-actions .btn.primary:hover, .hire-band .btn.primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
 .ph-actions .btn-icon { display: inline-flex; }
 .ph-actions .btn-icon svg { width: 16px; height: 16px; }
+.ph-buy-note { margin: 12px 0 0; color: var(--text-dim); font-size: 13.5px; line-height: 1.5; }
 .ph-stats { margin-top: 24px; grid-template-columns: repeat(4, minmax(0, 1fr)); }
 /* 2026-10-05: cuadro de cifras ~55% mas chico en area (ancho y alto a ~2/3).
    Los selectores llevan .ph-stats para ganarle a .hdr-stat de shell.css, que
@@ -777,8 +811,8 @@ class PluginRenderer:
                      % (esc(safe_url(p["marketplaceUrl"])), "trial" if is_paid else "install", esc(p["repo"]),
                         icons["jetbrains"], "Start free trial on JetBrains" if is_paid else "Install on JetBrains"))
         if is_paid:
-            h.append('<a class="btn" href="/contact/?intent=hire&amp;plugin=%s" data-goatcounter-click="cta-team-%s">'
-                     'Team licenses</a>' % (esc(p["repo"]), esc(p["repo"])))
+            h.append('<a class="btn" href="/contact/?intent=license&amp;plugin=%s" data-goatcounter-click="cta-team-%s">'
+                     'Ask about team licenses</a>' % (esc(p["repo"]), esc(p["repo"])))
         h.append('<a class="btn" href="%s" target="_blank" rel="noopener" data-goatcounter-click="out-github-%s">'
                  '<span class="btn-icon">%s</span>GitHub ↗</a>'
                  % (esc(safe_url(p.get("githubUrl"))), esc(p["repo"]), icons["github"]))
@@ -788,6 +822,13 @@ class PluginRenderer:
                      '<span class="btn-icon">%s</span>Also for VS Code ↗</a>'
                      % (esc(safe_url(vsx.get("marketplaceUrl"))), icons["vscode"]))
         h.append('</div>')
+        if is_paid:
+            # 2026-11-08: the price used to be missing from the page entirely ("Pricing: Paid"). Without a confirmed
+            # figure the note still tells the visitor where the price and the trial are, and where the terms live.
+            usd = self.src.prices.get(p["repo"])
+            lead = ("From USD %s a year on JetBrains Marketplace, with a free trial." % thousands(usd) if usd
+                    else "Price and free trial on JetBrains Marketplace.")
+            h.append('<p class="ph-buy-note">%s <a href="/eula/">License terms (EULA)</a></p>' % lead)
 
         stat = lambda num, label: ('<div class="hdr-stat"><span class="hdr-stat-num">%s</span>'
                                    '<span class="hdr-stat-label">%s</span></div>' % (num, label))
@@ -827,9 +868,9 @@ class PluginRenderer:
             h.append('</div></section>')
 
         h.append('<div class="hire-band"><div><strong>Need a tool like this built for your codebase?</strong>'
-                 '<span>Custom static-analysis rules, CI/CD integration, private plugin distribution and performance audits for IntelliJ plugins.</span></div>'
-                 '<a class="btn primary" href="/contact/?intent=hire&amp;plugin=%s" data-goatcounter-click="cta-plugin-hire-%s">'
-                 'Work with me</a></div>' % (esc(p["repo"]), esc(p["repo"])))
+                 '<span>Custom plugins and inspections, plugin updates and performance audits for IntelliJ plugins, at a fixed price.</span></div>'
+                 '<a class="btn primary" href="/contact/?intent=hire&amp;service=custom&amp;plugin=%s" data-goatcounter-click="cta-plugin-hire-%s">'
+                 'Ask for a quote</a></div>' % (esc(p["repo"]), esc(p["repo"])))
         h.append('<p class="plugin-asof">Download and star counts as of %s, refreshed twice daily '
                  'from the JetBrains Marketplace and GitHub APIs.</p>'
                  % esc((self.src.data.get("generatedAt") or "")[:10]))
@@ -943,9 +984,9 @@ class PluginRenderer:
             h.extend(self.vsx_card_html(o) for o in others)
             h.append('</div></section>')
         h.append('<div class="hire-band"><div><strong>Need a tool like this built for your codebase?</strong>'
-                 '<span>Custom static-analysis rules, CI/CD integration and private plugin distribution.</span></div>'
-                 '<a class="btn primary" href="/contact/?intent=hire&amp;plugin=%s" data-goatcounter-click="cta-vsx-hire-%s">'
-                 'Work with me</a></div>' % (esc(e["name"]), esc(e["name"])))
+                 '<span>Custom plugins and inspections for your codebase, at a fixed price.</span></div>'
+                 '<a class="btn primary" href="/contact/?intent=hire&amp;service=custom&amp;plugin=%s" data-goatcounter-click="cta-vsx-hire-%s">'
+                 'Ask for a quote</a></div>' % (esc(e["name"]), esc(e["name"])))
         h.append('<p class="plugin-asof">Install counts as of %s, refreshed daily from the VS Code Marketplace API.</p>'
                  % esc((self.src.data.get("generatedAt") or "")[:10]))
         return "".join(h)
@@ -1012,6 +1053,8 @@ class PluginRenderer:
             app["datePublished"] = p["firstPublished"]
         if p.get("pricing") == "FREE":
             app["offers"] = {"@type": "Offer", "price": "0", "priceCurrency": "USD"}
+        elif p.get("pricing") == "PAID" and self.src.prices.get(p["repo"]):
+            app["offers"] = {"@type": "Offer", "price": str(self.src.prices[p["repo"]]), "priceCurrency": "USD"}
         # Sin aggregateRating a proposito: las valoraciones son de otro
         # sitio (Marketplace) y Google no admite ratings agregados de
         # terceros -- marcarlos es una violacion de sus guidelines, no un

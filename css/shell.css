@@ -572,9 +572,18 @@
   .gh-nav-group .gh-pop { position: static; min-width: 0; padding: 0 0 6px 10px; border: 0; box-shadow: none; background: none; }
   .gh-nav-cta { display: inline-flex; justify-content: center; margin-top: 10px; }
 }
+/* Phones (2026-11-08): the primary action stays visible in the header. To make room, the theme menu leaves the
+   header (the same control is in the footer of every page) and, below 480px, the brand shows only its logo (the
+   link keeps its accessible name "Gap Hunter Labs home"). The copy inside the open menu would repeat it.
+   Measured: with the brand name the header needs about 448px. */
+.gh-nav-cta { display: none !important; }
 @media (max-width: 560px) {
-  .gh-cta { display: none; }
+  .gh-cta.btn { padding: 0 10px; font-size: 12.5px; white-space: nowrap; }
+  .gh-tools > .gh-menu:not(.gh-lang) { display: none; }
   .gh-header-inner { gap: 12px; }
+}
+@media (max-width: 479px) {
+  .gh-brand-name { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 }
 /* 320-380px phones: the brand and the four buttons need about 330px with the usual margins, so the margins,
    the brand and the buttons give up a few pixels (checked at 320, 340 and 360). */
@@ -605,7 +614,7 @@
 .gh-footer-about-title { margin: 0 0 4px; color: var(--signal) !important; font: 600 11px/1.4 var(--mono) !important; letter-spacing: 0.1em; text-transform: uppercase; }
 .gh-footer-about-links { display: flex; flex-wrap: wrap; gap: 4px 14px; margin-top: 8px !important; }
 .gh-footer-about-links a { color: var(--text); font-size: 13px; text-decoration: underline; text-underline-offset: 0.18em; }
-.gh-footer-cols { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 24px; }
+.gh-footer-cols { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 24px; }
 .gh-footer-col { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
 .gh-footer-title { margin: 0 0 4px; color: var(--text); font: 600 13.5px var(--sans); }
 .gh-footer-col a { color: var(--text-dim); font-size: 14px; text-decoration: none; }
