@@ -577,17 +577,25 @@
   .gh-nav-cta { display: inline-flex; justify-content: center; margin-top: 10px; }
 }
 /* Phones (2026-11-08): the primary action stays visible in the header. To make room, the theme menu leaves the
-   header (the same control is in the footer of every page) and, below 480px, the brand shows only its logo (the
-   link keeps its accessible name "Gap Hunter Labs home"). The copy inside the open menu would repeat it.
-   Measured: with the brand name the header needs about 448px. */
+   header (the same control is in the footer of every page). The copy inside the open menu would repeat it.
+   2026-11-09: the brand name stays visible too (it used to be hidden below 480px). The header cannot hold the
+   logo, the name, the search, the language, the primary action and the burger on a phone (measured in Brave 157:
+   50px too wide at 320px, 28px at 390px), so below 480px the search moves into the open menu, as its first item. */
 .gh-nav-cta { display: none !important; }
+.gh-nav-search { display: none; }
 @media (max-width: 560px) {
   .gh-cta.btn { padding: 0 10px; font-size: 12.5px; white-space: nowrap; }
   .gh-tools > .gh-menu:not(.gh-lang) { display: none; }
   .gh-header-inner { gap: 12px; }
 }
 @media (max-width: 479px) {
-  .gh-brand-name { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .gh-tools > .gh-search-btn { display: none; }
+  .gh-nav-search { display: flex; align-items: center; gap: 10px; width: 100%; margin: 0 0 6px; padding: 11px 12px;
+    border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface-2); color: var(--text);
+    font: inherit; font-size: 15px; text-align: left; cursor: pointer; }
+  .gh-nav-search svg { width: 18px; height: 18px; flex: 0 0 auto; fill: none; stroke: currentColor; stroke-width: 1.6;
+    stroke-linecap: round; }
+  .gh-nav-search:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 }
 /* 320-380px phones: the brand and the four buttons need about 330px with the usual margins, so the margins,
    the brand and the buttons give up a few pixels (checked at 320, 340 and 360). */
@@ -597,6 +605,12 @@
   .gh-logo { width: 22px; height: 22px; }
   .gh-tools { gap: 6px; }
   .gh-burger { width: 34px; }
+}
+/* 320-340px: with the brand name, the English row was 2px too wide at 320px. */
+@media (max-width: 340px) {
+  .gh-header-inner { padding: 0 8px; gap: 6px; }
+  .gh-tools { gap: 4px; }
+  .gh-cta.btn { padding: 0 8px; }
 }
 
 .site-footer.gh-footer { margin-top: 72px; padding: 56px 0 28px; padding-left: 0; border-top: 0; background: var(--bg); color: var(--text); position: relative; }

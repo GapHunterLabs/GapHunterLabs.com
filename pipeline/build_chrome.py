@@ -197,7 +197,13 @@ def header_html(active, en_path="/"):
         else:
             parts.append('<a class="gh-nav-link" href="%s"%s>%s</a>'
                          % (first, ' aria-current="page"' if first == active else "", second))
-    links = "".join(parts)
+    # 2026-11-09: on phones (below 480px) the header has no room for the search button next to the brand name, so the
+    # same search opens from here, the first item of the open menu. CSS hides it everywhere else. The visible text is
+    # in a <span> so build_i18n reuses the translation of the header button's screen-reader text.
+    nav_search = ('<button type="button" class="gh-nav-search" data-search-open aria-haspopup="dialog" '
+                  'aria-expanded="false"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5"/>'
+                  '<path d="M12.6 12.6 17 17"/></svg><span>Search plugins and pages</span></button>')
+    links = nav_search + "".join(parts)
     theme_items = "".join(
         '<button type="button" class="gh-pop-item" data-theme-choice="%s" aria-pressed="false">'
         '<span class="gh-ico">%s</span>%s</button>' % (key, ICON[key], label)

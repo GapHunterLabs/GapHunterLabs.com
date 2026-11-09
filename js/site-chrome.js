@@ -134,7 +134,10 @@
     var typing = t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName));
     var cmdK = (e.key === 'k' || e.key === 'K') && (e.ctrlKey || e.metaKey);
     var slash = e.key === '/' && !typing && !e.ctrlKey && !e.metaKey;
-    if (cmdK || slash) { e.preventDefault(); openSearch(searchButtons[0]); }
+    // 2026-11-09: the first *visible* button is the trigger (focus returns to it on close). The menu's search
+    // button comes first in the page but is hidden outside phones; focus must not go back to a hidden element.
+    var visible = Array.prototype.filter.call(searchButtons, function (b) { return b.offsetParent !== null; });
+    if (cmdK || slash) { e.preventDefault(); openSearch(visible[0] || searchButtons[0]); }
   });
 
   // Outbound clicks to JetBrains Marketplace (the macro conversion: leaving the
