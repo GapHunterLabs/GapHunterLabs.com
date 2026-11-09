@@ -1,4 +1,4 @@
-"""data/services.json: the single source for the published services (2026-11-09, decision D11).
+"""data/services.json: the single source for the published services (2026-11-09).
 
 Before this file a service price was typed by hand in 4 or 5 places (the home, /services/, the service page, the
 catalog, the social images), so a change in one of them left the site contradicting itself. Every reader goes

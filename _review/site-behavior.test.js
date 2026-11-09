@@ -375,7 +375,7 @@ test('phone search: from the open menu below 480 px, from the header above; Ctrl
   assert(!bad.length, bad.join('; '));
 });
 
-// 2026-11-09 (D6/D9). Headless Chromium draws no scrollbar, but Chrome on Windows takes about 17 px of the window
+// 2026-11-09. Headless Chromium draws no scrollbar, but Chrome on Windows takes about 17 px of the window
 // for a classic one while the media queries still see the full window. The pass with "sb" narrows the page by
 // 17 px to reproduce that. Wherever the links are shown (no burger), they must be the six labels in order, on one
 // row, and at least 8 px clear of the buttons.

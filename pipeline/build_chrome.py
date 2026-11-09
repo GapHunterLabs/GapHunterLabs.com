@@ -57,7 +57,7 @@ PAGES = (
 # Un item con submenu es (etiqueta, [(href, texto), ...]); el resto (href, texto).
 # 2026-10-19 (rediseno): Work / Engineering / Tools / Services / Contact. Las
 # rutas no cambian; Methodology y las paginas de evidencia van bajo Engineering.
-# 2026-11-09 (decisions D6 and D9): Services / Evidence / Plugins / Sponsors / Blog / Contact.
+# 2026-11-09: Services / Evidence / Plugins / Sponsors / Blog / Contact.
 # - "Work" (an anchor on the home) and the "Engineering" menu led to the same evidence pages under two labels;
 #   they are one menu now, "Evidence", named like the page it opens.
 # - Services goes first: it is the line of business that pays the year. Sponsors joins the header.
@@ -263,9 +263,9 @@ def footer_html(active):
         ext = ' target="_blank" rel="noopener"' if external else ""
         return '<a href="%s"%s%s>%s</a>' % (href, cur, ext, label)
 
-    # 2026-11-09 (D6): 6 columns. "Work" and "Engineering" were the same evidence pages under two titles, and three
+    # 2026-11-09: 6 columns. "Work" and "Engineering" were the same evidence pages under two titles, and three
     # of the four service pages and the Blog had no footer link at all.
-    # The service links come from data/services.json (decision D11), in its order, with their footer labels.
+    # The service links come from data/services.json, in its order, with their footer labels.
     cols = (
         ("Services", [link("/services/", "Work with me")]
                      + [link(s["path"], s["shortName"]) for s in _services()["services"]]

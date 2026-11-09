@@ -562,8 +562,8 @@
 .gh-skip-link:focus { top: 12px; }
 @media (prefers-reduced-motion: reduce) { .gh-skip-link { transition: none; } }
 
-/* 2026-11-09: the burger menu starts at 1000px instead of 960px. With the six links of the header (D6) the
-   Spanish row ("Herramientas", D9) needs about 953px of layout, and Chrome on Windows takes about 17px of the
+/* 2026-11-09: the burger menu starts at 1000px instead of 960px. With the six links of the header the
+   Spanish row ("Herramientas") needs about 953px of layout, and Chrome on Windows takes about 17px of the
    window for a classic scrollbar while this media query still sees the full window: at 961-977px the links
    would run under the buttons. From 1001px there are about 31px left with that scrollbar (48px without). */
 @media (max-width: 1000px) {

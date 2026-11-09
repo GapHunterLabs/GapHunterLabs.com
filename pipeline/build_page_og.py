@@ -130,7 +130,7 @@ def page(stem, layout, en, es):
     return dict(stem=stem, layout=layout, en=en, es=es)
 
 
-# 2026-11-09 (decision D11): prices and delivery times come from data/services.json. A changed price changes the
+# 2026-11-09: prices and delivery times come from data/services.json. A changed price changes the
 # text of these images, so they must be rendered again (and OG_VERSION bumped); build_services.py --check fails
 # until data/og-prices.json, written at the end of a full render, matches the prices below.
 import services_data as _S  # noqa: E402

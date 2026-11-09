@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""build_services.py -- applies data/services.json, the single source for the published services (decision D11,
-2026-11-09), to every page that shows a service figure.
+"""build_services.py -- applies data/services.json, the single source for the published services
+(2026-11-09), to every page that shows a service figure.
 
 On the English pages (build_i18n.py makes the Spanish ones afterwards, and the Spanish text keeps its own wording):
   1. Bound figures. Each <!--svc:<key>.<level>.<usd|days>--> is followed by its figure, and the figure is rewritten
