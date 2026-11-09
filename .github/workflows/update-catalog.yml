@@ -41,14 +41,16 @@ jobs:
       # pin; si algun dia hace falta actualizar la action, resolver el SHA
       # del nuevo tag primero, nunca pegar un SHA sin verificar de donde
       # salio.
+      # 2026-11-09: v7.0.1 and v7.1.0 run on Node 24 (v4/v5 ran on Node 20, which GitHub deprecated). checkout v6+
+      # keeps the token in a separate git config file, which `git push` in this same job still reads.
       - name: Checkout
-        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: true
           fetch-depth: 1
 
       - name: Set up Python
-        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: "3.x"
 
@@ -56,7 +58,8 @@ jobs:
       # Marketplace reports them, and the stored history is moved to that
       # basis once (auto_update_catalog.py). These tests guard both rules;
       # a failure stops the run before any data is written or committed.
-      - name: Test catalog download counts
+      # 2026-11-09: the same suite also covers the generation order, the services source and this workflow's wiring.
+      - name: Unit tests of the build scripts (pipeline/tests)
         run: python -m unittest discover -s pipeline/tests -v
 
       # 2026-08-28: GH_TOKEN agregado -- bug real encontrado en auditoria
@@ -79,57 +82,26 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: python pipeline/auto_update_catalog.py
 
-      # Fase 1 del SuperPlan de SEO (2026-09-22): una URL real por plugin
-      # (/catalog/<slug>/), generada a partir de los mismos datos que este
-      # workflow acaba de refrescar. Corre despues de auto_update_catalog.py
-      # porque lee data/catalog-data.json ya actualizado; verify_seo.py mas
-      # abajo es el gate que aborta el job si alguna ficha queda mal
-      # canonicalizada antes de que nada de esto llegue a commitearse.
-      # Fase 2 del SuperPlan de SEO (2026-09-22): pre-renderiza la grilla
-      # y la tabla de /catalog/ mismo (146 <a>/<tr> reales con los datos
-      # que auto_update_catalog.py acaba de refrescar) -- antes del build
-      # de fichas porque ambos leen catalog/index.html como fuente, y
-      # build_plugin_pages.py reemplaza <main> entero al generar cada
-      # ficha (no le importa el contenido de la grilla), asi que el orden
-      # entre los dos no es estrictamente necesario pero mantiene el log
-      # en el mismo orden que el pipeline conceptual: datos -> grid del
-      # catalogo -> fichas por plugin.
-      - name: Build catalog grid/table (pre-rendered, no JS needed to paint)
-        run: python pipeline/build_catalog_grid.py
+      # 2026-11-09: the VS Code data used to be refreshed by its own workflow (update-vscode-catalog.yml, retired),
+      # which committed data/vscode-catalog-data.json without rebuilding any page: the catalog and the search index
+      # lagged behind it until this workflow ran. Both now commit generated pages, and two writers of the same
+      # one-line files (js/search-data.js) cannot be reconciled by the rebase below, so this is the only writer.
+      # continue-on-error: a VS Code Marketplace outage must not stop the JetBrains update; the last step turns the
+      # job red after publishing, so the failure is still seen.
+      - name: Run VS Code auto-update
+        id: vscode
+        continue-on-error: true
+        run: python pipeline/auto_update_vscode_catalog.py
 
-      # Mismo principio que el paso de arriba, aplicado a la home: el
-      # subtitulo del hero, los contadores, los facts, las categorias y
-      # el slider de destacados tambien llegan ya pre-renderizados.
-      - name: Build home page (pre-rendered hero/stats/categories/slider)
-        run: python pipeline/build_home.py
-
-      - name: Build per-plugin pages
-        run: python pipeline/build_plugin_pages.py --sitemap --inject
-
-      # 2026-09-27: feed RSS de lanzamientos y version en espanol (/es/), que
-      # se genera desde las paginas inglesas ya construidas (asi las cifras
-      # nuevas llegan solas). Sin --strict: si falta una traduccion, esa
-      # frase queda en ingles y el paso avisa, sin frenar la actualizacion.
-      - name: Build RSS feed
-        run: python pipeline/build_feed.py
-
-      - name: Build Spanish pages
-        run: python pipeline/build_i18n.py
-
-      # 2026-11-03: feed propio de /writing (y su alterno ES). Corre DESPUES de
-      # build_i18n porque corrige el enlace de feed de la copia ES del indice.
-      - name: Build writing feed
-        run: python pipeline/build_writing_feed.py
-
-      # 2026-10-05: indice del buscador del topbar (js/search-data.js) y las
-      # URLs versionadas que site-chrome.js / site-search.js cargan al abrirlo.
-      - name: Build site search index
-        run: python pipeline/build_search_index.py
-
-      # 2026-09-27: ?v=<hash de contenido> en cada /css y /js -- GitHub Pages
-      # cachea 10 min (max-age=600); asi HTML nuevo nunca usa CSS viejo.
-      - name: Version CSS/JS references (cache busting)
-        run: python pipeline/version_assets.py
+      # 2026-11-09: every generated file (the catalog grid, the home blocks, one page per plugin, the feeds, the
+      # Spanish pages, the search index and the ?v= asset hashes) is rebuilt by pipeline/regenerate.py, which owns
+      # the order. The order used to be listed here step by step while a document and manual runs used shorter
+      # ones; the Spanish Blog index, which build_writing_feed.py must fix after build_i18n.py, is one of the files
+      # that went wrong that way. It runs after auto_update_catalog.py because every generator reads the data that
+      # step just refreshed. Without --strict: a missing Spanish translation leaves that phrase in English and is
+      # reported, without stopping the update. Pull requests run the same script with --check.
+      - name: Rebuild every generated file (pipeline/regenerate.py)
+        run: python pipeline/regenerate.py
 
       - name: Verify SEO guardrails (per-plugin pages, sitemap, hash shim)
         run: python _review/verify_seo.py
@@ -196,10 +168,12 @@ jobs:
           # privacy, terms...) quedaban modificadas sin commitear en cada
           # corrida, y ese arbol sucio hacia fallar el rebase del reintento
           # ("cannot rebase: You have unstaged changes", run 36507499020).
-          TRACKED=(data/catalog-data.json css/plugin.css js/slug-shim.js sitemap.xml
+          # 2026-11-09: js/contact.js and writing (the Blog feeds) can also be rebuilt by regenerate.py, and the VS
+          # Code data is refreshed by this job too.
+          TRACKED=(data/catalog-data.json data/vscode-catalog-data.json css/plugin.css js/slug-shim.js sitemap.xml
             _review/plugin_lastmod.json pipeline/catalog_daily_history.json
-            pipeline/catalog_latest_data.json es feed.xml ':(glob)**/*.html'
-            js/search-data.js js/site-search.js js/site-chrome.js)
+            pipeline/catalog_latest_data.json es feed.xml writing ':(glob)**/*.html'
+            js/search-data.js js/site-search.js js/site-chrome.js js/contact.js)
           git add -A -- "${TRACKED[@]}"
           if git diff --cached --quiet; then
             echo "sin cambios reales en los datos, no se commitea nada"
@@ -221,10 +195,18 @@ jobs:
             if git push; then
               exit $LEFTOVER
             fi
-            echo "push rechazado (probable carrera con update-vscode-catalog.yml, intento $i/5) -- fetch+rebase y reintentar"
+            echo "push rechazado (main cambio durante la corrida, intento $i/5) -- fetch+rebase y reintentar"
             sleep $(( (RANDOM % 10) + 5 ))
             git fetch origin main
             git rebase origin/main
           done
           echo "push fallo tras 5 intentos -- abortando" >&2
+          exit 1
+
+      # The VS Code step may fail without stopping the JetBrains update (continue-on-error above); this turns the
+      # run red once everything else is published, so the failure does not go unnoticed.
+      - name: Fail if the VS Code update failed
+        if: always() && steps.vscode.outcome == 'failure'
+        run: |
+          echo "::error::pipeline/auto_update_vscode_catalog.py failed: the VS Code data was not refreshed in this run"
           exit 1
