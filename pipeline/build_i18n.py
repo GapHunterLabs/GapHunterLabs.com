@@ -364,10 +364,19 @@ def translate(text, table, missing, page, used_context=None):
             tr = lookup(key, table)
             if tr is not None:
                 return m.group(1) + restore(tr, vals) + m.group(3)
-            # en las fichas, description/og:description son la descripcion del
-            # plugin (dato, no interfaz): queda en ingles y no cuenta como faltante
-            if page not in PLUGIN_PAGES or "description" not in sel:
-                missing.setdefault(key, set()).add(page)
+            # en las fichas, description/og:description eran la descripcion del plugin en ingles (dato, no
+            # interfaz). Desde 2026-11-09 la ficha espanola lleva una descripcion en espanol armada con datos del
+            # catalogo (nombre, nicho, plataforma, precio), para que el resultado de busqueda salga en espanol.
+            if page in PLUGIN_PAGES and "description" in sel:
+                es = pitch_description_es(page)
+                if es is not None:
+                    return m.group(1) + es + m.group(3)
+                missing.setdefault("plugin description of " + page + " (pipeline/i18n/plugin-pitches.es.json)",
+                                   set()).add(page)
+                es = plugin_description_es(page, table)   # red de seguridad fuera de --strict
+                if es is not None:
+                    return m.group(1) + es + m.group(3)
+            missing.setdefault(key, set()).add(page)
             return m.group(0)
         text = re.sub(r'(<meta %s content=")([^"]*)(")' % re.escape(sel), meta_sub, text, count=1)
     return text
@@ -386,6 +395,147 @@ def plugin_pages():
 
 
 PLUGIN_PAGES = dict(plugin_pages())
+
+PRICING_ES = {"FREE": "gratis", "FREEMIUM": "gratis, con versión Pro", "PAID": "de pago"}
+DESC_MAX = 170
+
+
+def _catalog_entries():
+    """{ruta inglesa de la ficha: (nombre, nicho, plataforma, precio)} desde los datos del catalogo."""
+    out = {}
+    jb = json.loads((ROOT / "data" / "catalog-data.json").read_text(encoding="utf-8"))
+    for p in jb.get("plugins", []):
+        out["/catalog/%s/" % p["repo"]] = (p["name"], p.get("niche", ""), "jetbrains", p.get("pricing", ""))
+    vs = json.loads((ROOT / "data" / "vscode-catalog-data.json").read_text(encoding="utf-8"))
+    for e in vs.get("extensions", []):
+        out["/catalog/vscode/%s/" % e["name"]] = (e["displayName"], e.get("niche", ""), "vscode", "FREE")
+    return out
+
+
+_CATALOG = None
+
+
+def plugin_description_es(en_path, table):
+    """Descripcion en espanol de una ficha (70-170 caracteres), o None si la ficha no esta en los datos."""
+    global _CATALOG
+    if _CATALOG is None:
+        _CATALOG = _catalog_entries()
+    entry = _CATALOG.get(en_path)
+    if entry is None:
+        return None
+    name, niche, platform, pricing = entry
+    niche_es = (lookup(normalize(niche)[0], table) or niche) if niche else ""
+    if platform == "vscode":
+        head = "%s: extensión gratuita para VS Code" % name
+        tail = "Qué hace, capturas, instalaciones y enlace al VS Code Marketplace."
+    else:
+        head = "%s: plugin %s para IntelliJ IDEA y los demás IDE de JetBrains" % (name, PRICING_ES.get(pricing, ""))
+        head = head.replace("plugin  para", "plugin para")
+        tail = "Qué hace, capturas, precio, descargas y enlace a JetBrains Marketplace."
+    if niche_es:
+        head += " (%s)" % niche_es
+    text = "%s. %s" % (head, tail)
+    if len(text) > DESC_MAX:
+        text = head + "."
+    return html_escape_attr(text)
+
+
+def html_escape_attr(s):
+    return s.replace("&", "&amp;").replace('"', "&quot;").replace("<", "&lt;").replace(">", "&gt;")
+
+
+# ---- descripciones de plugins en espanol (2026-11-09) --------------------------------------------------------------
+# pipeline/i18n/plugin-pitches.es.json guarda, por plugin, el texto ingles de origen (pitch_prose del dato) y su
+# traduccion. Si el dato ingles cambia, la traduccion queda vieja y cuenta como faltante (--strict falla).
+PITCHES_FILE = Path(__file__).resolve().parent / "i18n" / "plugin-pitches.es.json"
+_PITCH = None
+
+
+def _pitch_tables():
+    """(por ruta inglesa: (texto es, texto en vigente o None si esta vieja), por html ingles de bloque: html espanol)."""
+    global _PITCH
+    if _PITCH is not None:
+        return _PITCH
+    from build_plugin_pages import pitch_prose, pitch_text, plain_text, md_inline, esc  # noqa: WPS433
+    stored = json.loads(PITCHES_FILE.read_text(encoding="utf-8"))
+    by_path, blocks, stale = {}, {}, []
+    jb = json.loads((ROOT / "data" / "catalog-data.json").read_text(encoding="utf-8")).get("plugins", [])
+    vs = json.loads((ROOT / "data" / "vscode-catalog-data.json").read_text(encoding="utf-8")).get("extensions", [])
+    rows = [("jetbrains:" + p["repo"], "/catalog/%s/" % p["repo"], p.get("pitch")) for p in jb]
+    rows += [("vscode:" + e["name"], "/catalog/vscode/%s/" % e["name"], e.get("pitch")) for e in vs]
+    for key, path, pitch in rows:
+        entry = stored.get(key)
+        prose = pitch_prose(pitch)
+        if entry is None or entry["en"] != prose.strip():
+            stale.append(key)
+            continue
+        es = entry["es"]
+        by_path[path] = es
+        blocks[('ph-lead', md_inline(prose or "") or "—")] = md_inline(es)
+        blocks[('card-pitch', esc(pitch_text(pitch) or ""))] = esc(plain_text(es))
+        blocks[('rel-pitch', esc(pitch_text(pitch) or ""))] = esc(plain_text(es))
+        blocks[('jsonld', pitch_text(pitch) or "")] = plain_text(es)   # SoftwareApplication.description, sin recortar
+    _PITCH = (by_path, blocks, stale)
+    return _PITCH
+
+
+def pitch_description_es(en_path):
+    """meta description de la ficha espanola desde su traduccion, con el mismo recorte que la inglesa."""
+    from build_plugin_pages import plain_text, truncate, esc, DESC_MAX as PLUGIN_DESC_MAX  # noqa: WPS433
+    es = _pitch_tables()[0].get(en_path)
+    if es is None:
+        return None
+    text = plain_text(es)
+    limit = PLUGIN_DESC_MAX
+    result = truncate(text, limit)
+    while len(esc(result)) > PLUGIN_DESC_MAX and limit > 40:
+        limit -= 10
+        result = truncate(text, limit)
+    return esc(result)
+
+
+PITCH_BLOCK_RE = re.compile(r'(<p class="(ph-lead|card-pitch|rel-pitch)">)(.*?)(</p>)', re.S)
+JSONLD_DESC_RE = re.compile(r'("description":\s*")((?:[^"\\]|\\.)*)(")')
+META_DESC_RE = re.compile(r'<meta name="description" content="([^"]*)"')
+_JSONLD = None
+
+
+def _jsonld_descriptions():
+    """{descripcion inglesa de la ficha (la del JSON-LD y la meta): descripcion espanola}."""
+    global _JSONLD
+    if _JSONLD is None:
+        import html as _html
+        _JSONLD = {}
+        for path in _pitch_tables()[0]:
+            page = ROOT / path.strip("/") / "index.html"
+            m = META_DESC_RE.search(page.read_text(encoding="utf-8")) if page.exists() else None
+            if m:
+                _JSONLD[_html.unescape(m.group(1))] = _html.unescape(pitch_description_es(path))
+    return _JSONLD
+
+
+def translate_pitches(text, page, missing):
+    """Pasa a espanol la descripcion de cada plugin que aparece en la pagina (entradilla, tarjetas, relacionados)."""
+    blocks = _pitch_tables()[1]
+
+    def sub(m):
+        es = blocks.get((m.group(2), m.group(3)))
+        if es is None:
+            if m.group(3).strip() not in ("", "—"):
+                missing.setdefault("plugin description block (%s) on %s" % (m.group(2), page), set()).add(page)
+            return m.group(0)
+        return m.group(1) + es + m.group(4)
+    text = PITCH_BLOCK_RE.sub(sub, text)
+    table = _jsonld_descriptions()
+
+    def jsonld_sub(m):
+        try:
+            value = json.loads('"%s"' % m.group(2))
+        except ValueError:
+            return m.group(0)
+        es = table.get(value) or blocks.get(("jsonld", value))
+        return m.group(0) if es is None else m.group(1) + json.dumps(es, ensure_ascii=False)[1:-1] + m.group(3)
+    return JSONLD_DESC_RE.sub(jsonld_sub, text)
 
 
 # ---- ajustes estructurales ---------------------------------------------------
@@ -520,10 +670,14 @@ def main() -> int:
     table = json.loads(DICT_PATH.read_text(encoding="utf-8")) if DICT_PATH.exists() else {}
     check_table(table)
     missing: dict[str, set] = {}
+    for key in _pitch_tables()[2]:   # dato ingles cambiado o plugin nuevo sin traduccion
+        missing.setdefault("plugin description %s: stale or missing in pipeline/i18n/plugin-pitches.es.json" % key,
+                           set()).add("data")
     used_context: set = set()
     for en_path, es_path in list(ES_PATHS.items()) + list(PLUGIN_PAGES.items()):
         src = file_for(en_path).read_text(encoding="utf-8")
-        out = structural(translate(src, table, missing, en_path, used_context), en_path, es_path, table)
+        out = structural(translate_pitches(translate(src, table, missing, en_path, used_context), en_path, missing),
+                         en_path, es_path, table)
         out = apply_writing_es_body(out, en_path)
         if not args.extract:
             dest = file_for(es_path)

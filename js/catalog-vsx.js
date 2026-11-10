@@ -26,11 +26,22 @@
     var empty = document.getElementById('vsxNoResults');
     if (!section || !grid || !data.extensions.length) return;
     var all = data.extensions;
+    // 2026-11-09: the Spanish page comes with every card prerendered with its Spanish description (build_i18n). Keep
+    // that text when the grid is redrawn, and search it, instead of the English text of the data file.
+    var pitchEs = {};
+    if (ES) {
+      Array.prototype.forEach.call(grid.querySelectorAll('a.vsx-card'), function (a) {
+        var m = /\/vscode\/([^/]+)\/$/.exec(a.getAttribute('href') || '');
+        var p = a.querySelector('.card-pitch');
+        if (m && p) pitchEs[m[1]] = p.textContent;
+      });
+    }
+    function pitchOf(e) { return (ES && pitchEs[e.name]) || e.pitch || ''; }
 
     function filtered() {
       if (!query) return all;
       return all.filter(function (e) {
-        return ((e.displayName || '') + ' ' + (e.niche || '') + ' ' + (e.pitch || '')).toLowerCase().indexOf(query) !== -1;
+        return ((e.displayName || '') + ' ' + (e.niche || '') + ' ' + pitchOf(e)).toLowerCase().indexOf(query) !== -1;
       });
     }
     // 2026-09-27: cada extension tiene su ficha propia en /catalog/vscode/<name>/
@@ -42,7 +53,7 @@
         '<div class="card-header"><span class="card-cat vsx-mark" aria-hidden="true">' + VS_ICON + '</span>' +
         '<span class="price-badge price-free">' + (ES ? 'Gratis' : 'Free') + '</span></div>' +
         '<div class="card-top"><div class="card-name">' + esc(e.displayName) + '</div><div class="card-niche">' + esc(e.niche) + '</div></div>' +
-        '<p class="card-pitch">' + esc(e.pitch) + '</p>' +
+        '<p class="card-pitch">' + esc(pitchOf(e)) + '</p>' +
         '<div class="card-metrics"><span class="card-dl-wrap">' + thousands(n) +
         (ES ? (n === 1 ? ' instalación' : ' instalaciones') : (n === 1 ? ' install' : ' installs')) + '</span>' +
         '<span class="card-go">' + (ES ? 'Detalles' : 'Details') + '</span></div></a>';

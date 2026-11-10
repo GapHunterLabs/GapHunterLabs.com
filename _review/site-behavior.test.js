@@ -505,6 +505,26 @@ test('catalog on a phone: search and filters in the first screen, before the pan
   }
 });
 
+// 2026-11-09: the Spanish pages show the plugin descriptions in Spanish, also after catalog-vsx.js redraws the grid.
+test('Spanish catalog: plugin descriptions in Spanish after the scripts run, and the search finds them', async ({ b, base }) => {
+  const stored = JSON.parse(fs.readFileSync(path.join(root, 'pipeline', 'i18n', 'plugin-pitches.es.json'), 'utf8'));
+  const plain = (s) => s.replace(/\*\*|`/g, '').replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').trim();
+  await b.navigate(base + '/es/catalogo/');
+  await b.evaluate("document.querySelector('.platform-tab[data-platform=vscode]').click()");
+  await delay(300);
+  const card = await b.evaluate("(()=>{const a=document.querySelector('#vsxGrid a.vsx-card[href$=\"/android-unused-permission-companion/\"]');" +
+    "return a&&a.querySelector('.card-pitch').textContent})()");
+  equal(card, plain(stored['vscode:android-unused-permission-companion'].es), 'VS Code card after the redraw');
+  await b.evaluate("(()=>{const i=document.getElementById('vsxSearch');i.value='permiso';i.dispatchEvent(new Event('input',{bubbles:true}))})()");
+  await delay(300);
+  const found = await b.evaluate("[...document.querySelectorAll('#vsxGrid .card-pitch')].map(p=>p.textContent)");
+  assert(found.length >= 1 && found.every((t) => /permiso/i.test(t)), 'search in Spanish: ' + JSON.stringify(found));
+  await b.navigate(base + '/es/catalogo/ansible-companion/');
+  const lead = await b.evaluate("document.querySelector('.ph-lead').textContent");
+  equal(lead, plain(stored['jetbrains:ansible-companion'].es), 'plugin page lead');
+  equal(b.exceptions.length, 0, 'JavaScript exceptions: ' + b.exceptions.join(' | '));
+});
+
 // -------------------------------------------------------------------------------------- runner
 async function run() {
   const server = makeServer();
