@@ -554,7 +554,7 @@ def localize_links(text):
     return head + "</head>" + body
 
 
-JSONLD_TRANSLATABLE = ('"FAQPage"', '"Article"', '"TechArticle"')
+JSONLD_TRANSLATABLE = ('"FAQPage"', '"Article"', '"TechArticle"', '"CollectionPage"', '"ContactPage"', '"WebPage"')
 
 
 def translate_jsonld_text(text, table):
@@ -581,10 +581,28 @@ def translate_jsonld_text(text, table):
                 return fm.group(0)
             tr = lookup(key, table)
             if tr is None:
-                return fm.group(0)
+                # the table keys are page text, HTML-escaped ("Engineering &amp; Evidence"); JSON-LD has the plain text
+                key, vals = normalize(s.replace("&", "&amp;"))
+                tr = lookup(key, table)
+                if tr is None:
+                    return fm.group(0)
+                tr = restore(tr, vals).replace("&amp;", "&")
+                return fm.group(1) + json.dumps(tr, ensure_ascii=False)[1:-1] + fm.group(3)
             return fm.group(1) + json.dumps(restore(tr, vals), ensure_ascii=False)[1:-1] + fm.group(3)
 
-        return re.sub(r'("(?:name|text|headline|description)":\s*")((?:[^"\\]|\\.)*)(")', field_sub, block)
+        block = re.sub(r'("(?:name|text|headline|description)":\s*")((?:[^"\\]|\\.)*)(")', field_sub, block)
+
+        # 2026-11-09: in these blocks a "url" (and the page's own "#webpage" @id) points to the Spanish page when there is
+        # one. The site's home and identities (#website, #org, #joel) stay as they are.
+        def url_sub(um):
+            url, frag = um.group(2), um.group(3) or ""
+            path = url[len(SITE):] if url.startswith(SITE) else None
+            if path in (None, "/") or path not in ES_PATHS:
+                return um.group(0)
+            if um.group(1).startswith('"@id"') and frag != "#webpage":
+                return um.group(0)
+            return um.group(1) + SITE + ES_PATHS[path] + frag + '"'
+        return re.sub(r'("(?:url|@id)":\s*")(https://[^"#]+)(#[^"]*)?"', url_sub, block)
 
     return re.sub(r'<script type="application/ld\+json">.*?</script>', script_sub, text, flags=re.S)
 

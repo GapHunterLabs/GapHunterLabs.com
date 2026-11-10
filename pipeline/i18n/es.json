@@ -1857,5 +1857,6 @@
   "Evidence{svg}": "Evidencia{svg}",
   "Plugin updates": "Actualización de plugins",
   "[ctx:gh-nav-link] Plugins": "Herramientas",
-  "[ctx:gh-nav-link] Sponsors": "Patrocinio"
+  "[ctx:gh-nav-link] Sponsors": "Patrocinio",
+  "Developer tooling services": "Servicios de herramientas para desarrolladores"
 }
