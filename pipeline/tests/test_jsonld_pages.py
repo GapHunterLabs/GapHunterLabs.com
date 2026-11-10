@@ -53,5 +53,26 @@ class CommercialPagesTest(unittest.TestCase):
                         self.assertTrue(offer["url"].startswith(SITE + "/es/"), offer["url"])
 
 
+class BlogTest(unittest.TestCase):
+    def test_every_english_page_with_a_spanish_pair_is_in_the_sitemap(self):
+        import sys
+        sys.path.insert(0, str(ROOT / "pipeline"))
+        from build_chrome import ES_PATHS
+        sitemap = (ROOT / "sitemap.xml").read_text(encoding="utf-8")
+        missing = [p for p in ES_PATHS if "<loc>%s%s</loc>" % (SITE, p) not in sitemap]
+        self.assertEqual(missing, [])
+
+    def test_spanish_article_card_is_spanish_and_the_blog_has_its_own_image(self):
+        meta = lambda path, prop: re.search(r'<meta (?:property|name)="%s" content="([^"]*)"' % prop,
+                                            (ROOT / path / "index.html").read_text(encoding="utf-8")).group(1)
+        en, es = "writing/background-readaction-freeze", "es/escritos/background-readaction-freeze"
+        self.assertNotEqual(meta(en, "og:title"), meta(es, "og:title"))
+        self.assertTrue(meta(es, "og:title").startswith("Una acción de lectura"))
+        for path, image in (("writing", "og-blog.png"), ("es/escritos", "og-blog.es.png"), (en, "og-blog.png")):
+            self.assertIn("/" + image + "?v=", meta(path, "og:image"))
+            png = (ROOT / image).read_bytes()
+            self.assertEqual((int.from_bytes(png[16:20], "big"), int.from_bytes(png[20:24], "big")), (1200, 630))
+
+
 if __name__ == "__main__":
     unittest.main()

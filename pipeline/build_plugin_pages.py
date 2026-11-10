@@ -1231,6 +1231,14 @@ def read_static_entries():
     static = [(loc, lastmod) for loc, lastmod in entries if "/catalog/" not in loc or loc.endswith("/catalog/")]
     if not any(loc == CATALOG_URL for loc, _ in static):
         die("sitemap.xml no tiene la entrada de /catalog/ -- auto_update_catalog.py depende de ella")
+    # 2026-11-09: every English page that has a Spanish pair is in the sitemap. The static entries were added by
+    # hand, and the English Blog never was (its Spanish pages were). A page added here keeps its lastmod afterwards.
+    from build_chrome import ES_PATHS, SITE as CHROME_SITE  # noqa: WPS433
+    have = {loc for loc, _ in static}
+    today = date.today().isoformat()
+    for path in ES_PATHS:
+        if CHROME_SITE + path not in have and "/catalog/" not in path:
+            static.append((CHROME_SITE + path, today))
     return static
 
 

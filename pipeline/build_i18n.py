@@ -494,6 +494,34 @@ def pitch_description_es(en_path):
     return esc(result)
 
 
+SOCIAL_TITLE_RE = re.compile(r'(<meta (?:property="og:title"|name="twitter:title"|property="og:image:alt"|'
+                             r'name="twitter:image:alt") content=")([^"]*)(")')
+TITLE_RE = re.compile(r"<title>(.*?)</title>", re.S)
+
+
+def sync_social_titles(out, src):
+    """2026-11-09: a Spanish page whose <title> is translated but whose social card still has the English title (the
+    Blog article, written in Spanish outside the table) takes the Spanish title for og:title, twitter:title and the
+    image alt texts. A card that already differs from the English one is left alone."""
+    import html as _html
+    en_t, es_t = TITLE_RE.search(src), TITLE_RE.search(out)
+    if not en_t or not es_t:
+        return out
+    en_title, es_title = _html.unescape(en_t.group(1).strip()), _html.unescape(es_t.group(1).strip())
+    if en_title == es_title:
+        return out
+    def plain(s):
+        return _html.unescape(s).replace("’", "'").replace("‘", "'").replace("“", '"').replace("”", '"')
+
+    def sub(m):
+        # only a card that repeats the English <title> (a short card like "Name — Gap Hunter Labs" is the same in
+        # both languages on purpose)
+        if plain(m.group(2)) == plain(en_title):
+            return m.group(1) + html_escape_attr(es_title) + m.group(3)
+        return m.group(0)
+    return SOCIAL_TITLE_RE.sub(sub, out)
+
+
 PITCH_BLOCK_RE = re.compile(r'(<p class="(ph-lead|card-pitch|rel-pitch)">)(.*?)(</p>)', re.S)
 JSONLD_DESC_RE = re.compile(r'("description":\s*")((?:[^"\\]|\\.)*)(")')
 META_DESC_RE = re.compile(r'<meta name="description" content="([^"]*)"')
@@ -697,6 +725,7 @@ def main() -> int:
         out = structural(translate_pitches(translate(src, table, missing, en_path, used_context), en_path, missing),
                          en_path, es_path, table)
         out = apply_writing_es_body(out, en_path)
+        out = sync_social_titles(out, src)
         if not args.extract:
             dest = file_for(es_path)
             dest.parent.mkdir(parents=True, exist_ok=True)
