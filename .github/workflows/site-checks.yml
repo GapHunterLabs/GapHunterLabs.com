@@ -55,7 +55,9 @@ jobs:
   browser:
     # 2026-11-09: the behavior tests and the checks of verify_site.py run here, in a real browser. Both used to run
     # only by hand, and verify_site.py went stale (16 of 51 checks) without anybody noticing.
-    runs-on: ubuntu-latest
+    # A fixed image: on 2026-11-10 ubuntu-latest moved to 26.04, where Playwright 1.60 has no Chromium. Move both
+    # together (image and the Playwright pin) once Playwright supports the newer image.
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1 (Node 24)

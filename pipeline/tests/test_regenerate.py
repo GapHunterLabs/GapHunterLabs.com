@@ -97,6 +97,10 @@ class WorkflowWiringTest(unittest.TestCase):
         # 2026-11-09: the browser checks run in CI too (they had gone stale when they ran only by hand)
         self.assertIn("node _review/site-behavior.test.js", text)
         self.assertIn("python3 _review/verify_site.py", text)
+        # 2026-11-10: ubuntu-latest moved to an image Playwright 1.60 cannot install Chromium on; the job pins its image
+        browser_job = re.search(r"\n  browser:\n(.*?)(?=\n  [a-z-]+:\n|\Z)", text, re.S)
+        self.assertIsNotNone(browser_job, "site-checks.yml has no browser job")
+        self.assertRegex(browser_job.group(1), r"runs-on: ubuntu-\d\d\.\d\d\b")
         # npm ci needs the lockfile in the repository, not only on disk (the first run of this check failed on that)
         tracked = subprocess.run(["git", "ls-files", "--error-unmatch", "pipeline/package-lock.json"], cwd=ROOT,
                                  capture_output=True, text=True)
