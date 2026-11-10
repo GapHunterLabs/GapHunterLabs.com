@@ -658,7 +658,6 @@
   "Paid &amp; Pro (freemium + paid)": "De pago y Pro (freemium + de pago)",
   "Paid &amp; Pro plugins": "Plugins de pago y Pro",
   "Paid and Pro plugins": "Plugins de pago y Pro",
-  "Paid by international bank transfer in USD, against an invoice.": "Pago por transferencia bancaria internacional en USD, con factura.",
   "Paid plans and team licenses": "Planes de pago y licencias de equipo",
   "Partnership": "Alianzas",
   "Pending moderation": "En moderación",
@@ -1292,7 +1291,6 @@
   "<b>Checks you can read.</b> The tests and plugin-verifier runs behind each release, and the <a href=\"/methodology/\">method</a> that decides what gets investigated.": "<b>Verificaciones que puedes leer.</b> Las pruebas y las corridas del verificador de plugins detrás de cada versión, y el <a href=\"/methodology/\">método</a> que decide qué se investiga.",
   "<b>Fixes sent upstream.</b> Root-cause reports, patches and pull requests to the IntelliJ Platform and to open-source projects. The record is on the <a href=\"/engineering-evidence/\">evidence pages</a>.": "<b>Correcciones enviadas al origen.</b> Informes de causa raíz, parches y pull requests a la IntelliJ Platform y a proyectos de código abierto. El registro está en las <a href=\"/engineering-evidence/\">páginas de evidencia</a>.",
   "<b>Free tools that keep working.</b> The free plugins and extensions in the catalog, kept compatible as the IDEs change.": "<b>Herramientas gratuitas que siguen funcionando.</b> Los plugins y extensiones gratuitos del catálogo, compatibles a medida que cambian los IDE.",
-  "<b>Join.</b> Monthly support goes through Patreon; a one-off contribution through Buy Me a Coffee. If your company needs an invoice or other paperwork, write to me first.": "<b>Únete.</b> El apoyo mensual va por Patreon; un aporte único, por Buy Me a Coffee. Si tu empresa necesita factura u otros trámites, escríbeme primero.",
   "<b>New tools from documented gaps.</b> Each plugin starts from one gap that reviews or tickets already describe.": "<b>Herramientas nuevas a partir de brechas documentadas.</b> Cada plugin nace de una brecha que ya describen reseñas o tickets.",
   "<b>Pick a level.</b> If you are unsure, start with Supporter or Backer and change later.": "<b>Elige un nivel.</b> Si dudas, empieza con Colaborador o Impulsor y cambia después.",
   "<b>Send your name or logo.</b> For Silver and above, an SVG logo and the link you want. I add you to the page within a week.": "<b>Envía tu nombre o logo.</b> Desde Plata, un logo en SVG y el enlace que quieras. Te agrego a la página en una semana.",
@@ -1456,7 +1454,6 @@
   "Within {n} business days I send you the scope in writing: the inspections, whether CI is included, delivery date and price.": "En un plazo de {n} días hábiles te envío por escrito el alcance: las inspecciones, si incluye CI, fecha de entrega y precio.",
   "Within {n} business days I send you the scope in writing: versions, Minor or Major, delivery date and price.": "En un plazo de {n} días hábiles te envío por escrito el alcance: versiones, Menor o Mayor, fecha de entrega y precio.",
   "Yes. I can run the inspections in GitHub Actions or GitLab CI, so a pull request fails on the same rule the IDE flags as developers type, and I can serve the plugin from a private plugin repository your team updates from.": "Sí. Puedo ejecutar las inspecciones en GitHub Actions o GitLab CI, de modo que un pull request falla con la misma regla que el IDE señala mientras escribes, y puedo servir el plugin desde un repositorio privado de plugins del que se actualice tu equipo.",
-  "You pay by international bank transfer in USD, against an invoice.": "Pagas por transferencia bancaria internacional en USD, contra factura.",
   "You pay {n}% when the work starts and {n}% on delivery. I deliver within {n} business days of the start, or {n} for an extended scope.": "Pagas el {n}% al empezar el trabajo y el {n}% en la entrega. Entrego en un plazo de {n} días hábiles desde el inicio, o {n} si el alcance es ampliado.",
   "You pay {n}% when the work starts and {n}% on delivery.": "Pagas el {n}% al empezar el trabajo y el {n}% en la entrega.",
   "<strong>Evidence you can re-run.</strong> Every finding comes with a measurement, a stack trace or a test, and a before-and-after for anything that gets a fix.": "<strong>Evidencia que puedes volver a ejecutar.</strong> Cada hallazgo viene con una medición, un stack trace o un test, y con un antes y después para todo lo que recibe una corrección.",
@@ -1857,5 +1854,9 @@
   "Evidence{svg}": "Evidencia{svg}",
   "Plugin updates": "Actualización de plugins",
   "[ctx:gh-nav-link] Plugins": "Herramientas",
-  "[ctx:gh-nav-link] Sponsors": "Patrocinio"
+  "[ctx:gh-nav-link] Sponsors": "Patrocinio",
+  "Developer tooling services": "Servicios de herramientas para desarrolladores",
+  "You pay in USD by international bank transfer; I issue the invoice in Colombian pesos (COP), at the official exchange rate on its date.": "Pagas en USD por transferencia bancaria internacional; emito la factura en pesos colombianos (COP), a la tasa de cambio oficial de su fecha.",
+  "Paid in USD by international bank transfer; invoiced in Colombian pesos (COP), at the official exchange rate on the invoice date.": "Pago en USD por transferencia bancaria internacional; factura en pesos colombianos (COP), a la tasa de cambio oficial de su fecha.",
+  "<b>Join.</b> Monthly support goes through Patreon; a one-off contribution through Buy Me a Coffee. If your company needs an invoice or other paperwork, write to me first: I invoice companies in Colombian pesos (COP), at the official exchange rate on the invoice date.": "<b>Únete.</b> El apoyo mensual va por Patreon; un aporte único, por Buy Me a Coffee. Si tu empresa necesita factura u otros trámites, escríbeme primero: facturo a empresas en pesos colombianos (COP), a la tasa de cambio oficial de la fecha de la factura."
 }

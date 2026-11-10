@@ -8,7 +8,7 @@ On the English pages (build_i18n.py makes the Spanish ones afterwards, and the S
      up, so the translation keys do not change.
   2. The social-image alt text of each service page (og:image:alt and twitter:image:alt): its "USD n" is the
      service's lowest price.
-  3. The OfferCatalog of the home's JSON-LD: one Offer per service, with its URL, name and lowest and highest price
+  3. The OfferCatalog of the JSON-LD of the home and of /services/: one Offer per service, with its URL, name and lowest and highest price
      (no highest price when a tier is open-ended).
   4. js/contact.js: the SERVICES list of the engagement form, between its SERVICES:START and SERVICES:END markers.
 The footer column comes from the same file through build_chrome.py, and the social images through build_page_og.py.
@@ -218,7 +218,7 @@ def build(root=ROOT, data=None):
         used_by_page[url] = used
         problems += unbound(new, label)
         new = head_prices(new, label, by_path.get(url))
-        if url == HOME:
+        if url in (HOME, HUB):   # 2026-11-09: /services/ declares the same catalog in its own JSON-LD
             new = offer_catalog(new, data, label)
         if new != old:
             changes[label] = new

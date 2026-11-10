@@ -1,0 +1,718 @@
+{
+ "jetbrains:ansible-companion": {
+  "en": "**Encrypt and decrypt Ansible Vault (1.1/AES256 format) directly in the editor**, without depending on `ansible-vault` being installed.",
+  "es": "**Cifra y descifra Ansible Vault (formato 1.1/AES256) directamente en el editor**, sin depender de que `ansible-vault` esté instalado."
+ },
+ "jetbrains:apache-httpclient-reuse-companion": {
+  "en": "Warning icon on a `HttpClients.createDefault()`, `HttpClients.createSystem()`, or `HttpClients.custom().build()` construction (Apache HttpClient, both the 4.x `org.apache.http` and 5.x `org.apache.hc.client5.http` packages use `HttpClients` as the factory class) written inside a regular method body: Apache's own javadoc annotates `CloseableHttpClient` `@Contract(threading = ThreadingBehavior.SAFE",
+  "es": "Ícono de advertencia en una construcción `HttpClients.createDefault()`, `HttpClients.createSystem()` o `HttpClients.custom().build()` (Apache HttpClient; tanto los paquetes 4.x `org.apache.http` como los 5.x `org.apache.hc.client5.http` usan `HttpClients` como fábrica) escrita dentro del cuerpo de un método normal: el propio javadoc de Apache anota `CloseableHttpClient` con `@Contract(threading = ThreadingBehavior.SAFE…`"
+ },
+ "jetbrains:api-deprecation-header-companion": {
+  "en": "Gutter warning icon on any Java/Kotlin Spring MVC endpoint method marked `@Deprecated` whose body never sets a deprecation-related HTTP response header: RFC 9745 `Deprecation`, RFC 8594 `Sunset`, or the common non-standard `X-Deprecated`. The `@Deprecated` annotation only warns people reading or compiling the source; it tells real API consumers (a mobile app, a third-party integration, another te",
+  "es": "Ícono de advertencia en el margen en cualquier método de endpoint Spring MVC en Java/Kotlin marcado `@Deprecated` cuyo cuerpo nunca envía una cabecera HTTP de obsolescencia: `Deprecation` (RFC 9745), `Sunset` (RFC 8594) o la habitual no estándar `X-Deprecated`. La anotación `@Deprecated` solo avisa a quien lee o compila el código; no les dice nada a los consumidores reales de la API (una app móvil, una integración de terceros…"
+ },
+ "jetbrains:api-security-companion": {
+  "en": "Lightweight, 100% local API-security checks for Java and Kotlin: hardcoded secrets, plaintext HTTP, TLS misconfiguration, and OWASP API Security Top 10 patterns.",
+  "es": "Revisiones de seguridad de API livianas y 100 % locales para Java y Kotlin: secretos escritos en el código, HTTP sin cifrar, TLS mal configurado y patrones del OWASP API Security Top 10."
+ },
+ "jetbrains:async-self-invocation-companion": {
+  "en": "Warning icon on a call to a Spring `@Async` method made from another method of the **same** declaring class: Spring's own documentation states this bypasses the AOP proxy entirely: \"a call to the async-marked method from within the target object is not intercepted... self-invocation... effectively bypasses the proxy and its interceptor chain.\" The call still compiles and runs: just synchronously",
+  "es": "Ícono de advertencia en una llamada a un método `@Async` de Spring hecha desde otro método de la **misma** clase: la documentación de Spring dice que esto se salta por completo el proxy de AOP: «a call to the async-marked method from within the target object is not intercepted... self-invocation... effectively bypasses the proxy and its interceptor chain». La llamada compila y se ejecuta, pero de forma síncrona…"
+ },
+ "jetbrains:asyncapi-companion": {
+  "en": "Reliable go-to-definition for `$ref` values in AsyncAPI documents (JSON and YAML): 100% local, no network calls, and it never breaks when a new JetBrains IDE version ships.",
+  "es": "Ir a la definición de forma confiable para los valores `$ref` de documentos AsyncAPI (JSON y YAML): 100 % local, sin llamadas de red, y no se rompe cuando sale una versión nueva de los IDE de JetBrains."
+ },
+ "jetbrains:aws-s3-public-acl-sdk-companion": {
+  "en": "Warning on a real AWS SDK for Java call (application code, not infrastructure-as-code) that sets a PUBLIC ACL on an S3 bucket or object: SDK 1.x's `AmazonS3.setBucketAcl(bucket, CannedAccessControlList.PublicRead)`/`PutObjectRequest.withCannedAcl(...)`/ `.setCannedAcl(...)`, and SDK 2.x's fluent `.acl(ObjectCannedACL.PUBLIC_READ)`/`.acl(\"public-read\")`.",
+  "es": "Advertencia en una llamada real del AWS SDK para Java (código de aplicación, no infraestructura como código) que pone una ACL PÚBLICA en un bucket u objeto de S3: en el SDK 1.x, `AmazonS3.setBucketAcl(bucket, CannedAccessControlList.PublicRead)`/`PutObjectRequest.withCannedAcl(...)`/ `.setCannedAcl(...)`, y en el SDK 2.x, el fluido `.acl(ObjectCannedACL.PUBLIC_READ)`/`.acl(\"public-read\")`."
+ },
+ "jetbrains:aws-sdk-client-reuse-companion": {
+  "en": "Gutter warning icon on an AWS SDK for Java 2.x service client (`S3Client`, `DynamoDbClient`, `SqsClient`, `SnsClient`, `LambdaClient`, and similar) built via `XxxClient.builder().build()` inside a regular method body: AWS's own documentation states service clients are thread-safe and meant to be created once and reused; a client built inside a method means a brand new client (and its own connecti",
+  "es": "Ícono de advertencia en el margen en un cliente de servicio del AWS SDK para Java 2.x (`S3Client`, `DynamoDbClient`, `SqsClient`, `SnsClient`, `LambdaClient` y similares) creado con `XxxClient.builder().build()` dentro del cuerpo de un método normal: la documentación de AWS dice que los clientes de servicio son seguros entre hilos y están pensados para crearse una vez y reutilizarse; un cliente creado dentro de un método es un cliente nuevo (con su propio pool de conexiones…"
+ },
+ "jetbrains:background-readaction-freeze-companion": {
+  "en": "Flags a background-thread entry point in your plugin's own code that can reach a blocking, non-cancellable read-lock call: the pattern JetBrains' own Platform team has publicly named as a real, recurring cause of IDE freezes, with no static tooling to catch it today.",
+  "es": "Marca un punto de entrada en un hilo de fondo, en el código de tu propio plugin, que puede llegar a una llamada de bloqueo de lectura bloqueante y no cancelable: el patrón que el propio equipo de la plataforma de JetBrains señaló en público como una causa real y recurrente de congelamientos del IDE, y que hoy ninguna herramienta estática detecta."
+ },
+ "jetbrains:bean-copy-companion": {
+  "en": "Generates a real, compiling object-copy method between two Java or Kotlin classes. Select exactly two class files in the Project view, right-click → **Generate Bean Copy Method**, pick the copy direction, and get a new copier file with fields matched by name and type.",
+  "es": "Genera un método real, que compila, para copiar objetos entre dos clases Java o Kotlin. Selecciona exactamente dos archivos de clase en la vista Project, haz clic derecho → **Generate Bean Copy Method**, elige la dirección de la copia y obtén un archivo copiador nuevo con los campos emparejados por nombre y tipo."
+ },
+ "jetbrains:binding-result-position-companion": {
+  "en": "Warning icon on a Spring MVC controller method parameter annotated `@Valid`/`@Validated` whose matching `BindingResult`/`Errors` parameter exists somewhere in the method signature, but isn't the parameter immediately following it: Spring's own `ErrorsMethodArgumentResolver` javadoc is explicit: \"An Errors method argument is expected to appear immediately after the model attribute in the method si",
+  "es": "Ícono de advertencia en un parámetro de método de controlador Spring MVC anotado `@Valid`/`@Validated` cuyo parámetro `BindingResult`/`Errors` correspondiente está en la firma, pero no justo después: el javadoc de `ErrorsMethodArgumentResolver` de Spring es explícito: «An Errors method argument is expected to appear immediately after the model attribute in the method si…»"
+ },
+ "jetbrains:cache-invalidation-companion": {
+  "en": "Warning on a `.save(...)` call inside a method whose class also has a hand-rolled `Map`-backed cache field (populated by a `computeIfAbsent`/manual `containsKey`+`put` \"get-or-compute\" pattern), when that method never touches the cache field.",
+  "es": "Advertencia en una llamada `.save(...)` dentro de un método cuya clase también tiene un campo de caché hecho a mano sobre un `Map` (llenado con un patrón de «obtener o calcular» con `computeIfAbsent` o `containsKey`+`put`), cuando ese método nunca toca el campo de caché."
+ },
+ "jetbrains:cassandra-cqlsession-reuse-companion": {
+  "en": "Gutter warning icon on a `CqlSession.builder()....build()` construction chain (DataStax Java driver for Apache Cassandra) written inside a regular method body: DataStax's own best practices documentation states: \"These root objects are expensive to create because they initialize and maintain connection pools to every node in a cluster... Create one session instance for each application, and then",
+  "es": "Ícono de advertencia en el margen en una cadena de construcción `CqlSession.builder()....build()` (driver Java de DataStax para Apache Cassandra) escrita dentro del cuerpo de un método normal: la documentación de buenas prácticas de DataStax dice: «These root objects are expensive to create because they initialize and maintain connection pools to every node in a cluster... Create one session instance for each application, and then…»"
+ },
+ "jetbrains:cert-companion": {
+  "en": "A native, client-side viewer for X.509 certificates and keystores: decode a `.pem`, `.crt`, `.cer`, `.der`, `.jks`, `.p12`, or `.pfx` file without leaving the IDE.",
+  "es": "Un visor nativo y local de certificados X.509 y almacenes de claves: decodifica un archivo `.pem`, `.crt`, `.cer`, `.der`, `.jks`, `.p12` o `.pfx` sin salir del IDE."
+ },
+ "jetbrains:change-case-companion": {
+  "en": "Select an identifier (or just place the caret on one: no selection needed) and instantly convert it between `camelCase`, `PascalCase`, `snake_case`, `kebab-case`, and `CONSTANT_CASE`.",
+  "es": "Selecciona un identificador (o solo pon el cursor encima: no hace falta seleccionar) y conviértelo al instante entre `camelCase`, `PascalCase`, `snake_case`, `kebab-case` y `CONSTANT_CASE`."
+ },
+ "jetbrains:changelog-fragment-companion": {
+  "en": "Manages per-PR changelog fragments, the towncrier-style convention: instead of every PR editing the same `CHANGELOG.md` and fighting merge conflicts, each PR adds a small `changelog.d/<issue>.<type>.md` file, later collected into a real changelog at release time.",
+  "es": "Gestiona fragmentos de changelog por PR, la convención al estilo towncrier: en vez de que cada PR edite el mismo `CHANGELOG.md` y pelee con conflictos de fusión, cada PR agrega un archivo pequeño `changelog.d/<issue>.<type>.md`, que luego se reúne en un changelog real al momento de publicar."
+ },
+ "jetbrains:circular-dependency-companion": {
+  "en": "Visualizes the dependency graph between **modules** of a multi-module Gradle or Maven project, and highlights real circular dependencies when they exist: module/build-system level, not file/class-level \"circular import\" (already covered by several existing plugins). 100% static text/XML analysis of files already open in your project: no Gradle daemon, no Maven reactor buil",
+  "es": "Visualiza el grafo de dependencias entre los **módulos** de un proyecto Gradle o Maven multimódulo y resalta las dependencias circulares reales cuando existen: a nivel de módulo y de sistema de build, no el «import circular» entre archivos o clases (que ya cubren varios plugins). Análisis 100 % estático del texto y el XML de los archivos que ya están abiertos en tu proyecto: sin daemon de Gradle, sin reactor de Maven…"
+ },
+ "jetbrains:cmake-companion": {
+  "en": "Syntax highlighting, known-command highlighting, and an unmatched-paren inspection for `CMakeLists.txt`/`*.cmake` files.",
+  "es": "Resaltado de sintaxis, resaltado de comandos conocidos y una inspección de paréntesis sin cerrar para archivos `CMakeLists.txt`/`*.cmake`."
+ },
+ "jetbrains:commit-message-convention-companion": {
+  "en": "Validates the commit message you are **currently writing**, live, in the IntelliJ VCS Commit dialog: against the [Conventional Commits](https://www.conventionalcommits.org/) convention, and shows the exact rule it breaks before you commit, instead of silently accepting or rejecting.",
+  "es": "Valida el mensaje de commit que **estás escribiendo**, en vivo, en el diálogo Commit de IntelliJ, contra la convención [Conventional Commits](https://www.conventionalcommits.org/), y muestra la regla exacta que incumple antes de hacer el commit, en vez de aceptarlo o rechazarlo en silencio."
+ },
+ "jetbrains:completablefuture-cancellation-companion": {
+  "en": "IntelliJ-family plugin that flags a `.thenCompose(...)` chain whose result future can be cancelled, but whose inner future: constructed directly inside the lambda: never receives that cancellation, so the orphaned work keeps running and consuming resources after the caller believes the whole operation stopped.",
+  "es": "Plugin de la familia IntelliJ que marca una cadena `.thenCompose(...)` cuyo future de resultado se puede cancelar, pero cuyo future interno (creado directamente dentro de la lambda) nunca recibe esa cancelación, así que el trabajo huérfano sigue corriendo y consumiendo recursos después de que quien llamó cree que toda la operación se detuvo."
+ },
+ "jetbrains:config-secrets-file-companion": {
+  "en": "Warning on a suspected real secret (AWS access key, GitHub/Slack token, JWT, PEM private key, or a high-entropy value assigned to a secret-shaped key name) hardcoded directly in a config file: `.properties`, `.env` (and its variants), or a `.yml`/`.yaml` file. Config files are a real, common, separate place secrets get committed by accident: a real value pasted into `application.yml` \"just for l",
+  "es": "Advertencia ante un posible secreto real (clave de acceso de AWS, token de GitHub o Slack, JWT, clave privada PEM, o un valor de alta entropía asignado a una clave con nombre de secreto) escrito directamente en un archivo de configuración: `.properties`, `.env` (y sus variantes) o un `.yml`/`.yaml`. Los archivos de configuración son un lugar real, común y aparte donde los secretos se commitean por accidente: un valor real pegado en `application.yml` «solo para…»"
+ },
+ "jetbrains:connection-pool-config-companion": {
+  "en": "Warning on a HikariCP connection-pool setting (`spring.datasource.hikari.*` or bare `hikari.*`) set outside its own documented safe range in a `.properties`/`.yml`/`.yaml` config file: `connectionTimeout` below 250ms, `maxLifetime` below 30000ms, `idleTimeout` below 10000ms, or `idleTimeout` set greater than or equal to `maxLifetime` (HikariCP silently ignores `idleTimeout` in that case, a real,",
+  "es": "Advertencia en un ajuste del pool de conexiones de HikariCP (`spring.datasource.hikari.*` o `hikari.*` a secas) fuera de su propio rango seguro documentado, en un archivo `.properties`/`.yml`/`.yaml`: `connectionTimeout` menor que 250 ms, `maxLifetime` menor que 30000 ms, `idleTimeout` menor que 10000 ms, o `idleTimeout` mayor o igual que `maxLifetime` (en ese caso HikariCP ignora `idleTimeout` sin avisar…"
+ },
+ "jetbrains:correlation-id-propagation-companion": {
+  "en": "Gutter warning icon on any Java/Kotlin Spring MVC handler method that receives a correlation/trace-id header via `@RequestHeader` and makes an outbound HTTP call in its own body, but never references that header parameter again anywhere in the body: the common footgun where the incoming id is captured and then silently dropped instead of being forwarded to the downstream call, breaking distribute",
+  "es": "Ícono de advertencia en el margen en cualquier método handler de Spring MVC en Java/Kotlin que recibe una cabecera de correlation id o trace id con `@RequestHeader` y hace una llamada HTTP saliente en su cuerpo, pero nunca vuelve a usar ese parámetro: el error común en que el id entrante se captura y luego se pierde en silencio en vez de reenviarse a la llamada siguiente, lo que rompe el trazado distribuido…"
+ },
+ "jetbrains:cors-policy-companion": {
+  "en": "Warning icon on any Java/Kotlin Spring CORS configuration that combines a wildcard origin with credentials: this exact combination is forbidden by the CORS spec itself: browsers reject a wildcard origin combined with credentials, so requests silently fail (or, worse, the intent behind the configuration is misunderstood entirely). Catches both forms Spring offers for the same footgun:",
+  "es": "Ícono de advertencia en cualquier configuración CORS de Spring en Java/Kotlin que combina un origen comodín con credenciales: la propia especificación de CORS prohíbe exactamente esa combinación; los navegadores rechazan un origen comodín con credenciales, así que las peticiones fallan en silencio (o, peor, se malinterpreta por completo la intención de la configuración). Detecta las dos formas que Spring ofrece para el mismo error…"
+ },
+ "jetbrains:deadlock-lock-order-companion": {
+  "en": "Flags a real lock acquisition-order cycle inside a single Java class: the classic static-deadlock shape: before it ever happens at runtime.",
+  "es": "Marca un ciclo real en el orden de adquisición de locks dentro de una sola clase Java, la forma clásica de un interbloqueo estático, antes de que ocurra en ejecución."
+ },
+ "jetbrains:dependency-vulnerability-companion": {
+  "en": "Flags known-vulnerable dependency versions directly in `pom.xml`, `build.gradle(.kts)`, `package.json`, and `requirements.txt`, matched against a vulnerability database bundled inside the plugin: zero account, zero token, zero network call, ever.",
+  "es": "Marca versiones de dependencias con vulnerabilidades conocidas directamente en `pom.xml`, `build.gradle(.kts)`, `package.json` y `requirements.txt`, comparándolas con una base de vulnerabilidades incluida en el plugin: sin cuenta, sin token y sin ninguna llamada de red, nunca."
+ },
+ "jetbrains:dockerfile-layer-size-companion": {
+  "en": "Shows the real, on-disk size of each `COPY`/`ADD` layer in an open Dockerfile, inline: computed by summing the actual file sizes of what gets copied from your local build context, respecting `.dockerignore`. No Docker daemon, no build, no network call: 100% static analysis of the project already open in the IDE.",
+  "es": "Muestra en línea el tamaño real en disco de cada capa `COPY`/`ADD` de un Dockerfile abierto, calculado sumando el tamaño de los archivos que se copian desde tu contexto de build local y respetando `.dockerignore`. Sin daemon de Docker, sin build y sin llamadas de red: análisis 100 % estático del proyecto que ya está abierto en el IDE."
+ },
+ "jetbrains:dockerfile-missing-user-companion": {
+  "en": "Warning when a Dockerfile's FINAL build stage never sets a non-root `USER`: Docker runs a container as root by default when `USER` is absent.",
+  "es": "Advertencia cuando la etapa FINAL de un Dockerfile nunca define un `USER` que no sea root: si falta `USER`, Docker ejecuta el contenedor como root por defecto."
+ },
+ "jetbrains:dockerfile-unused-stage-companion": {
+  "en": "Warning on a named multi-stage Dockerfile build stage (`FROM ... AS name`) that's never referenced by a later `COPY --from=name` and isn't the file's own final stage: an orphaned intermediate stage that's real, wasted build time and a confusing read for the next person touching the file, usually left behind after a refactor that moved what it built into another stage.",
+  "es": "Advertencia en una etapa con nombre de un Dockerfile multietapa (`FROM ... AS name`) que ningún `COPY --from=name` posterior usa y que no es la etapa final del archivo: una etapa intermedia huérfana que gasta tiempo de build de verdad y confunde a quien toque el archivo después; suele quedar tras un refactor que movió lo que construía a otra etapa."
+ },
+ "jetbrains:elasticsearch-client-reuse-companion": {
+  "en": "Warning icon on a `new RestHighLevelClient(...)` (legacy client) or `new ElasticsearchClient(...)` (modern Java client) construction written inside a regular method body: Elastic's own documentation states \"only one single instance should be created\" and that it's \"best practice to create your RestHighLevelClient instance as singleton\" since \"each instance creates its own connection pool\". Buildi",
+  "es": "Ícono de advertencia en una construcción `new RestHighLevelClient(...)` (cliente heredado) o `new ElasticsearchClient(...)` (cliente Java moderno) escrita dentro del cuerpo de un método normal: la documentación de Elastic dice que «only one single instance should be created» y que es «best practice to create your RestHighLevelClient instance as singleton», porque «each instance creates its own connection pool»…"
+ },
+ "jetbrains:enum-ordinal-persistence-companion": {
+  "en": "Warning on a JPA `@Enumerated` field with no explicit `EnumType.STRING`, on a real `@Entity` class: JPA's own default is `ORDINAL`.",
+  "es": "Advertencia en un campo JPA `@Enumerated` sin `EnumType.STRING` explícito, en una clase `@Entity` real: el valor por defecto de JPA es `ORDINAL`."
+ },
+ "jetbrains:env-diff-companion": {
+  "en": "Select exactly two env-style files in the Project view: `.env` vs `.env.example`, `.env.development` vs `.env.production`, anything with `KEY=VALUE` lines: run **Compare Env Files**, and get a real report of which keys are missing from each side.",
+  "es": "Selecciona exactamente dos archivos de entorno en la vista Project (`.env` frente a `.env.example`, `.env.development` frente a `.env.production`, cualquier archivo con líneas `KEY=VALUE`), ejecuta **Compare Env Files** y obtén un informe real de qué claves faltan en cada lado."
+ },
+ "jetbrains:env-var-missing-companion": {
+  "en": "Cross-checks every real environment-variable access in your open file (`process.env.PORT`, `process.env[\"PORT\"]`, `import.meta.env.VITE_API_URL`, `os.environ[\"DEBUG\"]`, `os.environ.get(\"DEBUG\")`, `os.getenv(\"TIMEOUT\")`) against your project's real `.env`/`.env.example`/etc. files, and warns on any variable that's **used in code but never declared anywhere**: with a real qu",
+  "es": "Cruza cada acceso real a una variable de entorno en el archivo abierto (`process.env.PORT`, `process.env[\"PORT\"]`, `import.meta.env.VITE_API_URL`, `os.environ[\"DEBUG\"]`, `os.environ.get(\"DEBUG\")`, `os.getenv(\"TIMEOUT\")`) con los archivos `.env`/`.env.example`/etc. reales de tu proyecto, y avisa de cualquier variable que **se usa en el código pero no está declarada en ningún lado**…"
+ },
+ "jetbrains:environment-specific-constant-companion": {
+  "en": "IntelliJ-family plugin that flags a hardcoded URL or `host:port` string literal in Java source that also appears, textually, as a value in one of the project's own config files (`.properties`/`.yml`/`.yaml`/`.env`), the value clearly belongs to config, and the code copy can now silently drift out of sync with it.",
+  "es": "Plugin de la familia IntelliJ que marca una URL o una cadena `host:port` escrita a mano en código Java que también aparece, tal cual, como valor en uno de los archivos de configuración del proyecto (`.properties`/`.yml`/`.yaml`/`.env`): el valor claramente pertenece a la configuración, y la copia en el código puede desincronizarse sin que nadie lo note."
+ },
+ "jetbrains:error-lens-companion": {
+  "en": "Shows errors and warnings inline, at the end of the line that has them, instead of only as a gutter icon or a squiggly underline you have to hover to read. One hint per line (most severe diagnostic wins) so it never turns into unreadable clutter.",
+  "es": "Muestra los errores y las advertencias en línea, al final de la línea que los tiene, en vez de solo como un ícono en el margen o un subrayado ondulado que hay que señalar para leer. Una pista por línea (gana el diagnóstico más grave), para que nunca se vuelva un desorden ilegible."
+ },
+ "jetbrains:exception-escape-chain-companion": {
+  "en": "Warning on a `catch (Exception e)` (the broad type, not a narrower specific exception) that silently swallows: no rethrow, no logging: a specific CHECKED exception that a call inside its `try` block can actually throw, directly or transitively through a bounded same-class call chain.",
+  "es": "Advertencia en un `catch (Exception e)` (el tipo amplio, no una excepción específica) que se traga en silencio (sin relanzarla ni registrarla) una excepción VERIFICADA específica que una llamada dentro de su bloque `try` sí puede lanzar, directamente o a través de una cadena acotada de llamadas en la misma clase."
+ },
+ "jetbrains:feature-flag-reference-companion": {
+  "en": "Gutter icon next to every recognized feature-flag-check call's key literal in Java/Kotlin code (`isEnabled(\"checkout_v2\")`, `variation(\"checkout_v2\", false)`, and similar), showing how many times that exact key is referenced anywhere else in the open project: helps find orphaned flags (dead code left behind after a rollout completed) without connecting to any provider. 100",
+  "es": "Ícono en el margen junto al literal de la clave de cada llamada reconocida de verificación de feature flag en código Java/Kotlin (`isEnabled(\"checkout_v2\")`, `variation(\"checkout_v2\", false)` y similares), que muestra cuántas veces se usa esa misma clave en el resto del proyecto abierto: ayuda a encontrar flags huérfanos (código muerto que queda después de terminar un despliegue) sin conectarse a ningún proveedor…"
+ },
+ "jetbrains:feign-fallback-config-companion": {
+  "en": "Warning icon on a `@FeignClient(..., fallback = X.class)` or `fallbackFactory = X.class` annotation whose project has no `spring.cloud.openfeign.circuitbreaker.enabled=true` (or the legacy `feign.circuitbreaker.enabled=true`) anywhere in a reachable config file: Spring Cloud OpenFeign's own reference docs are explicit: \"If Spring Cloud CircuitBreaker is on the classpath and spring.cloud.openfeign",
+  "es": "Ícono de advertencia en una anotación `@FeignClient(..., fallback = X.class)` o `fallbackFactory = X.class` cuyo proyecto no tiene `spring.cloud.openfeign.circuitbreaker.enabled=true` (ni el antiguo `feign.circuitbreaker.enabled=true`) en ningún archivo de configuración alcanzable: la documentación de referencia de Spring Cloud OpenFeign es explícita: «If Spring Cloud CircuitBreaker is on the classpath and spring.cloud.openfeign…»"
+ },
+ "jetbrains:firestore-companion": {
+  "en": "Browse and edit Firestore collections, documents, and subcollections in a tool window, authenticating with a GCP service account key via simple REST calls.",
+  "es": "Explora y edita colecciones, documentos y subcolecciones de Firestore en una ventana de herramientas, autenticándote con una clave de cuenta de servicio de GCP mediante llamadas REST simples."
+ },
+ "jetbrains:flaky-test-marker-companion": {
+  "en": "Gutter warning icon on any Java/Kotlin test method annotated `@Disabled` (JUnit 5) or `@Ignore` (JUnit 4) with no reason given, or whose reason names a `YYYY-MM-DD` revisit date that has already passed. Skipped tests are easy to forget about entirely: without a reason, future readers have no context for why it's disabled; with a stale date, it's a real signal the test is overdue for a second look",
+  "es": "Ícono de advertencia en el margen en cualquier método de test Java/Kotlin anotado `@Disabled` (JUnit 5) o `@Ignore` (JUnit 4) sin motivo, o cuyo motivo indica una fecha de revisión `YYYY-MM-DD` que ya pasó. Los tests desactivados se olvidan con facilidad: sin motivo, quien lea después no sabe por qué está desactivado; con una fecha vencida, es una señal real de que el test necesita otra mirada…"
+ },
+ "jetbrains:format-converter-companion": {
+  "en": "Converts JSON, YAML, and XML directly in the editor: select text (or convert the whole file) and pick a target format from the right-click menu.",
+  "es": "Convierte JSON, YAML y XML directamente en el editor: selecciona texto (o convierte el archivo entero) y elige el formato de destino en el menú del clic derecho."
+ },
+ "jetbrains:gcp-client-reuse-companion": {
+  "en": "Gutter warning icon on a Google Cloud client library (`StorageOptions`, `FirestoreOptions`, `BigQueryOptions`, `PubSubOptions`, and similar) built via `XxxOptions.getDefaultInstance().getService()` inside a regular method body: Google Cloud's own client libraries best-practices documentation says: \"you should reuse the same client object for many requests when possible, instead of creating a new",
+  "es": "Ícono de advertencia en el margen en una biblioteca cliente de Google Cloud (`StorageOptions`, `FirestoreOptions`, `BigQueryOptions`, `PubSubOptions` y similares) creada con `XxxOptions.getDefaultInstance().getService()` dentro del cuerpo de un método normal: la documentación de buenas prácticas de las bibliotecas cliente de Google Cloud dice: «you should reuse the same client object for many requests when possible, instead of creating a new…»"
+ },
+ "jetbrains:git-hygiene-companion": {
+  "en": "Lightweight inline git blame (author and date at the end of the current line) designed from the ground up to never block the editor.",
+  "es": "git blame en línea y liviano (autor y fecha al final de la línea actual), diseñado desde cero para no bloquear nunca el editor."
+ },
+ "jetbrains:github-actions-pwn-request-companion": {
+  "en": "Flags a job that checks out untrusted PR/workflow_run head content while secrets are reachable: the real \"Pwn Request\" pattern.",
+  "es": "Marca un job que hace checkout de contenido no confiable de la cabeza de un PR o de un `workflow_run` mientras los secretos están al alcance: el patrón real de «Pwn Request»."
+ },
+ "jetbrains:gitlab-ci-companion": {
+  "en": "Static syntax and structural checks for `.gitlab-ci.yml`: catch mistakes before running a real pipeline, not after.",
+  "es": "Revisiones estáticas de sintaxis y estructura para `.gitlab-ci.yml`: detecta errores antes de correr un pipeline real, no después."
+ },
+ "jetbrains:go-timer-leak-companion": {
+  "en": "Warning on a `case <-time.After(...)` inside a `select` block: Go's documented behavior: the Timer created by `time.After` is not recovered by the garbage collector until it fires, and a `select` inside any repeatedly-executed loop (the overwhelmingly common place a `select` appears) creates a new one on every iteration, leaking memory until each one's duration elapses. `time.NewTimer(...)` plus",
+  "es": "Advertencia en un `case <-time.After(...)` dentro de un bloque `select`: según el comportamiento documentado de Go, el recolector de basura no recupera el Timer que crea `time.After` hasta que se dispara, y un `select` dentro de un bucle que se repite (el lugar más común para un `select`) crea uno nuevo en cada vuelta, con lo que se pierde memoria hasta que vence cada uno. `time.NewTimer(...)` más…"
+ },
+ "jetbrains:gradle-task-graph-companion": {
+  "en": "Tool window that visualizes the real `dependsOn` graph between Gradle tasks in your project: root project plus every submodule declared in `settings.gradle(.kts)`: grouped into dependency layers, with any real cycle called out in its own top section, in red.",
+  "es": "Ventana de herramientas que visualiza el grafo real de `dependsOn` entre las tareas de Gradle de tu proyecto (el proyecto raíz y cada submódulo declarado en `settings.gradle(.kts)`), agrupado en capas de dependencia, con cualquier ciclo real señalado en rojo en su propia sección arriba."
+ },
+ "jetbrains:graphql-companion": {
+  "en": "Fast syntax highlighting for `.graphql`/`.graphqls` files, and multi-schema discovery that works out of the box: with or without a `.graphqlconfig` file.",
+  "es": "Resaltado de sintaxis rápido para archivos `.graphql`/`.graphqls` y descubrimiento de varios esquemas que funciona de entrada, con o sin archivo `.graphqlconfig`."
+ },
+ "jetbrains:grpc-error-status-companion": {
+  "en": "Gutter warning icon on a `streamObserver.onError(rawException)` call where the argument isn't converted through gRPC's own `Status` type: gRPC's own `StreamObserver.onError` javadoc states the parameter \"should be a StatusException or StatusRuntimeException, and callers should generally convert from a Status via Status.asException() or Status.asRuntimeException()\". Passing a raw exception means i",
+  "es": "Ícono de advertencia en el margen en una llamada `streamObserver.onError(rawException)` cuyo argumento no se convierte con el tipo `Status` de gRPC: el javadoc de `StreamObserver.onError` dice que el parámetro «should be a StatusException or StatusRuntimeException, and callers should generally convert from a Status via Status.asException() or Status.asRuntimeException()». Pasar una excepción cruda significa…"
+ },
+ "jetbrains:grpc-missing-deadline-companion": {
+  "en": "Warning on an RPC call made through a generated gRPC blocking stub (`XxxGrpc.newBlockingStub(channel)....call(request)`) whose stub-construction chain never passes through `.withDeadline(...)`/`.withDeadlineAfter(...)`.",
+  "es": "Advertencia en una llamada RPC hecha con un stub bloqueante generado de gRPC (`XxxGrpc.newBlockingStub(channel)....call(request)`) cuya cadena de construcción nunca pasa por `.withDeadline(...)`/`.withDeadlineAfter(...)`."
+ },
+ "jetbrains:grpc-streamobserver-contract-companion": {
+  "en": "Warning icon on a `.onNext(...)` or `.onError(...)` call on a gRPC `StreamObserver` found, in textual order, AFTER an `.onCompleted()` call on the same receiver, within the same method body: gRPC's own `StreamObserver` javadoc states the contract explicitly: `onNext` \"is never called after onError(Throwable) or onCompleted() are called\", and \"onCompleted may only be called once and if called it m",
+  "es": "Ícono de advertencia en una llamada `.onNext(...)` u `.onError(...)` sobre un `StreamObserver` de gRPC que aparece, en el orden del texto, DESPUÉS de un `.onCompleted()` sobre el mismo receptor, en el mismo método: el javadoc de `StreamObserver` explicita el contrato: `onNext` «is never called after onError(Throwable) or onCompleted() are called», y «onCompleted may only be called once and if called it m…»"
+ },
+ "jetbrains:highlight-companion": {
+  "en": "A cognitive-complexity gutter icon for Java and Kotlin methods/functions: a colored badge with the real number, computed with SonarSource's documented Cognitive Complexity algorithm, never blocking the UI thread.",
+  "es": "Un ícono de complejidad cognitiva en el margen para métodos y funciones de Java y Kotlin: una insignia de color con el número real, calculado con el algoritmo de Cognitive Complexity documentado por SonarSource, sin bloquear nunca el hilo de la interfaz."
+ },
+ "jetbrains:http-status-inline-companion": {
+  "en": "Shows the official name of any HTTP status code (`404 -> Not Found`, `503 -> Service Unavailable`) inline, right after the numeric literal, in Java and Kotlin code: no need to look it up. Works in any code context, not tied to a specific HTTP framework's own annotations.",
+  "es": "Muestra en línea el nombre oficial de cualquier código de estado HTTP (`404 -> Not Found`, `503 -> Service Unavailable`) justo después del número, en código Java y Kotlin: no hace falta buscarlo. Funciona en cualquier contexto de código, sin depender de las anotaciones de un framework HTTP concreto."
+ },
+ "jetbrains:idempotency-key-companion": {
+  "en": "Gutter warning icon on any Java/Kotlin Spring MVC `@PostMapping`/ `@PutMapping` (or `@RequestMapping(method = ...)`) endpoint method with no `@RequestHeader` parameter for an idempotency key: the classic footgun where a retried or double-submitted POST/PUT creates a duplicate side effect (a duplicate order, a duplicate charge) because nothing in the handler recognizes \"I already saw this exact re",
+  "es": "Ícono de advertencia en el margen en cualquier método de endpoint Spring MVC en Java/Kotlin con `@PostMapping`/`@PutMapping` (o `@RequestMapping(method = ...)`) sin un parámetro `@RequestHeader` para una clave de idempotencia: el error clásico en que un POST o PUT reintentado o enviado dos veces crea un efecto duplicado (un pedido duplicado, un cobro duplicado) porque nada en el handler reconoce «ya vi esta misma petición»…"
+ },
+ "jetbrains:import-cost-companion": {
+  "en": "Run **Check Import Sizes** on a JS/TS file and get a real report of every `node_modules` package it imports, sorted by on-disk size, with unusually large ones flagged.",
+  "es": "Ejecuta **Check Import Sizes** en un archivo JS/TS y obtén un informe real de cada paquete de `node_modules` que importa, ordenado por tamaño en disco y con los inusualmente grandes marcados."
+ },
+ "jetbrains:integer-overflow-widening-companion": {
+  "en": "Warning on an `int * int`/`int + int` expression assigned/passed directly to a `long`-typed destination (a local variable's initializer, an assignment, a method parameter, or a method return) with no widening cast on either operand.",
+  "es": "Advertencia en una expresión `int * int`/`int + int` asignada o pasada directamente a un destino de tipo `long` (el inicializador de una variable local, una asignación, un parámetro de método o un retorno) sin conversión de ampliación en ninguno de los operandos."
+ },
+ "jetbrains:interface-exception-divergence-companion": {
+  "en": "Flags a call through an interface-typed reference, wrapped in a broad silent `catch`, where real implementations diverge on which `RuntimeException` they throw directly.",
+  "es": "Marca una llamada a través de una referencia de tipo interfaz, envuelta en un `catch` amplio y silencioso, cuando las implementaciones reales difieren en qué `RuntimeException` lanzan directamente."
+ },
+ "jetbrains:interface-resource-close-divergence-companion": {
+  "en": "Flags a call through an interface-typed reference, passing a resource, where real implementations diverge on guaranteeing to close it.",
+  "es": "Marca una llamada a través de una referencia de tipo interfaz que pasa un recurso, cuando las implementaciones reales difieren en si garantizan cerrarlo."
+ },
+ "jetbrains:interface-sink-divergence-companion": {
+  "en": "Flags a call through an interface-typed reference, passing tainted HTTP input, where real implementations diverge on whether they log it unsanitized.",
+  "es": "Marca una llamada a través de una referencia de tipo interfaz que pasa una entrada HTTP contaminada, cuando las implementaciones reales difieren en si la registran sin sanear."
+ },
+ "jetbrains:interprocedural-resource-leak-companion": {
+  "en": "Flags a resource delegated to a helper method that doesn't guarantee closing it, where the caller never closes it either.",
+  "es": "Marca un recurso delegado a un método auxiliar que no garantiza cerrarlo, cuando quien llama tampoco lo cierra."
+ },
+ "jetbrains:jdbc-double-close-companion": {
+  "en": "Flags a JDBC resource `.close()`/use reached with the resource already closed on some or every path.",
+  "es": "Marca un `.close()` o un uso de un recurso JDBC al que se llega con el recurso ya cerrado en alguno o en todos los caminos."
+ },
+ "jetbrains:jenkinsfile-companion": {
+  "en": "Real Groovy syntax highlighting for `Jenkinsfile` plus two genuine structural checks: 100% local, zero network calls, never a live Jenkins server connection.",
+  "es": "Resaltado real de sintaxis Groovy para `Jenkinsfile` más dos verificaciones estructurales de verdad: 100 % local, sin llamadas de red y sin conectarse nunca a un servidor Jenkins."
+ },
+ "jetbrains:json-path-builder-companion": {
+  "en": "A tool window with a JSONPath field and a sample-JSON text area: type an expression, type or paste sample JSON, and every matched node is highlighted live as you type, with a real match count.",
+  "es": "Una ventana de herramientas con un campo JSONPath y un área de JSON de ejemplo: escribe una expresión, escribe o pega el JSON, y cada nodo que coincide se resalta en vivo mientras escribes, con el conteo real de coincidencias."
+ },
+ "jetbrains:json-schema-companion": {
+  "en": "Go-to-definition (Ctrl+Click) for `$ref` values inside JSON Schema files, resolved entirely against local files.",
+  "es": "Ir a la definición (Ctrl+clic) para los valores `$ref` dentro de archivos JSON Schema, resueltos por completo contra archivos locales."
+ },
+ "jetbrains:json-to-code-companion": {
+  "en": "Select a JSON object: in a `.json` file, a string literal, anywhere: run **Generate Class from JSON**, and get a real Java POJO or Kotlin `data class` with field types inferred from the actual JSON values, including nested objects (their own nested/ sibling classes) and arrays (`List<T>`, typed from the first element).",
+  "es": "Selecciona un objeto JSON (en un archivo `.json`, en un literal de cadena, donde sea), ejecuta **Generate Class from JSON** y obtén un POJO de Java o una `data class` de Kotlin real, con los tipos de los campos inferidos de los valores del JSON, incluidos los objetos anidados (con sus propias clases anidadas o hermanas) y los arreglos (`List<T>`, tipados a partir del primer elemento)."
+ },
+ "jetbrains:jwt-companion": {
+  "en": "Decode and verify JSON Web Tokens directly in a dedicated tool window: no browser round-trip, no data leaving the IDE.",
+  "es": "Decodifica y verifica JSON Web Tokens directamente en una ventana de herramientas propia: sin ir al navegador y sin que los datos salgan del IDE."
+ },
+ "jetbrains:jwt-signature-verification-companion": {
+  "en": "Warning icon on a jjwt `Jwts.parser()...parse(token)` call chain: jjwt's own `parse` method accepts a JWT whose signature is empty or doesn't match, even when a signing key has been configured on the parser. This is a documented real vulnerability class: CodeQL ships a dedicated \"Missing JWT signature check\" query for exactly this pattern, and jjwt's own issue tracker confirms it. The fix is easy",
+  "es": "Ícono de advertencia en una cadena de llamadas `Jwts.parser()...parse(token)` de jjwt: el método `parse` de jjwt acepta un JWT cuya firma está vacía o no coincide, aunque el parser tenga configurada una clave de firma. Es una clase de vulnerabilidad real y documentada: CodeQL incluye una consulta específica, «Missing JWT signature check», para este patrón, y el propio issue tracker de jjwt lo confirma. El arreglo es fácil…"
+ },
+ "jetbrains:jwt-webhook-timing-safe-companion": {
+  "en": "Warning on a webhook/HMAC signature comparison that uses `.equals()`/ `Arrays.equals()` (short-circuits on the first differing byte) instead of `MessageDigest.isEqual(...)` (constant-time). An attacker can reconstruct a valid HMAC signature byte-by-byte by measuring response times, forging webhook events.",
+  "es": "Advertencia en una comparación de firmas de webhook o HMAC que usa `.equals()`/`Arrays.equals()` (se corta en el primer byte distinto) en vez de `MessageDigest.isEqual(...)` (tiempo constante). Un atacante puede reconstruir una firma HMAC válida byte a byte midiendo los tiempos de respuesta y falsificar eventos de webhook."
+ },
+ "jetbrains:k6-companion": {
+  "en": "A Run Configuration for [k6](https://k6.io) load test scripts, plus a tool window for k6's `--summary-export` JSON.",
+  "es": "Una Run Configuration para scripts de pruebas de carga de [k6](https://k6.io), más una ventana de herramientas para el JSON de `--summary-export` de k6."
+ },
+ "jetbrains:k8s-label-selector-exposure-companion": {
+  "en": "Flags a workload that's Service-exposed but silently uncovered by every NetworkPolicy in the project.",
+  "es": "Marca un workload expuesto por un Service que, en silencio, no cubre ninguna NetworkPolicy del proyecto."
+ },
+ "jetbrains:k8s-readiness-liveness-probe-companion": {
+  "en": "Warning on any container entry in a Kubernetes workload manifest (Deployment, Pod, StatefulSet, DaemonSet) with no `readinessProbe:` and/or no `livenessProbe:`. Without a readiness probe, Kubernetes can't take a sick pod out of the load balancer: real traffic keeps being routed to a broken instance. Without a liveness probe, a hung (not crashed) process is never automatically restarted. Both are",
+  "es": "Advertencia en cualquier contenedor de un manifiesto de workload de Kubernetes (Deployment, Pod, StatefulSet, DaemonSet) sin `readinessProbe:` o sin `livenessProbe:`. Sin una readiness probe, Kubernetes no puede sacar del balanceador un pod enfermo: el tráfico real sigue yendo a una instancia rota. Sin una liveness probe, un proceso colgado (no caído) nunca se reinicia solo. Las dos son…"
+ },
+ "jetbrains:k8s-resource-limit-companion": {
+  "en": "Warning on any container entry in a Kubernetes workload manifest (Deployment, Pod, StatefulSet, DaemonSet, Job, CronJob) with no `resources:` block, or one missing `requests`/`limits`. Without requests, the scheduler can't make good placement decisions; without limits, a single container can consume unlimited CPU/memory and starve its neighbors on the same node: a real, common, and documented Kub",
+  "es": "Advertencia en cualquier contenedor de un manifiesto de workload de Kubernetes (Deployment, Pod, StatefulSet, DaemonSet, Job, CronJob) sin bloque `resources:`, o con uno al que le faltan `requests`/`limits`. Sin requests, el scheduler no puede decidir bien dónde ubicarlo; sin limits, un solo contenedor puede consumir CPU y memoria sin tope y dejar sin recursos a sus vecinos del mismo nodo: un problema real, común y documentado de Kub…"
+ },
+ "jetbrains:kafka-premature-offset-commit-companion": {
+  "en": "Warning on a Kafka consumer poll-loop (`while (true) { ... poll(...) ... }`) that dispatches asynchronous work (`ExecutorService.submit(...)`, `CompletableFuture.runAsync(...)`/`.supplyAsync(...)`) without waiting for it to finish BEFORE the consumer commits offsets: either explicitly (`commitSync()`/`commitAsync()` called right there) or implicitly (no manual commit at all, relying on Kafka's o",
+  "es": "Advertencia en un bucle de poll de un consumidor de Kafka (`while (true) { ... poll(...) ... }`) que despacha trabajo asíncrono (`ExecutorService.submit(...)`, `CompletableFuture.runAsync(...)`/`.supplyAsync(...)`) sin esperar a que termine ANTES de que el consumidor confirme los offsets, ya sea de forma explícita (`commitSync()`/`commitAsync()` ahí mismo) o implícita (sin commit manual, confiando en el o…"
+ },
+ "jetbrains:kafka-producer-reuse-companion": {
+  "en": "Gutter warning icon on a `new KafkaProducer<>(...)` construction written inside a regular method body: Apache Kafka's own javadoc, unchanged across every released version, states \"The producer is thread safe and sharing a single producer instance across threads will generally be faster than having multiple instances.\" Building one inside a method means the real connection/initialization cost is p",
+  "es": "Ícono de advertencia en el margen en una construcción `new KafkaProducer<>(...)` escrita dentro del cuerpo de un método normal: el javadoc de Apache Kafka, igual en todas las versiones publicadas, dice «The producer is thread safe and sharing a single producer instance across threads will generally be faster than having multiple instances». Crear uno dentro de un método significa pagar el costo real de conexión e inicialización…"
+ },
+ "jetbrains:kafka-topic-feedback-loop-companion": {
+  "en": "Flags a `@KafkaListener` method whose own transitive call graph reaches a `.send(...)` back to the SAME topic it consumes.",
+  "es": "Marca un método `@KafkaListener` cuyo propio grafo de llamadas transitivo llega a un `.send(...)` de vuelta al MISMO topic que consume."
+ },
+ "jetbrains:kafka-topic-schema-companion": {
+  "en": "Validates a Kafka sample/message JSON file (named `<topic>.sample.json` or `<topic>.message.json`) against its sibling `<topic>.schema.json` JSON Schema file in the same directory: inline, in the editor, no broker connection, no schema registry.",
+  "es": "Valida un archivo JSON de ejemplo o de mensaje de Kafka (llamado `<topic>.sample.json` o `<topic>.message.json`) contra su archivo JSON Schema hermano `<topic>.schema.json` en la misma carpeta: en línea, en el editor, sin conexión a un broker y sin registro de esquemas."
+ },
+ "jetbrains:ktor-httpclient-reuse-companion": {
+  "en": "Warning icon on a Ktor `HttpClient(...)` constructor call built inside a regular function body: Ktor's own documentation states plainly: \"creating HttpClient is not a cheap operation, and it's better to reuse its instance in the case of multiple requests.\" Building one inside a regular function means a brand new client (and its own connection pool/engine) gets created on every call.",
+  "es": "Ícono de advertencia en una llamada al constructor `HttpClient(...)` de Ktor dentro del cuerpo de una función normal: la documentación de Ktor lo dice claro: «creating HttpClient is not a cheap operation, and it's better to reuse its instance in the case of multiple requests». Crear uno dentro de una función normal significa crear un cliente nuevo (con su propio pool de conexiones y su motor) en cada llamada."
+ },
+ "jetbrains:kubernetes-rbac-wildcard-companion": {
+  "en": "Warning on a `Role`/`ClusterRole` rule that combines a wildcard (`\"*\"`) in `verbs` or `resources` with a sensitive resource: `secrets`, `pods/exec`, `clusterrolebindings`. This is the most common path to privilege escalation after a single pod is compromised in a cluster (OWASP Kubernetes Top 10, K03: Overly Permissive RBAC Configurations).",
+  "es": "Advertencia en una regla de `Role`/`ClusterRole` que combina un comodín (`\"*\"`) en `verbs` o `resources` con un recurso sensible: `secrets`, `pods/exec`, `clusterrolebindings`. Es el camino más común a una escalada de privilegios después de que se compromete un solo pod en un clúster (OWASP Kubernetes Top 10, K03: Overly Permissive RBAC Configurations)."
+ },
+ "jetbrains:ldap-injection-sink-companion": {
+  "en": "Flags a `DirContext.search(...)` call whose filter argument is built from an HTTP endpoint parameter.",
+  "es": "Marca una llamada `DirContext.search(...)` cuyo argumento de filtro se arma con un parámetro de un endpoint HTTP."
+ },
+ "jetbrains:log-format-string-companion": {
+  "en": "Flags a **log message whose placeholder count doesn't match its argument count**: an error that today only surfaces at runtime: a leftover placeholder stays literal in the log output, or an extra argument is silently dropped, or (worst case) SLF4J misinterprets the last argument as an exception when it isn't one. Deliberately narrow (not a full SAST scanner like Qodana): o",
+  "es": "Marca un **mensaje de log cuya cantidad de marcadores no coincide con la de argumentos**: un error que hoy solo aparece en ejecución: un marcador sobrante queda literal en el log, un argumento de más se descarta en silencio o (en el peor caso) SLF4J interpreta el último argumento como una excepción cuando no lo es. Acotado a propósito (no es un escáner SAST completo como Qodana)…"
+ },
+ "jetbrains:log-injection-companion": {
+  "en": "Flags an unsanitized logging call reachable from an HTTP endpoint parameter, anywhere in the project's real call graph.",
+  "es": "Marca una llamada de log sin sanear a la que se llega desde un parámetro de un endpoint HTTP, en cualquier punto del grafo real de llamadas del proyecto."
+ },
+ "jetbrains:lucene-query-injection-companion": {
+  "en": "Flags a `QueryBuilders.queryStringQuery(...)`/`.simpleQueryStringQuery(...)` call whose argument is built from an HTTP endpoint parameter.",
+  "es": "Marca una llamada `QueryBuilders.queryStringQuery(...)`/`.simpleQueryStringQuery(...)` cuyo argumento se arma con un parámetro de un endpoint HTTP."
+ },
+ "jetbrains:material-companion": {
+  "en": "A Material Design-inspired dark editor color scheme (cool greys, blues, teals, and purples) with zero forced UI elements, zero paywalled customization, and zero performance cost.",
+  "es": "Un esquema de colores oscuro para el editor inspirado en Material Design (grises fríos, azules, verde azulado y morados), sin elementos de interfaz forzados, sin personalización de pago y sin costo de rendimiento."
+ },
+ "jetbrains:merge-conflict-leftover-companion": {
+  "en": "Flags real Git merge-conflict markers (`<<<<<<<`, `|||||||`, `=======`, `>>>>>>>`) left behind in any file: a real, distinct problem from an *active* unresolved merge (which the IDE's own Commit window already flags in red): a merge that was already resolved and committed, but with the markers themselves accidentally left in the file. Covers both the standard 3-way conflict style and the `diff3`/",
+  "es": "Marca marcadores reales de conflicto de fusión de Git (`<<<<<<<`, `|||||||`, `=======`, `>>>>>>>`) que quedaron en cualquier archivo: un problema real y distinto de una fusión *activa* sin resolver (que la ventana Commit del IDE ya marca en rojo): una fusión que ya se resolvió y se commiteó, pero con los marcadores olvidados en el archivo. Cubre el estilo estándar de conflicto a 3 vías y el estilo `diff3`…"
+ },
+ "jetbrains:mermaid-companion": {
+  "en": "Syntax highlighting and real syntax validation for `.mmd`/`.mermaid` diagram source files (flowchart, sequence, and class diagrams).",
+  "es": "Resaltado de sintaxis y validación real de la sintaxis para archivos fuente de diagramas `.mmd`/`.mermaid` (diagramas de flujo, de secuencia y de clases)."
+ },
+ "jetbrains:micrometer-timer-sample-companion": {
+  "en": "Warning icon on a Micrometer `Timer.Sample sample = Timer.start(...)` whose declaring method never calls `.stop(...)` on that sample anywhere: Micrometer's own reference docs show the sample usage as exactly two steps, start then stop, with no mention of a try/finally guard. A sample that's started but never stopped never records its timing, and per a real upstream Micrometer issue, can leak in l",
+  "es": "Ícono de advertencia en un `Timer.Sample sample = Timer.start(...)` de Micrometer cuyo método nunca llama a `.stop(...)` sobre esa muestra: la documentación de referencia de Micrometer muestra el uso como exactamente dos pasos, iniciar y detener, sin mencionar un `try`/`finally`. Una muestra iniciada y nunca detenida no registra su tiempo y, según un issue real de Micrometer, puede perder memoria…"
+ },
+ "jetbrains:micronaut-httpclient-create-companion": {
+  "en": "Warning icon on a Micronaut `HttpClient.create(...)` static factory call found anywhere in application code: the javadoc for this exact method is explicit: \"this method should only be used outside the context of a Micronaut application\" and \"Within a Micronaut application use @Inject to inject a client instead\", adding that \"the creator is responsible for closing the client to avoid leaking conne",
+  "es": "Ícono de advertencia en una llamada a la fábrica estática `HttpClient.create(...)` de Micronaut en cualquier punto del código de la aplicación: el javadoc de ese mismo método es explícito: «this method should only be used outside the context of a Micronaut application» y «Within a Micronaut application use @Inject to inject a client instead», y agrega que «the creator is responsible for closing the client to avoid leaking conne…»"
+ },
+ "jetbrains:mismatched-lock-object-companion": {
+  "en": "Flags a `synchronized` block whose lock object is PROVEN to never be the same as another lock guarding the same field elsewhere in the class.",
+  "es": "Marca un bloque `synchronized` cuyo objeto de lock está DEMOSTRADO que nunca es el mismo que otro lock que protege el mismo campo en otra parte de la clase."
+ },
+ "jetbrains:module-boundary-leak-companion": {
+  "en": "Warning on an `import` of an `internal` package (project convention: a `.internal.` segment in the package path) from a DIFFERENT Gradle/Maven module than the one that declares it, hidden architecture coupling that, in large monorepos/microservices, precedes cascading-deployment incidents.",
+  "es": "Advertencia en un `import` de un paquete `internal` (convención del proyecto: un segmento `.internal.` en la ruta del paquete) desde un módulo Gradle/Maven DISTINTO del que lo declara: un acoplamiento de arquitectura oculto que, en monorepos y microservicios grandes, precede a los incidentes de despliegue en cascada."
+ },
+ "jetbrains:mongo-client-reuse-companion": {
+  "en": "Warning icon on a `new MongoClient(...)` (legacy driver) or `MongoClients.create(...)` (modern `com.mongodb.client` driver) construction written inside a regular method body: MongoDB's own documentation states \"you will only need one instance of class MongoClient even with multiple threads\", and that not following the singleton pattern \"may lead to too many open connections in MongoDB\". A MongoCl",
+  "es": "Ícono de advertencia en una construcción `new MongoClient(...)` (driver heredado) o `MongoClients.create(...)` (driver moderno `com.mongodb.client`) escrita dentro del cuerpo de un método normal: la documentación de MongoDB dice «you will only need one instance of class MongoClient even with multiple threads», y que no seguir el patrón singleton «may lead to too many open connections in MongoDB»…"
+ },
+ "jetbrains:mutable-state-leak-companion": {
+  "en": "Flags a real mutation of a value returned by a getter that hands back one of its own mutable fields directly.",
+  "es": "Marca una mutación real de un valor devuelto por un getter que entrega directamente uno de sus propios campos mutables."
+ },
+ "jetbrains:n-plus-one-query-companion": {
+  "en": "Gutter icon on any Java/Kotlin `for` loop whose body accesses a lazy-loaded JPA association directly on the raw loop variable: the classic N+1 query shape: fetch a collection, then trigger one extra query per element while iterating it.",
+  "es": "Ícono en el margen en cualquier bucle `for` de Java/Kotlin cuyo cuerpo accede a una asociación JPA de carga perezosa directamente sobre la variable del bucle: la forma clásica de la consulta N+1: traer una colección y luego disparar una consulta extra por cada elemento al recorrerla."
+ },
+ "jetbrains:nginx-companion": {
+  "en": "Syntax highlighting and directive completion for nginx config files.",
+  "es": "Resaltado de sintaxis y autocompletado de directivas para archivos de configuración de nginx."
+ },
+ "jetbrains:npm-peer-dependency-companion": {
+  "en": "Warning icon on a `package.json` `peerDependencies` entry whose real installed version (from `node_modules`) doesn't satisfy the declared semver range: or isn't installed at all. npm's own peer dependency model is opt-in and silent: since npm 7 it auto-installs a compatible peer if it can, but a version mismatch, an unresolved conflict, or a peer installed via a workspace/hoisting quirk all produ",
+  "es": "Ícono de advertencia en una entrada de `peerDependencies` de `package.json` cuya versión instalada de verdad (la de `node_modules`) no cumple el rango semver declarado, o que no está instalada. El modelo de dependencias peer de npm es opcional y silencioso: desde npm 7 instala un peer compatible si puede, pero una versión distinta, un conflicto sin resolver o un peer instalado por una rareza de workspaces o del hoisting…"
+ },
+ "jetbrains:object-mapper-reuse-companion": {
+  "en": "Gutter warning icon on a Jackson mapper (`ObjectMapper`, `XmlMapper`, `YAMLMapper`, `CBORMapper`, `CsvMapper`) built via `new` inside a regular method body: Jackson's own javadoc states `ObjectMapper` is \"meant to be used as singleton across the lifetime of the application... also very expensive to create\". Building one inside a method means the real construction/configuration cost is paid on eve",
+  "es": "Ícono de advertencia en el margen en un mapper de Jackson (`ObjectMapper`, `XmlMapper`, `YAMLMapper`, `CBORMapper`, `CsvMapper`) creado con `new` dentro del cuerpo de un método normal: el javadoc de Jackson dice que `ObjectMapper` está «meant to be used as singleton across the lifetime of the application... also very expensive to create». Crear uno dentro de un método significa pagar el costo real de construcción y configuración en cada…"
+ },
+ "jetbrains:okhttp-client-reuse-companion": {
+  "en": "Gutter warning icon on an `OkHttpClient` built via `new OkHttpClient()` or `new OkHttpClient.Builder().build()` inside a regular method body: OkHttp's own documentation states \"OkHttp performs best when you create a single OkHttpClient instance and reuse it for all of your HTTP calls, because each client holds its own connection pool and thread pools... creating a client for each request wastes r",
+  "es": "Ícono de advertencia en el margen en un `OkHttpClient` creado con `new OkHttpClient()` o `new OkHttpClient.Builder().build()` dentro del cuerpo de un método normal: la documentación de OkHttp dice «OkHttp performs best when you create a single OkHttpClient instance and reuse it for all of your HTTP calls, because each client holds its own connection pool and thread pools... creating a client for each request wastes r…»"
+ },
+ "jetbrains:openapi-companion": {
+  "en": "Reliable go-to-definition (Ctrl+Click / Ctrl+B) for `$ref` values in OpenAPI/Swagger specs written in JSON or YAML, resolved entirely against local files, plus a warning on any `$ref` that doesn't actually resolve.",
+  "es": "Ir a la definición de forma confiable (Ctrl+clic / Ctrl+B) para los valores `$ref` de specs OpenAPI/Swagger escritas en JSON o YAML, resueltos por completo contra archivos locales, más una advertencia en cualquier `$ref` que no resuelve."
+ },
+ "jetbrains:otel-span-naming-companion": {
+  "en": "Gutter warning icon on any Java/Kotlin `tracer.spanBuilder(...)`/ `tracer.startSpan(...)` call whose name argument is built from a dynamic value (string concatenation in Java, string template interpolation in Kotlin) instead of a static literal. Per OpenTelemetry's own documented naming guidance, each unique id/value becomes its own span name in the tracing backend instead of a low-cardinality a",
+  "es": "Ícono de advertencia en el margen en cualquier llamada `tracer.spanBuilder(...)`/`tracer.startSpan(...)` de Java/Kotlin cuyo argumento de nombre se arma con un valor dinámico (concatenación de cadenas en Java, plantillas de cadena en Kotlin) en vez de un literal estático. Según la guía de nombres documentada por OpenTelemetry, cada id o valor único se vuelve un nombre de span distinto en el backend de trazas, en vez de un nombre de baja cardinalidad…"
+ },
+ "jetbrains:php-composer-script-companion": {
+  "en": "Gutter icon per `\"scripts\"` entry of an open `composer.json`, showing whether it's used or an orphan candidate: checks the script's own composer.json (calling another script), GitHub Actions/GitLab CI/ CircleCI configs, and README.md for a real `composer run-script <name>` or `composer <name>` invocation.",
+  "es": "Ícono en el margen por cada entrada de `\"scripts\"` de un `composer.json` abierto, que muestra si se usa o si es candidata a huérfana: revisa el propio `composer.json` (un script que llama a otro), las configuraciones de GitHub Actions, GitLab CI y CircleCI, y el README.md, en busca de una invocación real `composer run-script <name>` o `composer <name>`."
+ },
+ "jetbrains:php-file-inclusion-companion": {
+  "en": "Warning on `include`, `include_once`, `require`, or `require_once` whose path argument directly references a PHP superglobal (`$_GET`, `$_POST`, `$_REQUEST`, `$_COOKIE`). This is the textbook Local/Remote File Inclusion (LFI/RFI) anti-pattern: an attacker can point this at an arbitrary file via directory traversal, or a remote URL if `allow_url_include` is on.",
+  "es": "Advertencia en `include`, `include_once`, `require` o `require_once` cuyo argumento de ruta usa directamente una superglobal de PHP (`$_GET`, `$_POST`, `$_REQUEST`, `$_COOKIE`). Es el antipatrón de manual de inclusión de archivos local o remota (LFI/RFI): un atacante puede apuntarlo a un archivo arbitrario con recorrido de directorios, o a una URL remota si `allow_url_include` está activo."
+ },
+ "jetbrains:php-function-injection-companion": {
+  "en": "Warning on `call_user_func(` or `call_user_func_array(` whose function-name argument directly references a PHP superglobal (`$_GET`, `$_POST`, `$_REQUEST`, `$_COOKIE`). This is the textbook Function Injection anti-pattern: OWASP's own guidance documents that \"when an attacker passes a function name with user input to call_user_func, it can lead to remote code execution by passing the system functi",
+  "es": "Advertencia en `call_user_func(` o `call_user_func_array(` cuyo argumento de nombre de función usa directamente una superglobal de PHP (`$_GET`, `$_POST`, `$_REQUEST`, `$_COOKIE`). Es el antipatrón de manual de inyección de funciones: la guía de OWASP documenta que «when an attacker passes a function name with user input to call_user_func, it can lead to remote code execution by passing the system functi…»"
+ },
+ "jetbrains:php-open-redirect-companion": {
+  "en": "Warning on a `header('Location: ...')` call whose argument is built directly from a PHP superglobal (`$_GET`, `$_POST`, `$_REQUEST`, `$_COOKIE`). This is the textbook Open Redirect anti-pattern (CWE-601): an attacker crafts a link to the trusted site that redirects the victim to an attacker-controlled domain, commonly used for phishing since the initial URL still shows the trusted host. OWASP's ow",
+  "es": "Advertencia en una llamada `header('Location: ...')` cuyo argumento se arma directamente con una superglobal de PHP (`$_GET`, `$_POST`, `$_REQUEST`, `$_COOKIE`). Es el antipatrón de manual de redirección abierta (CWE-601): un atacante arma un enlace al sitio de confianza que redirige a la víctima a un dominio que él controla, algo muy usado en phishing porque la URL inicial muestra el host de confianza…"
+ },
+ "jetbrains:php-shell-injection-companion": {
+  "en": "Warning on `eval(`, `exec(`, `shell_exec(`, `system(`, `passthru(`, or `popen(` whose argument is a double-quoted string with `$variable` interpolation, or a concatenation with a variable, rather than a static literal. PHP's own official manual states this for `eval()`: \"pay special attention not to pass any user provided data into it without properly validating it beforehand\", the same class of",
+  "es": "Advertencia en `eval(`, `exec(`, `shell_exec(`, `system(`, `passthru(` o `popen(` cuyo argumento es una cadena entre comillas dobles con interpolación de `$variable`, o una concatenación con una variable, en vez de un literal estático. El manual oficial de PHP dice sobre `eval()`: «pay special attention not to pass any user provided data into it without properly validating it beforehand», la misma clase de…"
+ },
+ "jetbrains:php-sql-injection-companion": {
+  "en": "Warning on `mysqli_query(`, `->query(`, or `->exec(` (the `mysqli`/`PDO` query methods) whose SQL string argument contains `$variable` interpolation or a concatenation with a variable, rather than a prepared-statement placeholder. This is the textbook SQL injection anti-pattern: prepared statements exist precisely so the SQL text and the data are sent to the database separately, string- building",
+  "es": "Advertencia en `mysqli_query(`, `->query(` o `->exec(` (los métodos de consulta de `mysqli`/`PDO`) cuyo argumento SQL tiene interpolación de `$variable` o una concatenación con una variable, en vez de un marcador de consulta preparada. Es el antipatrón de manual de inyección SQL: las consultas preparadas existen justo para que el texto SQL y los datos viajen por separado a la base de datos…"
+ },
+ "jetbrains:pii-field-annotation-companion": {
+  "en": "Gutter warning icon on any Java/Kotlin class field whose name looks like it holds PII (`email`, `ssn`, `phoneNumber`, `dateOfBirth`, `creditCard`, `passportNumber`, `nationalId`, `taxId`, and similar) with no annotation of any kind on it: no way for masking, redaction, or access-control tooling built around annotations to ever pick it up.",
+  "es": "Ícono de advertencia en el margen en cualquier campo de clase Java/Kotlin cuyo nombre parece guardar datos personales (`email`, `ssn`, `phoneNumber`, `dateOfBirth`, `creditCard`, `passportNumber`, `nationalId`, `taxId` y similares) sin ninguna anotación: así, ninguna herramienta de enmascarado, ocultamiento o control de acceso basada en anotaciones lo va a detectar nunca."
+ },
+ "jetbrains:pii-tostring-leak-companion": {
+  "en": "Warning on a logging/print call passed an instance of a class whose `toString()` exposes a PII field (email, SSN, phone, date of birth, credit card...): `toString()` on a user object often serializes the whole model, unlike `log.info(user.getEmail())` which explicitly picks only what should be logged.",
+  "es": "Advertencia en una llamada de log o de impresión que recibe una instancia de una clase cuyo `toString()` expone un dato personal (email, número de identificación, teléfono, fecha de nacimiento, tarjeta de crédito…): el `toString()` de un objeto de usuario suele serializar el modelo entero, a diferencia de `log.info(user.getEmail())`, que elige de forma explícita solo lo que debe registrarse."
+ },
+ "jetbrains:postman-openapi-drift-companion": {
+  "en": "Warning on a Postman collection (`*.postman_collection.json`) endpoint whose method+path no longer exists in the project's OpenAPI/Swagger spec. Collections and specs drift apart silently: a collection is hand-edited or an endpoint gets renamed/removed in the spec, and nothing tells the team the collection now exercises a path that doesn't exist, usually caught only when a request in the collecti",
+  "es": "Advertencia en un endpoint de una colección de Postman (`*.postman_collection.json`) cuyo método y ruta ya no existen en la spec OpenAPI/Swagger del proyecto. Las colecciones y las specs se separan en silencio: alguien edita la colección a mano o se renombra o elimina un endpoint en la spec, y nada le avisa al equipo que la colección ahora prueba una ruta que no existe…"
+ },
+ "jetbrains:prometheus-metric-naming-companion": {
+  "en": "Warning icon on any Java/Kotlin metric name literal that violates Prometheus's own documented naming conventions (prometheus.io/docs/practices/naming): recognizes the two most common real registration shapes: the Prometheus Java client's `Counter.build(\"name\", \"help\")` and Micrometer's `Counter.builder(\"name\")` (same for Gauge/Histogram/Summary/Timer).",
+  "es": "Ícono de advertencia en cualquier literal de nombre de métrica en Java/Kotlin que incumple las convenciones de nombres documentadas por Prometheus (prometheus.io/docs/practices/naming). Reconoce las dos formas reales de registro más comunes: `Counter.build(\"name\", \"help\")` del cliente Java de Prometheus y `Counter.builder(\"name\")` de Micrometer (igual para Gauge, Histogram, Summary y Timer)."
+ },
+ "jetbrains:prometheus-metric-registration-companion": {
+  "en": "Warning icon on a `Counter.build()....register()` (also `Histogram`/ `Gauge`/`Summary`, Prometheus's Java client's four metric types) construction written inside a regular method body: the client's own official documentation states \"the best way to register a metric is via a static final class variable\". Registration happens against the process-global default registry: calling `.register()` more",
+  "es": "Ícono de advertencia en una construcción `Counter.build()....register()` (también `Histogram`, `Gauge` y `Summary`, los cuatro tipos de métrica del cliente Java de Prometheus) escrita dentro del cuerpo de un método normal: la documentación oficial del cliente dice «the best way to register a metric is via a static final class variable». El registro se hace contra el registro global del proceso: llamar a `.register()` más…"
+ },
+ "jetbrains:rabbitmq-channel-reuse-companion": {
+  "en": "Warning icon on a RabbitMQ `Channel` created with `....createChannel()` and used for `basicPublish(...)` in the same method: RabbitMQ's own Java Client API Guide calls this a \"classic anti-pattern to be avoided\": \"opening a channel for each published message... Channels are supposed to be reasonably long-lived and opening a new one is a network round-trip which makes this pattern extremely ineffi",
+  "es": "Ícono de advertencia en un `Channel` de RabbitMQ creado con `....createChannel()` y usado para `basicPublish(...)` en el mismo método: la guía de la API del cliente Java de RabbitMQ lo llama un «classic anti-pattern to be avoided»: «opening a channel for each published message... Channels are supposed to be reasonably long-lived and opening a new one is a network round-trip which makes this pattern extremely ineffi…»"
+ },
+ "jetbrains:rails-mass-assignment-companion": {
+  "en": "Warning on `params.permit!` (or `xxx_params.permit!`): Rails' own official documentation states: \"Extreme care should be taken when using permit!, as it will allow all current and future model attributes to be mass-assigned\". This is the exact anti-pattern strong parameters exist to prevent: it disables the whitelist entirely, permitting whatever attributes an attacker sends in the request body,",
+  "es": "Advertencia en `params.permit!` (o `xxx_params.permit!`): la documentación oficial de Rails dice: «Extreme care should be taken when using permit!, as it will allow all current and future model attributes to be mass-assigned». Es exactamente el antipatrón que los strong parameters buscan evitar: desactiva por completo la lista permitida y acepta cualquier atributo que un atacante envíe en el cuerpo de la petición…"
+ },
+ "jetbrains:rate-limiter-fallback-companion": {
+  "en": "Gutter warning icon on any Java/Kotlin method annotated with a Resilience4j resilience annotation (`@RateLimiter`, `@CircuitBreaker`, `@Retry`, `@Bulkhead`, `@TimeLimiter`) whose `fallbackMethod = \"name\"` doesn't match any method in the enclosing class: a real, silent footgun: nothing fails at compile time, but Resilience4j throws at runtime the first time the fallback is actually triggered (rate",
+  "es": "Ícono de advertencia en el margen en cualquier método Java/Kotlin anotado con una anotación de resiliencia de Resilience4j (`@RateLimiter`, `@CircuitBreaker`, `@Retry`, `@Bulkhead`, `@TimeLimiter`) cuyo `fallbackMethod = \"name\"` no coincide con ningún método de la clase: un error real y silencioso: nada falla al compilar, pero Resilience4j lanza una excepción en ejecución la primera vez que se dispara el fallback…"
+ },
+ "jetbrains:react-native-companion": {
+  "en": "Run React Native commands (`run-android`, `run-ios`, Metro) from a tool window without freezing the IDE.",
+  "es": "Ejecuta comandos de React Native (`run-android`, `run-ios`, Metro) desde una ventana de herramientas sin congelar el IDE."
+ },
+ "jetbrains:redis-lock-missing-ttl-companion": {
+  "en": "Warning on a `SET ... NX` call (Jedis's `SetParams.nx()`/Lettuce's `SetArgs.Builder.nx()` manual distributed-lock pattern) with no `EX`/`PX` expiry chained onto the same builder.",
+  "es": "Advertencia en una llamada `SET ... NX` (el patrón manual de lock distribuido con `SetParams.nx()` de Jedis o `SetArgs.Builder.nx()` de Lettuce) sin una expiración `EX`/`PX` encadenada en el mismo builder."
+ },
+ "jetbrains:redisson-client-reuse-companion": {
+  "en": "Gutter warning icon on a `Redisson.create(...)` call built inside a regular method body: Redisson's own Getting Started guide states: \"RedissonClient is thread-safe, so create a single instance and reuse it as a shared singleton across your application.\" A client built inside a method means a brand new connection pool to the Redis/Valkey server gets created on every call.",
+  "es": "Ícono de advertencia en el margen en una llamada `Redisson.create(...)` dentro del cuerpo de un método normal: la guía de inicio de Redisson dice: «RedissonClient is thread-safe, so create a single instance and reuse it as a shared singleton across your application». Un cliente creado dentro de un método significa un pool de conexiones nuevo hacia el servidor Redis/Valkey en cada llamada."
+ },
+ "jetbrains:redos-catastrophic-backtracking-companion": {
+  "en": "Warning on a `Pattern.compile(\"...\")`/`\"...\".matches(\"...\")` call in Java whose literal regex argument has a structural catastrophic-backtracking pattern: a nested unbounded quantifier (`(a+)+`), or an unbounded-quantified alternation with overlapping branches (`(a|a)*`). A single crafted input against either pattern can hang a server thread indefinitely.",
+  "es": "Advertencia en una llamada `Pattern.compile(\"...\")`/`\"...\".matches(\"...\")` en Java cuya expresión regular literal tiene una estructura de backtracking catastrófico: un cuantificador sin límite anidado (`(a+)+`), o una alternancia cuantificada sin límite con ramas que se solapan (`(a|a)*`). Una sola entrada preparada contra cualquiera de los dos patrones puede colgar un hilo del servidor indefinidamente."
+ },
+ "jetbrains:refactor-simulator": {
+  "en": "**Preview every refactoring before committing it.** Simulates a rename in an isolated, in-memory sandbox (using IntelliJ's own PSI, Find Usages, and refactoring processors, never a custom engine) and shows a full impact report, deterministic validation, and a native side-by-side diff before anything touches a real file.",
+  "es": "**Previsualiza cada refactorización antes de aplicarla.** Simula un renombrado en un entorno aislado en memoria (con el PSI, Find Usages y los procesadores de refactorización del propio IntelliJ, nunca un motor propio) y muestra un informe completo de impacto, una validación determinista y un diff nativo lado a lado antes de tocar ningún archivo real."
+ },
+ "jetbrains:regex-named-group-companion": {
+  "en": "Shows the name of every named group (`(?<year>\\d{4})`) inline, right on the line of any Java or Kotlin regex literal that has one: no need to open a separate tool window just to remember what a pattern's groups are called. A companion tool window (reusing Regex Preview Companion's own matching engine) lets you test a pattern against real sample text and see every named gro",
+  "es": "Muestra en línea el nombre de cada grupo con nombre (`(?<year>\\d{4})`), en la misma línea de cualquier literal de expresión regular de Java o Kotlin que lo tenga: no hace falta abrir otra ventana solo para recordar cómo se llaman los grupos de un patrón. Una ventana de herramientas complementaria (que reutiliza el motor de coincidencias de Regex Preview Companion) permite probar un patrón contra texto real y ver cada grupo…"
+ },
+ "jetbrains:regex-preview-companion": {
+  "en": "A tool window with a pattern field and a sample-text area: type a regex, type or paste sample text, and every match is highlighted live as you type, with a real match count. Case insensitive, multiline, and dot-all flags are real checkboxes, not something you have to remember inline syntax for.",
+  "es": "Una ventana de herramientas con un campo de patrón y un área de texto de ejemplo: escribe una expresión regular, escribe o pega texto, y cada coincidencia se resalta en vivo mientras escribes, con el conteo real de coincidencias. Las opciones de mayúsculas indistintas, multilínea y punto que incluye saltos de línea son casillas reales, no una sintaxis en línea que haya que recordar."
+ },
+ "jetbrains:resilience-self-invocation-companion": {
+  "en": "Warning icon on a call to a `@Retryable` (Spring Retry) or `@CircuitBreaker`/`@Retry`/`@RateLimiter`/`@Bulkhead`/`@TimeLimiter` (Resilience4j) method made from another method of the **same** declaring class. All of these are AOP-proxy-based, the same mechanism as Spring's own `@Transactional`/`@Cacheable`/`@Async`: self-invocation bypasses the proxy entirely, so the resilience behavior is silently",
+  "es": "Ícono de advertencia en una llamada a un método `@Retryable` (Spring Retry) o `@CircuitBreaker`/`@Retry`/`@RateLimiter`/`@Bulkhead`/`@TimeLimiter` (Resilience4j) hecha desde otro método de la **misma** clase. Todos funcionan con proxies de AOP, el mismo mecanismo que `@Transactional`/`@Cacheable`/`@Async` de Spring: la autoinvocación se salta el proxy por completo, así que el comportamiento de resiliencia se pierde en silencio…"
+ },
+ "jetbrains:retry-backoff-jitter-companion": {
+  "en": "Warning on a retry mechanism with a FIXED interval between attempts instead of exponential backoff + jitter: a manual `for`/`while` retry loop that `Thread.sleep(constant)`s in its `catch`, Spring `@Retryable` with no real exponential `@Backoff`, or Resilience4j's `RetryConfig` built with a fixed `.waitDuration(...)` and no `.intervalFunction(...)`.",
+  "es": "Advertencia en un mecanismo de reintento con un intervalo FIJO entre intentos en vez de backoff exponencial con jitter: un bucle de reintento manual `for`/`while` que hace `Thread.sleep(constant)` en su `catch`, un `@Retryable` de Spring sin un `@Backoff` exponencial real, o un `RetryConfig` de Resilience4j armado con un `.waitDuration(...)` fijo y sin `.intervalFunction(...)`."
+ },
+ "jetbrains:review-companion": {
+  "en": "Local, rule-based code review hints for Java and Kotlin: no account, no rate limit, no cloud call.",
+  "es": "Sugerencias de revisión de código locales y basadas en reglas para Java y Kotlin: sin cuenta, sin límite de uso y sin llamadas a la nube."
+ },
+ "jetbrains:ruby-gemfile-group-companion": {
+  "en": "Warning on a well-known dev/test gem (RSpec, RuboCop, Pry, FactoryBot, Capybara, SimpleCov, WebMock, VCR, and similar) declared at a `Gemfile`'s top level instead of inside a `group :development`/`group :test` block, it ships in every environment, including production, bloating the bundle and (for something like Pry or letter_opener) a real footgun if it's ever accidentally reachable in productio",
+  "es": "Advertencia en una gema conocida de desarrollo o test (RSpec, RuboCop, Pry, FactoryBot, Capybara, SimpleCov, WebMock, VCR y similares) declarada en el nivel superior de un `Gemfile` en vez de dentro de un bloque `group :development`/`group :test`: viaja a todos los entornos, incluida producción, infla el bundle y (en algo como Pry o letter_opener) es un riesgo real si alguna vez queda alcanzable en producción…"
+ },
+ "jetbrains:ruby-nethttp-reuse-companion": {
+  "en": "Warning on a `Net::HTTP.get`/`.get_response`/`.post` shorthand call found inside a loop/iterator block (`.each do`, `.times do`, `while`, `for`, brace-block `{ }`), Ruby's own `Net::HTTP` documentation explains why this matters: \"Creating a new HTTP connection for every request involves an extra TCP round-trip and causes TCP congestion avoidance negotiation to start over\". The shorthand class met",
+  "es": "Advertencia en una llamada abreviada `Net::HTTP.get`/`.get_response`/`.post` dentro de un bucle o bloque iterador (`.each do`, `.times do`, `while`, `for`, bloque `{ }`): la documentación de `Net::HTTP` de Ruby explica por qué importa: «Creating a new HTTP connection for every request involves an extra TCP round-trip and causes TCP congestion avoidance negotiation to start over». Los métodos de clase abreviados…"
+ },
+ "jetbrains:ruby-shell-injection-companion": {
+  "en": "Warning on `system(...)`, `exec(...)`, backticks (`` ` ``), or `%x[...]` whose command string contains `#{...}` interpolation: Ruby's own official documentation states: \"Some Ruby core methods accept string data that includes text to be executed as a system command and should not be called with unknown or unsanitized commands\", specifically naming `Kernel#exec`, `Kernel#spawn`, `Kernel#system`, a",
+  "es": "Advertencia en `system(...)`, `exec(...)`, comillas invertidas (`` ` ``) o `%x[...]` cuya cadena de comando tiene interpolación `#{...}`: la documentación oficial de Ruby dice: «Some Ruby core methods accept string data that includes text to be executed as a system command and should not be called with unknown or unsanitized commands», y nombra en concreto `Kernel#exec`, `Kernel#spawn`, `Kernel#system`…"
+ },
+ "jetbrains:rxjava-disposable-leak-companion": {
+  "en": "Warning icon on an RxJava `xxx.subscribe(...)` call (Observable/Flowable/Single/Maybe/Completable, RxJava 2.x/3.x) written as a bare expression statement: the returned `Disposable` is discarded immediately, with no way to ever call `.dispose()` on it later. RxJava's own guidance is explicit: always dispose of subscriptions when no longer needed, or this is a well-documented source of memory/resou",
+  "es": "Ícono de advertencia en una llamada `xxx.subscribe(...)` de RxJava (Observable, Flowable, Single, Maybe o Completable, RxJava 2.x/3.x) escrita como una sentencia suelta: el `Disposable` que devuelve se descarta enseguida, sin forma de llamar a `.dispose()` después. La guía de RxJava es explícita: siempre hay que liberar las suscripciones que ya no se necesitan, o esto se vuelve una fuente bien documentada de fugas de memoria y recursos…"
+ },
+ "jetbrains:second-order-sqli-field-companion": {
+  "en": "Flags a SQL sink reading a `@Entity` field that's ALSO confirmed, elsewhere in the project, to be written from unsanitized HTTP input.",
+  "es": "Marca un punto de SQL que lee un campo `@Entity` que, en otra parte del proyecto, también se confirma que se escribe con entrada HTTP sin sanear."
+ },
+ "jetbrains:semver-bump-mismatch-companion": {
+  "en": "Flags a `CHANGELOG.md` release entry (Keep a Changelog format) whose own body text reads as a breaking change: either the literal word \"BREAKING\", or a `### Removed` section (Keep a Changelog's own standard header for removed features, a breaking change by definition) (but whose version, versus the release right before it, only bumped MINOR or PATCH) SemVer expects a MAJOR bump for a breaking c",
+  "es": "Marca una entrada de versión de `CHANGELOG.md` (formato Keep a Changelog) cuyo texto describe un cambio incompatible (la palabra «BREAKING», o una sección `### Removed`, que en Keep a Changelog es por definición un cambio incompatible) pero cuya versión, frente a la anterior, solo subió MINOR o PATCH. SemVer espera un salto MAJOR para un cambio incompatible…"
+ },
+ "jetbrains:session-attribute-type-confusion-companion": {
+  "en": "Flags `(TypeB) session.getAttribute(\"key\")` when every known write site for that exact key stores a genuinely incompatible type.",
+  "es": "Marca `(TypeB) session.getAttribute(\"key\")` cuando cada lugar conocido donde se escribe esa misma clave guarda un tipo realmente incompatible."
+ },
+ "jetbrains:spel-injection-sink-companion": {
+  "en": "Flags a Spring `ExpressionParser.parseExpression(...)` call whose argument is built from an HTTP endpoint parameter, or is a hardcoded constant referencing a dangerous `T(...)` type.",
+  "es": "Marca una llamada `ExpressionParser.parseExpression(...)` de Spring cuyo argumento se arma con un parámetro de un endpoint HTTP, o es una constante escrita en el código que usa un tipo peligroso `T(...)`."
+ },
+ "jetbrains:spreadsheet-companion": {
+  "en": "Edit CSV/TSV files in a real table and view XLSX workbooks: without leaving the IDE, and without the plugin taking over your files.",
+  "es": "Edita archivos CSV/TSV en una tabla de verdad y mira libros XLSX sin salir del IDE, y sin que el plugin se adueñe de tus archivos."
+ },
+ "jetbrains:sql-concatenation-companion": {
+  "en": "Flags SQL queries built by **unparameterized string concatenation or interpolation** (the classic SQL-injection shape) across Java, Kotlin, and Python, and offers a real quick-fix toward parameterization. Deliberately narrow (not a full SAST scanner like Qodana): one specific pattern, near-zero configuration, tuned hard against false positives.",
+  "es": "Marca consultas SQL armadas por **concatenación o interpolación de cadenas sin parámetros** (la forma clásica de la inyección SQL) en Java, Kotlin y Python, y ofrece una corrección rápida real hacia consultas parametrizadas. Acotado a propósito (no es un escáner SAST completo como Qodana): un patrón concreto, casi sin configuración y muy ajustado contra los falsos positivos."
+ },
+ "jetbrains:ssrf-allowlist-bypass-companion": {
+  "en": "Flags an outbound HTTP call using an endpoint parameter that was only validated with `.startsWith`/`.contains` against a raw URL string.",
+  "es": "Marca una llamada HTTP saliente que usa un parámetro de endpoint validado solo con `.startsWith`/`.contains` contra la URL cruda."
+ },
+ "jetbrains:ssrf-unsanitized-url-companion": {
+  "en": "Warning on an HTTP call (`HttpRequest.newBuilder(...)`/Spring `RestTemplate`/OkHttp's `Request.Builder`) whose URL/host argument traces back (within the same method, one direct hop) to an untrusted Spring MVC/JAX-RS controller parameter, with no allowlist validation found in the same method: CWE-918, Server-Side Request Forgery.",
+  "es": "Advertencia en una llamada HTTP (`HttpRequest.newBuilder(...)`, `RestTemplate` de Spring o `Request.Builder` de OkHttp) cuyo argumento de URL o host viene (en el mismo método, a un paso directo) de un parámetro no confiable de un controlador Spring MVC o JAX-RS, sin validación contra una lista permitida en el mismo método: CWE-918, Server-Side Request Forgery."
+ },
+ "jetbrains:terraform-iam-privesc-companion": {
+  "en": "Flags a Terraform `aws_iam_role` that can reach an admin-equivalent role through a real, whole-project AssumeRole trust chain.",
+  "es": "Marca un `aws_iam_role` de Terraform que puede llegar a un rol equivalente a administrador a través de una cadena real de confianza AssumeRole en todo el proyecto."
+ },
+ "jetbrains:terraform-iam-wildcard-companion": {
+  "en": "Warning on an IAM policy statement (inside a Terraform `aws_iam_policy`/`aws_iam_role_policy` resource's `jsonencode({...})` block) whose `Action` or `Resource` is `\"*\"` with no `Condition` scoping it down.",
+  "es": "Advertencia en una sentencia de política IAM (dentro del bloque `jsonencode({...})` de un recurso `aws_iam_policy`/`aws_iam_role_policy` de Terraform) cuyo `Action` o `Resource` es `\"*\"` sin una `Condition` que lo acote."
+ },
+ "jetbrains:test-scaffold-companion": {
+  "en": "IntelliJ-family plugin (IntelliJ IDEA, Android Studio, and any IntelliJ-based IDE that bundles the Java and Kotlin plugins). Generates a real, compiling JUnit test skeleton for a Java or Kotlin class: one empty test method per public method, with your project's own test framework detected and imported correctly.",
+  "es": "Plugin de la familia IntelliJ (IntelliJ IDEA, Android Studio y cualquier IDE basado en IntelliJ que incluya los plugins de Java y Kotlin). Genera un esqueleto de test JUnit real, que compila, para una clase Java o Kotlin: un método de test vacío por cada método público, con el framework de test de tu proyecto detectado e importado correctamente."
+ },
+ "jetbrains:theme-companion": {
+  "en": "A dark, high-contrast editor color scheme plus a folder-icon provider that keeps source/test/resource root icons showing up, always.",
+  "es": "Un esquema de colores oscuro y de alto contraste para el editor, más un proveedor de íconos de carpetas que mantiene siempre visibles los íconos de las raíces de código, test y recursos."
+ },
+ "jetbrains:thread-confinement-escape-companion": {
+  "en": "Flags a mutable local variable shared with a background thread that the same method also touches afterward without synchronization.",
+  "es": "Marca una variable local mutable compartida con un hilo de fondo que el mismo método vuelve a tocar después sin sincronización."
+ },
+ "jetbrains:trycatch-consistency-companion": {
+  "en": "Learns the dominant checked-exception-handling convention your own file already established for a method, and flags the call sites that break with it.",
+  "es": "Aprende la convención dominante de manejo de excepciones verificadas que tu propio archivo ya estableció para un método y marca las llamadas que la rompen."
+ },
+ "jetbrains:turbo-log-companion": {
+  "en": "Place the caret on a variable, parameter, or field, run **Insert Log Statement**, and get a real `println` (Kotlin) / `System.out.println` (Java) inserted right after the enclosing statement: class, method, and line number already baked in as literal text. **Remove All Log Statements** finds and deletes every one this plugin has added to the current file, in one action.",
+  "es": "Pon el cursor sobre una variable, un parámetro o un campo, ejecuta **Insert Log Statement** y obtén un `println` (Kotlin) o `System.out.println` (Java) real insertado justo después de la sentencia que lo contiene, con la clase, el método y el número de línea ya escritos como texto. **Remove All Log Statements** encuentra y borra, en una sola acción, todos los que este plugin agregó al archivo actual."
+ },
+ "jetbrains:unsafe-deserialization-sink-companion": {
+  "en": "Warning on a `new ObjectInputStream(...).readObject()` call inside a Spring MVC/JAX-RS endpoint method whose constructor argument traces back (within the same method, one direct hop) to an untrusted parameter: CWE-502, Deserialization of Untrusted Data.",
+  "es": "Advertencia en una llamada `new ObjectInputStream(...).readObject()` dentro de un método de endpoint Spring MVC o JAX-RS cuyo argumento de constructor viene (en el mismo método, a un paso directo) de un parámetro no confiable: CWE-502, Deserialization of Untrusted Data."
+ },
+ "jetbrains:unused-npm-script-companion": {
+  "en": "Gutter icon on every entry of an open `package.json`'s `\"scripts\"` section, showing whether that script is actually **referenced** anywhere in your project: or an orphan nobody calls, a real candidate for cleanup. 100% static text/PSI analysis of files already open in your project: no Node.js/npm process spawned, no network call.",
+  "es": "Ícono en el margen en cada entrada de la sección `\"scripts\"` de un `package.json` abierto, que muestra si ese script se **usa** de verdad en algún lugar del proyecto o si es un huérfano que nadie llama, un candidato real a limpieza. Análisis 100 % estático del texto y el PSI de los archivos que ya están abiertos en tu proyecto: sin lanzar procesos de Node.js ni npm y sin llamadas de red."
+ },
+ "jetbrains:webhook-signature-companion": {
+  "en": "Gutter warning icon on any Java/Kotlin Spring MVC endpoint whose mapping path contains \"webhook\" with no signature-verification signal anywhere in the handler body: the classic footgun where anyone who guesses (or finds leaked) the endpoint URL can send a forged event, because nothing checks the payload really came from the real sender.",
+  "es": "Ícono de advertencia en el margen en cualquier endpoint Spring MVC en Java/Kotlin cuya ruta contiene «webhook» y sin ninguna señal de verificación de firma en el cuerpo del handler: el error clásico en que cualquiera que adivine (o encuentre filtrada) la URL del endpoint puede enviar un evento falso, porque nada comprueba que el contenido vino del remitente real."
+ },
+ "jetbrains:xpath-injection-sink-companion": {
+  "en": "Flags an `XPath.evaluate(...)`/`.compile(...)` call whose argument is built from an HTTP endpoint parameter.",
+  "es": "Marca una llamada `XPath.evaluate(...)`/`.compile(...)` cuyo argumento se arma con un parámetro de un endpoint HTTP."
+ },
+ "jetbrains:xsd-companion": {
+  "en": "Go-to-definition and a real structure tree for XSD/WSDL schemas split across multiple files.",
+  "es": "Ir a la definición y un árbol de estructura real para esquemas XSD/WSDL repartidos en varios archivos."
+ },
+ "vscode:android-unused-permission-companion": {
+  "en": "Flags a permission declared in AndroidManifest.xml that no Kotlin/Java source actually uses.",
+  "es": "Marca un permiso declarado en AndroidManifest.xml que ningún código Kotlin/Java usa de verdad."
+ },
+ "vscode:cargo-audit-companion": {
+  "en": "Wraps `cargo audit --json` as inline VS Code diagnostics on Cargo.toml: RustSec advisories at the exact dependency line.",
+  "es": "Convierte `cargo audit --json` en diagnósticos en línea de VS Code sobre Cargo.toml: los avisos de RustSec en la línea exacta de la dependencia."
+ },
+ "vscode:cert-companion": {
+  "en": "Decodes X.509 certificates (PEM/CRT/CER/DER) inline: subject, issuer, validity, fingerprint, right in the editor.",
+  "es": "Decodifica certificados X.509 (PEM/CRT/CER/DER) en línea: sujeto, emisor, vigencia y huella, en el mismo editor."
+ },
+ "vscode:circular-dependency-companion": {
+  "en": "Flags real circular dependencies between modules of a multi-module Gradle project: 100% static text parsing, no Gradle daemon.",
+  "es": "Marca dependencias circulares reales entre los módulos de un proyecto Gradle multimódulo: análisis 100 % estático del texto, sin daemon de Gradle."
+ },
+ "vscode:codeowners-validator-companion": {
+  "en": "Validates a CODEOWNERS file: duplicated patterns, unmatched patterns, invalid owners, syntax errors.",
+  "es": "Valida un archivo CODEOWNERS: patrones duplicados, patrones que no coinciden con nada, dueños inválidos y errores de sintaxis."
+ },
+ "vscode:config-secrets-file-companion": {
+  "en": "Flags a hardcoded secret (AWS key, GitHub/Slack token, JWT, PEM key, or high-entropy value) in config and env files.",
+  "es": "Marca un secreto escrito a mano (clave de AWS, token de GitHub o Slack, JWT, clave PEM o un valor de alta entropía) en archivos de configuración y de entorno."
+ },
+ "vscode:dependency-license-companion": {
+  "en": "Reads each node_modules dependency's SPDX license locally and flags copyleft or missing licenses.",
+  "es": "Lee en local la licencia SPDX de cada dependencia de node_modules y marca las licencias copyleft o ausentes."
+ },
+ "vscode:dockerfile-missing-user-companion": {
+  "en": "Warns when a Dockerfile's final build stage never sets a non-root USER (containers run as root by default).",
+  "es": "Avisa cuando la etapa final de un Dockerfile nunca define un USER que no sea root (los contenedores se ejecutan como root por defecto)."
+ },
+ "vscode:embedded-stack-usage-companion": {
+  "en": "Parses GCC .su stack-usage files (-fstack-usage) and flags any function over a configurable stack budget.",
+  "es": "Lee los archivos de uso de pila .su de GCC (-fstack-usage) y marca cualquier función que supere un presupuesto de pila configurable."
+ },
+ "vscode:flaky-test-history-companion": {
+  "en": "Tracks pass/fail history per test across JUnit XML report runs and flags tests with mixed outcomes.",
+  "es": "Sigue el historial de aprobados y fallidos de cada test a lo largo de las corridas de informes JUnit XML y marca los tests con resultados mezclados."
+ },
+ "vscode:infoplist-usage-description-companion": {
+  "en": "Cross-checks Swift/Objective-C imports (CoreLocation, Contacts, Photos, etc.) against required Info.plist usage-description keys.",
+  "es": "Cruza los imports de Swift/Objective-C (CoreLocation, Contacts, Photos, etc.) con las claves de descripción de uso que exige Info.plist."
+ },
+ "vscode:jwt-companion": {
+  "en": "Decode and inspect JSON Web Tokens on hover or via command: no data leaves your editor.",
+  "es": "Decodifica e inspecciona JSON Web Tokens al pasar el cursor o con un comando: ningún dato sale de tu editor."
+ },
+ "vscode:log-format-string-companion": {
+  "en": "Flags a log call whose placeholder count doesn't match its argument count: SLF4J `{}` and Python `%`-style format strings.",
+  "es": "Marca una llamada de log cuya cantidad de marcadores no coincide con la de argumentos: marcadores `{}` de SLF4J y cadenas de formato `%` de Python."
+ },
+ "vscode:merge-conflict-leftover-companion": {
+  "en": "Finds leftover Git conflict markers (`<<<<<<<`, `=======`, `>>>>>>>`) accidentally committed in any file.",
+  "es": "Encuentra marcadores de conflicto de Git (`<<<<<<<`, `=======`, `>>>>>>>`) commiteados por accidente en cualquier archivo."
+ },
+ "vscode:mlflow-companion": {
+  "en": "Browses local MLflow tracking-store runs (params, metrics, tags) in a sidebar tree, reading the store directly.",
+  "es": "Explora en un árbol de la barra lateral las corridas de un almacén de seguimiento local de MLflow (parámetros, métricas y etiquetas), leyendo el almacén directamente."
+ },
+ "vscode:n-plus-one-query-companion": {
+  "en": "Flags a TypeORM/Sequelize/Drizzle find/query call inside a loop: the classic N+1 query pattern.",
+  "es": "Marca una llamada find o de consulta de TypeORM, Sequelize o Drizzle dentro de un bucle: el patrón clásico de la consulta N+1."
+ },
+ "vscode:node-version-drift-companion": {
+  "en": "Flags when .nvmrc/.node-version/package.json engines.node/Dockerfile/CI disagree on the Node.js version.",
+  "es": "Avisa cuando .nvmrc, .node-version, `engines.node` de package.json, el Dockerfile o el CI no coinciden en la versión de Node.js."
+ },
+ "vscode:oauth2-oidc-flow-companion": {
+  "en": "Builds and decodes OAuth2 authorization-code+PKCE URLs: generates code_verifier/challenge pairs and decodes callback params.",
+  "es": "Arma y decodifica URL del flujo authorization code con PKCE de OAuth2: genera pares code_verifier/challenge y decodifica los parámetros de la respuesta."
+ },
+ "vscode:pact-contract-companion": {
+  "en": "Lists consumer-provider Pact contract files in your workspace and flags interactions with no matching provider state.",
+  "es": "Lista los archivos de contratos Pact entre consumidor y proveedor de tu workspace y marca las interacciones sin un estado de proveedor que coincida."
+ },
+ "vscode:php-composer-script-companion": {
+  "en": "Flags an orphan `composer.json` script: never called from itself, CI configs, or README.md.",
+  "es": "Marca un script huérfano de `composer.json`: nadie lo llama, ni el propio archivo, ni las configuraciones de CI, ni el README.md."
+ },
+ "vscode:php-security-companion": {
+  "en": "5 turnkey PHP injection-sink checks in one extension: SQL, shell, file inclusion, function injection, and open redirect.",
+  "es": "5 verificaciones listas de puntos de inyección en PHP en una sola extensión: SQL, shell, inclusión de archivos, inyección de funciones y redirección abierta."
+ },
+ "vscode:postman-openapi-drift-companion": {
+  "en": "Warns when a Postman collection endpoint's method+path no longer exists in the project's OpenAPI/Swagger spec.",
+  "es": "Avisa cuando el método y la ruta de un endpoint de una colección de Postman ya no existen en la spec OpenAPI/Swagger del proyecto."
+ },
+ "vscode:prometheus-alert-rule-companion": {
+  "en": "Lints Prometheus alert rule YAML: duplicate alert names, missing 'for', missing annotations.",
+  "es": "Revisa el YAML de las reglas de alerta de Prometheus: nombres de alerta duplicados, falta de 'for' y falta de anotaciones."
+ },
+ "vscode:ruby-companion": {
+  "en": "3 turnkey Ruby checks in one extension: shell injection, Net::HTTP reuse in a loop, and ungrouped dev/test gems in Gemfile.",
+  "es": "3 verificaciones listas para Ruby en una sola extensión: inyección de shell, reutilización de Net::HTTP en un bucle y gemas de desarrollo o test sin agrupar en el Gemfile."
+ },
+ "vscode:semver-bump-mismatch-companion": {
+  "en": "Flags a CHANGELOG.md release that reads as a breaking change but didn't bump MAJOR.",
+  "es": "Marca una versión de CHANGELOG.md que describe un cambio incompatible pero no subió el MAJOR."
+ },
+ "vscode:sql-concatenation-companion": {
+  "en": "Finds SQL built by unparameterized string concatenation or interpolation, then executed, across Java/Kotlin/Python.",
+  "es": "Encuentra SQL armado por concatenación o interpolación de cadenas sin parámetros y luego ejecutado, en Java, Kotlin y Python."
+ },
+ "vscode:turborepo-graph-companion": {
+  "en": "Shows your Turborepo workspace dependency graph as a sidebar tree: parses turbo.json + package.json workspaces.",
+  "es": "Muestra el grafo de dependencias de tu workspace de Turborepo como un árbol en la barra lateral: lee turbo.json y los workspaces de package.json."
+ },
+ "vscode:typosquat-dependency-companion": {
+  "en": "Flags a package.json dependency whose name is a near-miss (edit distance 1-2) of a much more popular package.",
+  "es": "Marca una dependencia de package.json cuyo nombre se parece mucho (distancia de edición de 1 o 2) al de un paquete mucho más popular."
+ },
+ "vscode:undeclared-dependency-companion": {
+  "en": "Flags a package imported in JS/TS but not declared in package.json: a common slopsquatting / supply-chain risk.",
+  "es": "Marca un paquete importado en JS/TS que no está declarado en package.json: un riesgo común de slopsquatting y de cadena de suministro."
+ },
+ "vscode:unleash-flag-usage-companion": {
+  "en": "Inventories Unleash feature flag usage across your codebase: naming check, find-all-usages, stale-flag detection.",
+  "es": "Inventaría el uso de feature flags de Unleash en tu código: revisión de nombres, búsqueda de todos los usos y detección de flags obsoletos."
+ },
+ "vscode:unreal-uht-macro-companion": {
+  "en": "Flags common UnrealHeaderTool macro mistakes in C++ headers: missing .generated.h include and related UPROPERTY/UFUNCTION issues.",
+  "es": "Marca errores comunes de las macros de UnrealHeaderTool en cabeceras C++: falta el include de .generated.h y problemas relacionados con UPROPERTY y UFUNCTION."
+ },
+ "vscode:webhook-signature-companion": {
+  "en": "Computes and verifies HMAC webhook signatures (GitHub/generic sha1/sha256/sha512) against a payload and secret.",
+  "es": "Calcula y verifica firmas HMAC de webhooks (GitHub o genéricas, sha1/sha256/sha512) contra un contenido y un secreto."
+ },
+ "vscode:wrangler-config-companion": {
+  "en": "Validates wrangler.toml: required fields (name/main/compatibility_date), and missing bindings.",
+  "es": "Valida wrangler.toml: los campos obligatorios (name, main, compatibility_date) y los bindings que faltan."
+ }
+}

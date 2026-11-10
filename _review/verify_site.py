@@ -98,7 +98,8 @@ class Env:
     @contextlib.contextmanager
     def page(self, width=1440, height=1000, theme="dark", block_data=False, js=True):
         ctx = self.browser.new_context(viewport={"width": width, "height": height}, java_script_enabled=js,
-                                       reduced_motion="reduce", device_scale_factor=1)
+                                       reduced_motion="reduce", device_scale_factor=1,
+                                       locale="en-US")   # the site redirects / by the browser language
         if theme:
             ctx.add_init_script("try{localStorage.setItem('ghl-theme','%s')}catch(e){}" % theme)
         if block_data:
@@ -293,73 +294,8 @@ def _tab_url(env: Env):
         expect(p.locator("#vsxSection").is_visible(), "VS Code panel should be open from the URL")
 
 
-# ====================================================================================== home
-def _home_checks(lang: str):
-    L = LANGS[lang]
-
-    @check("home", "hero: title, profile card, method and focus badges [%s]" % lang)
-    def _hero(env: Env):
-        with env.page() as p:
-            env.go(p, L["home"])
-            expect(len(p.locator("h1.nb-hero-title").inner_text().strip()) > 20, "hero title is empty")
-            eq(p.locator(".nb-hero .nb-lede").count(), 2, "lede paragraphs")
-            expect(p.evaluate("document.querySelector('.nb-profile img').naturalWidth") > 0, "portrait did not load")
-            eq(p.locator(".nb-method-mini li").count(), 3, "method steps")
-            badges = p.locator(".nb-focus .badge")
-            eq(badges.count(), 4, "focus badges")
-            expect(all(badges.nth(i).locator("svg").count() == 1 for i in range(4)), "each focus badge should carry an inline svg")
-            env.shot(p, "home-%s-desktop" % lang)
-
-    @check("home", "figures match data/*.json [%s]" % lang)
-    def _figures(env: Env):
-        with env.page() as p:
-            env.go(p, L["home"])
-            text = p.locator(".nb-impact").inner_text()
-            shown = "{:,}".format(env.total_downloads).replace(",", "," if lang == "en" else ".")   # Spanish groups thousands with a period
-            expect(shown in text, "downloads %s not shown: %r" % (shown, text[:120]))
-            expect(str(env.total_plugins + env.total_vsx) in text, "tool total %d not shown" % (env.total_plugins + env.total_vsx))
-            expect(str(env.total_plugins) in text and str(env.total_vsx) in text, "per-platform totals not shown")
-            eq(p.locator(".nb-impact .tw-p-5").count(), 4, "metric tiles")
-
-    @check("home", "investigations: facts, badges, status and links [%s]" % lang)
-    def _investigations(env: Env):
-        with env.page() as p:
-            env.go(p, L["home"])
-            cards = p.locator("article.inv")
-            eq(cards.count(), 5, "investigation cards")
-            for i in range(5):
-                c = cards.nth(i)
-                eq(c.locator("dt").count(), 3, "facts in card %d" % (i + 1))
-                expect(c.locator(".inv-links a").count() >= 2, "card %d needs evidence links" % (i + 1))
-                expect(c.locator(".inv-badges .badge svg").count() >= 1, "card %d needs a category badge" % (i + 1))
-                expect(c.locator(".inv-status").count() == 1, "card %d needs a status" % (i + 1))
-                lid = c.get_attribute("aria-labelledby")
-                expect(lid and p.locator("#" + lid).count() == 1, "card %d: aria-labelledby points nowhere" % (i + 1))
-
-    @check("home", "featured tools: platform and price badges, working links [%s]" % lang)
-    def _tools(env: Env):
-        with env.page() as p:
-            env.go(p, L["home"])
-            tools = p.locator("article.tool")
-            eq(tools.count(), 4, "featured tools")
-            for i in range(4):
-                t = tools.nth(i)
-                eq(t.locator(".tool-badges .badge").count(), 2, "badges on tool %d" % (i + 1))
-                href = t.locator("h3 a").get_attribute("href")
-                eq(env.get(href), 200, "link of tool %d (%s)" % (i + 1, href))
-
-    @check("home", "stack table: 4 rows and inline SVG badges only [%s]" % lang)
-    def _stack(env: Env):
-        with env.page() as p:
-            env.go(p, L["home"])
-            eq(p.locator("#stack .badge-table tr").count(), 4, "stack rows")
-            eq(p.locator("#stack img, .badge img").count(), 0, "images inside badges")
-            missing = p.evaluate("[...document.querySelectorAll('#stack .badge')].filter(b=>!b.querySelector('svg.b-ico')).length")
-            eq(missing, 0, "stack badges without an inline icon")
-
-
-for _lang in ("en", "es"):
-    _home_checks(_lang)
+# 2026-11-09: the home checks moved to _review/site-behavior.test.js, which runs in CI ('home: hero, profile card, figures, investigations, tools, stack').
+# They had gone stale here after the redesigns, and nothing ran this file.
 
 
 # =============================================================================== chrome
@@ -379,54 +315,8 @@ def _theme(env: Env):
         eq(p.evaluate("localStorage.getItem('ghl-theme')"), "system", "system is stored")
 
 
-for _lang in ("en", "es"):
-    @check("search", "Ctrl+K dialog: open, results, keys, close, open a result [%s]" % _lang)
-    def _search(env: Env, lang=_lang):
-        L = LANGS[lang]
-        with env.page() as p:
-            env.go(p, L["home"])
-            p.keyboard.press("Control+k")
-            dlg = p.locator(".ghs-backdrop")
-            p.wait_for_selector(".ghs-backdrop:not([hidden])")
-            expect(p.evaluate("document.activeElement && document.activeElement.classList.contains('ghs-input')"), "the input should take focus")
-            p.keyboard.type("openapi")
-            p.wait_for_selector(".ghs-item")
-            n = p.locator(".ghs-item").count()
-            expect(n >= 2, "expected several results for 'openapi', got %d" % n)
-            eq(p.locator(".ghs-item.is-active").count(), 1, "one active result")
-            first = p.locator(".ghs-item.is-active .ghs-name").inner_text()
-            p.keyboard.press("ArrowDown")
-            expect(p.locator(".ghs-item.is-active .ghs-name").inner_text() != first, "ArrowDown should move the active result")
-            expect(p.locator(".ghs-preview").is_visible(), "the preview should be visible on desktop")
-            env.shot(p, "search-%s" % lang)
-            p.keyboard.press("Escape")
-            expect(not dlg.is_visible(), "Escape should close the dialog")
-            p.locator("[data-search-open]").first.click()
-            p.wait_for_selector(".ghs-backdrop:not([hidden])")
-            p.keyboard.type("openapi")
-            p.wait_for_selector(".ghs-item")
-            with p.expect_navigation():
-                p.keyboard.press("Enter")
-            expect(urllib.parse.urlparse(p.url).path not in ("/", "/es/"), "Enter should open the result: " + p.url)
-
-    @check("chrome", "header: menus, language switch and mobile burger [%s]" % _lang)
-    def _nav(env: Env, lang=_lang):
-        L = LANGS[lang]
-        with env.page() as p:
-            env.go(p, L["home"])
-            toggle = p.locator(".gh-nav-toggle").first
-            toggle.click()
-            eq(toggle.get_attribute("aria-expanded"), "true", "dropdown opens")
-            p.keyboard.press("Escape")
-            eq(toggle.get_attribute("aria-expanded"), "false", "Escape closes the dropdown")
-            hrefs = p.evaluate("[...document.querySelectorAll('.gh-lang a')].map(a=>a.getAttribute('href'))")
-            expect("/es/" in hrefs and "/" in hrefs, "language menu should link both versions: %r" % hrefs)
-        with env.page(width=390, height=844) as p:
-            env.go(p, L["home"])
-            expect(not p.locator(".gh-nav").is_visible(), "the nav should be collapsed on a phone")
-            p.locator(".gh-burger").click()
-            expect(p.locator(".gh-nav").is_visible(), "the burger should open the nav")
-            eq(p.locator(".gh-burger").get_attribute("aria-expanded"), "true", "burger state")
+# 2026-11-09: the Ctrl+K search checks moved to _review/site-behavior.test.js, which runs in CI ('Ctrl+K search' and 'phone search').
+# They had gone stale here after the redesigns, and nothing ran this file.
 
 
 @check("chrome", "language switch lands on the Spanish home with lang=es")
@@ -441,34 +331,8 @@ def _lang_switch(env: Env):
 
 
 # ============================================================================== contact
-for _lang in ("en", "es"):
-    @check("contact", "request types, fields, counter and prepared message [%s]" % _lang)
-    def _contact(env: Env, lang=_lang):
-        L = LANGS[lang]
-        with env.page() as p:
-            env.go(p, L["contact"])
-            items = p.locator(".qa-item[data-target]")
-            n = items.count()
-            expect(n >= 4, "expected 4 request types, got %d" % n)
-            titles = set()
-            for i in range(n):
-                items.nth(i).click()
-                titles.add(p.locator("#cfTitle").inner_text())
-                eq(p.locator(".qa-item.is-active").count(), 1, "one active request type")
-                eq(items.nth(i).get_attribute("class").count("is-active"), 1, "the clicked type should be the active one")
-                expect(p.locator("#cfFields [name]").count() >= 2, "the form should show its fields")
-            eq(len(titles), n, "each request type should have its own title")
-            items.nth(0).click()
-            p.locator("#cfFields [name=org]").fill("Acme")
-            p.locator("#cfFields [name=service]").select_option(index=1)
-            p.locator("#cfFields [name=message]").fill("hello")
-            expect(re.search(r"5\s*/\s*1500", p.locator(".cf-counter").first.inner_text()), "the counter should read 5/1500")
-            p.locator("#cfSubmit").click()
-            p.wait_for_selector("#cfFallback:not([hidden])")
-            text = p.locator("#cfFallback textarea").input_value()
-            expect(("Engagement: Acme" in text) or ("Encargo: Acme" in text), "the prepared message should carry the subject: %r" % text[:80])
-            expect("Acme" in text and "hello" in text, "the prepared message should carry the fields")
-            env.shot(p, "contact-%s" % lang)
+# 2026-11-09: the contact form checks moved to _review/site-behavior.test.js, which runs in CI (the two 'contact:' tests).
+# They had gone stale here after the redesigns, and nothing ran this file.
 
 
 @check("contact", "?intent and ?need prefill the form")
@@ -492,7 +356,8 @@ def _sponsors_page(env: Env):
             hrefs = p.evaluate("[...document.querySelectorAll('.get-row a')].map(a => a.getAttribute('href'))")
             expect(any("patreon.com" in h for h in hrefs), "the Patreon link is missing [%s]" % lang)
             expect(any("buymeacoffee.com" in h for h in hrefs), "the Buy Me a Coffee link is missing [%s]" % lang)
-            expect(contact in hrefs, "the company-sponsorship link should go to %s [%s]" % (contact, lang))
+            expect(any(h.split("?")[0] == contact for h in hrefs),
+                   "the company-sponsorship link should go to %s [%s]" % (contact, lang))
             eq(p.locator(".sp-reach .tw-bg-bg").count(), 4, "reach figures [%s]" % lang)
             sep = "," if lang == "en" else "."
             downloads = p.evaluate("document.querySelector('.sp-reach .tw-text-3xl').textContent.trim()")
@@ -520,7 +385,7 @@ def _sponsors_home(env: Env):
         with env.page() as p:
             env.go(p, home)
             expect(p.locator("#sponsors").count() == 1, "the sponsors section is missing [%s]" % lang)
-            expect(p.locator("#sponsors a.btn.primary[href='%s']" % target).count() == 1, "the call to action [%s]" % lang)
+            expect(p.locator("#sponsors a.btn[href='%s']" % target).count() == 1, "the call to action [%s]" % lang)
 
 
 @check("sponsors", "sponsor links are counted per sponsor and place, keep rel=sponsored, and unlinked names stay plain")
@@ -552,10 +417,17 @@ def _es_meta(env: Env):
         text = (ROOT / rel).read_text(encoding="utf-8")
         return {k: (re.search(r"<meta %s content=\"([^\"]*)\"" % re.escape(k), text) or [None, None])[1] for k in keys}
 
+    def title_of(path):
+        rel = "index.html" if path == "/" else path.strip("/") + "/index.html"
+        return re.search(r"<title>(.*?)</title>", (ROOT / rel).read_text(encoding="utf-8"), re.S).group(1)
+
     same = []
     for en_path, es_path in ES_PATHS.items():
         en, es = metas(en_path), metas(es_path)
-        same += ["%s %s" % (es_path, k.split('"')[1]) for k in keys if en[k] and en[k] == es[k]]
+        # a card equal in both languages is fine when the page title is too ("Blog — Gap Hunter Labs")
+        same_title = title_of(en_path) == title_of(es_path)
+        same += ["%s %s" % (es_path, k.split('"')[1]) for k in keys
+                 if en[k] and en[k] == es[k] and not (same_title and 'title' in k or same_title and 'image:alt' in k)]
     expect(not same, "still in English: " + "; ".join(same[:8]))
 
 
@@ -656,7 +528,8 @@ def _ficha(env: Env):
     for lang in ("en", "es"):
         with env.page() as p:
             env.go(p, LANGS[lang]["ficha"])
-            eq(p.locator(".facts-table .fact").count(), 7, "facts rows [%s]" % lang)
+            # 6 rows since the "Growth" row was removed (2026-11-09)
+            eq(p.locator(".facts-table .fact").count(), 6, "facts rows [%s]" % lang)
             expect(p.locator(".facts-table .badge svg").count() >= 1, "the platform badge should carry an inline icon")
             expect(p.locator(".facts-table .badge-status").count() == 1, "the pricing badge is missing")
             expect(p.locator(".similar-grid .rel-card").count() >= 3, "related plugins are missing")

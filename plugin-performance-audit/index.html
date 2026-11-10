@@ -48,7 +48,7 @@
 <meta name="twitter:image" content="https://gaphunterlabs.com/og-audit.png?v=4">
 <meta name="twitter:image:alt" content="Plugin performance audit, USD 10,500 fixed — Gap Hunter Labs">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How do you diagnose a performance bottleneck in an IntelliJ IDEA plugin?","acceptedAnswer":{"@type":"Answer","text":"I reproduce the plugin in a clean IDE for each version it supports, with freeze detection on and thread dumps captured on every freeze, then measure the time spent on the UI thread when settings pages, actions and tool windows open, cold and warm. In the code review I look for the freeze patterns behind most reports in the JetBrains tracker: blocking read actions in background tasks without cancellation, file or network access on the UI thread, and waits on other threads while holding the read lock. I trace every finding to the exact code that caused it. I report what I find; I cannot prove that no other freeze exists."}},{"@type":"Question","name":"How do you prove a performance fix actually works?","acceptedAnswer":{"@type":"Answer","text":"Each patch I propose comes with a before and after measurement of the same action on the same IDE version, so the improvement is a number you can check, not a claim. I deliver patches as a pull request or a diff with tests where the fix allows them. It is the same method I used on freezes in IntelliJ's own code, which I reported to JetBrains with a root cause and a measurement."}}]}</script>
-<link rel="stylesheet" href="/css/theme.css?v=bcd865b2">
+<link rel="stylesheet" href="/css/theme.css?v=11abce56">
 <link rel="stylesheet" href="/css/base.css?v=f5309b4e">
 <style>
   @font-face {
@@ -221,7 +221,7 @@
       <ul>
         <li><strong>USD <!--svc:audit.base.usd-->10,500, fixed,</strong> for one plugin and up to 3 IDE versions, delivered within <!--svc:audit.base.days-->10 business days.</li>
         <li><strong>USD <!--svc:audit.extended.usd-->15,000, fixed,</strong> for an extended scope: more than 3 IDE versions, or a plugin with several background subsystems, language servers or external processes. Delivered within <!--svc:audit.extended.days-->15 business days.</li>
-        <li>You pay by international bank transfer in USD, against an invoice.</li>
+        <li>You pay in USD by international bank transfer; I issue the invoice in Colombian pesos (COP), at the official exchange rate on its date.</li>
       </ul>
     </section>
 
