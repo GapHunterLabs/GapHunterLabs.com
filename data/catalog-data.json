@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-09 13:29:09 UTC",
+  "generatedAt": "2026-11-10 03:57:15 UTC",
   "totalPlugins": 146,
   "totalDownloads": 14017,
   "pending": 0,
@@ -7,10 +7,6 @@
   "totalReviews": 0,
   "avgRating": null,
   "trend7d": [
-    {
-      "date": "2026-11-02",
-      "totalDownloads": 13247
-    },
     {
       "date": "2026-11-04",
       "totalDownloads": 13569
@@ -34,45 +30,13 @@
     {
       "date": "2026-11-09",
       "totalDownloads": 14017
+    },
+    {
+      "date": "2026-11-10",
+      "totalDownloads": 14017
     }
   ],
-  "recentChanges": [
-    {
-      "date": "2026-11-09",
-      "type": "growth",
-      "name": "Mermaid Companion",
-      "niche": "Diagrams",
-      "delta": 5
-    },
-    {
-      "date": "2026-11-09",
-      "type": "growth",
-      "name": "Terraform IAM Privesc Companion",
-      "niche": "IAM / Cloud Security",
-      "delta": 4
-    },
-    {
-      "date": "2026-11-09",
-      "type": "growth",
-      "name": "Gradle Task Graph Companion",
-      "niche": "Build Tooling / Architecture",
-      "delta": 4
-    },
-    {
-      "date": "2026-11-09",
-      "type": "growth",
-      "name": "Firestore Companion",
-      "niche": "Firestore / Database",
-      "delta": 4
-    },
-    {
-      "date": "2026-11-09",
-      "type": "growth",
-      "name": "Dockerfile Layer Size Companion",
-      "niche": "Docker / DevOps",
-      "delta": 4
-    }
-  ],
+  "recentChanges": [],
   "plugins": [
     {
       "xmlId": "dev.gaphunter.mermaidcompanion",
