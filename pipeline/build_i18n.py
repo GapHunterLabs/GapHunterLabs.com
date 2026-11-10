@@ -56,7 +56,7 @@ SKIP_CLASSES = {"card-pitch", "card-name", "card-niche", "hs-name", "hs-niche", 
                 "sp-name",
                 # writing (2026-11-03): el cuerpo del articulo se autora en ES
                 # directamente (flujo bilingue), no via diccionario. translate()
-                # salta este <main>; main() le inserta el <main> ES de es-main.html.
+                # salta este <main>; main() le inserta el <main> ES de pipeline/i18n/writing/.
                 "writing-article"}
 SKIP_IDS = {"tbody"}
 SKIP_IN = {"paid-card": {"h3", "p"}, "fact": {"code"}, "fact-data": {"span"}}   # ancestro con clase -> etiquetas de datos adentro
@@ -693,12 +693,13 @@ WRITING_MAIN_RE = re.compile(r"<main\b[^>]*\bwriting-article\b[^>]*>.*?</main>",
 def apply_writing_es_body(out, en_path):
     """Articulos de /writing (flujo bilingue): translate() salta el <main>
     marcado writing-article; aqui se reemplaza ese <main> por el <main> en
-    espanol autorado a mano en writing/<slug>/es-main.html. El cuerpo del
+    espanol autorado a mano en pipeline/i18n/writing/<slug>.es-main.html. El cuerpo del
     articulo asi es bilingue de verdad y no vive en es.json (2026-11-03)."""
     if not (en_path.startswith("/writing/") and en_path != "/writing/"):
         return out
     slug = en_path.strip("/").split("/", 1)[1]
-    body_file = ROOT / "writing" / slug / "es-main.html"
+    # 2026-11-09: kept under pipeline/ (not served as a page of its own; robots.txt excludes /pipeline/)
+    body_file = ROOT / "pipeline" / "i18n" / "writing" / (slug + ".es-main.html")
     if not body_file.exists():
         sys.exit("[build_i18n] falta el <main> ES autorado: %s" % body_file)
     es_main = body_file.read_text(encoding="utf-8").strip()

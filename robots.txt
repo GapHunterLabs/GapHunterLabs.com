@@ -1,23 +1,7 @@
 User-agent: *
 Allow: /
-# 2026-08-23 (indexing audit): pipeline/ holds the build scripts + raw
-# JSON data files that generate index.html's own catalog-data island --
-# same data, duplicated as standalone crawlable URLs, plus a .py file
-# with no search value. Nothing here is sensitive (it's already
-# documented as intentionally public data), this is purely a crawl-
-# budget / duplicate-content cleanup, not a security measure.
 Disallow: /pipeline/
-# 2026-08-28 (auditoria, hallazgo bajo #42): og-image-source.html es el
-# mismo tipo de andamio de build que pipeline/ ya excluye -- el HTML
-# fuente que genera og-image.png (la imagen real que SI se comparte),
-# sin contenido propio de busqueda, indexable como pagina huerfana de
-# baja calidad si no se excluye explicitamente.
-Disallow: /og-image-source.html
-
-# 2026-09-24 (auditoria SEO final): con .nojekyll GitHub Pages sirve TODO el repo. Estos dos
-# son andamiaje interno sin valor de busqueda (scripts de verificacion, doc de arquitectura) --
-# se excluyen del crawl (no del acceso: robots.txt no es una medida de seguridad).
 Disallow: /_review/
-Disallow: /DOCUMENTATION.md
+Disallow: /a11y/
 
 Sitemap: https://gaphunterlabs.com/sitemap.xml
