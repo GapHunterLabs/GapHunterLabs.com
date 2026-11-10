@@ -94,6 +94,9 @@ class WorkflowWiringTest(unittest.TestCase):
         self.assertIn("python3 _review/verify_tailwind.py", text)
         self.assertIn("npm ci --prefix pipeline --ignore-scripts", text)
         self.assertIn("pull_request:", text)
+        # 2026-11-09: the browser checks run in CI too (they had gone stale when they ran only by hand)
+        self.assertIn("node _review/site-behavior.test.js", text)
+        self.assertIn("python3 _review/verify_site.py", text)
         # npm ci needs the lockfile in the repository, not only on disk (the first run of this check failed on that)
         tracked = subprocess.run(["git", "ls-files", "--error-unmatch", "pipeline/package-lock.json"], cwd=ROOT,
                                  capture_output=True, text=True)
