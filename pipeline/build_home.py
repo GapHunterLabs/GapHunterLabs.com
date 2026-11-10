@@ -251,10 +251,20 @@ def sponsors_html(rows, home):
     return '<p class="sp-empty">%s</p>' % (SPONSOR_OPEN + " Your name or logo could be the first one here.")
 
 
-# Audience figures: copied by hand from GoatCounter and the LinkedIn page analytics (neither has a public API).
+# Audience figures: copied by hand from GoatCounter and the LinkedIn profile analytics (neither has a public API).
 REACH_COUNTS = {"site": ("visits",), "linkedin": ("followers", "impressions", "membersReached")}
 REACH_SHARES = {"site": ("countries", "languages"), "linkedin": ("followerProfile", "viewerProfile")}
 REACH_STALE_DAYS = 120
+# The 'Track performance' box of LinkedIn: short windows that end on asOf, never mixed with the long window above.
+REACH_RECENT_COUNTS = ("postImpressions7d", "profileViewers90d", "connections", "searchAppearances")
+
+
+def _int(value):
+    return isinstance(value, int) and not isinstance(value, bool)
+
+
+def _positive_int(value):
+    return _int(value) and value > 0
 
 
 def _iso(value, name):
@@ -293,6 +303,18 @@ def load_reach():
     outside = raw["linkedin"].get("outsideNetworkPct")
     if not isinstance(outside, int) or not 0 <= outside <= 100:
         die("reach.json: linkedin.outsideNetworkPct tiene que ser un entero de 0 a 100")
+    recent = raw["linkedin"].get("recent")
+    if not isinstance(recent, dict):
+        die("reach.json: falta el bloque linkedin.recent")
+    for field in REACH_RECENT_COUNTS:
+        if not _positive_int(recent.get(field)):
+            die("reach.json: linkedin.recent.%s tiene que ser un entero positivo" % field)
+    change = recent.get("postImpressions7dChangePct")
+    if not _int(change) or change < -100:
+        die("reach.json: linkedin.recent.postImpressions7dChangePct tiene que ser un entero de -100 en adelante")
+    s_from, s_to = _iso(recent.get("searchFrom"), "linkedin.recent.searchFrom"), _iso(recent.get("searchTo"), "linkedin.recent.searchTo")
+    if not s_from <= s_to <= as_of:
+        die("reach.json: en linkedin.recent tiene que cumplirse searchFrom <= searchTo <= asOf")
     if (date.today() - as_of).days > REACH_STALE_DAYS:
         print("[build_home] AVISO: data/reach.json es del %s; actualiza las cifras" % as_of)
     return raw
@@ -315,23 +337,34 @@ def _reach_window(label, block, first):
 
 
 def reach_html(reach):
-    """The audience a sponsor's name reaches: this site and the LinkedIn page, with the dates each figure covers."""
+    """The audience a sponsor's name reaches: this site and the LinkedIn profile, with the dates each figure covers."""
     site, li = reach["site"], reach["linkedin"]
     days = (date.fromisoformat(site["to"]) - date.fromisoformat(site["from"])).days + 1
     per_week = max(1, round(site["visits"] * 7 / days))
     tiles = [
-        tile("LinkedIn followers", format(li["followers"], ","), "<span>On my LinkedIn page</span>"),
+        tile("LinkedIn followers", format(li["followers"], ","), "<span>On my LinkedIn profile</span>"),
         tile("LinkedIn impressions", format(li["impressions"], ","),
              "<b>%d%%</b> <span>from outside my network</span>" % li["outsideNetworkPct"]),
         tile("Members reached", format(li["membersReached"], ","), "<span>Different people who saw my posts</span>"),
         tile("Site visits", format(site["visits"], ","), "<span>About %d a week</span>" % per_week),
+    ]
+    recent = li["recent"]
+    change = recent["postImpressions7dChangePct"]
+    tiles += [
+        tile("Post impressions, last 7 days", format(recent["postImpressions7d"], ","),
+             "<b>%s%d%%</b> <span>vs. the 7 days before</span>" % ("+" if change > 0 else "", change)),
+        tile("Profile viewers", format(recent["profileViewers90d"], ","), "<span>In the last 90 days</span>"),
+        tile("LinkedIn connections", format(recent["connections"], ","), "<span>People in my network</span>"),
+        tile("Search appearances", format(recent["searchAppearances"], ","),
+             '<span>From</span> <time datetime="%s">%s</time> <span>to</span> <time datetime="%s">%s</time>'
+             % (recent["searchFrom"], recent["searchFrom"], recent["searchTo"], recent["searchTo"])),
     ]
     grid = ('<div class="tw-grid tw-grid-cols-2 tw-gap-px tw-overflow-hidden tw-rounded-lg tw-border tw-border-line '
             'tw-bg-line md:tw-grid-cols-4">%s</div>' % "".join(tiles))
     facts = '<div class="sp-facts">%s</div>' % "".join([
         _share_chips("Where site visits come from", site["countries"]),
         _share_chips("Browser language of site visits", site["languages"]),
-        _share_chips("Who follows my LinkedIn page", li["followerProfile"]),
+        _share_chips("Who follows my LinkedIn profile", li["followerProfile"]),
         _share_chips("Who sees my posts on LinkedIn", li["viewerProfile"]),
     ])
     notes = [_reach_window("Site visits: " + site["source"], site, True),
@@ -339,6 +372,7 @@ def reach_html(reach):
     if site.get("includesOwnVisits"):
         notes.append(_reach_note(False, "<span>The site count includes my own visits.</span>"))
     notes.append(_reach_note(False, "<span>LinkedIn shows only the most common value in each category.</span>"))
+    notes.append(_reach_note(False, "<span>LinkedIn followers and connections are totals on the date below; the 7- and 90-day windows end on it.</span>"))
     notes.append(_reach_note(False, '<span>Counts as of</span> <time datetime="%s">%s</time>' % (reach["asOf"], reach["asOf"])))
     return grid + facts + "".join(notes)
 
