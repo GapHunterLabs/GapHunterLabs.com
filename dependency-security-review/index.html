@@ -48,7 +48,7 @@
 <meta name="twitter:image" content="https://gaphunterlabs.com/og-dependency-security.png?v=4">
 <meta name="twitter:image:alt" content="Dependency and CI/CD security review, from USD 4,800 — Gap Hunter Labs">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How do you tell whether a dependency vulnerability is actually exploitable?","acceptedAnswer":{"@type":"Answer","text":"I verify each advisory against the exact version pinned in your manifests and lockfiles, not against a version range, so an advisory that does not apply to your pinned version is not reported as a risk. I then order the findings by real exposure rather than by raw CVSS score, and I report anything exploitable first and privately through your security channel. The review is read-only and I report what I find; I cannot promise that no other vulnerability exists."}},{"@type":"Question","name":"What does a CI/CD security review include?","acceptedAnswer":{"@type":"Answer","text":"I check your CI and CD workflow permissions, tokens and third-party actions with OpenSSF Scorecard, and I look at manifests and lockfiles for internal package names that a public registry could shadow (dependency confusion). I can add an optional EU Cyber Resilience Act readiness check covering the security policy, security.txt, SBOM and the vulnerability-reporting workflow. The review is read-only: you choose the repositories and I push nothing to your code."}}]}</script>
-<link rel="stylesheet" href="/css/theme.css?v=bcd865b2">
+<link rel="stylesheet" href="/css/theme.css?v=11abce56">
 <link rel="stylesheet" href="/css/base.css?v=f5309b4e">
 <style>
   @font-face {
