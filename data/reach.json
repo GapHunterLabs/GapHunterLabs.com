@@ -1,5 +1,5 @@
 {
-  "_note": "Audience figures printed on /sponsors/, copied by hand from two dashboards (neither has a public API): GoatCounter for the site and the LinkedIn page analytics. Dates are ISO and are printed next to the figures. LinkedIn's dashboard offers 365 days; its 'from' is the first day with any activity, not the start of the window. followers is the total on asOf. linkedin.recent comes from the 'Track performance' box: the 7-day and 90-day windows end on asOf, and search appearances carry their own week. 'Other or unknown' is the share of visits whose browser language is not English or Spanish or is not reported. Both blocks are required. Turn includesOwnVisits off once the site count excludes my own visits. After editing, run: python pipeline/build_home.py && python pipeline/build_i18n.py --strict && python pipeline/version_assets.py.",
+  "_note": "Audience figures printed on /sponsors/, copied by hand from two dashboards (neither has a public API): GoatCounter for the site and the LinkedIn profile analytics. Dates are ISO and are printed next to the figures. LinkedIn's dashboard offers 365 days; its 'from' is the first day with any activity, not the start of the window. followers is the total on asOf. linkedin.recent comes from the 'Track performance' box: the 7-day and 90-day windows end on asOf, and search appearances carry their own week. 'Other or unknown' is the share of visits whose browser language is not English or Spanish or is not reported. Both blocks are required. Turn includesOwnVisits off once the site count excludes my own visits. After editing, run: python pipeline/build_home.py && python pipeline/build_i18n.py --strict && python pipeline/version_assets.py.",
   "asOf": "2026-11-10",
   "site": {
     "source": "GoatCounter",
@@ -22,7 +22,7 @@
     ]
   },
   "linkedin": {
-    "source": "page analytics",
+    "source": "profile analytics",
     "from": "2026-08-13",
     "to": "2026-10-29",
     "followers": 164,

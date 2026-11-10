@@ -251,7 +251,7 @@ def sponsors_html(rows, home):
     return '<p class="sp-empty">%s</p>' % (SPONSOR_OPEN + " Your name or logo could be the first one here.")
 
 
-# Audience figures: copied by hand from GoatCounter and the LinkedIn page analytics (neither has a public API).
+# Audience figures: copied by hand from GoatCounter and the LinkedIn profile analytics (neither has a public API).
 REACH_COUNTS = {"site": ("visits",), "linkedin": ("followers", "impressions", "membersReached")}
 REACH_SHARES = {"site": ("countries", "languages"), "linkedin": ("followerProfile", "viewerProfile")}
 REACH_STALE_DAYS = 120
@@ -337,12 +337,12 @@ def _reach_window(label, block, first):
 
 
 def reach_html(reach):
-    """The audience a sponsor's name reaches: this site and the LinkedIn page, with the dates each figure covers."""
+    """The audience a sponsor's name reaches: this site and the LinkedIn profile, with the dates each figure covers."""
     site, li = reach["site"], reach["linkedin"]
     days = (date.fromisoformat(site["to"]) - date.fromisoformat(site["from"])).days + 1
     per_week = max(1, round(site["visits"] * 7 / days))
     tiles = [
-        tile("LinkedIn followers", format(li["followers"], ","), "<span>On my LinkedIn page</span>"),
+        tile("LinkedIn followers", format(li["followers"], ","), "<span>On my LinkedIn profile</span>"),
         tile("LinkedIn impressions", format(li["impressions"], ","),
              "<b>%d%%</b> <span>from outside my network</span>" % li["outsideNetworkPct"]),
         tile("Members reached", format(li["membersReached"], ","), "<span>Different people who saw my posts</span>"),
@@ -364,7 +364,7 @@ def reach_html(reach):
     facts = '<div class="sp-facts">%s</div>' % "".join([
         _share_chips("Where site visits come from", site["countries"]),
         _share_chips("Browser language of site visits", site["languages"]),
-        _share_chips("Who follows my LinkedIn page", li["followerProfile"]),
+        _share_chips("Who follows my LinkedIn profile", li["followerProfile"]),
         _share_chips("Who sees my posts on LinkedIn", li["viewerProfile"]),
     ])
     notes = [_reach_window("Site visits: " + site["source"], site, True),
