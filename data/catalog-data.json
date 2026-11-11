@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-10 13:07:28 UTC",
+  "generatedAt": "2026-11-11 01:41:37 UTC",
   "totalPlugins": 146,
   "totalDownloads": 14074,
   "pending": 0,
@@ -7,10 +7,6 @@
   "totalReviews": 0,
   "avgRating": null,
   "trend7d": [
-    {
-      "date": "2026-11-04",
-      "totalDownloads": 13569
-    },
     {
       "date": "2026-11-05",
       "totalDownloads": 13626
@@ -34,45 +30,13 @@
     {
       "date": "2026-11-10",
       "totalDownloads": 14074
+    },
+    {
+      "date": "2026-11-11",
+      "totalDownloads": 14074
     }
   ],
-  "recentChanges": [
-    {
-      "date": "2026-11-10",
-      "type": "growth",
-      "name": "Mermaid Companion",
-      "niche": "Diagrams",
-      "delta": 26
-    },
-    {
-      "date": "2026-11-10",
-      "type": "growth",
-      "name": "React Native Companion",
-      "niche": "React Native Tooling",
-      "delta": 4
-    },
-    {
-      "date": "2026-11-10",
-      "type": "growth",
-      "name": "JWT Companion",
-      "niche": "JWT / Auth Tooling",
-      "delta": 3
-    },
-    {
-      "date": "2026-11-10",
-      "type": "growth",
-      "name": "AWS SDK Client Reuse Companion",
-      "niche": "Cloud SDK Client Reuse",
-      "delta": 3
-    },
-    {
-      "date": "2026-11-10",
-      "type": "growth",
-      "name": "AsyncAPI Companion",
-      "niche": "AsyncAPI Tooling",
-      "delta": 2
-    }
-  ],
+  "recentChanges": [],
   "plugins": [
     {
       "xmlId": "dev.gaphunter.mermaidcompanion",
