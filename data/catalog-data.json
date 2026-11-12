@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-11 12:17:20 UTC",
+  "generatedAt": "2026-11-12 02:40:48 UTC",
   "totalPlugins": 146,
   "totalDownloads": 14146,
   "pending": 0,
@@ -7,10 +7,6 @@
   "totalReviews": 0,
   "avgRating": null,
   "trend7d": [
-    {
-      "date": "2026-11-05",
-      "totalDownloads": 13626
-    },
     {
       "date": "2026-11-06",
       "totalDownloads": 13675
@@ -34,45 +30,13 @@
     {
       "date": "2026-11-11",
       "totalDownloads": 14146
+    },
+    {
+      "date": "2026-11-12",
+      "totalDownloads": 14146
     }
   ],
-  "recentChanges": [
-    {
-      "date": "2026-11-11",
-      "type": "growth",
-      "name": "Mermaid Companion",
-      "niche": "Diagrams",
-      "delta": 12
-    },
-    {
-      "date": "2026-11-11",
-      "type": "growth",
-      "name": "API Security Companion",
-      "niche": "API Security",
-      "delta": 5
-    },
-    {
-      "date": "2026-11-11",
-      "type": "growth",
-      "name": "Webhook Signature Companion",
-      "niche": "API Security",
-      "delta": 4
-    },
-    {
-      "date": "2026-11-11",
-      "type": "growth",
-      "name": "XSD Companion",
-      "niche": "XSD/WSDL Tooling",
-      "delta": 3
-    },
-    {
-      "date": "2026-11-11",
-      "type": "growth",
-      "name": "Redisson Client Reuse Companion",
-      "niche": "Cache Client Reuse",
-      "delta": 3
-    }
-  ],
+  "recentChanges": [],
   "plugins": [
     {
       "xmlId": "dev.gaphunter.mermaidcompanion",
