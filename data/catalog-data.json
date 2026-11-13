@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-12 13:25:52 UTC",
+  "generatedAt": "2026-11-13 02:21:16 UTC",
   "totalPlugins": 146,
   "totalDownloads": 14342,
   "pending": 0,
@@ -7,10 +7,6 @@
   "totalReviews": 0,
   "avgRating": null,
   "trend7d": [
-    {
-      "date": "2026-11-06",
-      "totalDownloads": 13675
-    },
     {
       "date": "2026-11-07",
       "totalDownloads": 13832
@@ -34,45 +30,13 @@
     {
       "date": "2026-11-12",
       "totalDownloads": 14342
+    },
+    {
+      "date": "2026-11-13",
+      "totalDownloads": 14342
     }
   ],
-  "recentChanges": [
-    {
-      "date": "2026-11-12",
-      "type": "growth",
-      "name": "Mermaid Companion",
-      "niche": "Diagrams",
-      "delta": 9
-    },
-    {
-      "date": "2026-11-12",
-      "type": "growth",
-      "name": "PHP Composer Script Companion",
-      "niche": "Node.js / npm Tooling",
-      "delta": 6
-    },
-    {
-      "date": "2026-11-12",
-      "type": "growth",
-      "name": "Config Secrets File Companion",
-      "niche": "Secrets Detection",
-      "delta": 6
-    },
-    {
-      "date": "2026-11-12",
-      "type": "growth",
-      "name": "Webhook Signature Companion",
-      "niche": "API Security",
-      "delta": 4
-    },
-    {
-      "date": "2026-11-12",
-      "type": "growth",
-      "name": "Semver Bump Mismatch Companion",
-      "niche": "VCS / Git Workflow",
-      "delta": 4
-    }
-  ],
+  "recentChanges": [],
   "plugins": [
     {
       "xmlId": "dev.gaphunter.mermaidcompanion",

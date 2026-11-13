@@ -33652,6 +33652,449 @@
           "downloads": 197
         }
       }
+    },
+    {
+      "date": "2026-11-13",
+      "plugins": {
+        "dev.gaphunter.ansiblecompanion": {
+          "downloads": 377
+        },
+        "dev.gaphunter.apachehttpclientreusecompanion": {
+          "downloads": 82
+        },
+        "dev.gaphunter.apideprecationheadercompanion": {
+          "downloads": 58
+        },
+        "dev.gaphunter.apisecuritycompanion": {
+          "downloads": 320
+        },
+        "dev.gaphunter.asyncselfinvocationcompanion": {
+          "downloads": 61
+        },
+        "dev.gaphunter.asyncapicompanion": {
+          "downloads": 159
+        },
+        "dev.gaphunter.awss3publicaclsdkcompanion": {
+          "downloads": 109
+        },
+        "dev.gaphunter.awssdkclientreusecompanion": {
+          "downloads": 114
+        },
+        "dev.gaphunter.backgroundreadactionfreezecompanion": {
+          "downloads": 90
+        },
+        "dev.gaphunter.beancopycompanion": {
+          "downloads": 62
+        },
+        "dev.gaphunter.bindingresultpositioncompanion": {
+          "downloads": 59
+        },
+        "dev.gaphunter.cacheinvalidationcompanion": {
+          "downloads": 60
+        },
+        "dev.gaphunter.cassandracqlsessionreusecompanion": {
+          "downloads": 79
+        },
+        "dev.gaphunter.certcompanion": {
+          "downloads": 216
+        },
+        "dev.gaphunter.changecasecompanion": {
+          "downloads": 79
+        },
+        "dev.gaphunter.changelogfragmentcompanion": {
+          "downloads": 60
+        },
+        "dev.gaphunter.circulardependencycompanion": {
+          "downloads": 82
+        },
+        "dev.gaphunter.cmakecompanion": {
+          "downloads": 123
+        },
+        "dev.gaphunter.commitmessageconventioncompanion": {
+          "downloads": 35
+        },
+        "dev.gaphunter.completablefuturecancellationcompanion": {
+          "downloads": 76
+        },
+        "dev.gaphunter.configsecretsfilecompanion": {
+          "downloads": 75
+        },
+        "dev.gaphunter.connectionpoolconfigcompanion": {
+          "downloads": 53
+        },
+        "dev.gaphunter.correlationidpropagationcompanion": {
+          "downloads": 58
+        },
+        "dev.gaphunter.corspolicycompanion": {
+          "downloads": 125
+        },
+        "dev.gaphunter.deadlocklockordercompanion": {
+          "downloads": 55
+        },
+        "dev.gaphunter.dependencyvulnerabilitycompanion": {
+          "downloads": 216
+        },
+        "dev.gaphunter.dockerfilelayersizecompanion": {
+          "downloads": 132
+        },
+        "dev.gaphunter.dockerfilemissingusercompanion": {
+          "downloads": 80
+        },
+        "dev.gaphunter.dockerfileunusedstagecompanion": {
+          "downloads": 110
+        },
+        "dev.gaphunter.elasticsearchclientreusecompanion": {
+          "downloads": 56
+        },
+        "dev.gaphunter.enumordinalpersistencecompanion": {
+          "downloads": 50
+        },
+        "dev.gaphunter.envdiffcompanion": {
+          "downloads": 77
+        },
+        "dev.gaphunter.envvarmissingcompanion": {
+          "downloads": 105
+        },
+        "dev.gaphunter.environmentspecificconstantcompanion": {
+          "downloads": 59
+        },
+        "dev.gaphunter.errorlenscompanion": {
+          "downloads": 127
+        },
+        "dev.gaphunter.exceptionescapechaincompanion": {
+          "downloads": 52
+        },
+        "dev.gaphunter.featureflagreferencecompanion": {
+          "downloads": 112
+        },
+        "dev.gaphunter.feignfallbackconfigcompanion": {
+          "downloads": 61
+        },
+        "dev.gaphunter.firestorecompanion": {
+          "downloads": 241
+        },
+        "dev.gaphunter.flakytestmarkercompanion": {
+          "downloads": 59
+        },
+        "dev.gaphunter.formatconvertercompanion": {
+          "downloads": 126
+        },
+        "dev.gaphunter.gcpclientreusecompanion": {
+          "downloads": 62
+        },
+        "dev.gaphunter.githygienecompanion": {
+          "downloads": 102
+        },
+        "dev.gaphunter.githubactionspwnrequestcompanion": {
+          "downloads": 85
+        },
+        "dev.gaphunter.gitlabcicompanion": {
+          "downloads": 271
+        },
+        "dev.gaphunter.gotimerleakcompanion": {
+          "downloads": 79
+        },
+        "dev.gaphunter.gradletaskgraphcompanion": {
+          "downloads": 75
+        },
+        "dev.gaphunter.graphqlcompanion": {
+          "downloads": 107
+        },
+        "dev.gaphunter.grpcerrorstatuscompanion": {
+          "downloads": 56
+        },
+        "dev.gaphunter.grpcmissingdeadlinecompanion": {
+          "downloads": 54
+        },
+        "dev.gaphunter.grpcstreamobservercontractcompanion": {
+          "downloads": 55
+        },
+        "dev.gaphunter.highlightcompanion": {
+          "downloads": 144
+        },
+        "dev.gaphunter.httpstatusinlinecompanion": {
+          "downloads": 22
+        },
+        "dev.gaphunter.idempotencykeycompanion": {
+          "downloads": 85
+        },
+        "dev.gaphunter.importcostcompanion": {
+          "downloads": 161
+        },
+        "dev.gaphunter.integeroverflowwideningcompanion": {
+          "downloads": 52
+        },
+        "dev.gaphunter.interfaceexceptiondivergencecompanion": {
+          "downloads": 55
+        },
+        "dev.gaphunter.interfaceresourceclosedivergencecompanion": {
+          "downloads": 51
+        },
+        "dev.gaphunter.interfacesinkdivergencecompanion": {
+          "downloads": 49
+        },
+        "dev.gaphunter.interproceduralresourceleakcompanion": {
+          "downloads": 38
+        },
+        "dev.gaphunter.jdbcdoubleclosecompanion": {
+          "downloads": 57
+        },
+        "dev.gaphunter.jenkinsfilecompanion": {
+          "downloads": 142
+        },
+        "dev.gaphunter.jsonpathbuildercompanion": {
+          "downloads": 58
+        },
+        "dev.gaphunter.jsonschemacompanion": {
+          "downloads": 145
+        },
+        "dev.gaphunter.jsontocodecompanion": {
+          "downloads": 67
+        },
+        "dev.gaphunter.jwtcompanion": {
+          "downloads": 245
+        },
+        "dev.gaphunter.jwtsignatureverificationcompanion": {
+          "downloads": 48
+        },
+        "dev.gaphunter.jwtwebhooktimingsafecompanion": {
+          "downloads": 66
+        },
+        "dev.gaphunter.k6companion": {
+          "downloads": 129
+        },
+        "dev.gaphunter.k8slabelselectorexposurecompanion": {
+          "downloads": 70
+        },
+        "dev.gaphunter.k8sreadinesslivenessprobecompanion": {
+          "downloads": 69
+        },
+        "dev.gaphunter.k8sresourcelimitcompanion": {
+          "downloads": 73
+        },
+        "dev.gaphunter.kafkaprematureoffsetcommitcompanion": {
+          "downloads": 67
+        },
+        "dev.gaphunter.kafkaproducerreusecompanion": {
+          "downloads": 79
+        },
+        "dev.gaphunter.kafkatopicfeedbackloopcompanion": {
+          "downloads": 91
+        },
+        "dev.gaphunter.kafkatopicschemacompanion": {
+          "downloads": 94
+        },
+        "dev.gaphunter.ktorhttpclientreusecompanion": {
+          "downloads": 50
+        },
+        "dev.gaphunter.kubernetesrbacwildcardcompanion": {
+          "downloads": 54
+        },
+        "dev.gaphunter.ldapinjectionsinkcompanion": {
+          "downloads": 36
+        },
+        "dev.gaphunter.logformatstringcompanion": {
+          "downloads": 98
+        },
+        "dev.gaphunter.loginjectioncompanion": {
+          "downloads": 44
+        },
+        "dev.gaphunter.lucenequeryinjectioncompanion": {
+          "downloads": 47
+        },
+        "dev.gaphunter.materialcompanion": {
+          "downloads": 47
+        },
+        "dev.gaphunter.mergeconflictleftovercompanion": {
+          "downloads": 110
+        },
+        "dev.gaphunter.mermaidcompanion": {
+          "downloads": 1357
+        },
+        "dev.gaphunter.micrometertimersamplecompanion": {
+          "downloads": 55
+        },
+        "dev.gaphunter.micronauthttpclientcreatecompanion": {
+          "downloads": 39
+        },
+        "dev.gaphunter.mismatchedlockobjectcompanion": {
+          "downloads": 39
+        },
+        "dev.gaphunter.moduleboundaryleakcompanion": {
+          "downloads": 43
+        },
+        "dev.gaphunter.mongoclientreusecompanion": {
+          "downloads": 50
+        },
+        "dev.gaphunter.mutablestateleakcompanion": {
+          "downloads": 44
+        },
+        "dev.gaphunter.nplusonequerycompanion": {
+          "downloads": 102
+        },
+        "dev.gaphunter.nginxcompanion": {
+          "downloads": 102
+        },
+        "dev.gaphunter.npmpeerdependencycompanion": {
+          "downloads": 67
+        },
+        "dev.gaphunter.objectmapperreusecompanion": {
+          "downloads": 44
+        },
+        "dev.gaphunter.okhttpclientreusecompanion": {
+          "downloads": 48
+        },
+        "dev.gaphunter.openapicompanion": {
+          "downloads": 294
+        },
+        "dev.gaphunter.otelspannamingcompanion": {
+          "downloads": 45
+        },
+        "dev.gaphunter.phpcomposerscriptcompanion": {
+          "downloads": 158
+        },
+        "dev.gaphunter.phpfileinclusioncompanion": {
+          "downloads": 58
+        },
+        "dev.gaphunter.phpfunctioninjectioncompanion": {
+          "downloads": 54
+        },
+        "dev.gaphunter.phpopenredirectcompanion": {
+          "downloads": 57
+        },
+        "dev.gaphunter.phpshellinjectioncompanion": {
+          "downloads": 59
+        },
+        "dev.gaphunter.phpsqlinjectioncompanion": {
+          "downloads": 60
+        },
+        "dev.gaphunter.piifieldannotationcompanion": {
+          "downloads": 37
+        },
+        "dev.gaphunter.piitostringleakcompanion": {
+          "downloads": 37
+        },
+        "dev.gaphunter.postmanopenapidriftcompanion": {
+          "downloads": 83
+        },
+        "dev.gaphunter.prometheusmetricnamingcompanion": {
+          "downloads": 128
+        },
+        "dev.gaphunter.prometheusmetricregistrationcompanion": {
+          "downloads": 44
+        },
+        "dev.gaphunter.rabbitmqchannelreusecompanion": {
+          "downloads": 53
+        },
+        "dev.gaphunter.railsmassassignmentcompanion": {
+          "downloads": 61
+        },
+        "dev.gaphunter.ratelimiterfallbackcompanion": {
+          "downloads": 42
+        },
+        "dev.gaphunter.reactnativecompanion": {
+          "downloads": 510
+        },
+        "dev.gaphunter.redislockmissingttlcompanion": {
+          "downloads": 71
+        },
+        "dev.gaphunter.redissonclientreusecompanion": {
+          "downloads": 68
+        },
+        "dev.gaphunter.redoscatastrophicbacktrackingcompanion": {
+          "downloads": 67
+        },
+        "dev.gaphunter.refactorsimulator": {
+          "downloads": 229
+        },
+        "dev.gaphunter.regexnamedgroupcompanion": {
+          "downloads": 59
+        },
+        "dev.gaphunter.regexpreviewcompanion": {
+          "downloads": 87
+        },
+        "dev.gaphunter.resilienceselfinvocationcompanion": {
+          "downloads": 41
+        },
+        "dev.gaphunter.retrybackoffjittercompanion": {
+          "downloads": 45
+        },
+        "dev.gaphunter.reviewcompanion": {
+          "downloads": 93
+        },
+        "dev.gaphunter.rubygemfilegroupcompanion": {
+          "downloads": 65
+        },
+        "dev.gaphunter.rubynethttpreusecompanion": {
+          "downloads": 53
+        },
+        "dev.gaphunter.rubyshellinjectioncompanion": {
+          "downloads": 60
+        },
+        "dev.gaphunter.rxjavadisposableleakcompanion": {
+          "downloads": 46
+        },
+        "dev.gaphunter.secondordersqlifieldcompanion": {
+          "downloads": 39
+        },
+        "dev.gaphunter.semverbumpmismatchcompanion": {
+          "downloads": 113
+        },
+        "dev.gaphunter.sessionattributetypeconfusioncompanion": {
+          "downloads": 38
+        },
+        "dev.gaphunter.spelinjectionsinkcompanion": {
+          "downloads": 37
+        },
+        "dev.gaphunter.spreadsheetcompanion": {
+          "downloads": 127
+        },
+        "dev.gaphunter.sqlconcatenationcompanion": {
+          "downloads": 167
+        },
+        "dev.gaphunter.ssrfallowlistbypasscompanion": {
+          "downloads": 40
+        },
+        "dev.gaphunter.ssrfunsanitizedurlcompanion": {
+          "downloads": 51
+        },
+        "dev.gaphunter.terraformiamprivesccompanion": {
+          "downloads": 116
+        },
+        "dev.gaphunter.terraformiamwildcardcompanion": {
+          "downloads": 88
+        },
+        "dev.gaphunter.testscaffoldcompanion": {
+          "downloads": 105
+        },
+        "dev.gaphunter.themecompanion": {
+          "downloads": 73
+        },
+        "dev.gaphunter.threadconfinementescapecompanion": {
+          "downloads": 41
+        },
+        "dev.gaphunter.trycatchconsistencycompanion": {
+          "downloads": 42
+        },
+        "dev.gaphunter.turbologcompanion": {
+          "downloads": 47
+        },
+        "dev.gaphunter.unsafedeserializationsinkcompanion": {
+          "downloads": 50
+        },
+        "dev.gaphunter.unusednpmscriptcompanion": {
+          "downloads": 151
+        },
+        "dev.gaphunter.webhooksignaturecompanion": {
+          "downloads": 100
+        },
+        "dev.gaphunter.xpathinjectionsinkcompanion": {
+          "downloads": 47
+        },
+        "dev.gaphunter.xsdcompanion": {
+          "downloads": 197
+        }
+      }
     }
   ],
   "downloadsBasis": "marketplace"
