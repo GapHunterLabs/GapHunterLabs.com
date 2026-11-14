@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-13 12:43:06 UTC",
+  "generatedAt": "2026-11-14 01:57:42 UTC",
   "totalPlugins": 146,
   "totalDownloads": 14433,
   "pending": 0,
@@ -7,10 +7,6 @@
   "totalReviews": 0,
   "avgRating": null,
   "trend7d": [
-    {
-      "date": "2026-11-07",
-      "totalDownloads": 13832
-    },
     {
       "date": "2026-11-08",
       "totalDownloads": 13861
@@ -34,45 +30,13 @@
     {
       "date": "2026-11-13",
       "totalDownloads": 14433
+    },
+    {
+      "date": "2026-11-14",
+      "totalDownloads": 14433
     }
   ],
-  "recentChanges": [
-    {
-      "date": "2026-11-13",
-      "type": "growth",
-      "name": "Mermaid Companion",
-      "niche": "Diagrams",
-      "delta": 7
-    },
-    {
-      "date": "2026-11-13",
-      "type": "growth",
-      "name": "React Native Companion",
-      "niche": "React Native Tooling",
-      "delta": 5
-    },
-    {
-      "date": "2026-11-13",
-      "type": "growth",
-      "name": "JWT Companion",
-      "niche": "JWT / Auth Tooling",
-      "delta": 5
-    },
-    {
-      "date": "2026-11-13",
-      "type": "growth",
-      "name": "Dependency Vulnerability Companion",
-      "niche": "Dependency / SCA Security",
-      "delta": 4
-    },
-    {
-      "date": "2026-11-13",
-      "type": "growth",
-      "name": "Ruby Gemfile Group Companion",
-      "niche": "VCS / Git Workflow",
-      "delta": 3
-    }
-  ],
+  "recentChanges": [],
   "plugins": [
     {
       "xmlId": "dev.gaphunter.mermaidcompanion",
