@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-14 11:52:23 UTC",
+  "generatedAt": "2026-11-15 01:30:21 UTC",
   "totalPlugins": 146,
   "totalDownloads": 14534,
   "pending": 0,
@@ -7,10 +7,6 @@
   "totalReviews": 0,
   "avgRating": null,
   "trend7d": [
-    {
-      "date": "2026-11-08",
-      "totalDownloads": 13861
-    },
     {
       "date": "2026-11-09",
       "totalDownloads": 14017
@@ -34,45 +30,13 @@
     {
       "date": "2026-11-14",
       "totalDownloads": 14534
+    },
+    {
+      "date": "2026-11-15",
+      "totalDownloads": 14534
     }
   ],
-  "recentChanges": [
-    {
-      "date": "2026-11-14",
-      "type": "growth",
-      "name": "Mermaid Companion",
-      "niche": "Diagrams",
-      "delta": 14
-    },
-    {
-      "date": "2026-11-14",
-      "type": "growth",
-      "name": "React Native Companion",
-      "niche": "React Native Tooling",
-      "delta": 4
-    },
-    {
-      "date": "2026-11-14",
-      "type": "growth",
-      "name": "OTel Span Naming Companion",
-      "niche": "Distributed Tracing",
-      "delta": 4
-    },
-    {
-      "date": "2026-11-14",
-      "type": "growth",
-      "name": "Object Mapper Reuse Companion",
-      "niche": "Object Mapper Reuse",
-      "delta": 4
-    },
-    {
-      "date": "2026-11-14",
-      "type": "growth",
-      "name": "JWT Companion",
-      "niche": "JWT / Auth Tooling",
-      "delta": 4
-    }
-  ],
+  "recentChanges": [],
   "plugins": [
     {
       "xmlId": "dev.gaphunter.mermaidcompanion",
