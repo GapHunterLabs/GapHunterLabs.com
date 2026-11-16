@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-11-16 01:32:29 UTC",
+  "generatedAt": "2026-11-16 13:14:45 UTC",
   "totalPlugins": 146,
-  "totalDownloads": 14558,
+  "totalDownloads": 14572,
   "pending": 0,
   "totalStars": 0,
   "totalReviews": 0,
@@ -33,10 +33,46 @@
     },
     {
       "date": "2026-11-16",
-      "totalDownloads": 14558
+      "totalDownloads": 14572
     }
   ],
-  "recentChanges": [],
+  "recentChanges": [
+    {
+      "date": "2026-11-16",
+      "type": "growth",
+      "name": "React Native Companion",
+      "niche": "React Native Tooling",
+      "delta": 5
+    },
+    {
+      "date": "2026-11-16",
+      "type": "growth",
+      "name": "Mermaid Companion",
+      "niche": "Diagrams",
+      "delta": 2
+    },
+    {
+      "date": "2026-11-16",
+      "type": "growth",
+      "name": "Error Lens Companion",
+      "niche": "Inline Diagnostics",
+      "delta": 2
+    },
+    {
+      "date": "2026-11-16",
+      "type": "growth",
+      "name": "Regex Preview Companion",
+      "niche": "Regex Tooling",
+      "delta": 1
+    },
+    {
+      "date": "2026-11-16",
+      "type": "growth",
+      "name": "NPM Peer Dependency Companion",
+      "niche": "Node.js / npm Tooling",
+      "delta": 1
+    }
+  ],
   "plugins": [
     {
       "xmlId": "dev.gaphunter.mermaidcompanion",
@@ -48,12 +84,12 @@
       "firstPublished": "2026-08-27",
       "repo": "mermaid-companion",
       "marketplaceUrl": "https://plugins.jetbrains.com/plugin/33340-mermaid-companion",
-      "downloads": 1383,
+      "downloads": 1385,
       "pricing": "FREEMIUM",
       "reviews": 0,
       "rating": null,
       "stars": 0,
-      "growth": 1794.5,
+      "growth": 1797.3,
       "growthSince": "2026-08-18",
       "growthFrom": 73
     },
@@ -67,12 +103,12 @@
       "firstPublished": "2026-08-27",
       "repo": "react-native-companion",
       "marketplaceUrl": "https://plugins.jetbrains.com/plugin/33093-react-native-companion",
-      "downloads": 521,
+      "downloads": 526,
       "pricing": "FREE",
       "reviews": 0,
       "rating": null,
       "stars": 0,
-      "growth": 327.0,
+      "growth": 331.1,
       "growthSince": "2026-08-18",
       "growthFrom": 122
     },
@@ -105,12 +141,12 @@
       "firstPublished": "2026-08-31",
       "repo": "api-security-companion",
       "marketplaceUrl": "https://plugins.jetbrains.com/plugin/33195-api-security-companion",
-      "downloads": 324,
+      "downloads": 325,
       "pricing": "FREEMIUM",
       "reviews": 0,
       "rating": null,
       "stars": 0,
-      "growth": 337.8,
+      "growth": 339.2,
       "growthSince": "2026-08-18",
       "growthFrom": 74
     },
@@ -219,12 +255,12 @@
       "firstPublished": null,
       "repo": "dependency-vulnerability-companion",
       "marketplaceUrl": "https://plugins.jetbrains.com/plugin/34191-dependency-vulnerability-companion",
-      "downloads": 222,
+      "downloads": 223,
       "pricing": "FREE",
       "reviews": 0,
       "rating": null,
       "stars": 0,
-      "growth": 11000.0,
+      "growth": 11050.0,
       "growthSince": "2026-09-11",
       "growthFrom": 2
     },
@@ -457,6 +493,25 @@
       "growthFrom": 2
     },
     {
+      "xmlId": "dev.gaphunter.errorlenscompanion",
+      "name": "Error Lens Companion",
+      "pitch": "IntelliJ-family plugin. Shows errors and warnings inline, at the end of the line that has them, instead of only as a gutter icon or a squiggly underline you have to hover to read. One hint per line (most severe diagnostic wins) so it never turns into unreadable clutter.",
+      "why": "Ports the \"Error Lens\" concept -- VS Code's Error Lens extension has 10M+ installs and is one of that ecosystem's most-used extensions -- into the IDE's own highlighting pipeline. Confirmed before building this that no equivalent already exists in JetBrains Marketplace. Same \"port a proven concept, no equivalent exists yet\" bet as the other 6 plugins built this same session -- the same documented-exception discipline this follows.",
+      "niche": "Inline Diagnostics",
+      "githubUrl": "https://github.com/GapHunterLabs/error-lens-companion",
+      "firstPublished": "2026-08-14",
+      "repo": "error-lens-companion",
+      "marketplaceUrl": "https://plugins.jetbrains.com/plugin/33554-error-lens-companion",
+      "downloads": 131,
+      "pricing": "FREE",
+      "reviews": 0,
+      "rating": null,
+      "stars": 0,
+      "growth": 13000.0,
+      "growthSince": "2026-08-18",
+      "growthFrom": 1
+    },
+    {
       "xmlId": "dev.gaphunter.corspolicycompanion",
       "name": "CORS Policy Companion",
       "pitch": "Warning icon on any Java/Kotlin Spring CORS configuration that combines a wildcard origin with credentials — this exact combination is forbidden by the CORS spec itself: browsers reject a wildcard origin combined with credentials, so requests silently fail (or, worse, the intent behind the configuration is misunderstood entirely). Catches both forms Spring offers for the same footgun:",
@@ -473,25 +528,6 @@
       "stars": 0,
       "growth": 12800.0,
       "growthSince": "2026-08-26",
-      "growthFrom": 1
-    },
-    {
-      "xmlId": "dev.gaphunter.errorlenscompanion",
-      "name": "Error Lens Companion",
-      "pitch": "IntelliJ-family plugin. Shows errors and warnings inline, at the end of the line that has them, instead of only as a gutter icon or a squiggly underline you have to hover to read. One hint per line (most severe diagnostic wins) so it never turns into unreadable clutter.",
-      "why": "Ports the \"Error Lens\" concept -- VS Code's Error Lens extension has 10M+ installs and is one of that ecosystem's most-used extensions -- into the IDE's own highlighting pipeline. Confirmed before building this that no equivalent already exists in JetBrains Marketplace. Same \"port a proven concept, no equivalent exists yet\" bet as the other 6 plugins built this same session -- the same documented-exception discipline this follows.",
-      "niche": "Inline Diagnostics",
-      "githubUrl": "https://github.com/GapHunterLabs/error-lens-companion",
-      "firstPublished": "2026-08-14",
-      "repo": "error-lens-companion",
-      "marketplaceUrl": "https://plugins.jetbrains.com/plugin/33554-error-lens-companion",
-      "downloads": 129,
-      "pricing": "FREE",
-      "reviews": 0,
-      "rating": null,
-      "stars": 0,
-      "growth": 12800.0,
-      "growthSince": "2026-08-18",
       "growthFrom": 1
     },
     {
@@ -561,12 +597,12 @@
       "firstPublished": "2026-08-27",
       "repo": "cmake-companion",
       "marketplaceUrl": "https://plugins.jetbrains.com/plugin/33339-cmake-companion",
-      "downloads": 123,
+      "downloads": 124,
       "pricing": "FREE",
       "reviews": 0,
       "rating": null,
       "stars": 0,
-      "growth": 547.4,
+      "growth": 552.6,
       "growthSince": "2026-08-18",
       "growthFrom": 19
     },
@@ -951,6 +987,25 @@
       "growthFrom": 1
     },
     {
+      "xmlId": "dev.gaphunter.regexpreviewcompanion",
+      "name": "Regex Preview Companion",
+      "pitch": "IntelliJ-family plugin. A tool window with a pattern field and a sample-text area — type a regex, type or paste sample text, and every match is highlighted live as you type, with a real match count. Case insensitive, multiline, and dot-all flags are real checkboxes, not something you have to remember inline syntax for.",
+      "why": "Ports a pattern that's genuinely popular elsewhere (standalone regex testers are a daily tool for many developers) directly into the IDE, with no real equivalent already in JetBrains Marketplace (confirmed by search before building this, not assumed). A deliberate \"port a proven concept\" bet — the same documented-exception discipline this follows (same treatment as Refactor Simulator/Bean Copy Companion and the other plugins built this same session).",
+      "niche": "Regex Tooling",
+      "githubUrl": "https://github.com/GapHunterLabs/regex-preview-companion",
+      "firstPublished": "2026-08-27",
+      "repo": "regex-preview-companion",
+      "marketplaceUrl": "https://plugins.jetbrains.com/plugin/33553-regex-preview-companion",
+      "downloads": 88,
+      "pricing": "FREE",
+      "reviews": 0,
+      "rating": null,
+      "stars": 0,
+      "growth": 8700.0,
+      "growthSince": "2026-08-18",
+      "growthFrom": 1
+    },
+    {
       "xmlId": "dev.gaphunter.terraformiamwildcardcompanion",
       "name": "Terraform IAM Wildcard Companion",
       "pitch": "Warning on an IAM policy statement (inside a Terraform `aws_iam_policy`/`aws_iam_role_policy` resource's `jsonencode({...})` block) whose `Action` or `Resource` is `\"*\"` with no `Condition` scoping it down.",
@@ -967,25 +1022,6 @@
       "stars": 0,
       "growth": 8700.0,
       "growthSince": "2026-09-02",
-      "growthFrom": 1
-    },
-    {
-      "xmlId": "dev.gaphunter.regexpreviewcompanion",
-      "name": "Regex Preview Companion",
-      "pitch": "IntelliJ-family plugin. A tool window with a pattern field and a sample-text area — type a regex, type or paste sample text, and every match is highlighted live as you type, with a real match count. Case insensitive, multiline, and dot-all flags are real checkboxes, not something you have to remember inline syntax for.",
-      "why": "Ports a pattern that's genuinely popular elsewhere (standalone regex testers are a daily tool for many developers) directly into the IDE, with no real equivalent already in JetBrains Marketplace (confirmed by search before building this, not assumed). A deliberate \"port a proven concept\" bet — the same documented-exception discipline this follows (same treatment as Refactor Simulator/Bean Copy Companion and the other plugins built this same session).",
-      "niche": "Regex Tooling",
-      "githubUrl": "https://github.com/GapHunterLabs/regex-preview-companion",
-      "firstPublished": "2026-08-27",
-      "repo": "regex-preview-companion",
-      "marketplaceUrl": "https://plugins.jetbrains.com/plugin/33553-regex-preview-companion",
-      "downloads": 87,
-      "pricing": "FREE",
-      "reviews": 0,
-      "rating": null,
-      "stars": 0,
-      "growth": 8600.0,
-      "growthSince": "2026-08-18",
       "growthFrom": 1
     },
     {
@@ -1293,6 +1329,25 @@
       "growthFrom": 2
     },
     {
+      "xmlId": "dev.gaphunter.npmpeerdependencycompanion",
+      "name": "NPM Peer Dependency Companion",
+      "pitch": "Warning icon on a `package.json` `peerDependencies` entry whose real installed version (from `node_modules`) doesn't satisfy the declared semver range — or isn't installed at all. npm's own peer dependency model is opt-in and silent: since npm 7 it auto-installs a compatible peer if it can, but a version mismatch, an unresolved conflict, or a peer installed via a workspace/hoisting quirk all produ",
+      "why": "A library declares `\"react\": \"^18.0.0\"` as a peer dependency, the project actually has React 17 installed, `npm install` doesn't fail — and the first real signal is a confusing runtime error deep inside a hooks call, far from the `package.json` line that's actually wrong.",
+      "niche": "Node.js / npm Tooling",
+      "githubUrl": "https://github.com/GapHunterLabs/npm-peer-dependency-companion",
+      "firstPublished": "2026-08-25",
+      "repo": "npm-peer-dependency-companion",
+      "marketplaceUrl": "https://plugins.jetbrains.com/plugin/33814-npm-peer-dependency-companion",
+      "downloads": 70,
+      "pricing": "FREE",
+      "reviews": 0,
+      "rating": null,
+      "stars": 0,
+      "growth": 6900.0,
+      "growthSince": "2026-08-26",
+      "growthFrom": 1
+    },
+    {
       "xmlId": "dev.gaphunter.redislockmissingttlcompanion",
       "name": "Redis/Redisson Distributed Lock Missing TTL Companion",
       "pitch": "Warning on a `SET ... NX` call (Jedis's `SetParams.nx()`/Lettuce's `SetArgs.Builder.nx()` manual distributed-lock pattern) with no `EX`/`PX` expiry chained onto the same builder.",
@@ -1347,25 +1402,6 @@
       "stars": 0,
       "growth": 6800.0,
       "growthSince": "2026-09-02",
-      "growthFrom": 1
-    },
-    {
-      "xmlId": "dev.gaphunter.npmpeerdependencycompanion",
-      "name": "NPM Peer Dependency Companion",
-      "pitch": "Warning icon on a `package.json` `peerDependencies` entry whose real installed version (from `node_modules`) doesn't satisfy the declared semver range — or isn't installed at all. npm's own peer dependency model is opt-in and silent: since npm 7 it auto-installs a compatible peer if it can, but a version mismatch, an unresolved conflict, or a peer installed via a workspace/hoisting quirk all produ",
-      "why": "A library declares `\"react\": \"^18.0.0\"` as a peer dependency, the project actually has React 17 installed, `npm install` doesn't fail — and the first real signal is a confusing runtime error deep inside a hooks call, far from the `package.json` line that's actually wrong.",
-      "niche": "Node.js / npm Tooling",
-      "githubUrl": "https://github.com/GapHunterLabs/npm-peer-dependency-companion",
-      "firstPublished": "2026-08-25",
-      "repo": "npm-peer-dependency-companion",
-      "marketplaceUrl": "https://plugins.jetbrains.com/plugin/33814-npm-peer-dependency-companion",
-      "downloads": 69,
-      "pricing": "FREE",
-      "reviews": 0,
-      "rating": null,
-      "stars": 0,
-      "growth": 6800.0,
-      "growthSince": "2026-08-26",
       "growthFrom": 1
     },
     {
