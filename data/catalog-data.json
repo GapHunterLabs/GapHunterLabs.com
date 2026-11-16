@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-15 12:22:16 UTC",
+  "generatedAt": "2026-11-16 01:32:29 UTC",
   "totalPlugins": 146,
   "totalDownloads": 14558,
   "pending": 0,
@@ -7,10 +7,6 @@
   "totalReviews": 0,
   "avgRating": null,
   "trend7d": [
-    {
-      "date": "2026-11-09",
-      "totalDownloads": 14017
-    },
     {
       "date": "2026-11-10",
       "totalDownloads": 14074
@@ -34,45 +30,13 @@
     {
       "date": "2026-11-15",
       "totalDownloads": 14558
+    },
+    {
+      "date": "2026-11-16",
+      "totalDownloads": 14558
     }
   ],
-  "recentChanges": [
-    {
-      "date": "2026-11-15",
-      "type": "growth",
-      "name": "Mermaid Companion",
-      "niche": "Diagrams",
-      "delta": 5
-    },
-    {
-      "date": "2026-11-15",
-      "type": "growth",
-      "name": "XSD Companion",
-      "niche": "XSD/WSDL Tooling",
-      "delta": 2
-    },
-    {
-      "date": "2026-11-15",
-      "type": "growth",
-      "name": "React Native Companion",
-      "niche": "React Native Tooling",
-      "delta": 2
-    },
-    {
-      "date": "2026-11-15",
-      "type": "growth",
-      "name": "Git Hygiene Companion",
-      "niche": "Git Tooling",
-      "delta": 2
-    },
-    {
-      "date": "2026-11-15",
-      "type": "growth",
-      "name": "Error Lens Companion",
-      "niche": "Inline Diagnostics",
-      "delta": 2
-    }
-  ],
+  "recentChanges": [],
   "plugins": [
     {
       "xmlId": "dev.gaphunter.mermaidcompanion",
