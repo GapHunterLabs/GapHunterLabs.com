@@ -75,7 +75,9 @@ async function openBrowser() {
     '--remote-debugging-port=' + port, '--user-data-dir=' + profile, 'about:blank'], { stdio: 'ignore' });
   proc.on('error', (error) => { throw error; });
   let targets;
-  for (let attempt = 0; attempt < 80; attempt += 1) {
+  // 2026-11-17: 80 attempts (8s) was too tight on a CI runner -- a run that passed still took 7.5s to respond,
+  // and two later runs timed out just past that budget. 150 attempts (15s) gives real margin.
+  for (let attempt = 0; attempt < 150; attempt += 1) {
     try {
       const r = await fetch('http://127.0.0.1:' + port + '/json/list');
       targets = await r.json();
