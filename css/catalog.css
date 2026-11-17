@@ -1520,14 +1520,18 @@
 .catalog-v2 .spec-sheet dd { font-size: 13.5px; }
 /* Phones (2026-11-08): the six facts took the whole first screen (about 430px at 390px wide), so no plugin and
    no search box were visible on arrival. They now sit in two compact columns, label above value, and the two long
-   facts span the full width: nothing is hidden, the card is about half as tall. */
+   facts span the full width: nothing is hidden, the card is about half as tall.
+   2026-11-17: this used to pick the full-width rows by position (nth-child(n+5), assuming exactly 4 short rows
+   then 2 long ones). Adding the Atlassian Marketplace row made 5 short rows (odd), which pushed "Categories"
+   to full width too and added a whole extra row of height, overflowing the first screen on a phone. The long
+   rows are now marked with their own class so the row count no longer changes the layout. */
 @media (max-width: 700px) {
   .catalog-v2 .spec-sheet { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 16px; }
   .catalog-v2 .spec-sheet .spec-row { grid-template-columns: minmax(0, 1fr); gap: 2px; padding: 9px 12px; }
   .catalog-v2 .spec-sheet .spec-row:nth-child(-n+2) { border-top: 0; }
   .catalog-v2 .spec-sheet .spec-row:nth-child(n) { background: var(--band-a); border-left: 0; }
   .catalog-v2 .spec-sheet .spec-row:nth-child(even) { border-left: 1px solid var(--border); }
-  .catalog-v2 .spec-sheet .spec-row:nth-child(n+5) { grid-column: 1 / -1; border-left: 0; background: var(--band-b); }
+  .catalog-v2 .spec-sheet .spec-row.spec-row-wide { grid-column: 1 / -1; border-left: 0; background: var(--band-b); }
   .catalog-v2 .spec-sheet dd { font-size: 13px; line-height: 1.45; }
 }
 

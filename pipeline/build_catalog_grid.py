@@ -223,16 +223,27 @@ def build(dry_run: bool = False) -> None:
     # 2026-10-19: spec sheet instead of four big numbers (no download totals in the header).
     by_price = {k: sum(1 for p in src.plugins if p.get("pricing") == k) for k in ("FREE", "FREEMIUM", "PAID")}
     snapshot = (src.data.get("generatedAt") or "")[:10]
+    # Cada fila lleva su propia marca de "ancha" (wide=True va a ancho completo en el
+    # grid movil de 2 columnas, @media max-width:700px en css/catalog.css). Antes el CSS
+    # decidia esto por posicion (nth-child(n+5), asumiendo siempre 4 filas cortas seguidas
+    # de 2 largas); la clase explicita hace que el conteo de filas ya no afecte el layout
+    # por accidente. Atlassian Marketplace no tiene fila propia aqui a proposito: el mismo
+    # dato ya aparece en la pestana (su badge de conteo) y en el subtitulo de su propia
+    # seccion (ATLSUB) -- agregarla como 7ma fila volvia impar el grupo de filas cortas y
+    # sumaba una fila visual entera de alto, desbordando la primera pantalla de un telefono
+    # (confirmado: test de layout en 390x844 fallando por 62px).
     spec_rows = (
-        ("JetBrains IDEs", "%d plugins" % len(src.plugins)),
-        ("VS Code", "%d extensions" % len(vsx)),
-        ("Atlassian Marketplace", atl_spec_text(atl)),
-        ("Pricing", "%d free &middot; %d freemium &middot; %d paid" % (by_price["FREE"], by_price["FREEMIUM"], by_price["PAID"])),
-        ("Categories", "%d, each with its own filter below" % cat_count),
-        ("Source code", "A public GitHub repository for every plugin and extension"),
-        ("Data", "Synced twice a day from public JetBrains Marketplace and GitHub data; last snapshot %s" % snapshot),
+        ("JetBrains IDEs", "%d plugins" % len(src.plugins), False),
+        ("VS Code", "%d extensions" % len(vsx), False),
+        ("Pricing", "%d free &middot; %d freemium &middot; %d paid" % (by_price["FREE"], by_price["FREEMIUM"], by_price["PAID"]), False),
+        ("Categories", "%d, each with its own filter below" % cat_count, False),
+        ("Source code", "A public GitHub repository for every plugin and extension", True),
+        ("Data", "Synced twice a day from public JetBrains Marketplace and GitHub data; last snapshot %s" % snapshot, True),
     )
-    stats_html = "".join('<div class="spec-row"><dt>%s</dt><dd>%s</dd></div>' % row for row in spec_rows)
+    stats_html = "".join(
+        '<div class="spec-row%s"><dt>%s</dt><dd>%s</dd></div>' % (" spec-row-wide" if wide else "", label, value)
+        for label, value, wide in spec_rows
+    )
     _ = total_downloads
 
     counts = {c["key"]: 0 for c in src.categories}
