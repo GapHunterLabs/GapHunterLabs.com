@@ -103,6 +103,10 @@
   "en": "Flags known-vulnerable dependency versions directly in `pom.xml`, `build.gradle(.kts)`, `package.json`, and `requirements.txt`, matched against a vulnerability database bundled inside the plugin: zero account, zero token, zero network call, ever.",
   "es": "Marca versiones de dependencias con vulnerabilidades conocidas directamente en `pom.xml`, `build.gradle(.kts)`, `package.json` y `requirements.txt`, comparándolas con una base de vulnerabilidades incluida en el plugin: sin cuenta, sin token y sin ninguna llamada de red, nunca."
  },
+ "jetbrains:disposed-project-callback-companion": {
+  "en": "IntelliJ-family plugin, for people who write IntelliJ Platform plugins. Flags a callback that the IDE will run later when it uses a captured `Project` with no disposal guard and no expiry on the scheduling call: the shape behind the \"Already disposed\" errors users report against plugins.",
+  "es": "Plugin para la familia IntelliJ, pensado para quienes escriben plugins de IntelliJ Platform. Señala un callback que el IDE ejecutará más adelante usando un `Project` capturado, sin comprobar si fue disposed y sin vencimiento en la llamada programada: el patrón detrás de los errores \"Already disposed\" que los usuarios reportan contra los plugins."
+ },
  "jetbrains:dockerfile-layer-size-companion": {
   "en": "Shows the real, on-disk size of each `COPY`/`ADD` layer in an open Dockerfile, inline: computed by summing the actual file sizes of what gets copied from your local build context, respecting `.dockerignore`. No Docker daemon, no build, no network call: 100% static analysis of the project already open in the IDE.",
   "es": "Muestra en línea el tamaño real en disco de cada capa `COPY`/`ADD` de un Dockerfile abierto, calculado sumando el tamaño de los archivos que se copian desde tu contexto de build local y respetando `.dockerignore`. Sin daemon de Docker, sin build y sin llamadas de red: análisis 100 % estático del proyecto que ya está abierto en el IDE."
