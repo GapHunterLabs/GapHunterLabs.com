@@ -152,6 +152,7 @@ def stack_html():
         ("Platforms", [dict(label="JetBrains IDEs", icon="jetbrains", variant="dark"),
                        dict(label="IntelliJ IDEA", icon="intellij-idea", variant="dark"),
                        dict(label="VS Code", icon="vscode", variant="brand", hex6="007ACC"),
+                       dict(label="Atlassian Forge", icon="atlassian", variant="dark"),
                        dict(label="Windows", icon="windows", variant="dark"),
                        dict(label="Linux", variant="dark")]),
         ("Languages", [dict(label="Kotlin", icon="kotlin"), dict(label="Java", icon="java", variant="soft"),

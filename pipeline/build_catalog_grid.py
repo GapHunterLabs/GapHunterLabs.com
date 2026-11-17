@@ -61,6 +61,18 @@ def plugin_count_text(n: int) -> str:
     return "1 plugin" if n == 1 else "%d plugins" % n
 
 
+def atl_spec_text(apps: list) -> str:
+    if not apps:
+        return "Coming soon"
+    pending = sum(1 for a in apps if a.get("installs") is None)
+    total = len(apps)
+    if pending == total:
+        return ("1 app, pending review" if total == 1 else "%d apps, pending review" % total)
+    if pending == 0:
+        return ("1 app" if total == 1 else "%d apps" % total)
+    return "%d apps (%d pending review)" % (total, pending)
+
+
 def card_html(p, renderer: PluginRenderer, src: Sources) -> str:
     is_pending = p.get("downloads") is None
     cat = src.cat_by_key.get(p["categoryKey"], src.cat_by_key["other"])
@@ -206,12 +218,15 @@ def build(dry_run: bool = False) -> None:
     cat_count = len([c for c in src.categories if c["key"] != "other"])
     vsx_path = ROOT / "data" / "vscode-catalog-data.json"
     vsx = json.loads(vsx_path.read_text(encoding="utf-8")).get("extensions", []) if vsx_path.exists() else []
+    atl_path = ROOT / "data" / "atlassian-catalog-data.json"
+    atl = json.loads(atl_path.read_text(encoding="utf-8")).get("apps", []) if atl_path.exists() else []
     # 2026-10-19: spec sheet instead of four big numbers (no download totals in the header).
     by_price = {k: sum(1 for p in src.plugins if p.get("pricing") == k) for k in ("FREE", "FREEMIUM", "PAID")}
     snapshot = (src.data.get("generatedAt") or "")[:10]
     spec_rows = (
         ("JetBrains IDEs", "%d plugins" % len(src.plugins)),
         ("VS Code", "%d extensions" % len(vsx)),
+        ("Atlassian Marketplace", atl_spec_text(atl)),
         ("Pricing", "%d free &middot; %d freemium &middot; %d paid" % (by_price["FREE"], by_price["FREEMIUM"], by_price["PAID"])),
         ("Categories", "%d, each with its own filter below" % cat_count),
         ("Source code", "A public GitHub repository for every plugin and extension"),
@@ -266,6 +281,37 @@ def build(dry_run: bool = False) -> None:
                   "".join(vsx_card(e) for e in vsx), "VSXGRID")
     html = inject(html, "<!-- PRERENDER:TABJB:START -->", "<!-- PRERENDER:TABJB:END -->", str(len(src.plugins)), "TABJB")
     html = inject(html, "<!-- PRERENDER:TABVSX:START -->", "<!-- PRERENDER:TABVSX:END -->", str(len(vsx)), "TABVSX")
+
+    # ---- Atlassian Marketplace: tarjetas pre-renderizadas (2026-11-17) --------
+    # Mismo markup que js/catalog-atlassian.js's cardHtml(); consciente de
+    # "pending" (installs=null) igual que card_html() de JetBrains mas arriba --
+    # nunca afirma una instalacion que todavia no existe.
+    def atl_card(e):
+        is_pending = e.get("installs") is None
+        n = e.get("installs") or 0
+        price_badge = ('<span class="price-badge price-pending">Pending</span>' if is_pending else
+                       '<span class="price-badge price-free">Free</span>')
+        metrics = ("Pending moderation" if is_pending else
+                   "%s %s" % (thousands(n), "install" if n == 1 else "installs"))
+        return (
+            '<a class="vsx-card atl-card" href="/catalog/atlassian/%s/">'
+            '<div class="card-header"><span class="card-cat atl-mark" aria-hidden="true">%s</span>'
+            '%s</div>'
+            '<div class="card-top"><div class="card-name">%s</div><div class="card-niche">%s</div></div>'
+            '<p class="card-pitch">%s</p>'
+            '<div class="card-metrics"><span class="card-dl-wrap">%s</span>'
+            '<span class="card-go">Details</span></div></a>'
+            % (esc(e.get("name")), src.icons["atlassian"], price_badge, esc(e.get("displayName")), esc(e.get("niche")),
+               esc(pitch_text(e.get("pitch"))), metrics))
+
+    html = inject(html, "<!-- PRERENDER:ATLSUB:START -->", "<!-- PRERENDER:ATLSUB:END -->",
+                  ("Apps for Jira Cloud, built with the same evidence-driven approach as the rest of the catalog."
+                   if not atl else
+                   "%s, built with the same evidence-driven approach as the rest of the catalog." % atl_spec_text(atl)),
+                  "ATLSUB")
+    html = inject(html, "<!-- PRERENDER:ATLGRID:START -->", "<!-- PRERENDER:ATLGRID:END -->",
+                  "".join(atl_card(e) for e in atl), "ATLGRID")
+    html = inject(html, "<!-- PRERENDER:TABATL:START -->", "<!-- PRERENDER:TABATL:END -->", str(len(atl)), "TABATL")
 
     # ---- hubs: data/hubs.json (la seccion no existe hasta el primer hub) ----
     hubs_path = ROOT / "data" / "hubs.json"

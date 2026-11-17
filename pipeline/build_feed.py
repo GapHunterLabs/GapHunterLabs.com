@@ -43,6 +43,10 @@ def main() -> int:
         if e.get("publishedDate"):
             items.append((e["publishedDate"][:10], e["displayName"], "%s/catalog/vscode/%s/" % (SITE_URL, e["name"]),
                           plain_text(e.get("pitch")), "VS Code extension · " + (e.get("niche") or "")))
+    for e in src.atl_list:
+        if e.get("publishedDate"):
+            items.append((e["publishedDate"][:10], e["displayName"], "%s/catalog/atlassian/%s/" % (SITE_URL, e["name"]),
+                          plain_text(e.get("pitch")), "Atlassian Marketplace app · " + (e.get("niche") or "")))
     items.sort(key=lambda i: (i[0], i[1]), reverse=True)
     items = items[:MAX_ITEMS]
     if not items:

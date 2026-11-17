@@ -59,6 +59,7 @@ CATALOG_URL = SITE + "/catalog/"
 
 DATA_FILE = ROOT / "data" / "catalog-data.json"
 VSX_DATA_FILE = ROOT / "data" / "vscode-catalog-data.json"
+ATL_DATA_FILE = ROOT / "data" / "atlassian-catalog-data.json"
 SHARED_JS = ROOT / "js" / "catalog-shared.js"
 # Optional (2026-11-08): the yearly price of a paid plugin, as listed on JetBrains Marketplace. The public API does
 # not expose prices, so the owner fills this file by hand; a plugin without an entry shows no amount (never a guess).
@@ -448,6 +449,16 @@ class Sources:
                 if e.get("name"):
                     self.vsx_by_repo[e["name"]] = e
                     self.vsx_list.append(e)
+
+        # Cross-reference real a Atlassian Marketplace, por el mismo slug de repo.
+        self.atl_by_repo = {}
+        self.atl_list = []
+        if ATL_DATA_FILE.exists():
+            atl = json.loads(ATL_DATA_FILE.read_text(encoding="utf-8"))
+            for e in atl.get("apps", []):
+                if e.get("name"):
+                    self.atl_by_repo[e["name"]] = e
+                    self.atl_list.append(e)
 
         self.css = self._build_css()
         self.cat_color = self._resolve_category_colors()
@@ -988,6 +999,132 @@ class PluginRenderer:
                  % esc((self.src.data.get("generatedAt") or "")[:10]))
         return "".join(h)
 
+    # ---- Atlassian Marketplace (tercera plataforma, 2026-11-17) ----------
+    # Workflow Gap Companion aun no pasa la revision de Atlassian: sin URL de
+    # marketplace, sin instalaciones reales todavia. is_pending espeja el
+    # mismo criterio que ya usa card_html() de JetBrains (downloads/installs
+    # en None = pendiente), para no afirmar nunca una instalacion que no
+    # existe (ver regla "Prohibido: declarar una feature como hecha...").
+    def atl_path(self, e):
+        return "atlassian/%s" % e["name"]
+
+    def atl_title(self, e):
+        base = "%s for Jira Cloud" % e["displayName"]
+        branded = base + " | Gap Hunter Labs"
+        return branded if len(branded) <= TITLE_SOFT_MAX else truncate(base, TITLE_SOFT_MAX)
+
+    def atl_description(self, e):
+        text = pitch_text(e.get("pitch")) or ("%s for Jira Cloud." % e["displayName"])
+        limit = DESC_MAX
+        result = truncate(text, limit)
+        while len(esc(result)) > DESC_MAX and limit > 40:
+            limit -= 10
+            result = truncate(text, limit)
+        return result
+
+    def atl_jsonld(self, e, url):
+        app = {
+            "@type": "SoftwareApplication", "@id": url + "#app", "name": e["displayName"], "url": url,
+            "description": pitch_text(e.get("pitch")), "applicationCategory": "DeveloperApplication",
+            "operatingSystem": "Jira Cloud", "publisher": {"@id": ORG_ID},
+            "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+            "sameAs": [u for u in (e.get("marketplaceUrl"), e.get("githubUrl")) if u],
+        }
+        if e.get("marketplaceUrl"):
+            app["downloadUrl"] = e["marketplaceUrl"]
+        if e.get("version"):
+            app["softwareVersion"] = e["version"]
+        if e.get("publishedDate"):
+            app["datePublished"] = e["publishedDate"][:10]
+        crumbs = {"@type": "BreadcrumbList", "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": SITE + "/"},
+            {"@type": "ListItem", "position": 2, "name": "Catalog", "item": CATALOG_URL},
+            {"@type": "ListItem", "position": 3, "name": "Atlassian Marketplace apps", "item": CATALOG_URL + "?platform=atlassian"},
+            {"@type": "ListItem", "position": 4, "name": e["displayName"]}]}
+        return json.dumps({"@context": "https://schema.org", "@graph": [app, crumbs]}, ensure_ascii=False)
+
+    def atl_card_html(self, o):
+        is_pending = o.get("installs") is None
+        n = o.get("installs") or 0
+        price_badge_html = ('<span class="price-badge price-pending">Pending</span>' if is_pending
+                             else '<span class="price-badge price-free">Free</span>')
+        foot = "Pending moderation" if is_pending else "%s %s" % (thousands(n), "install" if n == 1 else "installs")
+        # No aria-label: ver la nota de vsx_card_html, mismo criterio (WCAG 2.5.3).
+        return (
+            '<a class="rel-card" href="/catalog/atlassian/%s/">'
+            '<div class="rel-head"><span class="card-cat" style="--cat:var(--accent)" aria-hidden="true">%s</span>'
+            '%s</div>'
+            '<div class="rel-name">%s</div><div class="rel-niche">%s</div><p class="rel-pitch">%s</p>'
+            '<div class="rel-foot"><span>%s</span><span class="rel-go">Details</span></div></a>'
+        ) % (esc(o["name"]), self.src.icons["atlassian"], price_badge_html, esc(o["displayName"]),
+             esc(o.get("niche")), esc(pitch_text(o.get("pitch")) or ""), foot)
+
+    def atl_body_html(self, e):
+        src, icons = self.src, self.src.icons
+        is_pending = e.get("installs") is None
+        n = e.get("installs") or 0
+        others = sorted((o for o in src.atl_list if o["name"] != e["name"]),
+                        key=lambda o: (o.get("niche") != e.get("niche"), -(o.get("installs") or 0)))[:SIMILAR_MAX]
+        h = ['<nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span class="crumb-sep">›</span>'
+             '<a href="/catalog/">Catalog</a><span class="crumb-sep">›</span>'
+             '<a href="/catalog/?platform=atlassian">Atlassian</a><span class="crumb-sep">›</span>'
+             '<span aria-current="page">%s</span></nav>' % esc(e["displayName"])]
+        h.append('<header class="plugin-hero page-hero band-dark gh-page-header no-media"><div class="ph-copy">')
+        h.append('<p class="contact-kicker">Atlassian Marketplace app</p>')
+        price_badge_hero = ('<span class="price-badge price-pending">Pending</span>' if is_pending
+                             else '<span class="price-badge price-free">Free</span>')
+        h.append('<div class="ph-title-row"><h1>%s</h1>%s</div>' % (esc(e["displayName"]), price_badge_hero))
+        h.append('<p class="ph-niche">%s</p>' % esc(e.get("niche")))
+        h.append('<p class="ph-lead">%s</p>' % md_inline(pitch_prose(e.get("pitch")) or "—"))
+        h.append('<div class="ph-actions">')
+        if e.get("marketplaceUrl"):
+            h.append('<a class="btn primary" href="%s" target="_blank" rel="noopener" data-goatcounter-click="out-atl-install-%s">'
+                     '<span class="btn-icon">%s</span>Install from Atlassian Marketplace ↗</a>'
+                     % (esc(safe_url(e["marketplaceUrl"])), esc(e["name"]), icons["atlassian"]))
+        if e.get("githubUrl"):
+            h.append('<a class="btn" href="%s" target="_blank" rel="noopener" data-goatcounter-click="out-github-atl-%s">'
+                     '<span class="btn-icon">%s</span>GitHub ↗</a>' % (esc(safe_url(e["githubUrl"])), esc(e["name"]), icons["github"]))
+        h.append('</div>')
+        stat = lambda num, label: ('<div class="hdr-stat"><span class="hdr-stat-num">%s</span>'
+                                   '<span class="hdr-stat-label">%s</span></div>' % (num, label))
+        h.append('<div class="hdr-stats ph-stats">%s%s%s%s</div>' % (
+            stat("Pending" if is_pending else thousands(n), "Installs"), stat(esc(e.get("version") or "—"), "Version"),
+            stat(esc((e.get("publishedDate") or "—")[:10]), "Published"),
+            stat(esc((e.get("lastUpdated") or "—")[:10]), "Last updated")))
+        h.append('</div></header>')
+
+        fact = lambda k, v: '<div class="fact"><dt>%s</dt><dd>%s</dd></div>' % (k, v)
+        atl_id_m = re.search(r"/apps/(\d+)", e.get("marketplaceUrl") or "")
+        item = atl_id_m.group(1) if atl_id_m else ""
+        share_item = {"repo": self.atl_path(e), "name": e["displayName"], "niche": e.get("niche")}
+        h.append('<section class="pb-card pb-facts pb-gap"><div class="pb-facts-head"><h2 class="pb-title">Facts and pricing</h2>%s</div>'
+                 '<dl class="facts-table">%s</dl></section>' % (self.share_html(share_item, platform="Atlassian Marketplace"), "".join((
+                     fact("Platform", badge("Atlassian Marketplace", icon="atlassian", variant="dark")),
+                     fact("Pricing", price_badge("pending", "Pending") if is_pending else price_badge("free", "Free")),
+                     fact("Version", esc(e.get("version") or "—")),
+                     fact("First published", esc((e.get("publishedDate") or "—")[:10])),
+                     fact("Last updated", esc((e.get("lastUpdated") or "—")[:10])),
+                     fact("Marketplace ID", "<code>%s</code>" % esc(item) if item else "—"),
+                     fact("Repository", '<code>%s</code><button type="button" class="copy-btn" data-copy="%s" '
+                                        'aria-label="Copy repository name">%s</button>' % (esc(e.get("repo") or ""), esc(e.get("repo") or ""), icons["copy"])),
+                 ))))
+        if others:
+            h.append('<section class="similar-section"><div class="similar-head"><h2 class="similar-title">Related apps</h2>'
+                     '<a class="similar-all" href="/catalog/?platform=atlassian">All Atlassian Marketplace apps</a></div><div class="similar-grid">')
+            h.extend(self.atl_card_html(o) for o in others)
+            h.append('</div></section>')
+        h.append('<div class="hire-band"><div><strong>Need a tool like this built for your Jira or Confluence site?</strong>'
+                 '<span>Custom Forge apps and inspections for your workflows, at a fixed price.</span></div>'
+                 '<a class="btn primary" href="/contact/?intent=hire&amp;service=custom&amp;plugin=%s" data-goatcounter-click="cta-atl-hire-%s">'
+                 'Ask for a quote</a></div>' % (esc(e["name"]), esc(e["name"])))
+        if is_pending:
+            h.append('<p class="plugin-asof">Not yet published on the Atlassian Marketplace: this listing is pending review. '
+                     'Install counts will appear here once it goes live.</p>')
+        else:
+            h.append('<p class="plugin-asof">Install counts as of %s, refreshed daily from the Atlassian Marketplace API.</p>'
+                     % esc((self.src.data.get("generatedAt") or "")[:10]))
+        return "".join(h)
+
     # ---- metadatos -------------------------------------------------------
     def title(self, p):
         # Presupuesto de caracteres, no una plantilla fija: el nombre del
@@ -1404,6 +1541,35 @@ def main():
         out.write_text(page, encoding="utf-8")
         vsx_written += 1
     print("[build] %d fichas VS Code escritas -> catalog/vscode/<name>/index.html" % vsx_written)
+
+    # ---- fichas de apps Atlassian Marketplace (2026-11-17) --------------------
+    atl_written = 0
+    for e in ([] if args.limit else src.atl_list):
+        if not re.match(r"^[a-z0-9]+(?:-[a-z0-9]+)*$", e["name"]):
+            die("nombre de app invalido como ruta: %r" % e["name"])
+        slug = renderer.atl_path(e)
+        url = "%s/catalog/%s/" % (SITE, slug)
+        has_own_og = (MEDIA_DIR / slug / "og.png").exists()
+        page = shell.render(
+            title=renderer.atl_title(e), og_title="%s — Gap Hunter Labs" % e["displayName"],
+            desc=renderer.atl_description(e), url=url, jsonld=renderer.atl_jsonld(e, url),
+            body=renderer.atl_body_html(e),
+            og_image="%s/media/%s/og.png?v=%s" % (SITE, slug, OG_VERSION) if has_own_og else OG_IMAGE,
+            og_image_alt=("%s — Atlassian Marketplace app — Gap Hunter Labs" % e["displayName"]) if has_own_og else OG_IMAGE_ALT)
+        page = page.replace('<div class="app-main">', '<div class="app-main plugin-page">', 1)
+        fingerprint = json.dumps({k: e.get(k) for k in ("displayName", "pitch", "niche", "version", "marketplaceUrl", "installs")},
+                                 ensure_ascii=False, sort_keys=True)
+        prev = store.get(slug, {})
+        lastmod = prev.get("lastmod", today) if prev.get("fingerprint") == fingerprint else today
+        lastmods.append((slug, lastmod))
+        store[slug] = {"fingerprint": fingerprint, "lastmod": lastmod}
+        out = ROOT / "catalog" / slug / "index.html"
+        if args.dry_run or (out.exists() and out.read_text(encoding="utf-8") == page):
+            continue
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(page, encoding="utf-8")
+        atl_written += 1
+    print("[build] %d fichas Atlassian escritas -> catalog/atlassian/<name>/index.html" % atl_written)
 
     if args.dry_run:
         print("[dry-run] %d fichas renderizadas, nada escrito" % written)

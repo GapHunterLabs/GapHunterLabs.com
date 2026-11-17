@@ -55,6 +55,9 @@ CSS = """
 
 ACCENT = "#FF6A1A"  # the site's signal orange: the category colors in the catalog are neutral grays, too dim for a thumbnail
 VSCODE_MARK = '<svg class="solid" viewBox="0 0 24 24" aria-hidden="true"><path d="M16.5 3 21 5.2v13.6L16.5 21 7 12.9 3.6 15.6 2 14.8V9.2l1.6-.8L7 11.1 16.5 3Zm0 4.2-5 4.8 5 4.8V7.2Z"/></svg>'
+# Generic workflow-graph mark (3 nodes), not an Atlassian/Jira logo -- see js/catalog-shared.js's "atlassian" entry.
+ATLASSIAN_MARK = ('<svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="6" cy="6" r="2"/><circle cx="14" cy="6" r="2"/>'
+                   '<circle cx="10" cy="15" r="2"/><path d="M7.6 7.2 8.5 13.3M12.4 7.2 11.5 13.3"/></svg>')
 
 
 def name_size(name: str) -> int:
@@ -103,11 +106,20 @@ def extension_job(renderer: PluginRenderer, e: dict):
     return "vscode/" + e["name"], html
 
 
+def atlassian_job(renderer: PluginRenderer, e: dict):
+    is_pending = e.get("installs") is None
+    badges = K.badges_html(["atlassian", "pending" if is_pending else "free"])
+    html = K.page_html("en", body(e["displayName"], truncate(renderer.atl_description(e), 150), badges, ACCENT, ATLASSIAN_MARK),
+                       css=CSS, label=e.get("niche") or "Atlassian Marketplace app",
+                       host="%s/catalog/atlassian/%s/" % (K.SITE_HOST, e["name"]))
+    return "atlassian/" + e["name"], html
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--limit", type=int, default=None, help="solo los primeros N de cada grupo")
     ap.add_argument("--slug", default=None, help="solo este plugin (repo) o extension (vscode/<name>)")
-    ap.add_argument("--only", choices=("jetbrains", "vscode"), default=None)
+    ap.add_argument("--only", choices=("jetbrains", "vscode", "atlassian"), default=None)
     ap.add_argument("--out-dir", default=str(MEDIA_DIR), help="donde escribir <key>/og.png (default: media/)")
     ap.add_argument("--html", metavar="DIR", default=None, help="tambien escribe el HTML fuente en DIR (depuracion)")
     args = ap.parse_args()
@@ -115,16 +127,21 @@ def main() -> None:
     src = Sources()
     renderer = PluginRenderer(src)
     jobs = []
-    if args.only != "vscode":
+    if args.only is None or args.only == "jetbrains":
         rows = src.plugins
         if args.limit:
             rows = rows[: args.limit]
         jobs += [plugin_job(renderer, src, p) for p in rows]
-    if args.only != "jetbrains":
+    if args.only is None or args.only == "vscode":
         rows = src.vsx_list
         if args.limit:
             rows = rows[: args.limit]
         jobs += [extension_job(renderer, e) for e in rows]
+    if args.only is None or args.only == "atlassian":
+        rows = src.atl_list
+        if args.limit:
+            rows = rows[: args.limit]
+        jobs += [atlassian_job(renderer, e) for e in rows]
     if args.slug:
         jobs = [j for j in jobs if j[0] == args.slug]
         if not jobs:
@@ -136,7 +153,9 @@ def main() -> None:
 
     written = K.render(jobs, lambda key: Path(args.out_dir) / key / "og.png", label="build_og_images")
     for out in written:
-        print("  %-60s %4.0f KB" % (out.parent.name if out.parent.parent.name != "vscode" else "vscode/" + out.parent.name, out.stat().st_size / 1024))
+        group = out.parent.parent.name
+        label = out.parent.name if group not in ("vscode", "atlassian") else group + "/" + out.parent.name
+        print("  %-60s %4.0f KB" % (label, out.stat().st_size / 1024))
     print("\nOK -- %d imagen(es) OG generada(s)." % len(written))
 
 
