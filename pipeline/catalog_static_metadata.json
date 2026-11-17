@@ -236,6 +236,15 @@
       "githubUrl": "https://github.com/GapHunterLabs/dependency-vulnerability-companion",
       "firstPublished": null
     },
+    "disposed-project-callback-companion": {
+      "name": "Disposed Project Callback Companion",
+      "niche": "IntelliJ Platform Pitfalls",
+      "pitch": "IntelliJ-family plugin, for people who write IntelliJ Platform plugins. Flags a callback that the IDE will run later when it uses a captured `Project` with no disposal guard and no expiry on the scheduling call -- the shape behind the \"Already disposed\" errors users report against plugins.",
+      "why": "Not the usual \"a paid competitor's users are complaining\" story this catalog is built around. This one comes from JetBrains' own fixes and docs:\n\n- The [Disposer and Disposable](https://plugins.jetbrains.com/docs/intellij/disposers.html) page of the SDK docs: \"Use `Disposer.isDisposed()` to check whether a `Disposable` has already been disposed. This check is useful, for example, for an asynchronous callback to a `Disposable` that may be disposed before the callback is executed.\"\n- The canonical answer on the JetBrains support forum to \"What does `java.lang.AssertionError: Already disposed` mean?\": an `invokeLater()` whose project was closed before the runnable ran; pass a disposed condition to `invokeLater()`.\n- JetBrains' own history: since 2024, 86 commits in `intellij-community` whose fix adds an `isDisposed` check. The exact shape this plugin flags is the one fixed in IDEA-394513 (`UnknownJdkInstallerListener`) and IJPL-253421 (`ActionTracker`), both in October and September 2026.\n\nVerified before building (DevKit source on `master`, Marketplace search, two web search passes): Plugin DevKit has inspections about the wrong parent `Disposable`, listeners that implement `Disposable` and extensions that hold state, and nothing about a callback that uses a project after it was disposed. The only existing defense is the exception itself.",
+      "xmlId": "dev.gaphunter.disposedprojectcallbackcompanion",
+      "githubUrl": "https://github.com/GapHunterLabs/disposed-project-callback-companion",
+      "firstPublished": null
+    },
     "dockerfile-layer-size-companion": {
       "xmlId": "dev.gaphunter.dockerfilelayersizecompanion",
       "name": "Dockerfile Layer Size Companion",
