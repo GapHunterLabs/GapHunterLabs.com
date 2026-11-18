@@ -1,16 +1,12 @@
 {
-  "generatedAt": "2026-11-17 13:57:41 UTC",
+  "generatedAt": "2026-11-18 03:17:12 UTC",
   "totalPlugins": 147,
   "totalDownloads": 14682,
-  "pending": 1,
+  "pending": 0,
   "totalStars": 0,
   "totalReviews": 0,
   "avgRating": null,
   "trend7d": [
-    {
-      "date": "2026-11-11",
-      "totalDownloads": 14146
-    },
     {
       "date": "2026-11-12",
       "totalDownloads": 14342
@@ -34,45 +30,13 @@
     {
       "date": "2026-11-17",
       "totalDownloads": 14682
+    },
+    {
+      "date": "2026-11-18",
+      "totalDownloads": 14682
     }
   ],
-  "recentChanges": [
-    {
-      "date": "2026-11-17",
-      "type": "growth",
-      "name": "React Native Companion",
-      "niche": "React Native Tooling",
-      "delta": 5
-    },
-    {
-      "date": "2026-11-17",
-      "type": "growth",
-      "name": "Mermaid Companion",
-      "niche": "Diagrams",
-      "delta": 4
-    },
-    {
-      "date": "2026-11-17",
-      "type": "growth",
-      "name": "AWS S3 Public ACL via SDK Companion",
-      "niche": "AWS Security",
-      "delta": 4
-    },
-    {
-      "date": "2026-11-17",
-      "type": "growth",
-      "name": "JWT Companion",
-      "niche": "JWT / Auth Tooling",
-      "delta": 3
-    },
-    {
-      "date": "2026-11-17",
-      "type": "growth",
-      "name": "Config Secrets File Companion",
-      "niche": "Secrets Detection",
-      "delta": 3
-    }
-  ],
+  "recentChanges": [],
   "plugins": [
     {
       "xmlId": "dev.gaphunter.mermaidcompanion",
@@ -2857,11 +2821,12 @@
       "githubUrl": "https://github.com/GapHunterLabs/disposed-project-callback-companion",
       "firstPublished": null,
       "repo": "disposed-project-callback-companion",
-      "marketplaceUrl": null,
-      "downloads": null,
-      "pricing": null,
+      "marketplaceUrl": "https://plugins.jetbrains.com/plugin/36199-disposed-project-callback-companion",
+      "downloads": 0,
+      "pricing": "FREE",
       "reviews": 0,
       "rating": null,
+      "stars": 0,
       "growth": null,
       "growthSince": null,
       "growthFrom": null
