@@ -181,6 +181,7 @@ PATTERNS = (
     # titulos de las fichas (2026-10-05; nombre y nicho son datos)
     (re.compile(r"^(.+) — (.+) for IntelliJ \| Gap Hunter Labs$"), r"\1 — \2 para IntelliJ | Gap Hunter Labs"),
     (re.compile(r"^(.+) for VS Code \| Gap Hunter Labs$"), r"\1 para VS Code | Gap Hunter Labs"),
+    (re.compile(r"^(.+) for Jira Cloud \| Gap Hunter Labs$"), r"\1 para Jira Cloud | Gap Hunter Labs"),
     (re.compile(r"^(.+) — Gap Hunter Labs$"), r"\1 — Gap Hunter Labs"),
     (re.compile(r"^(.+) — (.+) for IntelliJ$"), r"\1 — \2 para IntelliJ"),
     (re.compile(r"^(.+) for IntelliJ$"), r"\1 para IntelliJ"),
@@ -190,11 +191,12 @@ PATTERNS = (
 
 def plugin_names():
     names = set()
-    for rel, key in (("data/catalog-data.json", "name"), ("data/vscode-catalog-data.json", "displayName")):
+    for rel, key in (("data/catalog-data.json", "name"), ("data/vscode-catalog-data.json", "displayName"),
+                     ("data/atlassian-catalog-data.json", "displayName")):
         f = ROOT / rel
         if f.exists():
             data = json.loads(f.read_text(encoding="utf-8"))
-            items = data.get("plugins") or data.get("extensions") or []
+            items = data.get("plugins") or data.get("extensions") or data.get("apps") or []
             names.update(i.get(key) for i in items if i.get(key))
     return names
 
