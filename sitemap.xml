@@ -897,6 +897,10 @@
     <lastmod>2026-11-17</lastmod>
   </url>
   <url>
+    <loc>https://gaphunterlabs.com/es/catalogo/atlassian/workflow-gap-companion/</loc>
+    <lastmod>2026-11-17</lastmod>
+  </url>
+  <url>
     <loc>https://gaphunterlabs.com/catalog/mermaid-companion/</loc>
     <lastmod>2026-09-28</lastmod>
   </url>
@@ -1615,5 +1619,9 @@
   <url>
     <loc>https://gaphunterlabs.com/catalog/vscode/wrangler-config-companion/</loc>
     <lastmod>2026-09-28</lastmod>
+  </url>
+  <url>
+    <loc>https://gaphunterlabs.com/catalog/atlassian/workflow-gap-companion/</loc>
+    <lastmod>2026-11-17</lastmod>
   </url>
 </urlset>

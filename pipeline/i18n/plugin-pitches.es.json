@@ -1,4 +1,8 @@
 {
+ "atlassian:workflow-gap-companion": {
+  "en": "Finds Jira workflow states with no way out, including closed loops that never reach Done.",
+  "es": "Encuentra estados de un workflow de Jira sin salida, incluidos ciclos cerrados que nunca llegan a Done."
+ },
  "jetbrains:ansible-companion": {
   "en": "**Encrypt and decrypt Ansible Vault (1.1/AES256 format) directly in the editor**, without depending on `ansible-vault` being installed.",
   "es": "**Cifra y descifra Ansible Vault (formato 1.1/AES256) directamente en el editor**, sin depender de que `ansible-vault` esté instalado."

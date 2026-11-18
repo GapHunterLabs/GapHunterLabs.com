@@ -5,7 +5,7 @@
    accesibilidad: dialogo modal + combobox con listbox (aria-activedescendant). */
 (function () {
   'use strict';
-  var DATA_URL = /*DATA_URL*/'/js/search-data.js?v=a88e4a20'/*ENDDATA_URL*/;
+  var DATA_URL = /*DATA_URL*/'/js/search-data.js?v=66c5a136'/*ENDDATA_URL*/;
   var ES = document.documentElement.lang === 'es';
   var LOCALE = ES ? 'es-ES' : 'en-US';
   // 2026-10-19: 'es-ES' leaves 4-digit numbers ungrouped ("1234") while the /es/ pages group them ("1.295").
@@ -19,7 +19,7 @@
     open: 'Abrir la página →', market: 'Marketplace ↗', count: '%s resultados', one: '1 resultado',
     hint: '↑↓ para moverte · Enter para abrir · Esc para cerrar', loading: 'Cargando…',
     downloads: '%s descargas', installs: '%s instalaciones',
-    type: { p: 'Plugin para JetBrains', v: 'Extensión para VS Code', g: 'Página', c: 'Caso de estudio', k: 'Ticket de JetBrains' },
+    type: { p: 'Plugin para JetBrains', v: 'Extensión para VS Code', a: 'App de Atlassian Marketplace', g: 'Página', c: 'Caso de estudio', k: 'Ticket de JetBrains' },
     price: { FREE: 'Gratis', FREEMIUM: 'Freemium', PAID: 'De pago' }, catalog: '/es/catalogo/'
   } : {
     dialog: 'Search the site', placeholder: 'Search plugins, extensions and pages…', close: 'Close search',
@@ -28,7 +28,7 @@
     open: 'Open page →', market: 'Marketplace ↗', count: '%s results', one: '1 result',
     hint: '↑↓ to move · Enter to open · Esc to close', loading: 'Loading…',
     downloads: '%s downloads', installs: '%s installs',
-    type: { p: 'JetBrains plugin', v: 'VS Code extension', g: 'Page', c: 'Case study', k: 'JetBrains ticket' },
+    type: { p: 'JetBrains plugin', v: 'VS Code extension', a: 'Atlassian Marketplace app', g: 'Page', c: 'Case study', k: 'JetBrains ticket' },
     price: { FREE: 'Free', FREEMIUM: 'Freemium', PAID: 'Paid' }, catalog: '/catalog/'
   };
   var MAX_RESULTS = 8;
@@ -71,7 +71,7 @@
     g.forEach(function (w) { SYN[w] = (SYN[w] || []).concat(g.filter(function (x) { return x !== w; })); });
   });
   var PRICE_WORDS = { free: 'FREE', gratis: 'FREE', gratuito: 'FREE', freemium: 'FREEMIUM', paid: 'PAID', pago: 'PAID', pro: 'PAID' };
-  var PLATFORM_WORDS = { vscode: 'v', jetbrains: 'p', intellij: 'p' };
+  var PLATFORM_WORDS = { vscode: 'v', jetbrains: 'p', intellij: 'p', atlassian: 'a', jira: 'a' };
 
   // Distancia de edicion con transposiciones ("ansibel" -> "ansible" = 1).
   function editDistance(a, b, max) {
@@ -115,13 +115,14 @@
   // ---- indice ----------------------------------------------------------
   var INDEX = null;
   function urlFor(it) {
-    if (it.t === 'p' || it.t === 'v') return ES ? '/es/catalogo/' + it.u.slice('/catalog/'.length) : it.u;
+    if (it.t === 'p' || it.t === 'v' || it.t === 'a') return ES ? '/es/catalogo/' + it.u.slice('/catalog/'.length) : it.u;
     return pick(it.u);
   }
   function buildIndex(data) {
     return data.items.map(function (it) {
       var name = pick(it.n), cat = pick(it.c), desc = pick(it.d);
-      var tags = [it.k, cat, it.t === 'v' ? 'vscode extension' : it.t === 'p' ? 'jetbrains plugin intellij' : '',
+      var tags = [it.k, cat, it.t === 'v' ? 'vscode extension' : it.t === 'p' ? 'jetbrains plugin intellij' :
+                  it.t === 'a' ? 'atlassian marketplace jira app' : '',
                   it.pr ? T.price[it.pr] + ' ' + it.pr : '', it.t === 'k' ? pick(it.st) + ' ticket' : '',
                   it.t === 'c' ? 'case study caso estudio' : ''].join(' ');
       var nName = norm(name), nSlug = norm(it.s || ''), nTags = norm(tags), nDesc = norm(desc);
@@ -165,7 +166,7 @@
   }
 
   function suggestions() {
-    var plugins = INDEX.filter(function (d) { return d.it.t === 'p' || d.it.t === 'v'; })
+    var plugins = INDEX.filter(function (d) { return d.it.t === 'p' || d.it.t === 'v' || d.it.t === 'a'; })
       .sort(function (a, b) { return (b.it.dl || 0) - (a.it.dl || 0); }).slice(0, 5);
     var pages = INDEX.filter(function (d) { return d.it.t === 'g' && d.url !== (ES ? '/es/' : '/'); }).slice(0, 3);
     return plugins.concat(pages);
@@ -236,7 +237,7 @@
 
   function itemHtml(d, i, terms) {
     var it = d.it;
-    var meta = it.t === 'p' || it.t === 'v'
+    var meta = it.t === 'p' || it.t === 'v' || it.t === 'a'
       ? esc(it.k) + (it.pr ? ' · ' + esc(T.price[it.pr]) : '')
       : esc(String(pick(it.d) == null ? '' : pick(it.d)).slice(0, 110));   // recortar ANTES de escapar: no parte una entidad
     var idx = Number(i) || 0;
@@ -287,11 +288,11 @@
     var it = d.it, h = [];
     h.push('<p class="ghs-p-kind">' + esc(T.type[it.t]) + (it.t === 'k' && pick(it.st) ? ' · ' + esc(pick(it.st)) : '') + '</p>');
     h.push('<h3 class="ghs-p-name">' + esc(d.name) + '</h3>');
-    if (it.t === 'p' || it.t === 'v') {
+    if (it.t === 'p' || it.t === 'v' || it.t === 'a') {
       h.push('<p class="ghs-p-chips"><span>' + esc(d.cat) + '</span>' + (it.pr ? '<span class="ghs-price ghs-price-' + esc(it.pr.toLowerCase()) + '">' +
         esc(T.price[it.pr]) + '</span>' : '') + '</p>');
       if (it.k) h.push('<p class="ghs-p-niche">' + esc(it.k) + '</p>');
-      h.push('<p class="ghs-p-stat">' + esc(fmt(it.t === 'v' ? T.installs : T.downloads, num(it.dl || 0))) + '</p>');
+      h.push('<p class="ghs-p-stat">' + esc(fmt(it.t === 'v' || it.t === 'a' ? T.installs : T.downloads, num(it.dl || 0))) + '</p>');
     }
     h.push('<p class="ghs-p-desc">' + esc(d.desc) + '</p>');
     h.push('<p class="ghs-p-actions"><a class="ghs-btn ghs-btn-primary" href="' + esc(d.url) + '">' + esc(T.open) + '</a>' +

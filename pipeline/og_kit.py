@@ -45,6 +45,7 @@ REG = {
     "platform": ("IntelliJ Platform", "jetbrains", "dark", None),
     "marketplace": ("JetBrains Marketplace", "jetbrains", "dark", None),
     "vscode": ("VS Code", "vscode", "brand", "007ACC"),
+    "atlassian": ("Atlassian Marketplace", "atlassian", "dark", None),
     "windows": ("Windows", "windows", "dark", None),
     "kotlin": ("Kotlin", "kotlin", "brand", None),
     "java": ("Java", "java", "soft", None),

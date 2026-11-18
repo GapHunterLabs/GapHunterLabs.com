@@ -1,0 +1,23 @@
+{
+  "generatedAt": "2026-11-17 00:00:00 UTC",
+  "totalApps": 1,
+  "totalInstalls": 0,
+  "pendingCount": 1,
+  "apps": [
+    {
+      "name": "workflow-gap-companion",
+      "displayName": "Workflow Gap Companion",
+      "pitch": "Finds Jira workflow states with no way out, including closed loops that never reach Done.",
+      "niche": "Workflow / Jira Cloud",
+      "repo": "workflow-gap-companion",
+      "githubUrl": "https://github.com/GapHunterLabs/workflow-gap-companion",
+      "marketplaceUrl": null,
+      "version": "1.0.0",
+      "publishedDate": null,
+      "lastUpdated": null,
+      "installs": null,
+      "rating": null,
+      "ratingCount": 0
+    }
+  ]
+}

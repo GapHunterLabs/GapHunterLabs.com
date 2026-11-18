@@ -92,6 +92,13 @@ def main() -> int:
             "pr": "FREE", "dl": e.get("installs") or 0,
             "u": "/catalog/vscode/%s/" % e["name"], "m": e.get("marketplaceUrl") or "",
         })
+    for e in src.atl_list:
+        items.append({
+            "t": "a", "n": e.get("displayName") or e["name"], "s": e["name"], "d": short(plain(pitch_prose(e.get("pitch"))), 320),
+            "k": e.get("niche") or "", "c": {"en": "Atlassian Marketplace app", "es": "App de Atlassian Marketplace"},
+            "pr": "FREE", "dl": e.get("installs") or 0,
+            "u": "/catalog/atlassian/%s/" % e["name"], "m": e.get("marketplaceUrl") or "",
+        })
 
     for en_path, es_path in ES_PATHS.items():
         t_en, d_en = head_meta(en_path)

@@ -1,11 +1,15 @@
-/* Pestanas de plataforma del catalogo (2026-09-27): JetBrains IDEs | VS Code.
-   Sin JavaScript las dos secciones se ven una debajo de la otra y las
-   pestanas funcionan como anclas. Con JavaScript se muestra una sola y la
-   eleccion queda en la URL (?platform=vscode) para poder compartirla.
-   Tambien acepta el ancla vieja #vsxSection. */
+/* Pestanas de plataforma del catalogo (2026-09-27, tercera plataforma
+   2026-11-17): JetBrains IDEs | VS Code | Atlassian. Sin JavaScript las
+   secciones se ven una debajo de la otra y las pestanas funcionan como
+   anclas. Con JavaScript se muestra una sola y la eleccion queda en la URL
+   (?platform=vscode / ?platform=atlassian) para poder compartirla. 'jetbrains'
+   es el default implicito: nunca aparece en la URL. Tambien acepta los
+   anclas viejas #vsxSection/#vscode y #atlassianSection/#atlassian. */
 (function () {
   var tabs = Array.prototype.slice.call(document.querySelectorAll('.platform-tab'));
   if (!tabs.length) return;
+
+  var names = tabs.map(function (tab) { return tab.getAttribute('data-platform'); });
 
   function panelOf(tab) { return document.getElementById(tab.getAttribute('aria-controls')); }
 
@@ -20,14 +24,17 @@
     if (!updateUrl) return;
     try {
       var url = new URL(location.href);
-      if (name === 'vscode') url.searchParams.set('platform', 'vscode'); else url.searchParams.delete('platform');
+      if (name === 'jetbrains') url.searchParams.delete('platform'); else url.searchParams.set('platform', name);
       history.replaceState(null, '', url.pathname + url.search);
     } catch (e) { /* sin History API: la pestana igual cambia */ }
   }
 
   var params = new URLSearchParams(location.search);
-  var wantsVsx = params.get('platform') === 'vscode' || location.hash === '#vsxSection' || location.hash === '#vscode';
-  select(wantsVsx ? 'vscode' : 'jetbrains', false);
+  var fromParam = params.get('platform');
+  var fromHash = location.hash === '#vsxSection' || location.hash === '#vscode' ? 'vscode' :
+    location.hash === '#atlassianSection' || location.hash === '#atlassian' ? 'atlassian' : null;
+  var wanted = (fromParam && names.indexOf(fromParam) !== -1) ? fromParam : fromHash;
+  select((wanted && names.indexOf(wanted) !== -1) ? wanted : 'jetbrains', false);
 
   tabs.forEach(function (tab, i) {
     tab.addEventListener('click', function (e) {

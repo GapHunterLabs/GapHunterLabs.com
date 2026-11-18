@@ -181,6 +181,7 @@ PATTERNS = (
     # titulos de las fichas (2026-10-05; nombre y nicho son datos)
     (re.compile(r"^(.+) — (.+) for IntelliJ \| Gap Hunter Labs$"), r"\1 — \2 para IntelliJ | Gap Hunter Labs"),
     (re.compile(r"^(.+) for VS Code \| Gap Hunter Labs$"), r"\1 para VS Code | Gap Hunter Labs"),
+    (re.compile(r"^(.+) for Jira Cloud \| Gap Hunter Labs$"), r"\1 para Jira Cloud | Gap Hunter Labs"),
     (re.compile(r"^(.+) — Gap Hunter Labs$"), r"\1 — Gap Hunter Labs"),
     (re.compile(r"^(.+) — (.+) for IntelliJ$"), r"\1 — \2 para IntelliJ"),
     (re.compile(r"^(.+) for IntelliJ$"), r"\1 para IntelliJ"),
@@ -190,11 +191,12 @@ PATTERNS = (
 
 def plugin_names():
     names = set()
-    for rel, key in (("data/catalog-data.json", "name"), ("data/vscode-catalog-data.json", "displayName")):
+    for rel, key in (("data/catalog-data.json", "name"), ("data/vscode-catalog-data.json", "displayName"),
+                     ("data/atlassian-catalog-data.json", "displayName")):
         f = ROOT / rel
         if f.exists():
             data = json.loads(f.read_text(encoding="utf-8"))
-            items = data.get("plugins") or data.get("extensions") or []
+            items = data.get("plugins") or data.get("extensions") or data.get("apps") or []
             names.update(i.get(key) for i in items if i.get(key))
     return names
 
@@ -386,7 +388,9 @@ def translate(text, table, missing, page, used_context=None):
 def plugin_pages():
     """Fichas inglesas que existen en disco -> [(ruta_en, ruta_es)]."""
     out = []
-    for f in sorted((ROOT / "catalog").glob("*/index.html")) + sorted((ROOT / "catalog" / "vscode").glob("*/index.html")):
+    for f in (sorted((ROOT / "catalog").glob("*/index.html"))
+              + sorted((ROOT / "catalog" / "vscode").glob("*/index.html"))
+              + sorted((ROOT / "catalog" / "atlassian").glob("*/index.html"))):
         en_path = "/" + f.parent.relative_to(ROOT).as_posix() + "/"
         es_path = es_path_for(en_path)
         if es_path and en_path not in ES_PATHS:
@@ -405,10 +409,15 @@ def _catalog_entries():
     out = {}
     jb = json.loads((ROOT / "data" / "catalog-data.json").read_text(encoding="utf-8"))
     for p in jb.get("plugins", []):
-        out["/catalog/%s/" % p["repo"]] = (p["name"], p.get("niche", ""), "jetbrains", p.get("pricing", ""))
+        out["/catalog/%s/" % p["repo"]] = (p["name"], p.get("niche", ""), "jetbrains", p.get("pricing", ""), False)
     vs = json.loads((ROOT / "data" / "vscode-catalog-data.json").read_text(encoding="utf-8"))
     for e in vs.get("extensions", []):
-        out["/catalog/vscode/%s/" % e["name"]] = (e["displayName"], e.get("niche", ""), "vscode", "FREE")
+        out["/catalog/vscode/%s/" % e["name"]] = (e["displayName"], e.get("niche", ""), "vscode", "FREE", False)
+    atl_file = ROOT / "data" / "atlassian-catalog-data.json"
+    atl = json.loads(atl_file.read_text(encoding="utf-8")) if atl_file.exists() else {}
+    for e in atl.get("apps", []):
+        out["/catalog/atlassian/%s/" % e["name"]] = (
+            e["displayName"], e.get("niche", ""), "atlassian", "FREE", e.get("installs") is None)
     return out
 
 
@@ -423,9 +432,14 @@ def plugin_description_es(en_path, table):
     entry = _CATALOG.get(en_path)
     if entry is None:
         return None
-    name, niche, platform, pricing = entry
+    name, niche, platform, pricing, pending = entry
     niche_es = (lookup(normalize(niche)[0], table) or niche) if niche else ""
-    if platform == "vscode":
+    if platform == "atlassian":
+        head = ("%s: app gratuita para Jira Cloud, en revisión en Atlassian Marketplace" % name if pending else
+                 "%s: app gratuita para Jira Cloud" % name)
+        tail = ("Qué hace, estado de la revisión y enlace al repositorio en GitHub." if pending else
+                "Qué hace, capturas, instalaciones y enlace a Atlassian Marketplace.")
+    elif platform == "vscode":
         head = "%s: extensión gratuita para VS Code" % name
         tail = "Qué hace, capturas, instalaciones y enlace al VS Code Marketplace."
     else:
@@ -461,8 +475,11 @@ def _pitch_tables():
     by_path, blocks, stale = {}, {}, []
     jb = json.loads((ROOT / "data" / "catalog-data.json").read_text(encoding="utf-8")).get("plugins", [])
     vs = json.loads((ROOT / "data" / "vscode-catalog-data.json").read_text(encoding="utf-8")).get("extensions", [])
+    atl_file = ROOT / "data" / "atlassian-catalog-data.json"
+    atl = json.loads(atl_file.read_text(encoding="utf-8")).get("apps", []) if atl_file.exists() else []
     rows = [("jetbrains:" + p["repo"], "/catalog/%s/" % p["repo"], p.get("pitch")) for p in jb]
     rows += [("vscode:" + e["name"], "/catalog/vscode/%s/" % e["name"], e.get("pitch")) for e in vs]
+    rows += [("atlassian:" + e["name"], "/catalog/atlassian/%s/" % e["name"], e.get("pitch")) for e in atl]
     for key, path, pitch in rows:
         entry = stored.get(key)
         prose = pitch_prose(pitch)

@@ -128,7 +128,7 @@ ES_PATHS = {
     "/writing/": "/es/escritos/",
     "/writing/background-readaction-freeze/": "/es/escritos/background-readaction-freeze/",
 }
-PLUGIN_PATH_RE = re.compile(r"^/catalog/((?:vscode/)?[a-z0-9][a-z0-9-]*)/$")
+PLUGIN_PATH_RE = re.compile(r"^/catalog/((?:vscode/|atlassian/)?[a-z0-9][a-z0-9-]*)/$")
 
 
 def es_path_for(en_path):
