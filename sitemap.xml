@@ -933,12 +933,12 @@
     <lastmod>2026-09-28</lastmod>
   </url>
   <url>
-    <loc>https://gaphunterlabs.com/catalog/refactor-simulator/</loc>
-    <lastmod>2026-09-22</lastmod>
-  </url>
-  <url>
     <loc>https://gaphunterlabs.com/catalog/dependency-vulnerability-companion/</loc>
     <lastmod>2026-10-04</lastmod>
+  </url>
+  <url>
+    <loc>https://gaphunterlabs.com/catalog/refactor-simulator/</loc>
+    <lastmod>2026-09-22</lastmod>
   </url>
   <url>
     <loc>https://gaphunterlabs.com/catalog/cert-companion/</loc>
@@ -1001,16 +1001,16 @@
     <lastmod>2026-09-28</lastmod>
   </url>
   <url>
+    <loc>https://gaphunterlabs.com/catalog/spreadsheet-companion/</loc>
+    <lastmod>2026-09-22</lastmod>
+  </url>
+  <url>
     <loc>https://gaphunterlabs.com/catalog/cmake-companion/</loc>
     <lastmod>2026-09-28</lastmod>
   </url>
   <url>
     <loc>https://gaphunterlabs.com/catalog/format-converter-companion/</loc>
     <lastmod>2026-09-28</lastmod>
-  </url>
-  <url>
-    <loc>https://gaphunterlabs.com/catalog/spreadsheet-companion/</loc>
-    <lastmod>2026-09-22</lastmod>
   </url>
   <url>
     <loc>https://gaphunterlabs.com/catalog/aws-sdk-client-reuse-companion/</loc>
@@ -1101,15 +1101,23 @@
     <lastmod>2026-09-22</lastmod>
   </url>
   <url>
-    <loc>https://gaphunterlabs.com/catalog/github-actions-pwn-request-companion/</loc>
-    <lastmod>2026-10-04</lastmod>
-  </url>
-  <url>
     <loc>https://gaphunterlabs.com/catalog/kafka-producer-reuse-companion/</loc>
     <lastmod>2026-09-22</lastmod>
   </url>
   <url>
+    <loc>https://gaphunterlabs.com/catalog/config-secrets-file-companion/</loc>
+    <lastmod>2026-09-22</lastmod>
+  </url>
+  <url>
+    <loc>https://gaphunterlabs.com/catalog/github-actions-pwn-request-companion/</loc>
+    <lastmod>2026-10-04</lastmod>
+  </url>
+  <url>
     <loc>https://gaphunterlabs.com/catalog/apache-httpclient-reuse-companion/</loc>
+    <lastmod>2026-09-22</lastmod>
+  </url>
+  <url>
+    <loc>https://gaphunterlabs.com/catalog/go-timer-leak-companion/</loc>
     <lastmod>2026-09-22</lastmod>
   </url>
   <url>
@@ -1125,10 +1133,6 @@
     <lastmod>2026-09-22</lastmod>
   </url>
   <url>
-    <loc>https://gaphunterlabs.com/catalog/config-secrets-file-companion/</loc>
-    <lastmod>2026-09-22</lastmod>
-  </url>
-  <url>
     <loc>https://gaphunterlabs.com/catalog/cassandra-cqlsession-reuse-companion/</loc>
     <lastmod>2026-09-22</lastmod>
   </url>
@@ -1138,10 +1142,6 @@
   </url>
   <url>
     <loc>https://gaphunterlabs.com/catalog/env-diff-companion/</loc>
-    <lastmod>2026-09-22</lastmod>
-  </url>
-  <url>
-    <loc>https://gaphunterlabs.com/catalog/go-timer-leak-companion/</loc>
     <lastmod>2026-09-22</lastmod>
   </url>
   <url>
@@ -1161,6 +1161,10 @@
     <lastmod>2026-09-28</lastmod>
   </url>
   <url>
+    <loc>https://gaphunterlabs.com/catalog/npm-peer-dependency-companion/</loc>
+    <lastmod>2026-09-22</lastmod>
+  </url>
+  <url>
     <loc>https://gaphunterlabs.com/catalog/k8s-label-selector-exposure-companion/</loc>
     <lastmod>2026-09-22</lastmod>
   </url>
@@ -1170,10 +1174,6 @@
   </url>
   <url>
     <loc>https://gaphunterlabs.com/catalog/k8s-readiness-liveness-probe-companion/</loc>
-    <lastmod>2026-09-22</lastmod>
-  </url>
-  <url>
-    <loc>https://gaphunterlabs.com/catalog/npm-peer-dependency-companion/</loc>
     <lastmod>2026-09-22</lastmod>
   </url>
   <url>
@@ -1329,6 +1329,10 @@
     <lastmod>2026-09-22</lastmod>
   </url>
   <url>
+    <loc>https://gaphunterlabs.com/catalog/rxjava-disposable-leak-companion/</loc>
+    <lastmod>2026-09-22</lastmod>
+  </url>
+  <url>
     <loc>https://gaphunterlabs.com/catalog/exception-escape-chain-companion/</loc>
     <lastmod>2026-09-22</lastmod>
   </url>
@@ -1381,11 +1385,11 @@
     <lastmod>2026-09-28</lastmod>
   </url>
   <url>
-    <loc>https://gaphunterlabs.com/catalog/unsafe-deserialization-sink-companion/</loc>
+    <loc>https://gaphunterlabs.com/catalog/mutable-state-leak-companion/</loc>
     <lastmod>2026-09-22</lastmod>
   </url>
   <url>
-    <loc>https://gaphunterlabs.com/catalog/rxjava-disposable-leak-companion/</loc>
+    <loc>https://gaphunterlabs.com/catalog/unsafe-deserialization-sink-companion/</loc>
     <lastmod>2026-09-22</lastmod>
   </url>
   <url>
@@ -1397,11 +1401,11 @@
     <lastmod>2026-09-22</lastmod>
   </url>
   <url>
-    <loc>https://gaphunterlabs.com/catalog/mutable-state-leak-companion/</loc>
+    <loc>https://gaphunterlabs.com/catalog/rate-limiter-fallback-companion/</loc>
     <lastmod>2026-09-22</lastmod>
   </url>
   <url>
-    <loc>https://gaphunterlabs.com/catalog/rate-limiter-fallback-companion/</loc>
+    <loc>https://gaphunterlabs.com/catalog/prometheus-metric-registration-companion/</loc>
     <lastmod>2026-09-22</lastmod>
   </url>
   <url>
@@ -1413,15 +1417,11 @@
     <lastmod>2026-09-22</lastmod>
   </url>
   <url>
-    <loc>https://gaphunterlabs.com/catalog/prometheus-metric-registration-companion/</loc>
+    <loc>https://gaphunterlabs.com/catalog/module-boundary-leak-companion/</loc>
     <lastmod>2026-09-22</lastmod>
   </url>
   <url>
     <loc>https://gaphunterlabs.com/catalog/retry-backoff-jitter-companion/</loc>
-    <lastmod>2026-09-22</lastmod>
-  </url>
-  <url>
-    <loc>https://gaphunterlabs.com/catalog/module-boundary-leak-companion/</loc>
     <lastmod>2026-09-22</lastmod>
   </url>
   <url>
@@ -1445,6 +1445,10 @@
     <lastmod>2026-09-22</lastmod>
   </url>
   <url>
+    <loc>https://gaphunterlabs.com/catalog/pii-tostring-leak-companion/</loc>
+    <lastmod>2026-09-22</lastmod>
+  </url>
+  <url>
     <loc>https://gaphunterlabs.com/catalog/second-order-sqli-field-companion/</loc>
     <lastmod>2026-09-22</lastmod>
   </url>
@@ -1453,15 +1457,11 @@
     <lastmod>2026-09-22</lastmod>
   </url>
   <url>
-    <loc>https://gaphunterlabs.com/catalog/session-attribute-type-confusion-companion/</loc>
-    <lastmod>2026-09-22</lastmod>
-  </url>
-  <url>
-    <loc>https://gaphunterlabs.com/catalog/pii-tostring-leak-companion/</loc>
-    <lastmod>2026-09-22</lastmod>
-  </url>
-  <url>
     <loc>https://gaphunterlabs.com/catalog/interprocedural-resource-leak-companion/</loc>
+    <lastmod>2026-09-22</lastmod>
+  </url>
+  <url>
+    <loc>https://gaphunterlabs.com/catalog/session-attribute-type-confusion-companion/</loc>
     <lastmod>2026-09-22</lastmod>
   </url>
   <url>
