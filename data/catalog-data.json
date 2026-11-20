@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-19 14:00:49 UTC",
+  "generatedAt": "2026-11-20 02:49:14 UTC",
   "totalPlugins": 147,
   "totalDownloads": 14822,
   "pending": 0,
@@ -7,10 +7,6 @@
   "totalReviews": 0,
   "avgRating": null,
   "trend7d": [
-    {
-      "date": "2026-11-13",
-      "totalDownloads": 14433
-    },
     {
       "date": "2026-11-14",
       "totalDownloads": 14534
@@ -34,45 +30,13 @@
     {
       "date": "2026-11-19",
       "totalDownloads": 14822
+    },
+    {
+      "date": "2026-11-20",
+      "totalDownloads": 14822
     }
   ],
-  "recentChanges": [
-    {
-      "date": "2026-11-19",
-      "type": "growth",
-      "name": "Dependency Vulnerability Companion",
-      "niche": "Dependency / SCA Security",
-      "delta": 10
-    },
-    {
-      "date": "2026-11-19",
-      "type": "growth",
-      "name": "Disposed Project Callback Companion",
-      "niche": "IntelliJ Platform Pitfalls",
-      "delta": 7
-    },
-    {
-      "date": "2026-11-19",
-      "type": "growth",
-      "name": "Mermaid Companion",
-      "niche": "Diagrams",
-      "delta": 6
-    },
-    {
-      "date": "2026-11-19",
-      "type": "growth",
-      "name": "RxJava Disposable Leak Companion",
-      "niche": "Code Quality / Logging",
-      "delta": 5
-    },
-    {
-      "date": "2026-11-19",
-      "type": "growth",
-      "name": "Go Timer Leak Companion",
-      "niche": "Code Quality / Logging",
-      "delta": 4
-    }
-  ],
+  "recentChanges": [],
   "plugins": [
     {
       "xmlId": "dev.gaphunter.mermaidcompanion",
