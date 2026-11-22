@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-21 13:08:55 UTC",
+  "generatedAt": "2026-11-22 01:53:25 UTC",
   "totalPlugins": 147,
   "totalDownloads": 15391,
   "pending": 0,
@@ -7,10 +7,6 @@
   "totalReviews": 0,
   "avgRating": null,
   "trend7d": [
-    {
-      "date": "2026-11-15",
-      "totalDownloads": 14558
-    },
     {
       "date": "2026-11-16",
       "totalDownloads": 14572
@@ -34,45 +30,13 @@
     {
       "date": "2026-11-21",
       "totalDownloads": 15391
+    },
+    {
+      "date": "2026-11-22",
+      "totalDownloads": 15391
     }
   ],
-  "recentChanges": [
-    {
-      "date": "2026-11-21",
-      "type": "growth",
-      "name": "Mermaid Companion",
-      "niche": "Diagrams",
-      "delta": 7
-    },
-    {
-      "date": "2026-11-21",
-      "type": "growth",
-      "name": "Ruby Gemfile Group Companion",
-      "niche": "VCS / Git Workflow",
-      "delta": 5
-    },
-    {
-      "date": "2026-11-21",
-      "type": "growth",
-      "name": "Ruby Shell Injection Companion",
-      "niche": "Ruby Security",
-      "delta": 3
-    },
-    {
-      "date": "2026-11-21",
-      "type": "growth",
-      "name": "Ruby Net::HTTP Reuse Companion",
-      "niche": "HTTP Client Reuse",
-      "delta": 3
-    },
-    {
-      "date": "2026-11-21",
-      "type": "growth",
-      "name": "Import Cost Companion",
-      "niche": "JS/TS Tooling",
-      "delta": 3
-    }
-  ],
+  "recentChanges": [],
   "plugins": [
     {
       "xmlId": "dev.gaphunter.mermaidcompanion",
