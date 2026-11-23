@@ -367,6 +367,7 @@ def _sponsors_page(env: Env):
             eq(p.locator(".sp-level").count(), 5, "levels [%s]" % lang)
             hrefs = p.evaluate("[...document.querySelectorAll('.get-row a')].map(a => a.getAttribute('href'))")
             expect(any("patreon.com" in h for h in hrefs), "the Patreon link is missing [%s]" % lang)
+            expect(any(h.startswith("https://github.com/sponsors/kendjm") for h in hrefs), "the GitHub Sponsors link is missing [%s]" % lang)
             expect(any("buymeacoffee.com" in h for h in hrefs), "the Buy Me a Coffee link is missing [%s]" % lang)
             expect(any(h.split("?")[0] == contact for h in hrefs),
                    "the company-sponsorship link should go to %s [%s]" % (contact, lang))
