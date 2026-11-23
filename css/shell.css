@@ -303,7 +303,7 @@
 .pi-list li { font-size: 13px; color: var(--text-dim); line-height: 1.5; }
 .pi-results { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
 .pi-results li { padding-left: 10px; border-left: 3px solid var(--valid-line); font-size: 13px; line-height: 1.5; color: var(--text-dim); }
-.pi-results li.is-open { border-left-color: var(--inspect-line); }
+.pi-results li.is-open { border-left-color: var(--signal); }   /* open = orange, as everywhere else */
 .pi-results a { display: block; margin-bottom: 2px; font: 600 13px/1.4 var(--mono); color: var(--text);
   text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
 .pi-links { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
@@ -614,7 +614,7 @@
   .gh-cta.btn { padding: 0 8px; }
 }
 
-.site-footer.gh-footer { margin-top: 72px; padding: 56px 0 28px; padding-left: 0; border-top: 0; background: var(--bg); color: var(--text); position: relative; }
+.site-footer.gh-footer { margin-top: 72px; padding: 56px 0 28px; padding-left: 0; border-top: 0; background: var(--section); color: var(--text); position: relative; }
 .site-footer.gh-footer::before { content: ''; position: absolute; top: 0; left: var(--page-pad, 24px); right: var(--page-pad, 24px); height: 1px; background: linear-gradient(90deg, transparent 0%, var(--signal) 30%, var(--signal) 70%, transparent 100%); opacity: 0.5; pointer-events: none; }
 .gh-footer-inner { max-width: var(--page-max); margin: 0 auto; padding: 0 var(--page-pad); }
 /* Layout: one full-width card on top (brand + pitch + CTA | About), the six link columns below it. */
@@ -1280,3 +1280,8 @@ a.sp-person:hover { border-color: var(--signal); }
 @media (max-width: 960px) { .nb-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 420px) { .nb-stat { padding: 14px; } .nb-stat-glyph { height: 42px; } .nb-stat-value { font-size: 24px; } }
 .nb-impact .nb-foot-row { margin-top: 8px; }
+
+/* Cards carry the ambient shadow of the theme (light mode: lifted off the gray page; dark mode: none). Gold keeps its
+   own orange ring, and a Blog card reached by its anchor keeps its focus ring (higher specificity). */
+.nb-stat, .nb-feat, .nb-svc-card, .nb-tools .tool, .inv, .nb-steps-v2 li, .nb-record li, .pi-card, .disclosure,
+.contact-form-panel, .sp-level:not(.sp-level-feature), .gh-footer-brand, .case { box-shadow: var(--shadow); }
