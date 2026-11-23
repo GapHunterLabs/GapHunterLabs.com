@@ -35,7 +35,9 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from build_plugin_pages import Sources, esc  # noqa: E402
-from badges import badge, badge_row, badge_table, price_badge  # noqa: E402
+from badges import badge, badge_row, badge_table, icon_svg, price_badge  # noqa: E402
+from build_blog import CATS, EVENTS, STATUS, link as case_link, nice  # noqa: E402
+import iso_figures  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 HOME_PAGE = ROOT / "index.html"
@@ -44,6 +46,8 @@ SPONSORS_DATA = ROOT / "data" / "sponsors.json"
 SPONSORS_PAGE = ROOT / "sponsors" / "index.html"
 REACH_DATA = ROOT / "data" / "reach.json"
 RESEARCH_DATA = ROOT / "data" / "research.json"
+SERVICES_DATA = ROOT / "data" / "services.json"
+CASES_DATA = ROOT / "data" / "blog-cases.json"
 PRICING_LABEL = {"FREE": "Free", "FREEMIUM": "Freemium", "PAID": "Paid"}
 
 # (slug, brecha, correccion). Texto en ingles: build_i18n.py lo traduce
@@ -378,6 +382,91 @@ def reach_html(reach):
     return grid + facts + "".join(notes)
 
 
+# ---- Hero: the four services and one real case -------------------------------------------------------------------
+# Service tiles: name, starting price and delivery time come from data/services.json (the same figures the service
+# pages print). The icon is the only thing chosen here.
+SERVICE_ICONS = {"audit": "gauge", "updates": "layers", "depsec": "shield", "custom": "code"}
+
+
+def service_tiles_html(services):
+    if len(services) != 4:
+        die("services.json: the hero has room for exactly 4 services, found %d" % len(services))
+    tiles = []
+    for s in services:
+        if s.get("key") not in SERVICE_ICONS:
+            die("services.json: no hero icon for the service %r" % s.get("key"))
+        priced = [t for t in s.get("tiers", []) if isinstance(t.get("usd"), int) and t["usd"] > 0]
+        if not priced or not s.get("shortName") or not str(s.get("path", "")).startswith("/"):
+            die("services.json: %r needs a shortName, a path and a priced tier" % s.get("key"))
+        first = min(priced, key=lambda t: t["usd"])
+        # The <!--svc:...--> comments bind each figure to data/services.json; build_services.py checks them.
+        terms = "From USD <!--svc:%s.%s.usd-->%s" % (s["key"], first["id"], format(first["usd"], ","))
+        if isinstance(first.get("days"), int) and first["days"] > 0:
+            terms += " &middot; <!--svc:%s.%s.days-->%d business days" % (s["key"], first["id"], first["days"])
+        tiles.append('<li><a class="nb-svc-tile" href="%s" data-goatcounter-click="cta-hero-svc-%s">%s'
+                     '<p class="nb-svc-name">%s</p><p class="nb-svc-sub">%s</p></a></li>'
+                     % (esc(s["path"]), s["key"], icon_svg(SERVICE_ICONS[s["key"]]), esc(s["shortName"]), terms))
+    return "".join(tiles)
+
+
+# The case in the hero card: one real case from data/blog-cases.json, shown with its own figures, dates and links.
+HERO_CASE = "reactive-commons-go-5"
+CASE_SERVICE = {"security": ("/dependency-security-review/", "Dependency and CI/CD security review"),
+                "performance": ("/plugin-performance-audit/", "Plugin performance audit"),
+                "custom": ("/custom-plugins-inspections/", "Custom plugins and inspections"),
+                "platform": ("/services/", "All services")}
+CASE_FIELDS = ("title", "problem", "work", "result", "events", "refs", "cat", "status")
+
+
+def _ico(name, cls="nb-ico"):
+    return '<svg class="%s" aria-hidden="true" focusable="false"><use href="#%s"/></svg>' % (cls, name)
+
+
+def hero_case_html(cases, case_id=HERO_CASE):
+    found = [c for c in cases if c.get("id") == case_id]
+    if len(found) != 1:
+        die("blog-cases.json: the hero case %r appears %d times" % (case_id, len(found)))
+    c = found[0]
+    missing = [k for k in CASE_FIELDS if not c.get(k)]
+    if missing:
+        die("blog-cases.json: the hero case %r has no %s" % (case_id, ", ".join(missing)))
+    if c["cat"] not in CATS or c["status"] not in STATUS:
+        die("blog-cases.json: the hero case %r has an unknown category or status" % case_id)
+    for ref in c["refs"]:
+        if len(ref) != 2 or not re.match(r'^(https://|/)[^\s"<>]*$', str(ref[1])) or "<" in str(ref[0]):
+            die("blog-cases.json: the hero case %r has a source that is not an https:// or site link" % case_id)
+    st_label, st_cls, _ = STATUS[c["status"]]
+    metric = ""
+    m = c.get("metric") or []
+    if len(m) == 2:
+        metric = ('<p class="nb-panel-metric"><span class="m-before">%s</span> <span class="nb-arrow" aria-hidden="true">'
+                  '&rarr;</span> <span class="m-after">%s</span></p>' % (m[0], m[1]))
+    elif len(m) == 1:
+        metric = '<p class="nb-panel-metric"><span class="m-before">%s</span></p>' % m[0]
+    if metric and c.get("caption"):
+        metric += '<p class="nb-panel-caption">%s</p>' % c["caption"]
+    facts = "".join('<div>%s<dt>%s</dt><dd>%s</dd></div>' % (_ico(i), dt, c[k]) for i, dt, k in
+                    (("ico-alert", "The problem", "problem"), ("ico-gear", "The work", "work"),
+                     ("ico-check", "The result", "result")))
+    # Same wording as the Blog cards ("Fixed Oct 7, 2026"), so both pages share one translation.
+    dates = "".join('<li data-ev-date="%s">%s%s %s</li>' % (e["d"], _ico("ico-clock"), EVENTS[e["t"]], nice(e["d"]))
+                    for e in c["events"])
+    refs = " &middot; ".join(case_link(label, href) for label, href in c["refs"])
+    svc_href, svc_label = CASE_SERVICE[c["cat"]]
+    return ('<div class="nb-case"><div class="nb-panel-top"><p class="nb-panel-label">Real case &middot; %s</p>'
+            '<p class="nb-panel-status %s">%s</p></div>'
+            '<div class="nb-case-head"><div class="nb-panel-hero">%s</div>'
+            '<figure class="nb-hero-face"><img class="nb-avatar" src="/assets/img/joel-diaz.jpg" alt="Joel Díaz, '
+            'founder of Gap Hunter Labs" width="104" height="104" loading="eager" decoding="async" fetchpriority="high">'
+            '<figcaption>Joel Díaz</figcaption></figure></div>'
+            '<h2 class="nb-case-title" id="heroCaseTitle">%s</h2>'
+            '<dl class="nb-panel-facts">%s</dl><ul class="nb-panel-meta">%s</ul>'
+            '<p class="nb-panel-ref">%s<span>%s</span></p>'
+            '<a class="nb-panel-svc" href="%s" data-goatcounter-click="cta-hero-card-%s">%s &rarr;</a></div>'
+            % (CATS[c["cat"]], st_cls, st_label, metric, c["title"], facts, dates, _ico("ico-link"), refs,
+               svc_href, c["cat"], svc_label))
+
+
 def die(msg: str) -> "NoReturn":  # noqa: F821
     sys.exit("[build_home] ERROR: " + msg)
 
@@ -427,6 +516,14 @@ def build(dry_run: bool = False) -> None:
     )
 
     html = inject(html, "<!-- PRERENDER:TOOLS:START -->", "<!-- PRERENDER:TOOLS:END -->", tools_html, "TOOLS")
+    services = json.loads(SERVICES_DATA.read_text(encoding="utf-8"))["services"]
+    html = inject(html, "<!-- PRERENDER:SVCTILES:START -->", "<!-- PRERENDER:SVCTILES:END -->",
+                  service_tiles_html(services), "SVCTILES")
+    cases = json.loads(CASES_DATA.read_text(encoding="utf-8"))["cases"]
+    html = inject(html, "<!-- PRERENDER:HEROCASE:START -->", "<!-- PRERENDER:HEROCASE:END -->",
+                  hero_case_html(cases), "HEROCASE")
+    for figure in ("grid", "hero"):
+        html = iso_figures.inject_or_die(html, figure, "index.html", "build_home")
     research = json.loads(RESEARCH_DATA.read_text(encoding="utf-8"))
     html = inject(html, "<!-- PRERENDER:SYNC:START -->", "<!-- PRERENDER:SYNC:END -->", sync_html(data), "SYNC")
     html = inject(html, "<!-- PRERENDER:METRICS:START -->", "<!-- PRERENDER:METRICS:END -->",
@@ -446,6 +543,7 @@ def build(dry_run: bool = False) -> None:
                          metrics_html(data, research, vscode_total), "METRICS (pagina)")
         sp_page = inject(sp_page, "<!-- PRERENDER:REACH:START -->", "<!-- PRERENDER:REACH:END -->",
                          reach_html(load_reach()), "REACH (pagina)")
+        sp_page = iso_figures.inject_or_die(sp_page, "sponsors", "sponsors/index.html", "build_home")
 
     if dry_run:
         print("[dry-run] %d herramientas, catalogo: %s -- nada escrito" % (len(rows), catalog_line))

@@ -233,10 +233,15 @@ test('home: hero, profile card, figures, investigations, tools, stack', async ({
   const data = readData('catalog-data.json');
   await b.viewport(1440, 900);
   await b.navigate(base + '/');
-  // 2026-11-08: expectations moved to the hire-oriented home of 2026-11-04 (PR #27): one lede, four service tabs
-  // with one real case each, 3 investigations and 3 selected tools. The old method list and focus badges are gone.
-  const facts = await b.evaluate("({h1: document.querySelector('h1.nb-hero-title').textContent.trim().length, lede: document.querySelectorAll('.nb-hero .nb-lede').length, img: document.querySelector('.nb-profile img').naturalWidth, tabs: document.querySelectorAll('.nb-states [role=tab]').length, panels: document.querySelectorAll('.nb-panels [role=tabpanel]').length, inv: document.querySelectorAll('article.inv').length, facts: [...document.querySelectorAll('article.inv')].map(a => a.querySelectorAll('dt').length), tools: [...document.querySelectorAll('article.tool')].map(t => t.querySelectorAll('.tool-badges .badge').length), stack: document.querySelectorAll('#stack .badge-table tr').length, stackImgs: document.querySelectorAll('#stack img').length, impact: document.querySelector('.nb-impact').innerText})");
-  assert(facts.h1 > 20 && facts.lede === 1 && facts.img > 0 && facts.tabs === 4 && facts.panels === 4, 'hero: ' + JSON.stringify(facts));
+  // 2026-11-22 (graphite redesign): the hero links the four services of data/services.json and shows ONE real case
+  // from data/blog-cases.json, with its own public sources; nothing rotates, so there are no tabs. The isometric
+  // figure is decorative. 3 investigations and 3 selected tools stay below.
+  const services = readData('services.json').services.map((s) => s.path);
+  const featured = readData('blog-cases.json').cases.find((c) => c.id === 'reactive-commons-go-5');
+  const facts = await b.evaluate("({h1: document.querySelector('h1.nb-hero-title').textContent.trim().length, lede: document.querySelectorAll('.nb-hero .nb-lede').length, img: document.querySelector('.nb-profile img').naturalWidth, tiles: [...document.querySelectorAll('.nb-svc-tile')].map(a => a.getAttribute('href')), cases: document.querySelectorAll('.nb-hero-card .nb-case').length, refs: [...document.querySelectorAll('.nb-hero-card .nb-panel-ref a')].map(a => a.getAttribute('href')), figure: document.querySelectorAll('.nb-hero-figure svg.iso-figure[aria-hidden=true]').length, tabs: document.querySelectorAll('.nb-hero [role=tab], .nb-hero [role=tabpanel]').length, inv: document.querySelectorAll('article.inv').length, facts: [...document.querySelectorAll('article.inv')].map(a => a.querySelectorAll('dt').length), tools: [...document.querySelectorAll('article.tool')].map(t => t.querySelectorAll('.tool-badges .badge').length), stack: document.querySelectorAll('#stack .badge-table tr').length, stackImgs: document.querySelectorAll('#stack img').length, impact: document.querySelector('.nb-impact').innerText})");
+  assert(facts.h1 > 20 && facts.lede === 1 && facts.img > 0 && facts.cases === 1 && facts.figure === 1 && facts.tabs === 0, 'hero: ' + JSON.stringify(facts));
+  equal(JSON.stringify(facts.tiles), JSON.stringify(services), 'service tiles follow data/services.json');
+  equal(JSON.stringify(facts.refs), JSON.stringify(featured.refs.map((r) => r[1])), 'the hero case links its own sources');
   assert(facts.inv === 3 && facts.facts.every((n) => n === 3), 'investigations: ' + JSON.stringify(facts.facts));
   assert(facts.tools.length === 3 && facts.tools.every((n) => n === 2), 'tool badges: ' + JSON.stringify(facts.tools));
   assert(!/Last 7 days/.test(facts.impact) && /\+[\d,]+ since \d{4}-\d{2}-\d{2}/.test(facts.impact),

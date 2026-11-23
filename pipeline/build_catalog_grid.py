@@ -36,6 +36,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from build_plugin_pages import Sources, PluginRenderer, esc, thousands, die, plain_text, pitch_text, atl_icon_html  # noqa: E402
 import json  # noqa: E402
+import iso_figures  # noqa: E402
 
 PRICE_LABEL = {"FREE": "Free", "FREEMIUM": "Freemium", "PAID": "Paid"}
 VS_ICON = ('<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.15 2.587L18.21.21a1.494 1.494 0 0 0-1.705.29l-9.46 8.63-4.12-3.128a.999.999 0 0 0-1.276.057L.327 7.261A1 1 0 0 0 .326 8.74L3.899 12 .326 15.26a1 1 0 0 0 .001 1.479L1.65 17.94a.999.999 0 0 0 1.276.057l4.12-3.128 9.46 8.63a1.492 1.492 0 0 0 1.704.29l4.942-2.377A1.5 1.5 0 0 0 24 20.06V3.939a1.5 1.5 0 0 0-.85-1.352zm-5.146 14.861L10.826 12l7.178-5.448v10.896z"/></svg>')
@@ -236,7 +237,7 @@ def build(dry_run: bool = False) -> None:
         ("JetBrains IDEs", "%d plugins" % len(src.plugins), False),
         ("VS Code", "%d extensions" % len(vsx), False),
         ("Pricing", "%d free &middot; %d freemium &middot; %d paid" % (by_price["FREE"], by_price["FREEMIUM"], by_price["PAID"]), False),
-        ("Categories", "%d, each with its own filter below" % cat_count, False),
+        ("Categories", "%d, each with its own filter" % cat_count, False),
         ("Source code", "A public GitHub repository for every plugin and extension", True),
         ("Data", "Synced twice a day from public JetBrains Marketplace and GitHub data; last snapshot %s" % snapshot, True),
     )
@@ -245,6 +246,12 @@ def build(dry_run: bool = False) -> None:
         for label, value, wide in spec_rows
     )
     _ = total_downloads
+    # Hero proof line: three counts from the same data as the spec sheet, never typed by hand.
+    proof_html = "".join(
+        '<li><strong>%d</strong><span>%s</span></li>' % (n, label)
+        for n, label in ((len(src.plugins), "JetBrains plugins"), (len(vsx), "VS Code extensions"),
+                         (by_price["FREE"], "Free plugins"))
+    )
 
     counts = {c["key"]: 0 for c in src.categories}
     for p in src.plugins:
@@ -259,6 +266,7 @@ def build(dry_run: bool = False) -> None:
     table_html = "".join(table_row_html(p, renderer, src) for p in rows)
 
     html = inject(html, "<!-- PRERENDER:STATS:START -->", "<!-- PRERENDER:STATS:END -->", stats_html, "STATS")
+    html = inject(html, "<!-- PRERENDER:PROOF:START -->", "<!-- PRERENDER:PROOF:END -->", proof_html, "PROOF")
     html = inject(html, "<!-- PRERENDER:CATOPTIONS:START -->", "<!-- PRERENDER:CATOPTIONS:END -->",
                   options_html, "CATOPTIONS")
     html = inject(html, "<!-- PRERENDER:GRID:START -->", "<!-- PRERENDER:GRID:END -->", grid_html, "GRID")
@@ -340,6 +348,7 @@ def build(dry_run: bool = False) -> None:
                    esc(h.get("pitch")), esc(h["marketplaceUrl"]), esc(h["slug"]))
                 for h in hubs))
     html = inject(html, "<!-- PRERENDER:CATHUBS:START -->", "<!-- PRERENDER:CATHUBS:END -->", hubs_html, "CATHUBS")
+    html = iso_figures.inject_or_die(html, "catalog", "catalog/index.html", "build_catalog_grid")
 
     if dry_run:
         print("[dry-run] %d tarjetas, %d filas, %d opciones de categoria -- nada escrito"

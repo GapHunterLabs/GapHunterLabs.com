@@ -10,6 +10,12 @@
    carry stack, status and price. Color carries meaning only:
      --inspect (amber)  a gap, a bottleneck, an open measurement
      --valid   (green)  a verified fix, a passing check, a measured result
+   Graphite direction (2026-11-22): black, graphite and grays carry the
+   page; orange (--signal) is the only accent; green (--valid) marks only a
+   positive state (a fix, a passing check, a measured result); blue (--cyan)
+   marks only technical elements and functional indicators (an identifier
+   chip, an in-progress status). Turquoise (--iso-accent-2) appears only as
+   one secondary stroke inside an isometric figure, never in the interface.
    Links are ink with an underline; the primary button is solid ink. The
    logo colors live only in the logo, the favicon and the social images
    (decision of 2026-11-09): the interface never uses them.
@@ -84,6 +90,22 @@
     --shadow-lg: none;
     --shadow-pop: 0 1px 2px rgba(10,10,10,0.08), 0 8px 24px rgba(10,10,10,0.12);
     --focus-ring: 0 0 0 2px #FAFAFA, 0 0 0 4px #0A0A0A;
+    /* Panels: a restrained graphite gradient for hero cards and side panels. */
+    --panel-1: #FFFFFF;
+    --panel-2: #F4F4F5;
+    /* Isometric figures (pipeline/iso): faces lit from the top left, graphite and metal materials. */
+    --iso-top-1: #FFFFFF; --iso-top-2: #E9EAEC; --iso-top-3: #DADDE1;
+    --iso-left-1: #D0D4D8; --iso-left-2: #BEC2C8;
+    --iso-right-1: #AAAFB6; --iso-right-2: #989EA6;
+    --iso-metal-1: #D2D6DB; --iso-metal-2: #7D838B;
+    --iso-bezel-1: #3A3F46; --iso-bezel-2: #2A2E34;
+    --iso-screen-1: #1F2328; --iso-screen-2: #14171A;
+    --iso-edge: #FFFFFF; --iso-recess: rgba(0, 0, 0, .45); --iso-line: rgba(0, 0, 0, .07);
+    --iso-glass: rgba(120, 140, 160, .12); --iso-glass-edge: rgba(60, 80, 100, .35);
+    --iso-gloss: #FFFFFF; --iso-gloss-op: .35;
+    --iso-ink: #8B929B;
+    --iso-shadow: #2B2F36; --iso-shadow-op: .38;
+    --iso-accent: #C2410C; --iso-accent-2: #0F766E; --iso-halo-op: .18;
 }
 
 /* Dark theme. "System" = no data-theme: follows the OS. "Light"/"Dark" =
@@ -125,6 +147,21 @@
       --band-a: #0F0F0F;
       --band-b: #161616;
       --focus-ring: 0 0 0 2px #0A0A0A, 0 0 0 4px #EDEDED;
+      --panel-1: #151515;
+      --panel-2: #0E0E0E;
+      /* Isometric figures (pipeline/iso): faces lit from the top left, graphite and metal materials. */
+      --iso-top-1: #4A4E55; --iso-top-2: #3A3D42; --iso-top-3: #2A2D31;
+      --iso-left-1: #2B2D31; --iso-left-2: #1F2124;
+      --iso-right-1: #18191C; --iso-right-2: #0F1012;
+      --iso-metal-1: #9AA0A8; --iso-metal-2: #5A5F66;
+      --iso-bezel-1: #26292D; --iso-bezel-2: #17191C;
+      --iso-screen-1: #0F1114; --iso-screen-2: #07080A;
+      --iso-edge: rgba(255, 255, 255, .22); --iso-recess: rgba(0, 0, 0, .7); --iso-line: rgba(255, 255, 255, .07);
+      --iso-glass: rgba(150, 170, 190, .10); --iso-glass-edge: rgba(210, 225, 240, .28);
+      --iso-gloss: #FFFFFF; --iso-gloss-op: .10;
+      --iso-ink: #5C626B;
+      --iso-shadow: #000000; --iso-shadow-op: .6;
+      --iso-accent: #FF6A1A; --iso-accent-2: #2FB8A6; --iso-halo-op: .30;
   }
 }
 :root[data-theme="dark"] {
@@ -162,6 +199,21 @@
     --band-a: #0F0F0F;
     --band-b: #161616;
     --focus-ring: 0 0 0 2px #0A0A0A, 0 0 0 4px #EDEDED;
+    --panel-1: #151515;
+    --panel-2: #0E0E0E;
+    /* Isometric figures (pipeline/iso): faces lit from the top left, graphite and metal materials. */
+    --iso-top-1: #4A4E55; --iso-top-2: #3A3D42; --iso-top-3: #2A2D31;
+    --iso-left-1: #2B2D31; --iso-left-2: #1F2124;
+    --iso-right-1: #18191C; --iso-right-2: #0F1012;
+    --iso-metal-1: #9AA0A8; --iso-metal-2: #5A5F66;
+    --iso-bezel-1: #26292D; --iso-bezel-2: #17191C;
+    --iso-screen-1: #0F1114; --iso-screen-2: #07080A;
+    --iso-edge: rgba(255, 255, 255, .22); --iso-recess: rgba(0, 0, 0, .7); --iso-line: rgba(255, 255, 255, .07);
+    --iso-glass: rgba(150, 170, 190, .10); --iso-glass-edge: rgba(210, 225, 240, .28);
+    --iso-gloss: #FFFFFF; --iso-gloss-op: .10;
+    --iso-ink: #5C626B;
+    --iso-shadow: #000000; --iso-shadow-op: .6;
+    --iso-accent: #FF6A1A; --iso-accent-2: #2FB8A6; --iso-halo-op: .30;
 }
 
 /* .band-dark used to repaint the hero and footer in navy. It now keeps the
