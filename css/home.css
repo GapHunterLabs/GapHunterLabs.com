@@ -77,32 +77,29 @@ a:focus-visible, .btn:focus-visible { outline: none; box-shadow: var(--focus-rin
 /* ---- Hero: statement + margin note, on the page itself -------------------- */
 .nb-hero {
   position: relative;
+  isolation: isolate;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 440px;
-  gap: 32px 48px;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 300px) 380px;
+  grid-template-areas: "copy figure card" "svc svc card";
+  gap: 32px;
+  align-items: start;
   padding: 64px 0 52px;
 }
-/* Grid + glow behind the headline: pure CSS, fades out toward the edges. */
-.nb-hero::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background:
-    radial-gradient(520px 220px at 28% 0%, color-mix(in srgb, var(--signal) 16%, transparent), transparent 70%),
-    linear-gradient(var(--grid-line) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
-  background-size: auto, 48px 48px, 48px 48px;
-  -webkit-mask-image: radial-gradient(ellipse at 30% 0%, #000 25%, transparent 78%);
-  mask-image: radial-gradient(ellipse at 30% 0%, #000 25%, transparent 78%);
-}
+/* Background: the isometric floor grid (pipeline/iso), faded towards the edges. */
+.nb-hero-grid { position: absolute; z-index: -1; inset: 0 0 auto auto; width: 72%; pointer-events: none; opacity: 0.9;
+  -webkit-mask-image: radial-gradient(ellipse at 60% 30%, #000 25%, transparent 70%);
+  mask-image: radial-gradient(ellipse at 60% 30%, #000 25%, transparent 70%); }
+.nb-hero-grid .iso-figure { max-width: none; }
+.nb-hero-copy { grid-area: copy; min-width: 0; }
+.nb-hero-figure { grid-area: figure; align-self: center; min-width: 0; }
+.nb-svc { grid-area: svc; min-width: 0; }
+.nb-hero-card { grid-area: card; }
 .nb-kicker { font: 600 12px/1.4 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--signal); }
 .nb-sync { display: inline-flex; align-items: center; gap: 8px; margin-top: 10px; font: 500 12px/1.4 var(--mono); color: var(--text-dim); }
 .nb-hero-title {
   margin-top: 16px;
   max-width: 17em;
-  font: 700 clamp(32px, 4.2vw, 56px)/1.06 var(--sans);
+  font: 700 clamp(32px, 3.6vw, 46px)/1.06 var(--sans);
   letter-spacing: -0.035em;
 }
 .nb-lede { margin-top: 16px; max-width: 60ch; font-size: 16px; line-height: 1.65; color: var(--text-dim); }
@@ -404,8 +401,10 @@ a:focus-visible, .btn:focus-visible { outline: none; box-shadow: var(--focus-rin
 
 /* ---- Narrow screens -------------------------------------------------------- */
 @media (max-width: 960px) {
-  .nb-hero { grid-template-columns: 1fr; padding-top: 48px; }
-  .nb-profile { max-width: 520px; }
+  .nb-hero { grid-template-columns: minmax(0, 1fr); grid-template-areas: "copy" "figure" "svc" "card"; padding-top: 48px; }
+  .nb-hero-figure { width: 100%; max-width: 420px; }
+  .nb-hero-grid { width: 100%; }
+  .nb-profile { max-width: 560px; }
   .tool { grid-template-columns: 1fr; }
   .inv-meta .inv-status { justify-self: start; }
   .nb-steps { grid-template-columns: 1fr; }
@@ -444,40 +443,35 @@ a:focus-visible, .btn:focus-visible { outline: none; box-shadow: var(--focus-rin
   border: 1px solid color-mix(in srgb, var(--good) 45%, transparent); background: var(--good-bg); color: var(--good);
   font: 500 13px/1.3 var(--sans); }
 .nb-accent { color: var(--signal); }
-.nb-services-label { margin-top: 28px; }
 .nb-hero-terms { display: flex; align-items: center; gap: 10px; margin-top: 16px; font: 500 14px/1.4 var(--sans); color: var(--text-dim); }
 .nb-hero-terms .nb-ico { width: 20px; height: 20px; color: var(--text-faint); }
 
-.nb-states { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-top: 12px; }
-.nb-state { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; min-width: 0; text-align: left; padding: 14px;
-  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); color: var(--text-dim);
-  font: inherit; cursor: pointer; transition: border-color 0.15s, background 0.15s; }
-.nb-state .b-ico { width: 22px; height: 22px; margin-bottom: 8px; fill: currentColor; color: var(--signal); }
-.nb-state-name { font: 600 14px/1.3 var(--sans); color: var(--text); }
-.nb-state-sub { font: 500 12px/1.4 var(--sans); }
-.nb-state:hover { background: var(--surface-2); border-color: var(--border-strong); }
-.nb-state[aria-selected="true"] { border-color: var(--signal); background: color-mix(in srgb, var(--signal) 8%, var(--surface));
-  box-shadow: 0 0 0 1px var(--signal); }
-.nb-state:focus-visible, .nb-ctl:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
+/* Service tiles: name, starting price and delivery time from data/services.json; each links to its page. */
+.nb-svc-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin: 12px 0 0; padding: 0; list-style: none; }
+.nb-svc-tile { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; height: 100%; padding: 14px;
+  border: 1px solid var(--border); border-radius: var(--radius-lg); background: linear-gradient(180deg, var(--panel-1), var(--panel-2));
+  color: var(--text-dim); text-decoration: none; transition: border-color 0.15s, background 0.15s; }
+.nb-svc-tile .b-ico { box-sizing: content-box; width: 18px; height: 18px; padding: 7px; margin-bottom: 10px; border-radius: var(--radius);
+  fill: currentColor; color: var(--signal); background: color-mix(in srgb, var(--signal) 12%, transparent); }
+.nb-svc-name { font: 600 14px/1.3 var(--sans); color: var(--text); }
+.nb-svc-sub { font: 500 12px/1.4 var(--sans); }
+.nb-svc-grid .nb-svc-tile { text-decoration: none; }
+.nb-svc-tile:hover { border-color: var(--border-strong); }
+.nb-svc-tile:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
 
-.nb-hero-card { --face: 104px; position: relative; display: flex; flex-direction: column;
-  border-color: color-mix(in srgb, var(--signal) 60%, var(--border));
-  box-shadow: 0 0 0 1px color-mix(in srgb, var(--signal) 18%, transparent),
-    0 24px 64px -28px color-mix(in srgb, var(--signal) 55%, transparent); }
-/* The portrait sits in the card, not in a panel, so it stays put while the cases rotate. */
-.nb-hero-face { position: absolute; z-index: 1; top: 64px; right: 22px; display: grid; justify-items: center; gap: 8px; margin: 0; }
+/* The case card: one real case from data/blog-cases.json, on a graphite panel. */
+.nb-hero-card { --face: 88px; position: relative; display: flex; flex-direction: column; }
+.nb-case { display: flex; flex-direction: column; padding: 20px 22px 6px; }
+.nb-case-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 6px; }
+.nb-case-head .nb-panel-hero { flex: 1 1 auto; min-width: 0; }
+.nb-case-head .nb-panel-metric { white-space: nowrap; }
+.nb-case-title { margin: 12px 0 0; font: 600 16px/1.3 var(--sans); letter-spacing: -0.015em; color: var(--text); }
+.nb-hero-face { display: grid; flex: none; justify-items: center; gap: 8px; margin: 0; }
 .nb-avatar { display: block; width: var(--face); height: var(--face); border-radius: 50%; object-fit: cover; object-position: 50% 8%;
-  border: 2px solid var(--signal); background: var(--surface-2);
-  box-shadow: 0 0 0 6px color-mix(in srgb, var(--signal) 14%, transparent),
-    0 10px 30px -8px color-mix(in srgb, var(--signal) 50%, transparent); }
+  border: 2px solid var(--signal); background: var(--surface-2); }
 .nb-hero-face figcaption { font: 600 13px/1.3 var(--sans); color: var(--text-dim); } /* a name, not a label */
 
 /* Every panel shares one grid cell, so the card is as tall as the tallest case and never jumps when it rotates. */
-.nb-panels { display: grid; padding: 20px 22px 6px; }
-.nb-panel { grid-area: 1 / 1; min-width: 0; }
-.nb-panel[hidden] { display: block; visibility: hidden; }
-.nb-panel:not([hidden]) { animation: nb-panel-in 0.35s ease both; }
-@keyframes nb-panel-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 
 .nb-panel-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 30px; }
 .nb-panel-label { font: 600 12px/1.4 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--signal); }
@@ -487,7 +481,7 @@ a:focus-visible, .btn:focus-visible { outline: none; box-shadow: var(--focus-rin
 .nb-panel-status.is-open { color: var(--signal); border: 1px solid var(--signal); }
 .nb-panel-status.is-fixed { color: var(--good); background: var(--good-bg); border: 1px solid color-mix(in srgb, var(--good) 45%, transparent); }
 
-.nb-panel-hero { display: grid; align-content: center; gap: 6px; min-height: calc(var(--face) + 30px); margin-top: 6px;
+.nb-panel-hero { display: grid; align-content: center; gap: 6px; min-height: var(--face);
   padding-right: calc(var(--face) + 24px); }
 .nb-panel-metric { font: 700 clamp(36px, 3.6vw, 46px)/1.05 var(--sans); letter-spacing: -0.03em; }
 .nb-panel-metric .m-before, .nb-panel-metric .m-after { padding: 0; background: none; font: inherit; }
@@ -516,20 +510,6 @@ a:focus-visible, .btn:focus-visible { outline: none; box-shadow: var(--focus-rin
   text-decoration: underline; text-underline-offset: 0.2em; text-decoration-thickness: 1px; }
 .nb-panel-svc:hover { text-decoration-thickness: 2px; }
 
-.nb-card-ctl { display: flex; align-items: center; gap: 8px; padding: 8px 22px 18px; }
-.nb-card-count { flex: none; margin: 0 4px 0 0; font: 500 12px/1 var(--mono); color: var(--text-dim); }
-.nb-card-count b { color: var(--text); }
-.nb-progress { flex: 1 1 auto; height: 3px; border-radius: 2px; background: var(--border); overflow: hidden; margin-right: 8px; }
-.nb-progress i { display: block; height: 100%; width: 100%; background: var(--signal); transform-origin: left; transform: scaleX(0); }
-.nb-progress.is-running i { animation: nb-progress var(--nb-dwell, 8s) linear forwards; }
-.nb-progress.is-paused i { animation-play-state: paused; }
-.nb-progress.is-static i { transform: scaleX(1); }
-@keyframes nb-progress { from { transform: scaleX(0); } to { transform: scaleX(1); } }
-.nb-ctl { display: grid; place-items: center; width: 34px; height: 34px; padding: 0; border: 1px solid var(--border-strong); border-radius: 50%;
-  background: none; color: var(--text); cursor: pointer; }
-.nb-ctl:hover { background: var(--surface-2); }
-.nb-ctl svg { width: 18px; height: 18px; fill: currentColor; }
-.nb-ctl[aria-pressed="false"] .i-play, .nb-ctl[aria-pressed="true"] .i-pause { display: none; }
 
 /* Commercial terms, right under the key figures. */
 .nb-assure { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px; list-style: none; margin: 20px 0 0; padding: 0;
@@ -543,85 +523,46 @@ a:focus-visible, .btn:focus-visible { outline: none; box-shadow: var(--focus-rin
 .nb-foot-link { font-size: 14px; text-decoration: underline; text-underline-offset: 0.2em; text-decoration-thickness: 1px; }
 .nb-foot-link:hover { text-decoration-thickness: 2px; }
 
-@media (prefers-reduced-motion: reduce) { .nb-panel:not([hidden]) { animation: none; } .nb-progress.is-running i { animation: none; transform: scaleX(1); } .nb-state { transition: none; } }
-@media (max-width: 960px) { .nb-hero-card { max-width: 520px; } .nb-assure { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (prefers-reduced-motion: reduce) { .nb-svc-tile { transition: none; } }
+@media (min-width: 961px) and (max-width: 1180px) {
+  .nb-hero { grid-template-columns: minmax(0, 1fr) 380px; grid-template-areas: "copy card" "figure card" "svc svc"; }
+  .nb-hero-figure { max-width: 360px; }
+}
+@media (max-width: 960px) { .nb-assure { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 700px) {
-  .nb-states { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .nb-svc-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 520px) {
   .nb-hero-card { --face: 72px; }
-  .nb-hero-face { top: 62px; right: 16px; }
-  .nb-panels { padding: 18px 16px 4px; }
+  .nb-case { padding: 18px 16px 4px; }
   .nb-panel-meta li + li { padding-left: 0; border-left: 0; }
-  .nb-card-ctl { padding: 8px 16px 16px; }
   .nb-panel-metric { font-size: 32px; }
-  .nb-panel-metric--wide { font-size: 19px; }
-  .nb-panel-metric--text { font-size: 22px; }
   .nb-assure { grid-template-columns: 1fr; }
 }
 
-/* ---- Hero: visual polish (styling only; markup and behavior unchanged) ---- */
-/* A second, warmer glow behind the case card, under the same grid as the headline. */
-.nb-hero::after {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  top: 0;
-  right: 0;
-  width: 55%;
-  height: 100%;
-  pointer-events: none;
-  background: radial-gradient(closest-side, color-mix(in srgb, var(--signal) 13%, transparent), transparent);
-  filter: blur(8px);
-}
+/* ---- Hero: finish. Graphite surfaces, no glow: the accent marks what matters, not the background. ---- */
 .nb-hero-title { text-wrap: balance; }
 .nb-lede { text-wrap: pretty; }
 
-/* Service tabs: the icon sits on a tinted tile; the selected one is lit from the top. */
-.nb-state { position: relative; overflow: hidden; padding: 14px 14px 13px;
-  transition: border-color 0.15s, background 0.15s, transform 0.15s; }
-.nb-state .b-ico { box-sizing: content-box; width: 18px; height: 18px; padding: 7px; margin-bottom: 10px; border-radius: 9px;
-  background: color-mix(in srgb, var(--signal) 12%, transparent); }
-.nb-state:hover { transform: translateY(-1px); }
-.nb-state[aria-selected="true"] { background:
-  linear-gradient(180deg, color-mix(in srgb, var(--signal) 14%, transparent), transparent 70%), var(--surface); }
-.nb-state[aria-selected="true"] .b-ico { background: color-mix(in srgb, var(--signal) 22%, transparent); }
-
-/* Hero buttons: a little larger than the page default, the arrow nudges on hover. */
+/* Hero buttons: a little larger than the page default. */
 .nb-hero .btn { min-height: 48px; padding: 12px 22px; border-radius: var(--radius-lg); font-size: 15px; }
-.nb-hero .btn.primary { box-shadow: 0 10px 28px -14px color-mix(in srgb, var(--accent) 70%, transparent); }
 
-/* Case card: soft warm light in two corners, like the hero glow. */
-.nb-hero-card { border-radius: 16px; background:
-  radial-gradient(360px 240px at 100% 0%, color-mix(in srgb, var(--signal) 9%, transparent), transparent 70%),
-  radial-gradient(320px 220px at 0% 100%, color-mix(in srgb, var(--signal) 8%, transparent), transparent 70%),
-  var(--surface); }
+/* Case card: a graphite panel with a thin rule. */
+.nb-hero-card { border-radius: 16px; background: linear-gradient(180deg, var(--panel-1), var(--panel-2)); }
 .nb-avatar { border-width: 2px; }
-
-/* Each panel is a column: the meta, evidence and service rows sit at the bottom of the card,
-   so a shorter case leaves its spare room above them instead of above the controls. */
-.nb-panel, .nb-panel[hidden] { display: flex; flex-direction: column; }
 .nb-panel-meta { margin-top: auto; }
 .nb-panel-facts { margin-bottom: 18px; }
 .nb-panel-metric { font-size: clamp(40px, 4vw, 54px); }
-.nb-panel-metric--wide { font-size: 23px; }
-.nb-panel-metric--text { font-size: 27px; }
 .nb-panel-facts .nb-ico { width: 22px; height: 22px; margin-top: 1px; }
-.nb-card-ctl { border-top: 1px solid var(--border); padding-top: 14px; margin-top: 4px; }
 
-/* Engagement terms: same tinted icon tile as the tabs. */
-.nb-assure li { background:
-  linear-gradient(180deg, color-mix(in srgb, var(--signal) 5%, transparent), transparent 60%), var(--surface); }
+/* Engagement terms: same tinted icon tile as the service tiles. */
+.nb-assure li { background: linear-gradient(180deg, var(--panel-1), var(--panel-2)); }
 .nb-assure-t .nb-ico { box-sizing: content-box; width: 14px; height: 14px; padding: 4px; border-radius: 6px;
   background: color-mix(in srgb, var(--signal) 12%, transparent); }
 .nb-assure-d { padding-left: 30px; }
 
-@media (prefers-reduced-motion: reduce) { .nb-state:hover { transform: none; } }
-@media (max-width: 960px) { .nb-hero::after { top: 45%; right: 0; width: 100%; height: 60%; } }
 @media (max-width: 520px) {
   .nb-hero-card { border-radius: 14px; }
   .nb-panel-metric { font-size: 36px; }
-  .nb-panel-metric--wide { font-size: 19px; }
-  .nb-panel-metric--text { font-size: 22px; }
   .nb-hero .btn { padding: 12px 18px; }
 }
