@@ -370,9 +370,9 @@ def _sponsors_page(env: Env):
             expect(any("buymeacoffee.com" in h for h in hrefs), "the Buy Me a Coffee link is missing [%s]" % lang)
             expect(any(h.split("?")[0] == contact for h in hrefs),
                    "the company-sponsorship link should go to %s [%s]" % (contact, lang))
-            eq(p.locator(".sp-reach .tw-bg-bg").count(), 4, "reach figures [%s]" % lang)
+            eq(p.locator(".sp-reach .nb-stat").count(), 4, "reach figures [%s]" % lang)
             sep = "," if lang == "en" else "."
-            downloads = p.evaluate("document.querySelector('.sp-reach .tw-text-3xl').textContent.trim()")
+            downloads = p.evaluate("document.querySelector('.sp-reach .nb-stat-value').textContent.trim()")
             expect(re.fullmatch(r"\d{1,3}(%s\d{3})+" % re.escape(sep), downloads), "downloads separator [%s]: %r" % (lang, downloads))
             # the audience card prints data/reach.json: same numbers, the thousands separator of the language, dated
             eq(p.locator(".sp-audience .tw-bg-bg").count(), 8, "audience figures [%s]" % lang)
