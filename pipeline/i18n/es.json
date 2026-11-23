@@ -1922,5 +1922,12 @@
   "open-source security report": "reporte de seguridad de código abierto",
   "open-source security reports": "reportes de seguridad de código abierto",
   "third-party plugin audit": "auditoría de un plugin de terceros",
-  "third-party plugin audits": "auditorías de plugins de terceros"
+  "third-party plugin audits": "auditorías de plugins de terceros",
+  "Plugins for the gaps your tools leave open": "Plugins para las brechas que dejan tus herramientas",
+  "Each one targets a documented problem in JetBrains IDEs, VS Code or Jira. Clear prices, and most of them are free.": "Cada uno ataca un problema documentado en los IDE de JetBrains, VS Code o Jira. Precios claros, y la mayoría son gratis.",
+  "Browse plugins": "Ver los plugins",
+  "Custom plugins for your team": "Plugins a medida para tu equipo",
+  "Free plugins": "Plugins gratuitos",
+  "About this catalog": "Sobre este catálogo",
+  "{n}, each with its own filter": "{n}, cada una con su filtro"
 }

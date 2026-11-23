@@ -1142,15 +1142,16 @@ a.sp-person:hover { border-color: var(--signal); }
 /* Levels as comparable cards (2026-11-22): one card per level, same rows in each, one highlighted by its border. */
 .sp-levels-sec .sp-group-title { margin: 0 0 10px; font: 600 12px / 1.4 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); }
 .sp-level-groups { display: grid; gap: 24px; }
-.sp-levels { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.sp-levels { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: auto; gap: 12px; }
 .sp-levels-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-.sp-level { position: relative; display: flex; flex-direction: column; gap: 14px; padding: 20px; border: 1px solid var(--border); border-radius: var(--radius-lg);
+.sp-level { position: relative; display: grid; grid-row: span 2; grid-template-rows: subgrid; row-gap: 14px; padding: 20px; border: 1px solid var(--border); border-radius: var(--radius-lg);
   background: linear-gradient(180deg, var(--panel-1), var(--panel-2)); }
 .sp-level-feature { border-color: var(--signal); box-shadow: 0 0 0 1px var(--signal); }
 .sp-level-head { display: grid; align-content: start; gap: 4px; }
 .sp-level-head p { margin: 0; }
-/* The flag sits on the top border, so every card keeps the same rows at the same height. */
-.sp-level-flag { position: absolute; top: -10px; left: 16px; padding: 0 8px; border: 1px solid var(--signal); border-radius: var(--radius-sm);
+/* The flag is the first line of the head, in the flow, so a long or translated flag wraps instead of covering the
+   level name. Cards are subgrids of the row, so every card's perk list still starts at the same height. */
+.sp-level-head .sp-level-flag { justify-self: start; max-width: 100%; margin: 0 0 6px; padding: 2px 8px; border: 1px solid var(--signal); border-radius: var(--radius-sm);
   background: var(--bg); font: 600 11.5px / 1.6 var(--mono); color: var(--signal); }
 .sp-level-name { margin: 0; font: 700 16px / 1.3 var(--sans); letter-spacing: -0.015em; color: var(--text); }
 .sp-level-price { font: 400 13px / 1.5 var(--mono); color: var(--text-dim); }

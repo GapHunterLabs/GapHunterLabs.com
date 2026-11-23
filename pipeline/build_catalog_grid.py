@@ -237,7 +237,7 @@ def build(dry_run: bool = False) -> None:
         ("JetBrains IDEs", "%d plugins" % len(src.plugins), False),
         ("VS Code", "%d extensions" % len(vsx), False),
         ("Pricing", "%d free &middot; %d freemium &middot; %d paid" % (by_price["FREE"], by_price["FREEMIUM"], by_price["PAID"]), False),
-        ("Categories", "%d, each with its own filter below" % cat_count, False),
+        ("Categories", "%d, each with its own filter" % cat_count, False),
         ("Source code", "A public GitHub repository for every plugin and extension", True),
         ("Data", "Synced twice a day from public JetBrains Marketplace and GitHub data; last snapshot %s" % snapshot, True),
     )
@@ -246,6 +246,12 @@ def build(dry_run: bool = False) -> None:
         for label, value, wide in spec_rows
     )
     _ = total_downloads
+    # Hero proof line: three counts from the same data as the spec sheet, never typed by hand.
+    proof_html = "".join(
+        '<li><strong>%d</strong><span>%s</span></li>' % (n, label)
+        for n, label in ((len(src.plugins), "JetBrains plugins"), (len(vsx), "VS Code extensions"),
+                         (by_price["FREE"], "Free plugins"))
+    )
 
     counts = {c["key"]: 0 for c in src.categories}
     for p in src.plugins:
@@ -260,6 +266,7 @@ def build(dry_run: bool = False) -> None:
     table_html = "".join(table_row_html(p, renderer, src) for p in rows)
 
     html = inject(html, "<!-- PRERENDER:STATS:START -->", "<!-- PRERENDER:STATS:END -->", stats_html, "STATS")
+    html = inject(html, "<!-- PRERENDER:PROOF:START -->", "<!-- PRERENDER:PROOF:END -->", proof_html, "PROOF")
     html = inject(html, "<!-- PRERENDER:CATOPTIONS:START -->", "<!-- PRERENDER:CATOPTIONS:END -->",
                   options_html, "CATOPTIONS")
     html = inject(html, "<!-- PRERENDER:GRID:START -->", "<!-- PRERENDER:GRID:END -->", grid_html, "GRID")
