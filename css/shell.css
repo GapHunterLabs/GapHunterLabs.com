@@ -952,10 +952,7 @@ tr.row td[data-label]::before { font-family: var(--sans); font-size: 11px; lette
 .page-hero.gh-page-header::before {
   content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
   background:
-    radial-gradient(520px 220px at 30% 50%, color-mix(in srgb, var(--signal) 14%, transparent), transparent 70%),
-    linear-gradient(var(--grid-line) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
-  background-size: auto, 40px 40px, 40px 40px;
+    none;   /* 2026-11-23: graphite direction: no orange glow and no decorative grid behind the inner page titles */
   /* 2026-11-04: one soft ellipse whose edge lands exactly on the left, top and bottom of the box
      (center x = horizontal radius), so the glow and the grid fade out before any edge instead of
      ending on a hard line. The glow used to sit on the top edge, cut off by the box. */
@@ -1101,9 +1098,9 @@ tr.row td[data-label]::before { font-family: var(--sans); font-size: 11px; lette
   counter-increment: svc; content: counter(svc, decimal-leading-zero); content: counter(svc, decimal-leading-zero) / "";
   display: block; margin-bottom: 8px; font: 600 11.5px/1 var(--mono); letter-spacing: 0.1em; color: var(--signal);
 }
-.disclosure.disclosure-warn { border-color: var(--inspect-line); background: color-mix(in srgb, var(--inspect) 6%, var(--surface)); }
+.disclosure.disclosure-warn { border-left: 3px solid var(--signal); }
 .disclosure-warn h2::before { content: ""; display: inline-block; width: 8px; height: 8px; margin-right: 10px; border-radius: 50%;
-  background: var(--inspect); vertical-align: middle; }
+  background: var(--signal); vertical-align: middle; }
 .disclosure code { border-radius: var(--radius-sm); font-size: 0.9em; }
 .disclosure a { color: var(--text); text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
 .disclosure b, .disclosure strong { font-weight: 650; }
@@ -1258,3 +1255,28 @@ a.sp-person:hover { border-color: var(--signal); }
   .ee-row { grid-template-columns: minmax(0, 1fr); }
   .ee-row-meta { justify-content: flex-start; }
 }
+
+/* Graphite pass on the remaining pages (2026-11-23): graphite panels for the sections, rail cards and the form;
+   the service badges drop their brand colors (orange stays the only accent). */
+.disclosure, .pi-card, .contact-form-panel { background: linear-gradient(180deg, var(--panel-1), var(--panel-2)); }
+.svc-badges .badge { background: var(--surface-2); color: var(--text); border-color: var(--border); }
+.svc-badges .badge .b-ico { fill: var(--text-dim); }
+.pi-counts li b { display: inline-block; min-width: 2ch; margin-right: 6px; color: var(--text); font-variant-numeric: tabular-nums; }
+
+/* Key figures, home and sponsors (2026-11-23): four graphite cards with an isometric glyph, one line of detail each, one foot line. */
+.nb-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.nb-stat { position: relative; min-width: 0; padding: 18px 18px 16px; border: 1px solid var(--border); border-radius: var(--radius-lg);
+  background: linear-gradient(180deg, var(--panel-1), var(--panel-2)); }
+.nb-stat-glyph { display: flex; align-items: flex-end; height: 52px; margin: -4px 0 10px -4px; }
+/* every glyph sits on the same baseline, so the figures of the four cards line up */
+.nb-stat-glyph svg { width: auto; height: 100%; }
+.nb-stat p { margin: 0; }
+.nb-stat-value { font: 700 32px / 1.1 var(--sans); letter-spacing: -0.02em; color: var(--text); font-variant-numeric: tabular-nums; }
+.nb-stat-label { margin-top: 6px !important; font: 600 11.5px / 1.4 var(--mono); letter-spacing: 0.04em; color: var(--text-dim); }
+.nb-stat-sub { margin-top: 8px !important; font-size: 13px; line-height: 1.45; color: var(--text-faint); }
+.nb-stat-sub b { color: var(--text-dim); }
+.nb-stat-foot { display: flex; flex-wrap: wrap; gap: 4px 20px; margin-top: 14px; font: 500 12px / 1.5 var(--mono); color: var(--text-faint); }
+.nb-stat-foot p { display: inline-flex; align-items: center; gap: 6px; margin: 0; }
+@media (max-width: 960px) { .nb-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 420px) { .nb-stat { padding: 14px; } .nb-stat-glyph { height: 42px; } .nb-stat-value { font-size: 24px; } }
+.nb-impact .nb-foot-row { margin-top: 8px; }

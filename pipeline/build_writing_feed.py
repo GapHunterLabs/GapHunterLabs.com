@@ -92,6 +92,8 @@ def link_index(tree):
     tag = '<link rel="alternate" type="application/atom+xml" title="%s" href="%s">\n' % (escape(tree["title"]), tree["feed"])
     # ancla: justo antes de </head>
     new, n = re.subn(r"</head>", tag + "</head>", text, count=1)
+    # the side rail's "RSS feed" link: build_i18n copies the English URL into the Spanish page
+    new = re.sub(r'(<a href=")/writing/feed\.xml(")', lambda m: m.group(1) + tree["feed"] + m.group(2), new)
     if n == 1 and new != text:
         idx.write_text(new, encoding="utf-8")
 

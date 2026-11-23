@@ -13,15 +13,13 @@
 .case-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); gap: 16px; align-items: stretch; }
 .case {
   display: flex; flex-direction: column; min-width: 0; padding: 18px 18px 16px; scroll-margin-top: 96px;
-  border: 1px solid color-mix(in srgb, var(--signal) 32%, var(--border)); border-radius: 14px;
-  background:
-    radial-gradient(260px 160px at 100% 0%, color-mix(in srgb, var(--signal) 8%, transparent), transparent 70%),
-    var(--surface);
+  border: 1px solid var(--border); border-radius: 14px;
+  background: linear-gradient(180deg, var(--panel-1), var(--panel-2));   /* graphite panel; orange stays in the accents */
   transition: border-color 0.15s, box-shadow 0.15s;
 }
 /* The page styles give <p> a bottom margin; inside a card every gap is set below. */
 .case p, .case dl, .case ul { margin-bottom: 0; }
-.case:hover { border-color: color-mix(in srgb, var(--signal) 60%, var(--border)); }
+.case:hover { border-color: var(--border-strong); }
 .case:target { border-color: var(--signal); box-shadow: 0 0 0 2px var(--signal), 0 16px 40px -24px color-mix(in srgb, var(--signal) 60%, transparent); }
 
 

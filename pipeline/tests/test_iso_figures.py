@@ -18,14 +18,19 @@ import regenerate as R  # noqa: E402
 
 FIGURES = sorted(p.stem for p in (PIPELINE / "iso" / "figures").glob("*.cjs"))
 PAGES = {  # English page -> figures it inlines
-    "index.html": ("grid", "hero"),
+    "index.html": ("grid", "hero", "catalog", "stat-downloads", "stat-tools", "stat-prs", "stat-advisories"),
     "catalog/index.html": ("catalog",),
-    "sponsors/index.html": ("sponsors",),
+    "sponsors/index.html": ("sponsors", "stat-downloads", "stat-tools", "stat-prs", "stat-advisories"),
     "engineering-evidence/index.html": ("evidence", "thumb-analysis", "thumb-tickets", "thumb-security", "thumb-audits"),
+    "services/index.html": ("services",),
+    "security/index.html": ("security",),
+    "writing/index.html": ("writing",),
 }
 SPANISH = {"index.html": "es/index.html", "catalog/index.html": "es/catalogo/index.html",
            "sponsors/index.html": "es/patrocinadores/index.html",
-           "engineering-evidence/index.html": "es/ingenieria-y-evidencia/index.html"}
+           "engineering-evidence/index.html": "es/ingenieria-y-evidencia/index.html",
+           "services/index.html": "es/servicios/index.html", "security/index.html": "es/seguridad/index.html",
+           "writing/index.html": "es/escritos/index.html"}
 
 
 def theme_blocks():

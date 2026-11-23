@@ -33,8 +33,9 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "pipeline"))
 import iso_figures  # noqa: E402
 
-PAGES = {"/": ("grid", "hero"), "/catalog/": ("catalog",), "/sponsors/": ("sponsors",),
-         "/engineering-evidence/": ("evidence", "thumb-analysis", "thumb-tickets", "thumb-security", "thumb-audits")}
+PAGES = {"/": ("grid", "hero", "catalog", "stat-downloads", "stat-tools", "stat-prs", "stat-advisories"), "/catalog/": ("catalog",), "/sponsors/": ("sponsors", "stat-downloads", "stat-tools", "stat-prs", "stat-advisories"),
+         "/engineering-evidence/": ("evidence", "thumb-analysis", "thumb-tickets", "thumb-security", "thumb-audits"),
+         "/services/": ("services",), "/security/": ("security",), "/writing/": ("writing",)}
 WIDTHS = (320, 390, 768, 1280)
 BACKGROUND = {"grid"}   # drawn behind the hero and faded by CSS: no margin and no phone stroke rule
 
@@ -109,7 +110,9 @@ def serve():
 def margin_checks(b, fails, M, names):
     theme_css = (ROOT / "css" / "theme.css").read_text(encoding="utf-8")
     shell = (ROOT / "css" / "shell.css").read_text(encoding="utf-8")
-    rules = "\n".join(re.findall(r"(\.iso-figure[^{]*\{[^}]*\}|@media[^{]*\{\s*\.iso-figure[^}]*\}\s*\})", shell))
+    # Only rules whose selector STARTS with .iso-figure: a scoped rule such as ".nb-stat-glyph .iso-figure" must not
+    # leak into this isolated page and resize every figure.
+    rules = "\n".join(re.findall(r"(?m)(^\.iso-figure[^{]*\{[^}]*\}|^@media[^{]*\{\s*\.iso-figure[^}]*\}\s*\})", shell))
     M["margins_px"] = {}
     for name in names:
         if name in BACKGROUND:

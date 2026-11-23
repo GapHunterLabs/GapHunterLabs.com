@@ -70,74 +70,114 @@ TOOLS = (
 )
 
 
-def sparkline(values, first_date, last_date, w=140, h=28):
-    """Polilinea SVG (en linea, sin librerias) de una serie corta de enteros.
-
-    2026-11-08: the label names the real dates of the first and last snapshot. The series is the last 7
-    snapshots, and a day without a snapshot made "the last 7 days" untrue."""
-    lo, hi = min(values), max(values)
-    span = (hi - lo) or 1
-    step = w / (len(values) - 1)
-    pts = " ".join("%.0f,%.0f" % (i * step, h - 2 - (v - lo) * (h - 4) / span) for i, v in enumerate(values))
-    label = "Total downloads from %s to %s: %s to %s" % (first_date, last_date, format(values[0], ","), format(values[-1], ","))
-    return ('<svg class="tw-mt-2 tw-h-7 tw-w-full" viewBox="0 0 %d %d" preserveAspectRatio="none" role="img" '
-            'aria-label="%s"><polyline fill="none" stroke="var(--signal)" stroke-width="2" '
-            'stroke-linejoin="round" stroke-linecap="round" points="%s"/></svg>' % (w, h, esc(label), pts))
-
-
 def tile(label, value, sub_html, extra=""):
     return ('<div class="tw-bg-bg tw-p-5"><p class="tw-font-mono tw-text-xs tw-text-faint">%s</p>'
             '<p class="tw-mt-1 tw-text-3xl tw-font-bold tw-text-ink">%s</p>%s'
             '<p class="tw-mt-2 tw-text-xs tw-text-dim">%s</p></div>' % (label, value, extra, sub_html))
 
 
-def sync_html(data):
-    snap = (data.get("generatedAt") or "")[:10]
-    return ('<span class="live-dot" aria-hidden="true"></span>'
-            '<span>Catalog synced</span> <time datetime="%s">%s</time>' % (snap, snap))
+STAT_FIGURES = ("stat-downloads", "stat-tools", "stat-prs", "stat-advisories")
+
+
+def stat_card(figure, value, label, sub_html):
+    return ('<div class="nb-stat"><span class="nb-stat-glyph" aria-hidden="true">'
+            '<!-- PRERENDER:ISO:%s:START --><!-- PRERENDER:ISO:%s:END --></span>'
+            '<p class="nb-stat-value">%s</p><p class="nb-stat-label">%s</p><p class="nb-stat-sub">%s</p></div>'
+            % (figure, figure, value, label, sub_html))
 
 
 def metrics_html(data, research, vscode_total):
+    """Key figures (2026-11-23, graphite redesign): four cards with an isometric glyph, the figure, its label and one
+    line of detail, then one foot line with the date of each source. The figures and their glyphs are placed by
+    inline_stat_figures() once the block is in the page."""
     points = [d for d in data.get("trend7d", []) if "totalDownloads" in d and d.get("date")]
     trend = [d["totalDownloads"] for d in points]
     pr = research["upstreamPullRequests"]
     adv = research["advisoriesClosedUpstream"]
-    # 2026-11-08: the figure is the all-time total; the line under it used to read "Last 7 days", as if the total
-    # were a weekly count. It now states what the sparkline shows: the gain since the first snapshot of the series.
+    # The figure is the all-time total; the line under it states the gain since the first snapshot of the series.
     if len(trend) >= 2:
         since = points[0]["date"]
         dl_sub = '<b>+%s</b> <span>since</span> <time datetime="%s">%s</time>' % (format(trend[-1] - trend[0], ","), since, since)
-        dl_extra = sparkline(trend, since, points[-1]["date"])
     else:
-        dl_sub, dl_extra = "<span>All-time total</span>", ""
-    tiles = [
-        tile("JetBrains Marketplace downloads", format(data["totalDownloads"], ","), dl_sub, dl_extra),
-        tile("Tools in the catalog", str(data["totalPlugins"] + vscode_total),
-             "<span>%d JetBrains plugins</span> &middot; <span>%d VS Code extensions</span>" % (data["totalPlugins"], vscode_total)),
-        tile("Pull requests to IntelliJ", str(pr["total"]),
-             "<b>%d</b> <span>integrated</span> &middot; <b>%d</b> <span>open</span>" % (pr["integrated"], pr["open"])),
-        tile("Advisories closed upstream", str(adv["count"]),
-             "<span>Fixed by the maintainers in</span> <code>reactive-commons-go</code>"),
+        dl_sub = "<span>All-time total</span>"
+    cards = [
+        stat_card("stat-downloads", format(data["totalDownloads"], ","), "JetBrains Marketplace downloads", dl_sub),
+        stat_card("stat-tools", str(data["totalPlugins"] + vscode_total), "Tools in the catalog",
+                  "<span>%d JetBrains plugins</span> &middot; <span>%d VS Code extensions</span>" % (data["totalPlugins"], vscode_total)),
+        stat_card("stat-prs", str(pr["total"]), "Pull requests to IntelliJ",
+                  "<b>%d</b> <span>integrated</span> &middot; <b>%d</b> <span>open</span>" % (pr["integrated"], pr["open"])),
+        stat_card("stat-advisories", str(adv["count"]), "Advisories closed upstream",
+                  "<span>Fixed by the maintainers in</span> <code>reactive-commons-go</code>"),
     ]
-    grid = ('<div class="tw-grid tw-grid-cols-2 tw-gap-px tw-overflow-hidden tw-rounded-lg tw-border tw-border-line '
-            'tw-bg-line md:tw-grid-cols-4">%s</div>' % "".join(tiles))
-    chips = badge_row([
-        dict(label="JetBrains Marketplace", icon="jetbrains", variant="dark",
-             href="https://plugins.jetbrains.com/vendor/gap-hunter-labs"),
-        dict(label="GitHub", icon="github", variant="dark", href="https://github.com/GapHunterLabs"),
-        dict(label="VS Code Marketplace", icon="vscode", variant="dark"),
-    ])
     # Each source keeps its own date: downloads and tool counts come from the twice-daily sync, the pull requests
-    # and advisories from research.json, which is checked by hand.
+    # and advisories from research.json, which is checked by hand. One label and its <time> per element: that is
+    # what build_i18n keys on (a date inside a longer text would change the translation key every day).
     asof = research["asOf"]
     snap = (data.get("generatedAt") or "")[:10]
-    # Two lines, one label each: a label and its <time> in one element is what build_i18n keys on (a date inside
-    # a longer text would change the translation key every day).
-    foot = ('<p class="tw-mt-3 tw-font-mono tw-text-xs tw-text-faint"><span>Downloads and tools as of</span> '
-            '<time datetime="%s">%s</time></p>'
-            '<p class="tw-mt-1 tw-font-mono tw-text-xs tw-text-faint"><span>Pull requests and advisories as of</span> '
-            '<time datetime="%s">%s</time></p>' % (snap, snap, asof, asof))
-    return grid + '<div class="tw-mt-4">' + chips + "</div>" + foot
+    foot = ('<div class="nb-stat-foot"><p><span class="live-dot" aria-hidden="true"></span><span>Downloads and tools as of</span> '
+            '<time datetime="%s">%s</time></p><p><span>Pull requests and advisories as of</span> '
+            '<time datetime="%s">%s</time></p></div>' % (snap, snap, asof, asof))
+    return '<div class="nb-stats">%s</div>%s' % ("".join(cards), foot)
+
+
+FEATURED = ("openapi-companion", "ansible-companion", "dependency-vulnerability-companion",
+            "mermaid-companion", "cors-policy-companion", "cert-companion")
+PRICE_LABEL = {"FREE": ("Free", "is-free"), "FREEMIUM": ("Freemium", "is-freemium"), "PAID": ("Paid", "is-paid")}
+
+
+def featured_html(data, featured=FEATURED):
+    """The featured plugin cards of the home catalog section: name, downloads and price, all read from the data.
+    A featured plugin missing from the data, without downloads, or with an unknown price stops the build."""
+    by_repo = {p["repo"]: p for p in data["plugins"]}
+    cards = []
+    for repo in featured:
+        p = by_repo.get(repo)
+        if p is None:
+            sys.exit("[build_home] ERROR: featured plugin %r is not in data/catalog-data.json" % repo)
+        if p.get("pricing") not in PRICE_LABEL:
+            sys.exit("[build_home] ERROR: featured plugin %r has an unknown price %r" % (repo, p.get("pricing")))
+        if not isinstance(p.get("downloads"), int):
+            sys.exit("[build_home] ERROR: featured plugin %r has no download count" % repo)
+        label, cls = PRICE_LABEL[p["pricing"]]
+        cards.append('<a class="nb-feat" href="/catalog/%s/"><span class="nb-feat-name">%s</span>'
+                     '<span class="nb-feat-meta">%s downloads</span><span class="badge badge-status %s">%s</span></a>'
+                     % (repo, esc(p["name"]), format(p["downloads"], ","), cls, label))
+    return "".join(cards)
+
+
+# Hand-made pages that state how many plugins are in the catalog: each figure is bound by a comment placed right
+# before it (<!--count:jetbrains-->147), rewritten here from the data. build_i18n drops comments before it looks a
+# text up, so the translation keys do not change.
+COUNT_PAGES = ("custom-plugins-inspections/index.html", "plugin-performance-audit/index.html", "plugin-updates/index.html")
+COUNT_RE = re.compile(r"<!--count:([a-z]+)-->(\d[\d,]*)")
+
+
+def bind_counts(text, values, label):
+    def rep(m):
+        if m.group(1) not in values:
+            sys.exit("[build_home] ERROR: %s: unknown count %r (known: %s)" % (label, m.group(1), ", ".join(sorted(values))))
+        return "<!--count:%s-->%s" % (m.group(1), values[m.group(1)])
+    new, n = COUNT_RE.subn(rep, text)
+    if n == 0:
+        sys.exit("[build_home] ERROR: %s has no <!--count:...--> binding left" % label)
+    return new
+
+
+def bind_count_pages(data, vscode_total, dry_run=False):
+    values = {"jetbrains": str(data["totalPlugins"]), "vscode": str(vscode_total),
+              "tools": str(data["totalPlugins"] + vscode_total)}
+    for rel in COUNT_PAGES:
+        path = ROOT / rel
+        raw = path.read_bytes().decode("utf-8")
+        new = bind_counts(raw, values, rel)
+        if new != raw and not dry_run:
+            path.write_bytes(new.encode("utf-8"))
+
+
+def inline_stat_figures(html, where):
+    for figure in STAT_FIGURES:
+        html = iso_figures.inject_or_die(html, figure, where, "build_home")
+    return html
 
 
 # Focus areas: shown in the hero card and as the "Disciplines" row of the stack table.
@@ -511,8 +551,7 @@ def build(dry_run: bool = False) -> None:
     snapshot = (data.get("generatedAt") or "")[:10]
     catalog_line = (
         "%d JetBrains plugins and %d VS Code extensions, each with its own page and a clear price: "
-        "free, freemium or paid. Figures are synced twice a day from public JetBrains Marketplace "
-        "and GitHub data (last snapshot: %s)." % (data["totalPlugins"], vscode_total, snapshot)
+        "free, freemium or paid." % (data["totalPlugins"], vscode_total)
     )
 
     html = inject(html, "<!-- PRERENDER:TOOLS:START -->", "<!-- PRERENDER:TOOLS:END -->", tools_html, "TOOLS")
@@ -525,11 +564,22 @@ def build(dry_run: bool = False) -> None:
     for figure in ("grid", "hero"):
         html = iso_figures.inject_or_die(html, figure, "index.html", "build_home")
     research = json.loads(RESEARCH_DATA.read_text(encoding="utf-8"))
-    html = inject(html, "<!-- PRERENDER:SYNC:START -->", "<!-- PRERENDER:SYNC:END -->", sync_html(data), "SYNC")
     html = inject(html, "<!-- PRERENDER:METRICS:START -->", "<!-- PRERENDER:METRICS:END -->",
                   metrics_html(data, research, vscode_total), "METRICS")
+    html = inline_stat_figures(html, "index.html")
     html = inject(html, "<!-- PRERENDER:STACK:START -->", "<!-- PRERENDER:STACK:END -->", stack_html(), "STACK")
     html = inject(html, "<!-- PRERENDER:CATALOG:START -->", "<!-- PRERENDER:CATALOG:END -->", esc(catalog_line), "CATALOG")
+    # Every number of the catalog section comes from the data, so the twice-daily cron (regenerate.py) keeps it
+    # current: the title, the "All n tools" link and the featured cards (name, downloads, price).
+    total_tools = data["totalPlugins"] + vscode_total
+    html = inject(html, "<!-- PRERENDER:CATTITLE:START -->", "<!-- PRERENDER:CATTITLE:END -->",
+                  "%d engineering tools,<br>one place" % total_tools, "CATTITLE")
+    html = inject(html, "<!-- PRERENDER:CATALL:START -->", "<!-- PRERENDER:CATALL:END -->",
+                  "All %d tools &rarr;" % total_tools, "CATALL")
+    html = inject(html, "<!-- PRERENDER:CATFEATURED:START -->", "<!-- PRERENDER:CATFEATURED:END -->",
+                  featured_html(data), "CATFEATURED")
+    html = iso_figures.inject_or_die(html, "catalog", "index.html", "build_home")
+    bind_count_pages(data, vscode_total, dry_run)
 
     sponsors = load_sponsors()
     html = inject(html, "<!-- PRERENDER:SPONSORS:START -->", "<!-- PRERENDER:SPONSORS:END -->",
@@ -541,6 +591,7 @@ def build(dry_run: bool = False) -> None:
                          sponsors_html(sponsors, home=False), "SPONSORS (pagina)")
         sp_page = inject(sp_page, "<!-- PRERENDER:METRICS:START -->", "<!-- PRERENDER:METRICS:END -->",
                          metrics_html(data, research, vscode_total), "METRICS (pagina)")
+        sp_page = inline_stat_figures(sp_page, "sponsors/index.html")
         sp_page = inject(sp_page, "<!-- PRERENDER:REACH:START -->", "<!-- PRERENDER:REACH:END -->",
                          reach_html(load_reach()), "REACH (pagina)")
         sp_page = iso_figures.inject_or_die(sp_page, "sponsors", "sponsors/index.html", "build_home")

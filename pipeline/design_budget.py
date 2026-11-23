@@ -33,8 +33,8 @@ COMPILED = {"tw.css"}
 # Counts on 2026-11-09 after the first step of the migration; lowered on 2026-11-22 when the graphite redesign
 # dropped the hero glows and the rotating case card. Lower them; never raise them.
 CAPS = {
-    "font_sizes": 48,
-    "spacing": 43,
+    "font_sizes": 47,
+    "spacing": 42,
     "breakpoints": 21,
     "fixed_radii": 11,
     "shadows": 11,
