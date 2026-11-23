@@ -76,6 +76,8 @@ def tile(label, value, sub_html, extra=""):
             '<p class="tw-mt-2 tw-text-xs tw-text-dim">%s</p></div>' % (label, value, extra, sub_html))
 
 
+# Figures of the home that build() inlines by name; the catalog figure and the stat glyphs have their own steps.
+HOME_FIGURES = ("grid", "hero", "step-find", "step-trace", "step-fix")
 STAT_FIGURES = ("stat-downloads", "stat-tools", "stat-prs", "stat-advisories")
 
 
@@ -561,7 +563,7 @@ def build(dry_run: bool = False) -> None:
     cases = json.loads(CASES_DATA.read_text(encoding="utf-8"))["cases"]
     html = inject(html, "<!-- PRERENDER:HEROCASE:START -->", "<!-- PRERENDER:HEROCASE:END -->",
                   hero_case_html(cases), "HEROCASE")
-    for figure in ("grid", "hero", "step-find", "step-trace", "step-fix"):
+    for figure in HOME_FIGURES:
         html = iso_figures.inject_or_die(html, figure, "index.html", "build_home")
     research = json.loads(RESEARCH_DATA.read_text(encoding="utf-8"))
     html = inject(html, "<!-- PRERENDER:METRICS:START -->", "<!-- PRERENDER:METRICS:END -->",
