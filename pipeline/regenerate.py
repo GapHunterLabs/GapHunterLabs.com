@@ -41,6 +41,8 @@ STEPS = (
                                   "build_blog, which rewrites the Blog page, and before build_i18n"),
     ("build_plugin_pages.py", ("--sitemap", "--inject"), "one page per plugin, the sitemap and the hash shim"),
     ("build_feed.py", (), "the plugins RSS feed"),
+    ("inline_critical_css.py", (), "the critical CSS of the home into its <head>: after the English generators, before "
+                                  "build_i18n copies the page into Spanish"),
     ("build_i18n.py", (), "every Spanish page, copied from the English ones: after every English generator"),
     ("build_writing_feed.py", (), "the Blog feeds and their <link> in both Blog indexes: after build_i18n, which "
                                   "copies the English <head> into the Spanish page"),
@@ -53,6 +55,8 @@ STEPS = (
 # Generators that are deliberately not part of a rebuild, with the reason.
 EXCLUDED = {
     "build_icons.py": "needs the simple-icons npm package; writes pipeline/icons.json only when a brand icon is added",
+    "build_critical_css.py": "renders the home with Chromium; writes pipeline/critical/home.css when the CSS or the "
+                             "first screen changes, and verify_site.py fails until it is run",
     "build_iso_figures.py": "needs Node and the isometric build packages; writes the committed pipeline/iso/out/*.svg "
                             "only when a figure changes, and the page generators inline those files",
     "build_og_images.py": "renders one PNG per plugin with Chromium; run by hand when a plugin is added",

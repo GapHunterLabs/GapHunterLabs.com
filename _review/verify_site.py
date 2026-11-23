@@ -530,6 +530,98 @@ def _overflow_320(env: Env):
     expect(not bad, "; ".join(bad))
 
 
+_PIXEL_DIFF_JS = r"""async ([a, b]) => {
+  const load = (src) => new Promise((ok, bad) => { const i = new Image(); i.onload = () => ok(i); i.onerror = bad; i.src = src; });
+  const [x, y] = await Promise.all([load(a), load(b)]);
+  if (x.width !== y.width || x.height !== y.height) return {size: [x.width, x.height, y.width, y.height]};
+  const read = (img) => { const c = document.createElement('canvas'); c.width = img.width; c.height = img.height;
+    const g = c.getContext('2d'); g.drawImage(img, 0, 0); return g.getImageData(0, 0, c.width, c.height).data; };
+  const p = read(x), q = read(y);
+  let n = 0, top = Infinity, bottom = -1;
+  for (let i = 0; i < p.length; i += 4) {
+    if (p[i] !== q[i] || p[i + 1] !== q[i + 1] || p[i + 2] !== q[i + 2]) { n++; const row = Math.floor(i / 4 / x.width);
+      top = Math.min(top, row); bottom = Math.max(bottom, row); }
+  }
+  return {pixels: n, share: n / (p.length / 4), rows: n ? [top, bottom] : null};
+}"""
+
+
+_FIGURE_STYLES_JS = r"""(fold) => {
+  const props = ['display', 'visibility', 'opacity', 'fill', 'fill-opacity', 'stroke', 'stroke-opacity', 'stroke-width',
+                 'stop-color', 'stop-opacity', 'color', 'mix-blend-mode', 'filter', 'transform'];
+  const out = [];
+  document.querySelectorAll('svg.iso-figure').forEach((svg) => {
+    // A figure without a box (hidden at this width) is skipped; one shown on the first screen only without the
+    // stylesheets would still change the picture, where the mask paints a box that the full page does not have.
+    const r = svg.getBoundingClientRect();
+    if (!r.width || !r.height || r.top >= fold) return;
+    out.push(['figure', Math.round(r.left), Math.round(r.top), Math.round(r.width), Math.round(r.height)]);
+    svg.querySelectorAll('*').forEach((el) => {
+      const cs = getComputedStyle(el);
+      out.push([el.tagName, ...props.map((p) => cs.getPropertyValue(p))]);
+    });
+  });
+  return out;
+}"""
+
+
+@check("pages", "home: the first screen painted with only the critical CSS is the full page's first screen")
+def _critical_css(env: Env):
+    # pipeline/critical_css.py inlines the rules of the home's first screen and loads the stylesheets at the end of
+    # <body>. Blocking every /css/ file shows what a visitor sees before they arrive: it must be the same picture.
+    import base64
+    problems = []
+    for path in ("/", "/es/"):
+        for width, height in ((390, 844), (768, 1024), (1280, 800), (1920, 1080)):
+            for theme in ("dark", "light"):
+                shots = []
+                for blocked in (False, True):
+                    ctx = env.browser.new_context(viewport={"width": width, "height": height}, reduced_motion="reduce",
+                                                  device_scale_factor=1, locale="en-US")
+                    ctx.add_init_script("try{localStorage.setItem('ghl-theme','%s')}catch(e){}" % theme)
+                    if blocked:
+                        # A predicate, not a glob: the links carry ?v=<hash>, which "**/css/*.css" does not match.
+                        ctx.route(lambda url: urllib.parse.urlsplit(url).path.startswith("/css/"),
+                                  lambda route: route.abort())
+                    page = ctx.new_page()
+                    try:
+                        page.goto(env.base + path, wait_until="load")
+                        page.evaluate("document.fonts.ready.then(() => true)")
+                        page.wait_for_timeout(200)
+                        # A link whose request failed still gets a CSSStyleSheet, but without readable rules.
+                        sheets = page.evaluate("[...document.styleSheets].filter(s => s.href).filter(s => "
+                                               "{ try { return s.cssRules.length > 0; } catch (e) { return false; } })"
+                                               ".length")
+                        if blocked:
+                            eq(sheets, 0, "stylesheets applied while /css/ was blocked on %s" % path)
+                            expect(page.evaluate("!!document.querySelector('style#critical-css')"),
+                                   "%s has no critical CSS block" % path)
+                        # The isometric figures are masked in the picture: on the Linux runner their gradients
+                        # rasterize with a few different pixels from one load to the next (2026-11-23: 37 to 83
+                        # pixels, a different case each run, none locally). The mask keeps their position and size
+                        # in the comparison, and figure_styles compares what the mask hides, as text.
+                        figures = page.locator("svg.iso-figure")
+                        shots.append(("data:image/png;base64," + base64.b64encode(
+                            page.screenshot(mask=[figures], mask_color="#FF00FF")).decode(),
+                            page.evaluate(_FIGURE_STYLES_JS, height)))
+                    finally:
+                        ctx.close()
+                ctx = env.browser.new_context()
+                try:
+                    diff = ctx.new_page().evaluate(_PIXEL_DIFF_JS, [shots[0][0], shots[1][0]])
+                finally:
+                    ctx.close()
+                if diff.get("size") or diff["pixels"]:
+                    problems.append("%s %dx%d %s: %s" % (path, width, height, theme, diff))
+                full, critical = shots[0][1], shots[1][1]
+                if full != critical:
+                    first = next((i for i, (a, b) in enumerate(zip(full, critical)) if a != b), min(len(full), len(critical)))
+                    problems.append("%s %dx%d %s: figure styles differ at element %d: %s vs %s" % (
+                        path, width, height, theme, first, full[first:first + 1], critical[first:first + 1]))
+    expect(not problems, "the first screen differs without the stylesheets (run python pipeline/build_critical_css.py, "
+                         "then python pipeline/regenerate.py --strict): " + "; ".join(problems))
+
+
 @check("pages", "methodology: the decision diagram fits a phone")
 def _methodology(env: Env):
     with env.page(width=390, height=844) as p:

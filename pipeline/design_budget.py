@@ -12,8 +12,9 @@ lowers them towards GOALS.
 Measured:
 - every css/*.css except tw.css (compiled by the Tailwind CLI, checked by _review/verify_tailwind.py); plugin.css is
   generated from catalog.css by build_plugin_pages.py and counted like the rest;
-- the <style> blocks and style="" attributes of the English pages tracked in git (the Spanish pages are copies made
-  by build_i18n.py; the catalog pages share one template and are measured through the first one).
+- the <style> blocks (except the generated critical CSS) and style="" attributes of the English pages tracked in git
+  (the Spanish pages are copies made by build_i18n.py; the catalog pages share one template and are measured
+  through the first one).
 Not measured: the Tailwind classes, and CSS that JavaScript writes at run time.
 
 Since 2026-11-09 the three logo colors appear only as fill="" of the logo SVG (pages, favicon.svg) and in the social
@@ -49,6 +50,7 @@ LOGO_COLORS = ("#0151FC", "#01B3FD", "#02F172")
 
 COMMENT = re.compile(r"/\*.*?\*/", re.S)
 STYLE_BLOCK = re.compile(r"<style\b[^>]*>(.*?)</style>", re.S | re.I)
+CRITICAL_BLOCK = re.compile(r'<style id="critical-css">.*?</style>', re.S)
 STYLE_ATTR = re.compile(r"""\sstyle\s*=\s*("([^"]*)"|'([^']*)')""", re.I)
 COLOR = re.compile(r"#[0-9a-fA-F]{3,8}\b|rgba?\([^)]*\)|hsla?\([^)]*\)")
 FONT_SIZE = re.compile(r"(?<![\w-])font-size\s*:\s*([^;}{]+)")
@@ -86,7 +88,8 @@ def sources():
     for page in english_pages():
         text = page.read_text(encoding="utf-8")
         rel = page.relative_to(ROOT).as_posix()
-        for i, block in enumerate(STYLE_BLOCK.findall(text)):
+        # The critical CSS block is a generated copy of rules from css/*.css, already counted there.
+        for i, block in enumerate(STYLE_BLOCK.findall(CRITICAL_BLOCK.sub("", text))):
             yield f"{rel} <style> {i}", block, False
         attrs = [m.group(2) if m.group(2) is not None else m.group(3) for m in STYLE_ATTR.finditer(text)]
         if attrs:

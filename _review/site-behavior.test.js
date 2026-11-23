@@ -275,6 +275,32 @@ test('home: six blocks, offer in the hero, counts from the data, short proof, no
   assert(f.words <= 650, 'the home is back to ' + f.words + ' words (cap 650)');
 });
 
+test('reveal: reads every position before it styles anything (no forced layout per element)', async ({ b, base }) => {
+  // Reading an element's position right after styling the previous one forces a layout of the whole page each time.
+  // Log what js/site-reveal.js itself reads and writes.
+  const { identifier } = await b.send('Page.addScriptToEvaluateOnNewDocument', { source: `(() => {
+    const log = window.__rvLog = [];
+    const mine = () => /site-reveal\\.js/.test(new Error().stack || '');
+    const rect = Element.prototype.getBoundingClientRect;
+    Element.prototype.getBoundingClientRect = function () { if (mine()) log.push('R'); return rect.apply(this, arguments); };
+    const set = CSSStyleDeclaration.prototype.setProperty;
+    CSSStyleDeclaration.prototype.setProperty = function () { if (mine()) log.push('W'); return set.apply(this, arguments); };
+    const add = DOMTokenList.prototype.add;
+    DOMTokenList.prototype.add = function () { if (mine()) log.push('W'); return add.apply(this, arguments); };
+  })();` });
+  try {
+    await b.viewport(390, 844, true);
+    await b.navigate(base + '/');
+    const log = await b.evaluate("(window.__rvLog || []).join('')");
+    assert(log.includes('R') && log.includes('W'), 'the reveal script read or wrote nothing (is it still loaded?): ' + log.slice(0, 80));
+    // The only write before the first read is rv-on on <html>; after that, every read comes before every write.
+    const fromFirstRead = log.slice(log.indexOf('R'));
+    assert(/^R+W+$/.test(fromFirstRead), 'reads and writes interleave: ' + fromFirstRead.slice(0, 120));
+  } finally {
+    await b.send('Page.removeScriptToEvaluateOnNewDocument', { identifier });
+  }
+});
+
 test('Ctrl+K search: open, results, arrow keys, Escape', async ({ b, base }) => {
   await b.viewport(1440, 900);
   await b.navigate(base + '/');

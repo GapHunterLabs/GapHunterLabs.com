@@ -127,10 +127,14 @@
 
   function prepare() {
     var viewport = window.innerHeight || root.clientHeight;
-    candidates().forEach(function (el) {
+    // Read every position first, then write: reading one element's position right after
+    // styling the previous one forces a new layout of the whole page per element.
+    var below = candidates().filter(function (el) {
       if (seen) seen.add(el);
       // Already on screen (or above it) when this runs: leave it as it is.
-      if (el.getBoundingClientRect().top < viewport) return;
+      return el.getBoundingClientRect().top >= viewport;
+    });
+    below.forEach(function (el) {
       var s = settings(el);
       var xy = offset(s.direction, s.distance);
       el.style.setProperty("--rv-x", xy[0] + "px");
