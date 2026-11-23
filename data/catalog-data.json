@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-22 12:56:55 UTC",
+  "generatedAt": "2026-11-23 02:09:35 UTC",
   "totalPlugins": 147,
   "totalDownloads": 15410,
   "pending": 0,
@@ -7,10 +7,6 @@
   "totalReviews": 0,
   "avgRating": null,
   "trend7d": [
-    {
-      "date": "2026-11-16",
-      "totalDownloads": 14572
-    },
     {
       "date": "2026-11-17",
       "totalDownloads": 14682
@@ -34,45 +30,13 @@
     {
       "date": "2026-11-22",
       "totalDownloads": 15410
+    },
+    {
+      "date": "2026-11-23",
+      "totalDownloads": 15410
     }
   ],
-  "recentChanges": [
-    {
-      "date": "2026-11-22",
-      "type": "growth",
-      "name": "React Native Companion",
-      "niche": "React Native Tooling",
-      "delta": 5
-    },
-    {
-      "date": "2026-11-22",
-      "type": "growth",
-      "name": "API Security Companion",
-      "niche": "API Security",
-      "delta": 2
-    },
-    {
-      "date": "2026-11-22",
-      "type": "growth",
-      "name": "Terraform IAM Wildcard Companion",
-      "niche": "IAM / Cloud Security",
-      "delta": 1
-    },
-    {
-      "date": "2026-11-22",
-      "type": "growth",
-      "name": "Terraform IAM Privesc Companion",
-      "niche": "IAM / Cloud Security",
-      "delta": 1
-    },
-    {
-      "date": "2026-11-22",
-      "type": "growth",
-      "name": "Kubernetes RBAC Wildcard Companion",
-      "niche": "Kubernetes Security",
-      "delta": 1
-    }
-  ],
+  "recentChanges": [],
   "plugins": [
     {
       "xmlId": "dev.gaphunter.mermaidcompanion",
