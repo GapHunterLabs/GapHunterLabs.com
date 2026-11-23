@@ -546,6 +546,25 @@ _PIXEL_DIFF_JS = r"""async ([a, b]) => {
 }"""
 
 
+_FIGURE_STYLES_JS = r"""(fold) => {
+  const props = ['display', 'visibility', 'opacity', 'fill', 'fill-opacity', 'stroke', 'stroke-opacity', 'stroke-width',
+                 'stop-color', 'stop-opacity', 'color', 'mix-blend-mode', 'filter', 'transform'];
+  const out = [];
+  document.querySelectorAll('svg.iso-figure').forEach((svg) => {
+    // A figure without a box (hidden at this width) is skipped; one shown on the first screen only without the
+    // stylesheets would still change the picture, where the mask paints a box that the full page does not have.
+    const r = svg.getBoundingClientRect();
+    if (!r.width || !r.height || r.top >= fold) return;
+    out.push(['figure', Math.round(r.left), Math.round(r.top), Math.round(r.width), Math.round(r.height)]);
+    svg.querySelectorAll('*').forEach((el) => {
+      const cs = getComputedStyle(el);
+      out.push([el.tagName, ...props.map((p) => cs.getPropertyValue(p))]);
+    });
+  });
+  return out;
+}"""
+
+
 @check("pages", "home: the first screen painted with only the critical CSS is the full page's first screen")
 def _critical_css(env: Env):
     # pipeline/critical_css.py inlines the rules of the home's first screen and loads the stylesheets at the end of
@@ -577,16 +596,28 @@ def _critical_css(env: Env):
                             eq(sheets, 0, "stylesheets applied while /css/ was blocked on %s" % path)
                             expect(page.evaluate("!!document.querySelector('style#critical-css')"),
                                    "%s has no critical CSS block" % path)
-                        shots.append("data:image/png;base64," + base64.b64encode(page.screenshot()).decode())
+                        # The isometric figures are masked in the picture: on the Linux runner their gradients
+                        # rasterize with a few different pixels from one load to the next (2026-11-23: 37 to 83
+                        # pixels, a different case each run, none locally). The mask keeps their position and size
+                        # in the comparison, and figure_styles compares what the mask hides, as text.
+                        figures = page.locator("svg.iso-figure")
+                        shots.append(("data:image/png;base64," + base64.b64encode(
+                            page.screenshot(mask=[figures], mask_color="#FF00FF")).decode(),
+                            page.evaluate(_FIGURE_STYLES_JS, height)))
                     finally:
                         ctx.close()
                 ctx = env.browser.new_context()
                 try:
-                    diff = ctx.new_page().evaluate(_PIXEL_DIFF_JS, shots)
+                    diff = ctx.new_page().evaluate(_PIXEL_DIFF_JS, [shots[0][0], shots[1][0]])
                 finally:
                     ctx.close()
                 if diff.get("size") or diff["pixels"]:
                     problems.append("%s %dx%d %s: %s" % (path, width, height, theme, diff))
+                full, critical = shots[0][1], shots[1][1]
+                if full != critical:
+                    first = next((i for i, (a, b) in enumerate(zip(full, critical)) if a != b), min(len(full), len(critical)))
+                    problems.append("%s %dx%d %s: figure styles differ at element %d: %s vs %s" % (
+                        path, width, height, theme, first, full[first:first + 1], critical[first:first + 1]))
     expect(not problems, "the first screen differs without the stylesheets (run python pipeline/build_critical_css.py, "
                          "then python pipeline/regenerate.py --strict): " + "; ".join(problems))
 
