@@ -10,7 +10,7 @@
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
     });
   }
-  var ATL_ICON = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6" cy="6" r="2"/><circle cx="14" cy="6" r="2"/><circle cx="10" cy="15" r="2"/><path d="M7.6 7.2 8.5 13.3M12.4 7.2 11.5 13.3"/></svg>';
+  var ATL_ICON = '<svg viewBox="7 4 34.6925 34.63" fill="currentColor" aria-hidden="true"><path d="M41.3175 36.5672L25.4402 4.81262C25.1276 4.12502 24.8151 4 24.44 4C24.1275 4 23.7524 4.12502 23.3774 4.75011C21.127 8.31312 20.1269 12.4387 20.1269 16.7518C20.1269 22.7527 23.1898 28.3785 27.6905 37.4423C28.1906 38.4425 28.5656 38.63 29.4407 38.63H40.4423C41.2549 38.63 41.6925 38.3175 41.6925 37.6924C41.6925 37.3798 41.63 37.1923 41.3175 36.5672ZM18.2516 21.565C17.0014 19.6898 16.6264 19.5647 16.3138 19.5647C16.0013 19.5647 15.8138 19.6898 15.2512 20.8149L7.31255 36.6922C7.06251 37.1923 7 37.3798 7 37.6299C7 38.1299 7.43756 38.63 8.3752 38.63H19.5643C20.3144 38.63 20.877 38.0049 21.1895 36.8172C21.5646 35.317 21.6896 34.0043 21.6896 32.4416C21.6896 28.066 19.7518 23.8154 18.2516 21.565Z"/></svg>';
   var PAGE_SIZE = 12;
   var page = 1;
   var query = '';
@@ -45,6 +45,15 @@
     }
     // 2026-11-17: cada app tiene su ficha propia en /catalog/atlassian/<name>/
     // (la instalacion sigue en Atlassian Marketplace, desde esa ficha, una vez publicada).
+    // The app's own icon when the data declares one; only a same-origin /media/*.png path is accepted,
+    // anything else falls back to the Atlassian platform mark.
+    function iconHtml(e) {
+      if (typeof e.icon === 'string' && /^\/media\/[a-z0-9\/._-]+\.png$/.test(e.icon) && e.icon.indexOf('..') === -1) {
+        return '<span class="card-cat card-app-icon" aria-hidden="true"><img src="' + esc(e.icon) +
+          '" width="34" height="34" alt="" decoding="async" loading="lazy"></span>';
+      }
+      return '<span class="card-cat atl-mark" aria-hidden="true">' + ATL_ICON + '</span>';
+    }
     function cardHtml(e) {
       var pending = e.installs === null || e.installs === undefined;
       var n = Number(e.installs) || 0;
@@ -56,7 +65,7 @@
         : thousands(n) + (ES ? (n === 1 ? ' instalación' : ' instalaciones') : (n === 1 ? ' install' : ' installs'));
       // No aria-label: visible text is the accessible name (WCAG 2.5.3).
       return '<a class="vsx-card atl-card" href="' + (ES ? '/es/catalogo/atlassian/' : '/catalog/atlassian/') + esc(e.name) + '/">' +
-        '<div class="card-header"><span class="card-cat atl-mark" aria-hidden="true">' + ATL_ICON + '</span>' +
+        '<div class="card-header">' + iconHtml(e) +
         priceBadge + '</div>' +
         '<div class="card-top"><div class="card-name">' + esc(e.displayName) + '</div><div class="card-niche">' + esc(e.niche) + '</div></div>' +
         '<p class="card-pitch">' + esc(pitchOf(e)) + '</p>' +

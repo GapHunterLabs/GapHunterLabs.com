@@ -197,6 +197,13 @@ test('catalog: platform tabs switch panels and keep the VS Code blue', async ({ 
   equal(await color('vscode'), 'rgb(0, 122, 204)', 'VS Code icon color');
   equal(await b.evaluate("document.getElementById('vsxSection').hidden"), false, 'VS Code panel shown');
   equal(await b.evaluate("document.getElementById('jetbrains').hidden"), true, 'JetBrains panel hidden');
+  await b.evaluate("document.querySelector('.platform-tab[data-platform=atlassian]').click()");
+  await delay(300);
+  equal(await b.evaluate("document.querySelector('.platform-tab[data-platform=atlassian]').getAttribute('aria-selected')"), 'true', 'Atlassian tab selected');
+  // official colors only: brand #1868DB on light, inverse white on dark (the brand blue is under 3:1 on the dark tab).
+  assert(['rgb(24, 104, 219)', 'rgb(255, 255, 255)'].includes(await color('atlassian')), 'Atlassian icon color: ' + await color('atlassian'));
+  equal(await b.evaluate("document.getElementById('atlassianSection').hidden"), false, 'Atlassian panel shown');
+  equal(await b.evaluate("document.getElementById('vsxSection').hidden"), true, 'VS Code panel hidden');
 });
 
 test('catalog and home keep working when /data/*.json is unreachable', async ({ b, base }) => {

@@ -28,6 +28,7 @@ Uso:
 from __future__ import annotations
 
 import argparse
+import base64
 import sys
 from pathlib import Path
 
@@ -35,7 +36,7 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 
 import og_kit as K  # noqa: E402
-from build_plugin_pages import Sources, PluginRenderer, truncate  # noqa: E402
+from build_plugin_pages import Sources, PluginRenderer, truncate, atl_app_icon  # noqa: E402
 
 ROOT = HERE.parent
 MEDIA_DIR = ROOT / "media"
@@ -51,13 +52,15 @@ CSS = """
     box-shadow:0 0 90px color-mix(in srgb, var(--cat) 24%, transparent); }
   .visual svg { width:132px; height:132px; stroke:var(--cat); fill:none; stroke-width:1.35; stroke-linecap:round; stroke-linejoin:round; }
   .visual svg.solid { stroke:none; fill:var(--cat); }
+  .visual img { width:144px; height:144px; display:block; }
 """
 
 ACCENT = "#FF6A1A"  # the site's signal orange: the category colors in the catalog are neutral grays, too dim for a thumbnail
 VSCODE_MARK = '<svg class="solid" viewBox="0 0 24 24" aria-hidden="true"><path d="M16.5 3 21 5.2v13.6L16.5 21 7 12.9 3.6 15.6 2 14.8V9.2l1.6-.8L7 11.1 16.5 3Zm0 4.2-5 4.8 5 4.8V7.2Z"/></svg>'
-# Generic workflow-graph mark (3 nodes), not an Atlassian/Jira logo -- see js/catalog-shared.js's "atlassian" entry.
-ATLASSIAN_MARK = ('<svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="6" cy="6" r="2"/><circle cx="14" cy="6" r="2"/>'
-                   '<circle cx="10" cy="15" r="2"/><path d="M7.6 7.2 8.5 13.3M12.4 7.2 11.5 13.3"/></svg>')
+# The large tile shows the app's own icon (workflow graph), never the Atlassian logo: the owner's mark only identifies
+# the platform, in the "Atlassian Marketplace" badge, so the app is not mistaken for an Atlassian product.
+APP_MARK_ATLASSIAN = ('<svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="6" cy="6" r="2"/><circle cx="14" cy="6" r="2"/>'
+                      '<circle cx="10" cy="15" r="2"/><path d="M7.6 7.2 8.5 13.3M12.4 7.2 11.5 13.3"/></svg>')
 
 
 def name_size(name: str) -> int:
@@ -109,7 +112,12 @@ def extension_job(renderer: PluginRenderer, e: dict):
 def atlassian_job(renderer: PluginRenderer, e: dict):
     is_pending = e.get("installs") is None
     badges = K.badges_html(["atlassian", "pending" if is_pending else "free"])
-    html = K.page_html("en", body(e["displayName"], truncate(renderer.atl_description(e), 150), badges, ACCENT, ATLASSIAN_MARK),
+    icon = atl_app_icon(e)
+    visual = APP_MARK_ATLASSIAN
+    if icon:   # the renderer gets HTML, not the site's files: the app's own icon goes in as a data URI
+        b64 = base64.b64encode((ROOT / icon.lstrip("/")).read_bytes()).decode("ascii")
+        visual = '<img src="data:image/png;base64,%s" width="144" height="144" alt="">' % b64
+    html = K.page_html("en", body(e["displayName"], truncate(renderer.atl_description(e), 150), badges, ACCENT, visual),
                        css=CSS, label=e.get("niche") or "Atlassian Marketplace app",
                        host="%s/catalog/atlassian/%s/" % (K.SITE_HOST, e["name"]))
     return "atlassian/" + e["name"], html

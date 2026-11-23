@@ -31,6 +31,12 @@ ICONS = {
 }
 
 # Genericos (no son marcas): 24x24, trazo relleno.
+# Official marks vendored unmodified under pipeline/brand/ (the owner's guidelines require their own file).
+# name -> (file, title, hex, viewBox = the file's own clip rect)
+OFFICIAL = {
+    "atlassian": ("brand/atlassian-mark.svg", "Atlassian", "1868DB", "7 4 34.6925 34.63"),
+}
+
 GENERIC = {
     "vscode": ("M16.5 3 21 5.2v13.6L16.5 21 7 12.9 3.6 15.6 2 14.8V9.2l1.6-.8L7 11.1 16.5 3Zm0 4.2-5 4.8 5 4.8V7.2Z",
                "Visual Studio Code (generic mark)"),
@@ -63,6 +69,9 @@ def main() -> int:
         title = re.search(r"<title>([^<]+)</title>", svg).group(1)
         hexc = (by_title.get(title) or {}).get("hex")
         out[name] = {"d": d, "title": title, "hex": hexc, "kind": "brand"}
+    for name, (rel, title, hexc, vb) in OFFICIAL.items():
+        d = re.search(r'<path d="([^"]+)"', (HERE / rel).read_text(encoding="utf-8")).group(1)
+        out[name] = {"d": d, "title": title, "hex": hexc, "kind": "brand", "viewBox": vb, "source": "official, unmodified"}
     for name, (d, title) in GENERIC.items():
         out[name] = {"d": d, "title": title, "hex": None, "kind": "generic"}
     OUT.write_text(json.dumps({"_license": "Brand marks: simple-icons, CC0-1.0. Brand names and logos belong to their owners.",

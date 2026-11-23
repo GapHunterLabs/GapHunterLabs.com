@@ -47,8 +47,8 @@ def icon_svg(name: str) -> str:
     ic = _ICONS.get(name)
     if not ic:
         raise KeyError("icono desconocido: %s (agregalo en build_icons.py)" % name)
-    return ('<svg class="b-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false">'
-            '<path d="%s"/></svg>' % ic["d"])
+    return ('<svg class="b-ico" viewBox="%s" aria-hidden="true" focusable="false">'
+            '<path d="%s"/></svg>' % (ic.get("viewBox", "0 0 24 24"), ic["d"]))
 
 
 def badge(label: str, icon: str | None = None, variant: str = "brand", hex6: str | None = None,
