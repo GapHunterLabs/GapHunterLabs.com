@@ -10,4 +10,4 @@ SITE_URL = "https://gaphunterlabs.com"
 
 # Version of the social-share (Open Graph) images, appended as ?v= to every og:image and twitter:image URL.
 # Networks cache the image by URL: bump it whenever pipeline/build_page_og.py or build_og_images.py re-render.
-OG_VERSION = "4"
+OG_VERSION = "5"
