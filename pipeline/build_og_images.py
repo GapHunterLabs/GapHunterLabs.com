@@ -55,8 +55,10 @@ CSS = """
 
 ACCENT = "#FF6A1A"  # the site's signal orange: the category colors in the catalog are neutral grays, too dim for a thumbnail
 VSCODE_MARK = '<svg class="solid" viewBox="0 0 24 24" aria-hidden="true"><path d="M16.5 3 21 5.2v13.6L16.5 21 7 12.9 3.6 15.6 2 14.8V9.2l1.6-.8L7 11.1 16.5 3Zm0 4.2-5 4.8 5 4.8V7.2Z"/></svg>'
-# Atlassian logomark (simple-icons, CC0): same path as pipeline/icons.json, unmodified, in the white (inverse) variant for dark backgrounds.
-ATLASSIAN_MARK = ('<svg viewBox="0 0 24 24" style="fill:#fff;stroke:none" aria-hidden="true"><path d="M7.12 11.084a.683.683 0 00-1.16.126L.075 22.974a.703.703 0 00.63 1.018h8.19a.678.678 0 00.63-.39c1.767-3.65.696-9.203-2.406-12.52zM11.434.386a15.515 15.515 0 00-.906 15.317l3.95 7.9a.703.703 0 00.628.388h8.19a.703.703 0 00.63-1.017L12.63.38a.664.664 0 00-1.196.006z"/></svg>')
+# The large tile shows the app's own icon (workflow graph), never the Atlassian logo: the owner's mark only identifies
+# the platform, in the "Atlassian Marketplace" badge, so the app is not mistaken for an Atlassian product.
+APP_MARK_ATLASSIAN = ('<svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="6" cy="6" r="2"/><circle cx="14" cy="6" r="2"/>'
+                      '<circle cx="10" cy="15" r="2"/><path d="M7.6 7.2 8.5 13.3M12.4 7.2 11.5 13.3"/></svg>')
 
 
 def name_size(name: str) -> int:
@@ -108,7 +110,7 @@ def extension_job(renderer: PluginRenderer, e: dict):
 def atlassian_job(renderer: PluginRenderer, e: dict):
     is_pending = e.get("installs") is None
     badges = K.badges_html(["atlassian", "pending" if is_pending else "free"])
-    html = K.page_html("en", body(e["displayName"], truncate(renderer.atl_description(e), 150), badges, ACCENT, ATLASSIAN_MARK),
+    html = K.page_html("en", body(e["displayName"], truncate(renderer.atl_description(e), 150), badges, ACCENT, APP_MARK_ATLASSIAN),
                        css=CSS, label=e.get("niche") or "Atlassian Marketplace app",
                        host="%s/catalog/atlassian/%s/" % (K.SITE_HOST, e["name"]))
     return "atlassian/" + e["name"], html

@@ -285,11 +285,12 @@ def _tabs(env: Env):
             expect("platform=vscode" in p.url, "the URL should record the platform: " + p.url)
             expect(p.locator("#vsxGrid > *:not([hidden])").count() > 0, "no VS Code cards are visible")
             env.shot(p, "catalog-vscode-" + theme)
-            # Atlassian: brand blue when selected, lighter blue on dark so the icon keeps 3:1 against the tab (see css/catalog.css).
+            # Atlassian: official neutral before, brand blue (light) or inverse white (dark) when selected (see css/catalog.css).
+            eq(color("atlassian"), "rgb(150, 153, 158)" if theme == "dark" else "rgb(108, 111, 119)", "Atlassian icon neutral when not selected (%s)" % theme)
             p.locator(".platform-tab[data-platform=atlassian]").click()
             p.wait_for_timeout(300)
             eq(p.locator(".platform-tab[data-platform=atlassian]").get_attribute("aria-selected"), "true", "Atlassian tab selected")
-            eq(color("atlassian"), "rgb(38, 132, 255)" if theme == "dark" else "rgb(0, 82, 204)", "Atlassian icon color when selected (%s)" % theme)
+            eq(color("atlassian"), "rgb(255, 255, 255)" if theme == "dark" else "rgb(24, 104, 219)", "Atlassian icon color when selected (%s)" % theme)
             expect(p.locator("#atlassianSection").is_visible() and not p.locator("#vsxSection").is_visible(), "the Atlassian panel should replace the VS Code one")
             expect("platform=atlassian" in p.url, "the URL should record the platform: " + p.url)
             eq(p.locator(".platform-tab[data-platform=atlassian] svg path").count(), 1, "the Atlassian tab icon is a single logomark path")

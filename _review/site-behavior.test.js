@@ -200,8 +200,8 @@ test('catalog: platform tabs switch panels and keep the VS Code blue', async ({ 
   await b.evaluate("document.querySelector('.platform-tab[data-platform=atlassian]').click()");
   await delay(300);
   equal(await b.evaluate("document.querySelector('.platform-tab[data-platform=atlassian]').getAttribute('aria-selected')"), 'true', 'Atlassian tab selected');
-  // #0052CC on light, #2684FF on dark (the brand blue is under 3:1 on the dark tab).
-  assert(['rgb(0, 82, 204)', 'rgb(38, 132, 255)'].includes(await color('atlassian')), 'Atlassian icon color: ' + await color('atlassian'));
+  // official colors only: brand #1868DB on light, inverse white on dark (the brand blue is under 3:1 on the dark tab).
+  assert(['rgb(24, 104, 219)', 'rgb(255, 255, 255)'].includes(await color('atlassian')), 'Atlassian icon color: ' + await color('atlassian'));
   equal(await b.evaluate("document.getElementById('atlassianSection').hidden"), false, 'Atlassian panel shown');
   equal(await b.evaluate("document.getElementById('vsxSection').hidden"), true, 'VS Code panel hidden');
 });

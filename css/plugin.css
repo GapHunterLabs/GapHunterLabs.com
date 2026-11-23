@@ -1460,7 +1460,8 @@
 .catalog-v2 .card-cat { display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px; flex: none;
   border-radius: var(--radius); color: var(--cat, var(--accent)); background: color-mix(in srgb, var(--cat, var(--accent)) 12%, var(--surface)); }
 .catalog-v2 .card-cat svg { width: 20px; height: 20px; }
-.catalog-v2 .vsx-mark, .catalog-v2 .atl-mark { --cat: var(--text-dim); }
+.catalog-v2 .vsx-mark { --cat: var(--text-dim); }
+.catalog-v2 .atl-mark { --cat: var(--brand-atlassian-neutral); }
 /* The Atlassian logomark is a solid shape: undo the stroke-only icon rule of .card-cat svg. */
 .card-cat.atl-mark svg { fill: currentColor; stroke: none; }
 .catalog-v2 .card-top { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
@@ -1546,8 +1547,9 @@
 .catalog-v2 .platform-tab[aria-selected="true"] svg { color: var(--signal); }
 /* Brand logos keep their own color: VS Code is blue when selected, never the site accent. */
 .catalog-v2 .platform-tab[data-platform="vscode"][aria-selected="true"] svg { color: #007ACC; }
-/* Atlassian blue (--brand-atlassian in theme.css): #0052CC on the light tab (5.8:1); on dark that blue is only 2.5:1
-   against #1C1C1C, under the 3:1 minimum for a non-text icon, so dark themes get the lighter #2684FF (4.7:1). */
+/* Atlassian mark: only the owner's approved colors. Official neutral when not selected; when selected, the brand
+   blue #1868DB on light (4.4:1 on the tab) and the inverse (white) on dark, where the brand blue is under 3:1. */
+.catalog-v2 .platform-tab[data-platform="atlassian"] svg { color: var(--brand-atlassian-neutral); }
 .catalog-v2 .platform-tab[data-platform="atlassian"][aria-selected="true"] svg { color: var(--brand-atlassian); }
 .catalog-v2 .pt-count { padding: 1px 7px; font: 600 11.5px var(--mono); }
 .catalog-v2 .platform-tab[aria-selected="true"] .pt-count { background: var(--surface); color: var(--text); }
