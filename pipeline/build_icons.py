@@ -28,6 +28,7 @@ ICONS = {
     "gradle": "gradle", "openjdk": "java", "python": "python", "github": "github",
     "githubactions": "github-actions", "git": "git", "markdown": "markdown",
     "junit5": "junit", "cloudflare": "cloudflare", "gitlab": "gitlab", "go": "go", "linkedin": "linkedin",
+    "atlassian": "atlassian",
 }
 
 # Genericos (no son marcas): 24x24, trazo relleno.

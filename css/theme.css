@@ -47,6 +47,7 @@
     --radius-lg: 10px;
 
     --bg: #FAFAFA;
+    --brand-atlassian: #0052CC;
     --surface: #FFFFFF;
     --surface-2: #F5F5F5;
     --surface-3: #EDEDED;
@@ -91,6 +92,7 @@
   :root:not([data-theme="light"]) {
       color-scheme: dark;
       --bg: #0A0A0A;
+      --brand-atlassian: #2684FF;
       --surface: #111111;
       --surface-2: #161616;
       --surface-3: #1C1C1C;
@@ -126,6 +128,7 @@
 :root[data-theme="dark"] {
     color-scheme: dark;
     --bg: #0A0A0A;
+    --brand-atlassian: #2684FF;
     --surface: #111111;
     --surface-2: #161616;
     --surface-3: #1C1C1C;
