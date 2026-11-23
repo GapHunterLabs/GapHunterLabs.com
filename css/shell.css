@@ -952,10 +952,7 @@ tr.row td[data-label]::before { font-family: var(--sans); font-size: 11px; lette
 .page-hero.gh-page-header::before {
   content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
   background:
-    radial-gradient(520px 220px at 30% 50%, color-mix(in srgb, var(--signal) 14%, transparent), transparent 70%),
-    linear-gradient(var(--grid-line) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
-  background-size: auto, 40px 40px, 40px 40px;
+    none;   /* 2026-11-23: graphite direction: no orange glow and no decorative grid behind the inner page titles */
   /* 2026-11-04: one soft ellipse whose edge lands exactly on the left, top and bottom of the box
      (center x = horizontal radius), so the glow and the grid fade out before any edge instead of
      ending on a hard line. The glow used to sit on the top edge, cut off by the box. */
@@ -1101,9 +1098,9 @@ tr.row td[data-label]::before { font-family: var(--sans); font-size: 11px; lette
   counter-increment: svc; content: counter(svc, decimal-leading-zero); content: counter(svc, decimal-leading-zero) / "";
   display: block; margin-bottom: 8px; font: 600 11.5px/1 var(--mono); letter-spacing: 0.1em; color: var(--signal);
 }
-.disclosure.disclosure-warn { border-color: var(--inspect-line); background: color-mix(in srgb, var(--inspect) 6%, var(--surface)); }
+.disclosure.disclosure-warn { border-left: 3px solid var(--signal); }
 .disclosure-warn h2::before { content: ""; display: inline-block; width: 8px; height: 8px; margin-right: 10px; border-radius: 50%;
-  background: var(--inspect); vertical-align: middle; }
+  background: var(--signal); vertical-align: middle; }
 .disclosure code { border-radius: var(--radius-sm); font-size: 0.9em; }
 .disclosure a { color: var(--text); text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
 .disclosure b, .disclosure strong { font-weight: 650; }
@@ -1258,3 +1255,10 @@ a.sp-person:hover { border-color: var(--signal); }
   .ee-row { grid-template-columns: minmax(0, 1fr); }
   .ee-row-meta { justify-content: flex-start; }
 }
+
+/* Graphite pass on the remaining pages (2026-11-23): graphite panels for the sections, rail cards and the form;
+   the service badges drop their brand colors (orange stays the only accent). */
+.disclosure, .pi-card, .contact-form-panel { background: linear-gradient(180deg, var(--panel-1), var(--panel-2)); }
+.svc-badges .badge { background: var(--surface-2); color: var(--text); border-color: var(--border); }
+.svc-badges .badge .b-ico { fill: var(--text-dim); }
+.pi-counts li b { display: inline-block; min-width: 2ch; margin-right: 6px; color: var(--text); font-variant-numeric: tabular-nums; }

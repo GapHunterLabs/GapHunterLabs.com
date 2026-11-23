@@ -37,6 +37,8 @@ STEPS = (
     ("build_blog.py", (), "the Blog index from data/blog-cases.json"),
     ("build_evidence.py", (), "the evidence hub's case cards and counts, from data/blog-cases.json and the four "
                               "evidence pages"),
+    ("build_page_figures.py", (), "the isometric figure of the hand-made pages (services, security, Blog): after "
+                                  "build_blog, which rewrites the Blog page, and before build_i18n"),
     ("build_plugin_pages.py", ("--sitemap", "--inject"), "one page per plugin, the sitemap and the hash shim"),
     ("build_feed.py", (), "the plugins RSS feed"),
     ("build_i18n.py", (), "every Spanish page, copied from the English ones: after every English generator"),

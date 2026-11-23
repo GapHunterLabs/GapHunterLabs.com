@@ -1929,5 +1929,17 @@
   "Custom plugins for your team": "Plugins a medida para tu equipo",
   "Free plugins": "Plugins gratuitos",
   "About this catalog": "Sobre este catálogo",
-  "{n}, each with its own filter": "{n}, cada una con su filtro"
+  "{n}, each with its own filter": "{n}, cada una con su filtro",
+  "<b>{n}</b> Fixed": "<b>{n}</b> corregidos",
+  "<b>{n}</b> In review": "<b>{n}</b> en revisión",
+  "<b>{n}</b> Open": "<b>{n}</b> abiertos",
+  "<b>{n}</b> Performance": "<b>{n}</b> de rendimiento",
+  "<b>{n}</b> Security": "<b>{n}</b> de seguridad",
+  "<b>{n}</b> Custom tools": "<b>{n}</b> de herramientas a medida",
+  "<b>{n}</b> Platform engineering": "<b>{n}</b> de ingeniería de plataforma",
+  "Blog at a glance": "El Blog en cifras",
+  "Cases by area": "Casos por área",
+  "Cases by status": "Casos por estado",
+  "Follow": "Seguir",
+  "RSS feed of the Blog": "Feed RSS del Blog"
 }

@@ -32,6 +32,20 @@
    "turquoise": 1,
    "problems": []
   },
+  "security": {
+   "bytes": 10898,
+   "nodes": 94,
+   "blurFilters": 0,
+   "turquoise": 1,
+   "problems": []
+  },
+  "services": {
+   "bytes": 12811,
+   "nodes": 110,
+   "blurFilters": 0,
+   "turquoise": 1,
+   "problems": []
+  },
   "sponsors": {
    "bytes": 19421,
    "nodes": 158,
@@ -65,6 +79,13 @@
    "nodes": 74,
    "blurFilters": 0,
    "turquoise": 0,
+   "problems": []
+  },
+  "writing": {
+   "bytes": 12641,
+   "nodes": 107,
+   "blurFilters": 0,
+   "turquoise": 1,
    "problems": []
   }
  }

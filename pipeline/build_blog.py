@@ -30,6 +30,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data" / "blog-cases.json"
 PAGE = ROOT / "writing" / "index.html"
 START, END = "<!-- PRERENDER:BLOG:START -->", "<!-- PRERENDER:BLOG:END -->"
+RAIL_START, RAIL_END = "<!-- PRERENDER:BLOGRAIL:START -->", "<!-- PRERENDER:BLOGRAIL:END -->"
 
 CATS = {"performance": "Performance", "security": "Security", "custom": "Custom tools", "platform": "Platform engineering"}
 STATUS = {"fixed": ("Fixed", "is-fixed", "ico-check"), "review": ("In review", "is-open", "ico-clock"),
@@ -121,6 +122,21 @@ def calendar_html() -> str:
             '</section>' % (ico("ico-chev-l", "cal-ico"), ico("ico-chev-r", "cal-ico"), labels))
 
 
+def rail_html(cases) -> str:
+    """Side rail: the case counts by status and by area (every number comes from the cases), the feed and links."""
+    by_status = {k: sum(1 for c in cases if c["status"] == k) for k in STATUS}
+    by_cat = {k: sum(1 for c in cases if c["cat"] == k) for k in CATS}
+    status_rows = "".join('<li><b>%d</b> %s</li>' % (by_status[k], STATUS[k][0]) for k in STATUS if by_status[k])
+    cat_rows = "".join('<li><b>%d</b> %s</li>' % (by_cat[k], CATS[k]) for k in CATS if by_cat[k])
+    return ('<div class="pi-card"><p class="pi-eyebrow">Cases by status</p><ul class="pi-list pi-counts">%s</ul></div>'
+            '<div class="pi-card"><p class="pi-eyebrow">Cases by area</p><ul class="pi-list pi-counts">%s</ul></div>'
+            '<div class="pi-card"><p class="pi-eyebrow">Follow</p><ul class="pi-links">'
+            '<li><a href="/writing/feed.xml">RSS feed of the Blog</a></li><li><a href="#calendar">Calendar</a></li></ul></div>'
+            '<div class="pi-card"><p class="pi-eyebrow">Related</p><ul class="pi-links">'
+            '<li><a href="/engineering-evidence/">Engineering evidence</a></li><li><a href="/methodology/">Methodology</a></li>'
+            '<li><a href="/services/">Services</a></li></ul></div>' % (status_rows, cat_rows))
+
+
 def build(dry_run: bool = False) -> None:
     data = json.loads(DATA.read_text(encoding="utf-8"))
     cases = sorted(data["cases"], key=lambda c: (max(e["d"] for e in c["events"]), c["id"]), reverse=True)
@@ -140,6 +156,10 @@ def build(dry_run: bool = False) -> None:
     if a < 0 or b < a:
         sys.exit("[build_blog] faltan los marcadores PRERENDER:BLOG en %s" % PAGE)
     html = html[:a + len(START)] + block + html[b:]
+    ra, rb = html.find(RAIL_START), html.find(RAIL_END)
+    if ra < 0 or rb < ra or html.count(RAIL_START) != 1:
+        sys.exit("[build_blog] faltan los marcadores PRERENDER:BLOGRAIL en %s" % PAGE)
+    html = html[:ra + len(RAIL_START)] + rail_html(cases) + html[rb:]
     if dry_run:
         print("[build_blog] dry-run: %d casos, %d articulos" % (len(cases), len(data["posts"])))
         return

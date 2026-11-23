@@ -34,7 +34,8 @@ sys.path.insert(0, str(ROOT / "pipeline"))
 import iso_figures  # noqa: E402
 
 PAGES = {"/": ("grid", "hero"), "/catalog/": ("catalog",), "/sponsors/": ("sponsors",),
-         "/engineering-evidence/": ("evidence", "thumb-analysis", "thumb-tickets", "thumb-security", "thumb-audits")}
+         "/engineering-evidence/": ("evidence", "thumb-analysis", "thumb-tickets", "thumb-security", "thumb-audits"),
+         "/services/": ("services",), "/security/": ("security",), "/writing/": ("writing",)}
 WIDTHS = (320, 390, 768, 1280)
 BACKGROUND = {"grid"}   # drawn behind the hero and faded by CSS: no margin and no phone stroke rule
 
