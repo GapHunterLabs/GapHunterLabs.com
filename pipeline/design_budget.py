@@ -30,13 +30,14 @@ ROOT = Path(__file__).resolve().parents[1]
 CSS = ROOT / "css"
 COMPILED = {"tw.css"}
 
-# Counts on 2026-11-09 after the first step of the migration. Lower them; never raise them.
+# Counts on 2026-11-09 after the first step of the migration; lowered on 2026-11-22 when the graphite redesign
+# dropped the hero glows and the rotating case card. Lower them; never raise them.
 CAPS = {
-    "font_sizes": 49,
+    "font_sizes": 48,
     "spacing": 43,
     "breakpoints": 21,
-    "fixed_radii": 12,
-    "shadows": 15,
+    "fixed_radii": 11,
+    "shadows": 11,
     "z_index": 10,
     "fixed_colors": 24,
 }

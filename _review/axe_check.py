@@ -41,6 +41,7 @@ def main() -> int:
     ap.add_argument("--base", default="http://127.0.0.1:8080")
     ap.add_argument("--out", help="escribe el detalle JSON aqui")
     ap.add_argument("--no-es", action="store_true")
+    ap.add_argument("--widths", default="1440,390", help="viewport widths, comma separated (default 1440,390)")
     args = ap.parse_args()
     if not AXE.exists():
         print("falta axe-core: ejecuta `npm install` en pipeline/")
@@ -55,7 +56,7 @@ def main() -> int:
             for path in paths:
                 url_path = es_url(path) if lang else path
                 for theme in ("dark", "light"):
-                    for w in (1440, 390):
+                    for w in [int(x) for x in args.widths.split(",")]:
                         ctx = b.new_context(viewport={"width": w, "height": 900},
                                             color_scheme=theme)
                         ctx.add_init_script(

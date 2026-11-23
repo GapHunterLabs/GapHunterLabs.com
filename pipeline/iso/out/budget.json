@@ -1,0 +1,71 @@
+{
+ "budget": {
+  "bytes": 40960,
+  "nodes": 400
+ },
+ "figures": {
+  "catalog": {
+   "bytes": 15686,
+   "nodes": 133,
+   "blurFilters": 0,
+   "turquoise": 1,
+   "problems": []
+  },
+  "evidence": {
+   "bytes": 14614,
+   "nodes": 123,
+   "blurFilters": 0,
+   "turquoise": 1,
+   "problems": []
+  },
+  "grid": {
+   "bytes": 3537,
+   "nodes": 35,
+   "blurFilters": 0,
+   "turquoise": 0,
+   "problems": []
+  },
+  "hero": {
+   "bytes": 15582,
+   "nodes": 110,
+   "blurFilters": 0,
+   "turquoise": 1,
+   "problems": []
+  },
+  "sponsors": {
+   "bytes": 19421,
+   "nodes": 158,
+   "blurFilters": 0,
+   "turquoise": 1,
+   "problems": []
+  },
+  "thumb-analysis": {
+   "bytes": 7089,
+   "nodes": 67,
+   "blurFilters": 0,
+   "turquoise": 0,
+   "problems": []
+  },
+  "thumb-audits": {
+   "bytes": 7555,
+   "nodes": 72,
+   "blurFilters": 0,
+   "turquoise": 0,
+   "problems": []
+  },
+  "thumb-security": {
+   "bytes": 8125,
+   "nodes": 77,
+   "blurFilters": 0,
+   "turquoise": 0,
+   "problems": []
+  },
+  "thumb-tickets": {
+   "bytes": 7740,
+   "nodes": 74,
+   "blurFilters": 0,
+   "turquoise": 0,
+   "problems": []
+  }
+ }
+}
