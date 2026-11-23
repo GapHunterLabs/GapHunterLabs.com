@@ -170,15 +170,19 @@ def contact_services(text, data, label):
 
 
 def coverage(data, used_by_page):
-    """Every price and delivery time must be shown on its own page, on /services/ and on the home."""
+    """Every price and delivery time must be shown on its own page and on /services/. The home (2026-11-23 cut) shows
+    one tile per service with its lowest price and that tier's delivery time, so it must show exactly those."""
     errors = []
     for s in data["services"]:
+        priced = [t for t in s["tiers"] if isinstance(t.get("usd"), int) and t["usd"] > 0]
+        lowest = min(priced, key=lambda t: t["usd"])["id"] if priced else None
         for lv in s["tiers"] + s.get("addOns", []):
             for field in S.FIELDS:
                 if lv.get(field) is None:
                     continue
                 ref = "%s.%s.%s" % (s["key"], lv["id"], field)
-                for where in (s["path"], HUB, HOME):
+                places = (s["path"], HUB, HOME) if lv["id"] == lowest and lv in s["tiers"] else (s["path"], HUB)
+                for where in places:
                     if ref not in used_by_page.get(where, set()):
                         errors.append("%s: no page binding shows %s (%s)" % (where, ref, lv[field]))
     return errors

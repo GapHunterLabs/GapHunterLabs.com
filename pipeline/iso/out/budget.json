@@ -53,55 +53,6 @@
    "turquoise": 1,
    "problems": []
   },
-  "stat-advisories": {
-   "bytes": 4873,
-   "nodes": 51,
-   "blurFilters": 0,
-   "turquoise": 0,
-   "problems": []
-  },
-  "stat-downloads": {
-   "bytes": 6158,
-   "nodes": 61,
-   "blurFilters": 0,
-   "turquoise": 0,
-   "problems": []
-  },
-  "stat-prs": {
-   "bytes": 4427,
-   "nodes": 49,
-   "blurFilters": 0,
-   "turquoise": 0,
-   "problems": []
-  },
-  "stat-tools": {
-   "bytes": 6869,
-   "nodes": 68,
-   "blurFilters": 0,
-   "turquoise": 0,
-   "problems": []
-  },
-  "step-find": {
-   "bytes": 5870,
-   "nodes": 61,
-   "blurFilters": 0,
-   "turquoise": 0,
-   "problems": []
-  },
-  "step-fix": {
-   "bytes": 5999,
-   "nodes": 61,
-   "blurFilters": 0,
-   "turquoise": 0,
-   "problems": []
-  },
-  "step-trace": {
-   "bytes": 7177,
-   "nodes": 70,
-   "blurFilters": 0,
-   "turquoise": 0,
-   "problems": []
-  },
   "thumb-analysis": {
    "bytes": 7089,
    "nodes": 67,

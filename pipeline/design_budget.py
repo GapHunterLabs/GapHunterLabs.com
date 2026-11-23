@@ -39,7 +39,7 @@ CAPS = {
     "fixed_radii": 11,
     "shadows": 11,
     "z_index": 10,
-    "fixed_colors": 24,
+    "fixed_colors": 19,
 }
 # Where the migration ends.
 GOALS = {"font_sizes": 10, "spacing": 13, "breakpoints": 6, "fixed_radii": 0, "shadows": 3, "z_index": 6,

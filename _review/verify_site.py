@@ -397,8 +397,9 @@ def _sponsors_home(env: Env):
     for lang, home, target in (("en", "/", "/sponsors/"), ("es", "/es/", "/es/patrocinadores/")):
         with env.page() as p:
             env.go(p, home)
-            expect(p.locator("#sponsors").count() == 1, "the sponsors section is missing [%s]" % lang)
-            expect(p.locator("#sponsors a.btn[href='%s']" % target).count() == 1, "the call to action [%s]" % lang)
+            # 2026-11-23 home cut: no sponsor wall on the home; the closing block links to the sponsors page.
+            expect(p.locator("#start a[href='%s']" % target).count() == 1,
+                   "the closing block must link to the sponsors page [%s]" % lang)
 
 
 @check("sponsors", "sponsor links are counted per sponsor and place, keep rel=sponsored, and unlinked names stay plain")
@@ -455,10 +456,12 @@ VOICE_ES = re.compile(r"\bnuestr[oa]s?\b|\bnosotr[oa]s\b|\bJoel (es|tiene|respon
 VOICE_SKIP = ("eula/", "es/eula/", "catalog/", "es/catalogo/", "laboratorio/")
 
 
-def _visible_main(text):
+def _visible_main(text, drop_quotes=False):
     m = re.search(r"(?is)<main\b.*?</main>", re.sub(r"(?s)<!--.*?-->", "", text))
     body = m.group(0) if m else ""
     body = re.sub(r"(?is)<(script|style|svg)\b.*?</\1>", " ", body)
+    if drop_quotes:   # a <blockquote> holds a third party's own words (2026-11-23: a maintainer's comment on the home)
+        body = re.sub(r"(?is)<blockquote\b.*?</blockquote>", " ", body)
     body = re.sub(r"<[^>]+>", " ", body)
     import html as _html
     return " ".join(_html.unescape(body).split())
@@ -474,7 +477,7 @@ def _voice(env: Env):
             continue
         rx = VOICE_ES if rel.startswith("es/") else VOICE_EN
         page = f.read_text(encoding="utf-8")
-        text = _visible_main(page)
+        text = _visible_main(page, drop_quotes=True)
         for sent in re.split(r"(?<=[.!?])\s+", text):
             if rx.search(sent) and "Gap Hunter Labs is my" not in sent:
                 bad.append("%s: %s" % (rel, sent[:110]))
