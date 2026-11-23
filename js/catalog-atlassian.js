@@ -45,6 +45,15 @@
     }
     // 2026-11-17: cada app tiene su ficha propia en /catalog/atlassian/<name>/
     // (la instalacion sigue en Atlassian Marketplace, desde esa ficha, una vez publicada).
+    // The app's own icon when the data declares one; only a same-origin /media/*.png path is accepted,
+    // anything else falls back to the Atlassian platform mark.
+    function iconHtml(e) {
+      if (typeof e.icon === 'string' && /^\/media\/[a-z0-9\/._-]+\.png$/.test(e.icon) && e.icon.indexOf('..') === -1) {
+        return '<span class="card-cat card-app-icon" aria-hidden="true"><img src="' + esc(e.icon) +
+          '" width="34" height="34" alt="" decoding="async" loading="lazy"></span>';
+      }
+      return '<span class="card-cat atl-mark" aria-hidden="true">' + ATL_ICON + '</span>';
+    }
     function cardHtml(e) {
       var pending = e.installs === null || e.installs === undefined;
       var n = Number(e.installs) || 0;
@@ -56,7 +65,7 @@
         : thousands(n) + (ES ? (n === 1 ? ' instalación' : ' instalaciones') : (n === 1 ? ' install' : ' installs'));
       // No aria-label: visible text is the accessible name (WCAG 2.5.3).
       return '<a class="vsx-card atl-card" href="' + (ES ? '/es/catalogo/atlassian/' : '/catalog/atlassian/') + esc(e.name) + '/">' +
-        '<div class="card-header"><span class="card-cat atl-mark" aria-hidden="true">' + ATL_ICON + '</span>' +
+        '<div class="card-header">' + iconHtml(e) +
         priceBadge + '</div>' +
         '<div class="card-top"><div class="card-name">' + esc(e.displayName) + '</div><div class="card-niche">' + esc(e.niche) + '</div></div>' +
         '<p class="card-pitch">' + esc(pitchOf(e)) + '</p>' +

@@ -28,6 +28,7 @@ Uso:
 from __future__ import annotations
 
 import argparse
+import base64
 import sys
 from pathlib import Path
 
@@ -35,7 +36,7 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 
 import og_kit as K  # noqa: E402
-from build_plugin_pages import Sources, PluginRenderer, truncate  # noqa: E402
+from build_plugin_pages import Sources, PluginRenderer, truncate, atl_app_icon  # noqa: E402
 
 ROOT = HERE.parent
 MEDIA_DIR = ROOT / "media"
@@ -51,6 +52,7 @@ CSS = """
     box-shadow:0 0 90px color-mix(in srgb, var(--cat) 24%, transparent); }
   .visual svg { width:132px; height:132px; stroke:var(--cat); fill:none; stroke-width:1.35; stroke-linecap:round; stroke-linejoin:round; }
   .visual svg.solid { stroke:none; fill:var(--cat); }
+  .visual img { width:144px; height:144px; display:block; }
 """
 
 ACCENT = "#FF6A1A"  # the site's signal orange: the category colors in the catalog are neutral grays, too dim for a thumbnail
@@ -110,7 +112,12 @@ def extension_job(renderer: PluginRenderer, e: dict):
 def atlassian_job(renderer: PluginRenderer, e: dict):
     is_pending = e.get("installs") is None
     badges = K.badges_html(["atlassian", "pending" if is_pending else "free"])
-    html = K.page_html("en", body(e["displayName"], truncate(renderer.atl_description(e), 150), badges, ACCENT, APP_MARK_ATLASSIAN),
+    icon = atl_app_icon(e)
+    visual = APP_MARK_ATLASSIAN
+    if icon:   # the renderer gets HTML, not the site's files: the app's own icon goes in as a data URI
+        b64 = base64.b64encode((ROOT / icon.lstrip("/")).read_bytes()).decode("ascii")
+        visual = '<img src="data:image/png;base64,%s" width="144" height="144" alt="">' % b64
+    html = K.page_html("en", body(e["displayName"], truncate(renderer.atl_description(e), 150), badges, ACCENT, visual),
                        css=CSS, label=e.get("niche") or "Atlassian Marketplace app",
                        host="%s/catalog/atlassian/%s/" % (K.SITE_HOST, e["name"]))
     return "atlassian/" + e["name"], html

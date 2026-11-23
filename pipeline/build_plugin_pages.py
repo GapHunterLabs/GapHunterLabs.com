@@ -343,6 +343,31 @@ PAIRED_DASH_RE = re.compile(r"\s+[—–]\s+([^—–.]{1,140}?)\s+[—–]\s+")
 SINGLE_DASH_RE = re.compile(r"\s+(?:[—–]|--)\s+")
 
 
+ATL_ICON_RE = re.compile(r"^/media/[a-z0-9/._-]+\.png$")
+
+
+def atl_app_icon(app: dict):
+    """Site path of an Atlassian app's own icon, or None when the data has none. A declared icon that is not a
+    same-origin /media/*.png path, or whose file is missing, stops the build: never a broken or foreign image."""
+    icon = app.get("icon")
+    if icon is None:
+        return None
+    if not isinstance(icon, str) or not ATL_ICON_RE.match(icon) or ".." in icon:
+        raise SystemExit("[build] data/atlassian-catalog-data.json: invalid icon for %s (expected /media/...png)" % app.get("name"))
+    if not (ROOT / icon.lstrip("/")).is_file():
+        raise SystemExit("[build] data/atlassian-catalog-data.json: icon file not found for %s: %s" % (app.get("name"), icon))
+    return icon
+
+
+def atl_icon_html(app: dict, platform_mark: str, size: int = 34) -> str:
+    """The card's icon slot: the app's own icon when it has one, otherwise the Atlassian platform mark."""
+    icon = atl_app_icon(app)
+    if icon:
+        return ('<span class="card-cat card-app-icon" aria-hidden="true"><img src="%s" width="%d" height="%d" alt="" '
+                'decoding="async" loading="lazy"></span>' % (esc(icon), size, size))
+    return '<span class="card-cat atl-mark" aria-hidden="true">%s</span>' % platform_mark
+
+
 def pitch_prose(value) -> str:
     """Descripcion de un plugin tal como la muestra el sitio (2026-10-08). Sale del README y repite en todas el mismo
     molde: un prefijo de plataforma ("IntelliJ-family plugin.") que ya dice la ficha, y rayas largas para incisos y
@@ -1052,11 +1077,11 @@ class PluginRenderer:
         # No aria-label: ver la nota de vsx_card_html, mismo criterio (WCAG 2.5.3).
         return (
             '<a class="rel-card" href="/catalog/atlassian/%s/">'
-            '<div class="rel-head"><span class="card-cat" style="--cat:var(--accent)" aria-hidden="true">%s</span>'
+            '<div class="rel-head">%s'
             '%s</div>'
             '<div class="rel-name">%s</div><div class="rel-niche">%s</div><p class="rel-pitch">%s</p>'
             '<div class="rel-foot"><span>%s</span><span class="rel-go">Details</span></div></a>'
-        ) % (esc(o["name"]), self.src.icons["atlassian"], price_badge_html, esc(o["displayName"]),
+        ) % (esc(o["name"]), atl_icon_html(o, self.src.icons["atlassian"]), price_badge_html, esc(o["displayName"]),
              esc(o.get("niche")), esc(pitch_text(o.get("pitch")) or ""), foot)
 
     def atl_body_html(self, e):

@@ -10,6 +10,7 @@
       "pitch": "Finds Jira workflow states with no way out, including closed loops that never reach Done.",
       "niche": "Workflow / Jira Cloud",
       "repo": "workflow-gap-companion",
+      "icon": "/media/atlassian/workflow-gap-companion/icon.png",
       "githubUrl": "https://github.com/GapHunterLabs/workflow-gap-companion",
       "marketplaceUrl": null,
       "version": "1.0.0",

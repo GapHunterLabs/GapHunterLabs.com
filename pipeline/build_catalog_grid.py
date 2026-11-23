@@ -34,7 +34,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from build_plugin_pages import Sources, PluginRenderer, esc, thousands, die, plain_text, pitch_text  # noqa: E402
+from build_plugin_pages import Sources, PluginRenderer, esc, thousands, die, plain_text, pitch_text, atl_icon_html  # noqa: E402
 import json  # noqa: E402
 
 PRICE_LABEL = {"FREE": "Free", "FREEMIUM": "Freemium", "PAID": "Paid"}
@@ -306,13 +306,13 @@ def build(dry_run: bool = False) -> None:
                    "%s %s" % (thousands(n), "install" if n == 1 else "installs"))
         return (
             '<a class="vsx-card atl-card" href="/catalog/atlassian/%s/">'
-            '<div class="card-header"><span class="card-cat atl-mark" aria-hidden="true">%s</span>'
+            '<div class="card-header">%s'
             '%s</div>'
             '<div class="card-top"><div class="card-name">%s</div><div class="card-niche">%s</div></div>'
             '<p class="card-pitch">%s</p>'
             '<div class="card-metrics"><span class="card-dl-wrap">%s</span>'
             '<span class="card-go">Details</span></div></a>'
-            % (esc(e.get("name")), src.icons["atlassian"], price_badge, esc(e.get("displayName")), esc(e.get("niche")),
+            % (esc(e.get("name")), atl_icon_html(e, src.icons["atlassian"]), price_badge, esc(e.get("displayName")), esc(e.get("niche")),
                esc(pitch_text(e.get("pitch"))), metrics))
 
     html = inject(html, "<!-- PRERENDER:ATLSUB:START -->", "<!-- PRERENDER:ATLSUB:END -->",
