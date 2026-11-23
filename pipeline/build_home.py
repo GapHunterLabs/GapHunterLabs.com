@@ -77,7 +77,7 @@ def tile(label, value, sub_html, extra=""):
 
 
 # Figures of the home that build() inlines by name; the catalog figure and the stat glyphs have their own steps.
-HOME_FIGURES = ("grid", "hero", "step-find", "step-trace", "step-fix")
+HOME_FIGURES = ("grid", "hero", "step-find", "step-trace", "step-fix", "thumb-tickets", "thumb-security", "thumb-audits")
 STAT_FIGURES = ("stat-downloads", "stat-tools", "stat-prs", "stat-advisories")
 
 

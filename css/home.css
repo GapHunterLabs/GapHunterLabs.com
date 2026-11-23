@@ -176,7 +176,7 @@ a:focus-visible, .btn:focus-visible { outline: none; box-shadow: var(--focus-rin
   border-radius: 50%;
   background: var(--pending);
 }
-.inv-status.is-open::before { background: var(--inspect); }
+.inv-status.is-open::before { background: var(--signal); }
 .inv-status.is-fixed::before { background: var(--valid); }
 
 .inv-body h3 { font: 600 22px/1.3 var(--sans); letter-spacing: -0.015em; overflow-wrap: anywhere; }
@@ -210,7 +210,7 @@ a:focus-visible, .btn:focus-visible { outline: none; box-shadow: var(--focus-rin
   .inv-links { grid-column: 1 / -1; grid-row: 5; }
 }
 
-/* Measurements: amber = the bottleneck as found, green = the result after
+/* Measurements: neutral = the bottleneck as found, green = the result after
    the fix. Never color alone: the sentence always says which is which. */
 .m-before, .m-after, .m-neutral {
   font: 600 0.95em var(--mono);
@@ -218,7 +218,7 @@ a:focus-visible, .btn:focus-visible { outline: none; box-shadow: var(--focus-rin
   padding: 0 0.25em;
   border-radius: var(--radius-sm);
 }
-.m-before { color: var(--inspect); background: var(--inspect-bg); }
+.m-before { color: var(--text); background: var(--surface-2); }
 .m-after { color: var(--valid); background: var(--valid-bg); }
 .m-neutral { color: var(--text); background: var(--surface-2); }
 
@@ -575,3 +575,37 @@ a:focus-visible, .btn:focus-visible { outline: none; box-shadow: var(--focus-rin
 .nb-tools .tool-facts dt { font: 600 11.5px/1.6 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; }
 .nb-tools .tool-facts dd { margin: 0; font-size: 14px; line-height: 1.6; }
 @media (max-width: 960px) { .nb-tools { grid-template-columns: minmax(0, 1fr); } .nb-svc-cards { grid-template-columns: minmax(0, 1fr); } }
+
+/* ---- Selected investigations, graphite pass (2026-11-23) -----------------------------------------------------
+   A thumbnail per case; on desktop the case facts sit in a left column and the story (title, cause, intervention,
+   result, links) on the right. Orange marks an open case and the cause, green a fix and the result; no blue. */
+.inv { background: linear-gradient(180deg, var(--panel-1), var(--panel-2)); }
+.inv-glyph { order: 0; display: flex; align-items: flex-end; height: 72px; }
+.inv-glyph svg { width: auto; height: 100%; }
+.inv-facts > div { padding: 14px 0 0; border: 0; border-top: 2px solid var(--border-strong); border-radius: 0; background: none; }
+.inv-facts > div:last-child { border-top-color: var(--valid); }
+.inv-facts dt { font: 600 11.5px/1.4 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-dim); }
+.inv-facts > div:nth-child(1) dt { --dot: var(--signal); }
+.inv-facts > div:nth-child(2) dt { --dot: var(--text-dim); }
+.inv-facts > div:nth-child(3) dt { --dot: var(--valid); }
+@media (min-width: 961px) {
+  .inv { grid-template-columns: 200px minmax(0, 1fr); column-gap: 40px; row-gap: 8px; align-items: start; }
+  .inv-glyph { grid-column: 1; grid-row: 1; }
+  .inv-no { grid-column: 1; grid-row: 2; }
+  .inv-badges { grid-column: 1; grid-row: 3; }
+  .inv-id { grid-column: 1; grid-row: 4; }
+  .inv-scope { grid-column: 1; grid-row: 5; }
+  .inv-meta .inv-status { grid-column: 1; grid-row: 6; justify-self: start; max-width: none; margin-top: 6px; }
+  .inv-body h3 { grid-column: 2; grid-row: 1; align-self: end; }
+  .inv-facts { grid-column: 2; grid-row: 2 / span 5; gap: 24px; margin-top: 8px; }
+  .inv-links { grid-column: 2; grid-row: 7; }
+}
+.nb-record { margin-top: 28px; padding-top: 0; border-top: 0; }
+.nb-record ul { gap: 8px; }
+.nb-record li { max-width: none; padding: 12px 16px 12px 136px; border: 1px solid var(--border); border-radius: var(--radius-lg);
+  background: linear-gradient(180deg, var(--panel-1), var(--panel-2)); }
+.nb-record li > .inv-status { left: 12px; top: 12px; }
+@media (max-width: 600px) {
+  .nb-record li { padding: 12px 14px; }
+  .nb-record li > .inv-status { position: static; display: inline-flex; width: auto; margin: 0 0 6px; }
+}

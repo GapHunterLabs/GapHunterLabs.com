@@ -33,7 +33,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "pipeline"))
 import iso_figures  # noqa: E402
 
-PAGES = {"/": ("grid", "hero", "catalog", "step-find", "step-trace", "step-fix", "stat-downloads", "stat-tools", "stat-prs", "stat-advisories"), "/catalog/": ("catalog",), "/sponsors/": ("sponsors", "stat-downloads", "stat-tools", "stat-prs", "stat-advisories"),
+PAGES = {"/": ("grid", "hero", "catalog", "thumb-tickets", "thumb-security", "thumb-audits", "step-find", "step-trace", "step-fix", "stat-downloads", "stat-tools", "stat-prs", "stat-advisories"), "/catalog/": ("catalog",), "/sponsors/": ("sponsors", "stat-downloads", "stat-tools", "stat-prs", "stat-advisories"),
          "/engineering-evidence/": ("evidence", "thumb-analysis", "thumb-tickets", "thumb-security", "thumb-audits"),
          "/services/": ("services",), "/security/": ("security",), "/writing/": ("writing",)}
 WIDTHS = (320, 390, 768, 1280)
