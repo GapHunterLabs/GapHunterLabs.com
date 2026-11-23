@@ -561,7 +561,7 @@ def build(dry_run: bool = False) -> None:
     cases = json.loads(CASES_DATA.read_text(encoding="utf-8"))["cases"]
     html = inject(html, "<!-- PRERENDER:HEROCASE:START -->", "<!-- PRERENDER:HEROCASE:END -->",
                   hero_case_html(cases), "HEROCASE")
-    for figure in ("grid", "hero"):
+    for figure in ("grid", "hero", "step-find", "step-trace", "step-fix"):
         html = iso_figures.inject_or_die(html, figure, "index.html", "build_home")
     research = json.loads(RESEARCH_DATA.read_text(encoding="utf-8"))
     html = inject(html, "<!-- PRERENDER:METRICS:START -->", "<!-- PRERENDER:METRICS:END -->",
