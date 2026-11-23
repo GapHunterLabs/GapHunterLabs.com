@@ -1716,6 +1716,11 @@
 .ph-stats .hdr-stat-label { font-size: 11.5px; }
 .ph-media { overflow: hidden; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); box-shadow: var(--shadow-lg); }
 .ph-media img, .ph-media video { display: block; width: 100%; height: auto; }
+/* Atlassian app screenshots (2026-11-23): the first one sits in the hero (.ph-media); the rest in their own card. */
+.atl-shots { margin-top: 16px; }
+.atl-shot { margin: 0; }
+.atl-shot img { display: block; width: 100%; height: auto; border: 1px solid var(--border); border-radius: var(--radius); }
+.atl-shot figcaption { margin-top: 10px; color: var(--text-dim); font-size: 14px; line-height: 1.5; }
 .plugin-body { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); align-items: start; gap: 16px; margin-top: 24px; }
 .pb-card { padding: 24px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); }
 .pb-title { display: flex; align-items: center; gap: 10px; margin: 0 0 12px; color: var(--text); font: 700 18px var(--sans); letter-spacing: 0; text-transform: none; }
