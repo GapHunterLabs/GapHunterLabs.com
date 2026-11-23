@@ -1949,5 +1949,8 @@
   "Verified badge: Introduction to Modern AI, Cisco": "Insignia verificada: Introduction to Modern AI, Cisco",
   "{n} JetBrains plugins and {n} VS Code extensions, each with its own page and a clear price: free, freemium or paid.": "{n} plugins para JetBrains y {n} extensiones para VS Code, cada uno con su propia página y un precio claro: gratis, freemium o de pago.",
   "<b>Join.</b> Monthly support goes through GitHub Sponsors or Patreon; a one-off contribution through Buy Me a Coffee. If your company needs an invoice or other paperwork, write to me first: I invoice companies in Colombian pesos (COP), at the official exchange rate on the invoice date.": "<b>Únete.</b> El apoyo mensual va por GitHub Sponsors o Patreon; un aporte único, por Buy Me a Coffee. Si tu empresa necesita factura u otros trámites, escríbeme primero: facturo a empresas en pesos colombianos (COP), a la tasa de cambio oficial de la fecha de la factura.",
-  "Sponsor on GitHub": "Patrocinar en GitHub"
+  "Sponsor on GitHub": "Patrocinar en GitHub",
+  "Screenshots": "Capturas de pantalla",
+  "Workflow Gap Companion report in Jira admin: four orphan states found in a demo workflow, each flagged as dead end, closed cycle or no incoming": "Reporte de Workflow Gap Companion en la administración de Jira: cuatro estados huérfanos encontrados en un workflow de demostración, marcados como sin salida, ciclo cerrado o sin entrada",
+  "The export panel open, with the full report as JSON and a CSV option": "El panel de exportación abierto, con el reporte completo en JSON y la opción CSV"
 }

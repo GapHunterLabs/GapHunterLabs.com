@@ -18,7 +18,17 @@
       "lastUpdated": null,
       "installs": null,
       "rating": null,
-      "ratingCount": 0
+      "ratingCount": 0,
+      "screenshots": [
+        {
+          "src": "/media/atlassian/workflow-gap-companion/screenshot-1-report-1840.webp",
+          "alt": "Workflow Gap Companion report in Jira admin: four orphan states found in a demo workflow, each flagged as dead end, closed cycle or no incoming"
+        },
+        {
+          "src": "/media/atlassian/workflow-gap-companion/screenshot-2-export-1840.webp",
+          "alt": "The export panel open, with the full report as JSON and a CSV option"
+        }
+      ]
     }
   ]
 }

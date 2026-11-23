@@ -359,6 +359,42 @@ def atl_app_icon(app: dict):
     return icon
 
 
+ATL_SHOT_RE = re.compile(r"^/media/[a-z0-9/._-]+-1840\.webp$")
+
+
+def atl_screenshots(app: dict) -> list:
+    """An Atlassian app's screenshots: [{"src": "/media/...-1840.webp", "alt": "..."}], each with a 920 px twin
+    ("-920.webp") for smaller screens. A malformed entry, a foreign or traversing path, a missing file or an empty alt
+    stops the build: never a broken image, never an image without a text alternative."""
+    shots = app.get("screenshots")
+    if shots is None:
+        return []
+    name = app.get("name")
+    if not isinstance(shots, list):
+        raise SystemExit("[build] data/atlassian-catalog-data.json: screenshots of %s must be a list" % name)
+    out = []
+    for i, s in enumerate(shots, 1):
+        src = s.get("src") if isinstance(s, dict) else None
+        alt = s.get("alt") if isinstance(s, dict) else None
+        if not isinstance(src, str) or not ATL_SHOT_RE.match(src) or ".." in src:
+            raise SystemExit("[build] data/atlassian-catalog-data.json: screenshot %d of %s: invalid src (expected /media/...-1840.webp)" % (i, name))
+        if not isinstance(alt, str) or not alt.strip() or len(alt) > 200:
+            raise SystemExit("[build] data/atlassian-catalog-data.json: screenshot %d of %s: alt text missing or longer than 200" % (i, name))
+        small = src[: -len("-1840.webp")] + "-920.webp"
+        for path in (src, small):
+            if not (ROOT / path.lstrip("/")).is_file():
+                raise SystemExit("[build] data/atlassian-catalog-data.json: screenshot file not found for %s: %s" % (name, path))
+        out.append({"src": src, "small": small, "alt": alt.strip()})
+    return out
+
+
+def atl_shot_img(shot: dict, eager: bool) -> str:
+    return ('<img src="%s" srcset="%s 920w, %s 1840w" sizes="(max-width: 900px) 100vw, 50vw" width="1840" height="900" '
+            'alt="%s" decoding="async" loading="%s"%s>'
+            % (esc(shot["small"]), esc(shot["small"]), esc(shot["src"]), esc(shot["alt"]),
+               "eager" if eager else "lazy", ' fetchpriority="high"' if eager else ""))
+
+
 def atl_icon_html(app: dict, platform_mark: str, size: int = 34) -> str:
     """The card's icon slot: the app's own icon when it has one, otherwise the Atlassian platform mark."""
     icon = atl_app_icon(app)
@@ -612,6 +648,11 @@ PLUGIN_PAGE_CSS = """
 .ph-stats .hdr-stat-label { font-size: 11.5px; }
 .ph-media { overflow: hidden; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); box-shadow: var(--shadow-lg); }
 .ph-media img, .ph-media video { display: block; width: 100%; height: auto; }
+/* Atlassian app screenshots (2026-11-23): the first one sits in the hero (.ph-media); the rest in their own card. */
+.atl-shots { margin-top: 16px; }
+.atl-shot { margin: 0; }
+.atl-shot img { display: block; width: 100%; height: auto; border: 1px solid var(--border); border-radius: var(--radius); }
+.atl-shot figcaption { margin-top: 10px; color: var(--text-dim); font-size: 14px; line-height: 1.5; }
 .plugin-body { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); align-items: start; gap: 16px; margin-top: 24px; }
 .pb-card { padding: 24px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); }
 .pb-title { display: flex; align-items: center; gap: 10px; margin: 0 0 12px; color: var(--text); font: 700 18px var(--sans); letter-spacing: 0; text-transform: none; }
@@ -1094,7 +1135,8 @@ class PluginRenderer:
              '<a href="/catalog/">Catalog</a><span class="crumb-sep">›</span>'
              '<a href="/catalog/?platform=atlassian">Atlassian</a><span class="crumb-sep">›</span>'
              '<span aria-current="page">%s</span></nav>' % esc(e["displayName"])]
-        h.append('<header class="plugin-hero page-hero band-dark gh-page-header no-media"><div class="ph-copy">')
+        shots = atl_screenshots(e)
+        h.append('<header class="plugin-hero page-hero band-dark gh-page-header%s"><div class="ph-copy">' % ("" if shots else " no-media"))
         h.append('<p class="contact-kicker">Atlassian Marketplace app</p>')
         price_badge_hero = ('<span class="price-badge price-pending">Pending</span>' if is_pending
                              else '<span class="price-badge price-free">Free</span>')
@@ -1116,7 +1158,14 @@ class PluginRenderer:
             stat("Pending" if is_pending else thousands(n), "Installs"), stat(esc(e.get("version") or "—"), "Version"),
             stat(esc((e.get("publishedDate") or "—")[:10]), "Published"),
             stat(esc((e.get("lastUpdated") or "—")[:10]), "Last updated")))
-        h.append('</div></header>')
+        h.append('</div>')
+        if shots:
+            h.append('<div class="ph-media">%s</div>' % atl_shot_img(shots[0], eager=True))
+        h.append('</header>')
+        if len(shots) > 1:
+            h.append('<section class="pb-card atl-shots"><h2 class="pb-title">Screenshots</h2>%s</section>' % "".join(
+                '<figure class="atl-shot">%s<figcaption>%s</figcaption></figure>' % (atl_shot_img(s, eager=False), esc(s["alt"]))
+                for s in shots[1:]))
 
         fact = lambda k, v: '<div class="fact"><dt>%s</dt><dd>%s</dd></div>' % (k, v)
         atl_id_m = re.search(r"/apps/(\d+)", e.get("marketplaceUrl") or "")
