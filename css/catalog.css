@@ -882,13 +882,9 @@
 
   .chip.free { background: var(--surface-2); color: var(--text-dim); }
   .chip.freemium { background: color-mix(in srgb, var(--accent) 18%, transparent); color: var(--accent); }
-  /* 2026-08-23 (audit finding): Paid used to share the exact same
-     --accent text color as Freemium, distinguished only by background
-     opacity (18% vs 30%) -- harder to tell apart at a glance than
-     .free/.pending, which each get their own distinct hue. --cyan is
-     already part of the brand palette (the logo's second blue), unused
-     by any other chip/badge, so this doesn't introduce a new color. */
-  .chip.paid { background: color-mix(in srgb, var(--cyan) 22%, transparent); color: var(--cyan); }
+  /* Paid has its own tint so it never reads like Freemium. 2026-11-22: the orange accent, not blue; blue marks
+     technical elements only. */
+  .chip.paid { background: color-mix(in srgb, var(--signal) 14%, transparent); color: var(--text); }
 
   .chip.pending { background: var(--pending-bg); color: var(--pending); animation: pendingPulse 2.4s ease-in-out infinite; }
   @keyframes pendingPulse {
@@ -1411,6 +1407,17 @@
   align-items: start; gap: 0; max-width: none; margin: 0; }
 
 @media (max-width: 900px) { .catalog-v2 .catalog-heading.gh-page-header { grid-template-columns: 1fr; } }
+/* 2026-11-22: the isometric figure sits to the right of the title; the spec sheet keeps the full width below both.
+   Phones drop the figure, so the search and filters still end inside the first screen. */
+.catalog-v2 .catalog-heading.has-figure { grid-template-columns: minmax(0, 1fr) minmax(0, 340px); grid-template-areas: "copy figure" "spec spec";
+  column-gap: 40px; align-items: center; }
+.catalog-v2 .catalog-heading.has-figure .ch-copy { grid-area: copy; }
+.catalog-v2 .catalog-heading.has-figure .spec-sheet { grid-area: spec; }
+.catalog-v2 .catalog-heading.has-figure .page-figure { grid-area: figure; }
+@media (max-width: 900px) {
+  .catalog-v2 .catalog-heading.has-figure { grid-template-columns: minmax(0, 1fr); grid-template-areas: "copy" "figure" "spec"; }
+}
+@media (max-width: 700px) { .catalog-v2 .catalog-heading.has-figure .page-figure { display: none; } }
 
 /* Pestanas de plataforma */
 .platform-tabs { display: flex; gap: 4px; margin: 32px 0 0; border-bottom: 1px solid var(--border); overflow-x: auto; }
@@ -1568,6 +1575,17 @@
 .catalog-v2 .catalog-explore .cat-cell { border-radius: var(--radius-lg); transition: border-color 120ms ease, background-color 120ms ease; }
 .catalog-v2 .catalog-explore .cat-cell:hover { border-color: var(--border-strong); background: var(--surface-2); }
 .catalog-v2 .catalog-explore .cat-cell[aria-pressed="true"] { border-color: var(--signal); background: color-mix(in srgb, var(--signal) 9%, var(--surface)); }
+
+/* Category navigation (2026-11-22): on wide screens a grid of labelled cells, each with its count, easier to scan
+   than a wrapped row of small chips. Narrower screens keep the compact chips above. */
+@media (min-width: 961px) {
+  .catalog-v2 .catalog-explore .cat-board { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; overflow: visible; }
+  .catalog-v2 .catalog-explore .cat-cell { gap: 10px; padding: 10px 12px; }
+  .catalog-v2 .catalog-explore .cat-cell-icon { width: 28px; height: 28px; }
+  .catalog-v2 .catalog-explore .cat-cell-icon svg { width: 14px; height: 14px; }
+  .catalog-v2 .catalog-explore .cat-cell-label { font-size: 13.5px; }
+  .catalog-v2 .catalog-explore .cat-cell-count { font-size: 12px; }
+}
 
 /* Cards (JetBrains and VS Code). */
 .catalog-v2 .plugin-grid { gap: 14px; }
