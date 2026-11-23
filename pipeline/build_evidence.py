@@ -242,7 +242,10 @@ def build(dry_run: bool = False) -> None:
     if dry_run:
         print("[build_evidence] dry-run: %d of %d cases shown" % (shown, len(cases)))
         return
-    HUB.write_text(html, encoding="utf-8", newline="\n")
+    # Keep the line endings the checkout already has (CRLF on Windows with autocrlf, LF elsewhere): a rebuild that
+    # changes nothing but the line endings would make regenerate.py --check report the page as changed.
+    newline = "\r\n" if b"\r\n" in HUB.read_bytes() else "\n"
+    HUB.write_text(html, encoding="utf-8", newline=newline)
     print("[build_evidence] engineering-evidence/index.html: %d of %d cases, %s"
           % (shown, len(cases), ", ".join("%s %d" % (k, len(v)) for k, v in by_area.items())))
 
