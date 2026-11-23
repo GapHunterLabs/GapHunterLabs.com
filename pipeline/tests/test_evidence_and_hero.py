@@ -140,30 +140,6 @@ class HomeHeroTest(unittest.TestCase):
                 with self.assertRaises(SystemExit):
                     H.service_tiles_html(data)
 
-    def test_the_hero_case_prints_its_own_data(self):
-        c = next(x for x in CASES if x["id"] == H.HERO_CASE)
-        html = H.hero_case_html(CASES)
-        self.assertEqual(html.count('class="nb-case"'), 1)
-        for _, href in c["refs"]:
-            self.assertIn('href="%s"' % href, html)
-        for e in c["events"]:
-            self.assertIn('data-ev-date="%s"' % e["d"], html)
-        if c.get("metric"):
-            self.assertIn('<span class="m-before">%s</span>' % c["metric"][0], html)
-
-    def test_the_hero_case_fails_fast_when_it_is_missing_or_incomplete(self):
-        for cases in ([], [case(id=H.HERO_CASE, refs=[])], [case(id=H.HERO_CASE, status="maybe")],
-                      [case(id=H.HERO_CASE), case(id=H.HERO_CASE)], [case(id=H.HERO_CASE, work="")],
-                      [case(id=H.HERO_CASE, refs=[["r", "http://plain.example/"]])],
-                      [case(id=H.HERO_CASE, refs=[["r", "javascript:alert(1)"]])],
-                      [case(id=H.HERO_CASE, refs=[["r", 'https://x.example/"><script>']])],
-                      [case(id=H.HERO_CASE, refs=[["<img src=x>", "https://x.example/"]])],
-                      [case(id=H.HERO_CASE, refs=[["only label"]])]):
-            with self.subTest(cases=len(cases)):
-                with self.assertRaises(SystemExit):
-                    H.hero_case_html(cases)
-        self.assertIn("nb-case", H.hero_case_html([case(id=H.HERO_CASE)]))
-
 
 if __name__ == "__main__":
     unittest.main()

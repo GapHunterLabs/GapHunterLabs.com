@@ -35,8 +35,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from build_plugin_pages import Sources, esc  # noqa: E402
-from badges import badge, badge_row, badge_table, icon_svg, price_badge  # noqa: E402
-from build_blog import CATS, EVENTS, STATUS, link as case_link, nice  # noqa: E402
+from badges import badge, badge_row, icon_svg, price_badge  # noqa: E402
 import iso_figures  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -76,22 +75,21 @@ def tile(label, value, sub_html, extra=""):
             '<p class="tw-mt-2 tw-text-xs tw-text-dim">%s</p></div>' % (label, value, extra, sub_html))
 
 
-# Figures of the home that build() inlines by name; the catalog figure and the stat glyphs have their own steps.
-HOME_FIGURES = ("grid", "hero", "step-find", "step-trace", "step-fix", "thumb-tickets", "thumb-security", "thumb-audits")
-STAT_FIGURES = ("stat-downloads", "stat-tools", "stat-prs", "stat-advisories")
+# Figures of the home that build() inlines by name; the catalog figure has its own step.
+HOME_FIGURES = ("grid", "hero")
 
 
 def stat_card(figure, value, label, sub_html):
-    return ('<div class="nb-stat"><span class="nb-stat-glyph" aria-hidden="true">'
-            '<!-- PRERENDER:ISO:%s:START --><!-- PRERENDER:ISO:%s:END --></span>'
-            '<p class="nb-stat-value">%s</p><p class="nb-stat-label">%s</p><p class="nb-stat-sub">%s</p></div>'
-            % (figure, figure, value, label, sub_html))
+    # 2026-11-23: no glyph above the figure (the small isometric glyphs read as a template); `figure` is kept as the
+    # card's key so the order of the four cards stays explicit.
+    return ('<div class="nb-stat nb-stat-%s"><p class="nb-stat-value">%s</p><p class="nb-stat-label">%s</p>'
+            '<p class="nb-stat-sub">%s</p></div>' % (figure, value, label, sub_html))
 
 
 def metrics_html(data, research, vscode_total):
     """Key figures (2026-11-23, graphite redesign): four cards with an isometric glyph, the figure, its label and one
     line of detail, then one foot line with the date of each source. The figures and their glyphs are placed by
-    inline_stat_figures() once the block is in the page."""
+    the page itself."""
     points = [d for d in data.get("trend7d", []) if "totalDownloads" in d and d.get("date")]
     trend = [d["totalDownloads"] for d in points]
     pr = research["upstreamPullRequests"]
@@ -176,45 +174,17 @@ def bind_count_pages(data, vscode_total, dry_run=False):
             path.write_bytes(new.encode("utf-8"))
 
 
-def inline_stat_figures(html, where):
-    for figure in STAT_FIGURES:
-        html = iso_figures.inject_or_die(html, figure, where, "build_home")
-    return html
-
-
-# Focus areas: shown in the hero card and as the "Disciplines" row of the stack table.
-DISCIPLINES = [dict(label="Static analysis", icon="code", variant="dark"),
-               dict(label="Performance", icon="gauge", variant="dark"),
-               dict(label="Security research", icon="shield", variant="dark"),
-               dict(label="Reliability", icon="layers", variant="dark")]
-
-
-def focus_html():
-    return badge_row(DISCIPLINES)
-
-
-def stack_html():
-    rows = [
-        ("Platforms", [dict(label="JetBrains IDEs", icon="jetbrains", variant="dark"),
-                       dict(label="IntelliJ IDEA", icon="intellij-idea", variant="dark"),
-                       dict(label="VS Code", icon="vscode", variant="brand", hex6="007ACC"),
-                       dict(label="Atlassian Forge", icon="atlassian", variant="dark"),
-                       dict(label="Windows", icon="windows", variant="dark"),
-                       dict(label="Linux", variant="dark")]),
-        ("Languages", [dict(label="Kotlin", icon="kotlin"), dict(label="Java", icon="java", variant="soft"),
-                       dict(label="Python", icon="python"),
-                       dict(label="TypeScript", variant="brand", hex6="3178C6"),
-                       dict(label="Go", icon="go"),
-                       dict(label="YAML", variant="dark")]),
-        ("Disciplines", DISCIPLINES + [dict(label="Dependency auditing", icon="shield", variant="dark"),
-                                       dict(label="Open-source contributions", icon="github", variant="dark")]),
-        ("Tooling", [dict(label="Gradle", icon="gradle", variant="soft"), dict(label="JUnit", icon="junit"),
-                     dict(label="Git", icon="git"), dict(label="GitHub", icon="github", variant="dark"),
-                     dict(label="GitHub Actions", icon="github-actions"),
-                     dict(label="Plugin Verifier", variant="dark"),
-                     dict(label="Node.js", variant="dark")]),
-    ]
-    return badge_table("Platforms, languages and tooling", rows, "stackCaption")
+def hero_proof_html(data, research, vscode_total):
+    """The hero's proof line, three counts from the data: fixes sent to JetBrains, advisories closed upstream and free
+    tools (free JetBrains plugins plus the VS Code extensions, which are all free). One span per count, so each has a
+    stable translation key."""
+    free = sum(1 for p in data["plugins"] if p.get("pricing") == "FREE") + vscode_total
+    prs = research["upstreamPullRequests"]["total"]
+    adv = research["advisoriesClosedUpstream"]["count"]
+    if min(free, prs, adv) <= 0:
+        die("hero proof line: a count is zero (fixes %d, advisories %d, free tools %d)" % (prs, adv, free))
+    return ("<span>%d fixes sent to JetBrains.</span> <span>%d advisories closed upstream.</span> "
+            "<span>%d free tools.</span>" % (prs, adv, free))
 
 
 # Sponsors: (clave del nivel, titulo del grupo). Platinum/gold/silver llevan logo y enlace; el resto, solo nombre.
@@ -430,6 +400,15 @@ def reach_html(reach):
 SERVICE_ICONS = {"audit": "gauge", "updates": "layers", "depsec": "shield", "custom": "code"}
 
 
+# One line per service on the home tiles (services.json has no free-text field; it rejects unknown keys).
+SERVICE_PITCH = {
+    "audit": "I find why your plugin freezes the IDE and patch it, with timings before and after.",
+    "updates": "Your plugin rebuilt and verified for the IDE versions you need to support.",
+    "custom": "Inspections for your own code, delivered as a plugin your team installs.",
+    "depsec": "A read-only review of known vulnerabilities in your dependencies and CI workflows.",
+}
+
+
 def service_tiles_html(services):
     if len(services) != 4:
         die("services.json: the hero has room for exactly 4 services, found %d" % len(services))
@@ -445,68 +424,13 @@ def service_tiles_html(services):
         terms = "From USD <!--svc:%s.%s.usd-->%s" % (s["key"], first["id"], format(first["usd"], ","))
         if isinstance(first.get("days"), int) and first["days"] > 0:
             terms += " &middot; <!--svc:%s.%s.days-->%d business days" % (s["key"], first["id"], first["days"])
+        if not SERVICE_PITCH.get(s["key"]):
+            die("services.json: no one-line pitch in build_home.SERVICE_PITCH for the service %r" % s["key"])
         tiles.append('<li><a class="nb-svc-tile" href="%s" data-goatcounter-click="cta-hero-svc-%s">%s'
-                     '<p class="nb-svc-name">%s</p><p class="nb-svc-sub">%s</p></a></li>'
-                     % (esc(s["path"]), s["key"], icon_svg(SERVICE_ICONS[s["key"]]), esc(s["shortName"]), terms))
+                     '<p class="nb-svc-name">%s</p><p class="nb-svc-pitch">%s</p><p class="nb-svc-sub">%s</p></a></li>'
+                     % (esc(s["path"]), s["key"], icon_svg(SERVICE_ICONS[s["key"]]), esc(s["shortName"]),
+                        esc(SERVICE_PITCH[s["key"]]), terms))
     return "".join(tiles)
-
-
-# The case in the hero card: one real case from data/blog-cases.json, shown with its own figures, dates and links.
-HERO_CASE = "reactive-commons-go-5"
-CASE_SERVICE = {"security": ("/dependency-security-review/", "Dependency and CI/CD security review"),
-                "performance": ("/plugin-performance-audit/", "Plugin performance audit"),
-                "custom": ("/custom-plugins-inspections/", "Custom plugins and inspections"),
-                "platform": ("/services/", "All services")}
-CASE_FIELDS = ("title", "problem", "work", "result", "events", "refs", "cat", "status")
-
-
-def _ico(name, cls="nb-ico"):
-    return '<svg class="%s" aria-hidden="true" focusable="false"><use href="#%s"/></svg>' % (cls, name)
-
-
-def hero_case_html(cases, case_id=HERO_CASE):
-    found = [c for c in cases if c.get("id") == case_id]
-    if len(found) != 1:
-        die("blog-cases.json: the hero case %r appears %d times" % (case_id, len(found)))
-    c = found[0]
-    missing = [k for k in CASE_FIELDS if not c.get(k)]
-    if missing:
-        die("blog-cases.json: the hero case %r has no %s" % (case_id, ", ".join(missing)))
-    if c["cat"] not in CATS or c["status"] not in STATUS:
-        die("blog-cases.json: the hero case %r has an unknown category or status" % case_id)
-    for ref in c["refs"]:
-        if len(ref) != 2 or not re.match(r'^(https://|/)[^\s"<>]*$', str(ref[1])) or "<" in str(ref[0]):
-            die("blog-cases.json: the hero case %r has a source that is not an https:// or site link" % case_id)
-    st_label, st_cls, _ = STATUS[c["status"]]
-    metric = ""
-    m = c.get("metric") or []
-    if len(m) == 2:
-        metric = ('<p class="nb-panel-metric"><span class="m-before">%s</span> <span class="nb-arrow" aria-hidden="true">'
-                  '&rarr;</span> <span class="m-after">%s</span></p>' % (m[0], m[1]))
-    elif len(m) == 1:
-        metric = '<p class="nb-panel-metric"><span class="m-before">%s</span></p>' % m[0]
-    if metric and c.get("caption"):
-        metric += '<p class="nb-panel-caption">%s</p>' % c["caption"]
-    facts = "".join('<div>%s<dt>%s</dt><dd>%s</dd></div>' % (_ico(i), dt, c[k]) for i, dt, k in
-                    (("ico-alert", "The problem", "problem"), ("ico-gear", "The work", "work"),
-                     ("ico-check", "The result", "result")))
-    # Same wording as the Blog cards ("Fixed Oct 7, 2026"), so both pages share one translation.
-    dates = "".join('<li data-ev-date="%s">%s%s %s</li>' % (e["d"], _ico("ico-clock"), EVENTS[e["t"]], nice(e["d"]))
-                    for e in c["events"])
-    refs = " &middot; ".join(case_link(label, href) for label, href in c["refs"])
-    svc_href, svc_label = CASE_SERVICE[c["cat"]]
-    return ('<div class="nb-case"><div class="nb-panel-top"><p class="nb-panel-label">Real case &middot; %s</p>'
-            '<p class="nb-panel-status %s">%s</p></div>'
-            '<div class="nb-case-head"><div class="nb-panel-hero">%s</div>'
-            '<figure class="nb-hero-face"><img class="nb-avatar" src="/assets/img/joel-diaz.jpg" alt="Joel Díaz, '
-            'founder of Gap Hunter Labs" width="104" height="104" loading="eager" decoding="async" fetchpriority="high">'
-            '<figcaption>Joel Díaz</figcaption></figure></div>'
-            '<h2 class="nb-case-title" id="heroCaseTitle">%s</h2>'
-            '<dl class="nb-panel-facts">%s</dl><ul class="nb-panel-meta">%s</ul>'
-            '<p class="nb-panel-ref">%s<span>%s</span></p>'
-            '<a class="nb-panel-svc" href="%s" data-goatcounter-click="cta-hero-card-%s">%s &rarr;</a></div>'
-            % (CATS[c["cat"]], st_cls, st_label, metric, c["title"], facts, dates, _ico("ico-link"), refs,
-               svc_href, c["cat"], svc_label))
 
 
 def die(msg: str) -> "NoReturn":  # noqa: F821
@@ -556,20 +480,15 @@ def build(dry_run: bool = False) -> None:
         "free, freemium or paid." % (data["totalPlugins"], vscode_total)
     )
 
-    html = inject(html, "<!-- PRERENDER:TOOLS:START -->", "<!-- PRERENDER:TOOLS:END -->", tools_html, "TOOLS")
     services = json.loads(SERVICES_DATA.read_text(encoding="utf-8"))["services"]
     html = inject(html, "<!-- PRERENDER:SVCTILES:START -->", "<!-- PRERENDER:SVCTILES:END -->",
                   service_tiles_html(services), "SVCTILES")
     cases = json.loads(CASES_DATA.read_text(encoding="utf-8"))["cases"]
-    html = inject(html, "<!-- PRERENDER:HEROCASE:START -->", "<!-- PRERENDER:HEROCASE:END -->",
-                  hero_case_html(cases), "HEROCASE")
     for figure in HOME_FIGURES:
         html = iso_figures.inject_or_die(html, figure, "index.html", "build_home")
     research = json.loads(RESEARCH_DATA.read_text(encoding="utf-8"))
-    html = inject(html, "<!-- PRERENDER:METRICS:START -->", "<!-- PRERENDER:METRICS:END -->",
-                  metrics_html(data, research, vscode_total), "METRICS")
-    html = inline_stat_figures(html, "index.html")
-    html = inject(html, "<!-- PRERENDER:STACK:START -->", "<!-- PRERENDER:STACK:END -->", stack_html(), "STACK")
+    html = inject(html, "<!-- PRERENDER:HEROPROOF:START -->", "<!-- PRERENDER:HEROPROOF:END -->",
+                  hero_proof_html(data, research, vscode_total), "HEROPROOF")
     html = inject(html, "<!-- PRERENDER:CATALOG:START -->", "<!-- PRERENDER:CATALOG:END -->", esc(catalog_line), "CATALOG")
     # Every number of the catalog section comes from the data, so the twice-daily cron (regenerate.py) keeps it
     # current: the title, the "All n tools" link and the featured cards (name, downloads, price).
@@ -584,8 +503,6 @@ def build(dry_run: bool = False) -> None:
     bind_count_pages(data, vscode_total, dry_run)
 
     sponsors = load_sponsors()
-    html = inject(html, "<!-- PRERENDER:SPONSORS:START -->", "<!-- PRERENDER:SPONSORS:END -->",
-                  sponsors_html(sponsors, home=True), "SPONSORS")
     sp_page = None
     if SPONSORS_PAGE.exists():
         sp_page = SPONSORS_PAGE.read_text(encoding="utf-8")
@@ -593,7 +510,6 @@ def build(dry_run: bool = False) -> None:
                          sponsors_html(sponsors, home=False), "SPONSORS (pagina)")
         sp_page = inject(sp_page, "<!-- PRERENDER:METRICS:START -->", "<!-- PRERENDER:METRICS:END -->",
                          metrics_html(data, research, vscode_total), "METRICS (pagina)")
-        sp_page = inline_stat_figures(sp_page, "sponsors/index.html")
         sp_page = inject(sp_page, "<!-- PRERENDER:REACH:START -->", "<!-- PRERENDER:REACH:END -->",
                          reach_html(load_reach()), "REACH (pagina)")
         sp_page = iso_figures.inject_or_die(sp_page, "sponsors", "sponsors/index.html", "build_home")

@@ -609,3 +609,40 @@ a:focus-visible, .btn:focus-visible { outline: none; box-shadow: var(--focus-rin
   .nb-record li { padding: 12px 14px; }
   .nb-record li > .inv-status { position: static; display: inline-flex; width: auto; margin: 0 0 6px; }
 }
+
+/* ---- Home cut (2026-11-23): six blocks, no eyebrows, no accent word ------------------------------------------
+   Hero: copy and figure only. Services: four tiles with one line each. Proof: three short cases and one quote. */
+.nb-hero { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); grid-template-areas: "copy figure"; align-items: center; }
+.nb-hero .nb-avail { margin-bottom: 4px; }
+.nb-hero .nb-proof span { display: inline; }
+.nb-svc-grid-v2 { margin-top: 0; }
+.nb-svc-grid-v2 .nb-svc-tile { gap: 6px; padding: 18px; }
+.nb-svc-pitch { margin: 0; font: 400 14px/1.5 var(--sans); color: var(--text-dim); }
+.nb-svc-grid-v2 .nb-svc-sub { margin-top: auto; padding-top: 8px; color: var(--text); }
+.nb-cases { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.nb-case-card { display: grid; align-content: start; gap: 6px; padding: 18px; border: 1px solid var(--border); border-radius: var(--radius-lg);
+  background: linear-gradient(180deg, var(--panel-1), var(--panel-2)); box-shadow: var(--shadow); color: inherit; text-decoration: none; }
+.nb-case-card:hover { border-color: var(--border-strong); }
+.nb-case-metric { font: 700 20px/1.3 var(--sans); color: var(--text); }
+.nb-case-title { font: 400 14px/1.5 var(--sans); color: var(--text-dim); }
+.nb-case-meta { font: 500 12px/1.4 var(--mono); color: var(--text-faint); }
+.nb-quote { grid-column: 1 / -1; margin: 0; padding: 18px 22px; border-left: 3px solid var(--signal); background: var(--surface-2);
+  border-radius: var(--radius); }
+.nb-quote blockquote { margin: 0; }
+.nb-quote p { margin: 0; font: 400 16px/1.6 var(--sans); color: var(--text); }
+.nb-quote figcaption { margin-top: 8px; font: 500 12px/1.4 var(--mono); }
+.nb-quote figcaption a { color: var(--text-dim); }
+.nb-about-v2 { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 24px; align-items: start; }
+.nb-about-photo { width: 96px; height: 96px; border-radius: 50%; object-fit: cover; }
+.nb-about-copy h2 { margin: 0 0 8px; }
+.nb-about-copy > p { max-width: 62ch; margin: 0; color: var(--text-dim); line-height: 1.65; }
+.nb-start { text-align: center; }
+.nb-start > p { max-width: 56ch; margin: 10px auto 0; color: var(--text-dim); line-height: 1.65; }
+.nb-start .nb-actions { justify-content: center; margin-top: 18px; }
+.nb-start-sponsor { margin-top: 14px !important; font-size: 14px; }
+.nb-catv3-sub { margin: 0; font: 600 15px/1.3 var(--sans); color: var(--text); }
+@media (max-width: 960px) {
+  .nb-hero { grid-template-columns: minmax(0, 1fr); grid-template-areas: "copy" "figure"; }
+  .nb-cases { grid-template-columns: minmax(0, 1fr); }
+}
+@media (min-width: 961px) and (max-width: 1180px) { .nb-hero { grid-template-columns: minmax(0, 1fr) 360px; grid-template-areas: "copy figure"; } }

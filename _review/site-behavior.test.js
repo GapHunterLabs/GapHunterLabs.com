@@ -223,31 +223,56 @@ async function unreachableData({ b, base }) {
   assert((await b.evaluate(visibleCards + '.length')) >= 1, 'search should work without data');
   equal(b.exceptions.length, 0, 'catalog JavaScript exceptions: ' + b.exceptions.join(' | '));
   await b.navigate(base + '/');
-  // 2026-11-08: the hire-oriented home of 2026-11-04 shows 3 investigations and 3 selected tools (was 5 and 4).
-  equal(await b.evaluate("document.querySelectorAll('article.inv').length"), 3, 'investigations without data');
-  equal(await b.evaluate("document.querySelectorAll('article.tool').length"), 3, 'tools without data');
+  // 2026-11-23 home cut: the four service tiles and the three proof cards are in the HTML, not built from /data.
+  equal(await b.evaluate("document.querySelectorAll('.nb-svc-tile').length"), 4, 'service tiles without data');
+  equal(await b.evaluate("document.querySelectorAll('.nb-case-card').length"), 3, 'proof cards without data');
   equal(b.exceptions.length, 0, 'home JavaScript exceptions: ' + b.exceptions.join(' | '));
 }
 
-test('home: hero, profile card, figures, investigations, tools, stack', async ({ b, base }) => {
+test('home: six blocks, offer in the hero, counts from the data, short proof, no eyebrows', async ({ b, base }) => {
+  // 2026-11-23 home cut (owner feedback: "too much text"): hero, services, proof, catalog, about, closing.
   const data = readData('catalog-data.json');
+  const research = readData('research.json');
+  const vscode = readData('vscode-catalog-data.json').totalExtensions;
+  const free = data.plugins.filter((p) => p.pricing === 'FREE').length + vscode;
+  const services = readData('services.json').services.map((s) => s.path);
   await b.viewport(1440, 900);
   await b.navigate(base + '/');
-  // 2026-11-22 (graphite redesign): the hero links the four services of data/services.json and shows ONE real case
-  // from data/blog-cases.json, with its own public sources; nothing rotates, so there are no tabs. The isometric
-  // figure is decorative. 3 investigations and 3 selected tools stay below.
-  const services = readData('services.json').services.map((s) => s.path);
-  const featured = readData('blog-cases.json').cases.find((c) => c.id === 'reactive-commons-go-5');
-  const facts = await b.evaluate("({h1: document.querySelector('h1.nb-hero-title').textContent.trim().length, lede: document.querySelectorAll('.nb-hero .nb-lede').length, img: document.querySelector('.nb-profile img').naturalWidth, tiles: [...document.querySelectorAll('.nb-svc-tile')].map(a => a.getAttribute('href')), cases: document.querySelectorAll('.nb-hero-card .nb-case').length, refs: [...document.querySelectorAll('.nb-hero-card .nb-panel-ref a')].map(a => a.getAttribute('href')), figure: document.querySelectorAll('.nb-hero-figure svg.iso-figure[aria-hidden=true]').length, tabs: document.querySelectorAll('.nb-hero [role=tab], .nb-hero [role=tabpanel]').length, inv: document.querySelectorAll('article.inv').length, facts: [...document.querySelectorAll('article.inv')].map(a => a.querySelectorAll('dt').length), tools: [...document.querySelectorAll('article.tool')].map(t => t.querySelectorAll('.tool-badges .badge').length), stack: document.querySelectorAll('#stack .badge-table tr').length, stackImgs: document.querySelectorAll('#stack img').length, impact: document.querySelector('.nb-impact').innerText})");
-  assert(facts.h1 > 20 && facts.lede === 1 && facts.img > 0 && facts.cases === 1 && facts.figure === 1 && facts.tabs === 0, 'hero: ' + JSON.stringify(facts));
-  equal(JSON.stringify(facts.tiles), JSON.stringify(services), 'service tiles follow data/services.json');
-  equal(JSON.stringify(facts.refs), JSON.stringify(featured.refs.map((r) => r[1])), 'the hero case links its own sources');
-  assert(facts.inv === 3 && facts.facts.every((n) => n === 3), 'investigations: ' + JSON.stringify(facts.facts));
-  assert(facts.tools.length === 3 && facts.tools.every((n) => n === 2), 'tool badges: ' + JSON.stringify(facts.tools));
-  assert(!/Last 7 days/.test(facts.impact) && /\+[\d,]+ since \d{4}-\d{2}-\d{2}/.test(facts.impact),
-    'the downloads figure must say what the gain is measured from: ' + facts.impact.slice(0, 160));
-  assert(facts.stack === 4 && facts.stackImgs === 0, 'stack rows ' + facts.stack + ', images ' + facts.stackImgs);
-  assert(facts.impact.includes(data.totalDownloads.toLocaleString('en-US')), 'downloads ' + data.totalDownloads + ' not shown in: ' + facts.impact.slice(0, 120));
+  const f = await b.evaluate(`(() => {
+    const main = document.querySelector('main');
+    const q = (s) => [...main.querySelectorAll(s)];
+    return {
+      blocks: [...main.children].filter((e) => e.tagName === 'SECTION').map((e) => e.id),
+      h1: document.querySelector('h1.nb-hero-title').textContent.trim(),
+      lede: q('.nb-hero .nb-lede').length,
+      proof: q('.nb-hero .nb-proof span').map((s) => s.textContent.trim()),
+      figure: q('.nb-hero-figure svg.iso-figure[aria-hidden=true]').length,
+      tiles: q('.nb-svc-tile').map((a) => a.getAttribute('href')),
+      pitches: q('.nb-svc-tile .nb-svc-pitch').filter((p) => p.textContent.trim().length > 20).length,
+      cases: q('.nb-case-card').map((a) => a.getAttribute('href')),
+      quote: q('.nb-quote blockquote').map((bq) => bq.getAttribute('cite')),
+      quoteLink: q('.nb-quote figcaption a').map((a) => a.getAttribute('href')),
+      photo: q('.nb-about-photo').map((i) => [i.getAttribute('src'), i.getAttribute('alt')]),
+      sponsor: q('#start a[href="/sponsors/"]').length,
+      eyebrows: q('.nb-label').length, accent: q('.nb-accent').length,
+      glyphs: q('.nb-stat-glyph, .nb-step-glyph, .inv-glyph').length,
+      words: main.innerText.split(/\\s+/).filter(Boolean).length,   // \s: inside this template literal a lone \s would turn into the letter s
+    };
+  })()`);
+  equal(JSON.stringify(f.blocks), JSON.stringify(['top', 'services', 'proof', 'catalog', 'about', 'start']), 'blocks');
+  assert(/JetBrains plugins/.test(f.h1) && f.lede === 1 && f.figure === 1, 'hero: ' + JSON.stringify(f));
+  equal(JSON.stringify(f.proof), JSON.stringify([
+    research.upstreamPullRequests.total + ' fixes sent to JetBrains.',
+    research.advisoriesClosedUpstream.count + ' advisories closed upstream.',
+    free + ' free tools.']), 'the hero proof line follows the data');
+  equal(JSON.stringify(f.tiles), JSON.stringify(services), 'service tiles follow data/services.json');
+  equal(f.pitches, 4, 'every service tile has its one-line pitch');
+  assert(f.cases.length === 3 && f.cases.every((h) => h.startsWith('https://')), 'proof cards: ' + JSON.stringify(f.cases));
+  assert(f.quote.length === 1 && f.quote[0] === f.quoteLink[0] && f.quote[0].startsWith('https://github.com/'), 'quote: ' + JSON.stringify(f.quote));
+  assert(f.photo.length === 1 && /joel-diaz/.test(f.photo[0][0]) && f.photo[0][1].length > 3, 'about photo: ' + JSON.stringify(f.photo));
+  equal(f.sponsor, 1, 'the closing block links to the sponsors page');
+  assert(f.eyebrows === 0 && f.accent === 0 && f.glyphs === 0, 'no eyebrows, accent word or glyphs: ' + JSON.stringify(f));
+  assert(f.words <= 650, 'the home is back to ' + f.words + ' words (cap 650)');
 });
 
 test('Ctrl+K search: open, results, arrow keys, Escape', async ({ b, base }) => {

@@ -104,7 +104,7 @@ class HomeFiguresTest(unittest.TestCase):
         # A marker left out of the generator keeps its old SVG and silently goes stale when the figure changes.
         html = (ROOT / "index.html").read_text(encoding="utf-8")
         markers = set(re.findall(r"<!-- PRERENDER:ISO:([a-z0-9-]+):START -->", html))
-        self.assertEqual(markers, set(H.HOME_FIGURES) | set(H.STAT_FIGURES) | {"catalog"})
+        self.assertEqual(markers, set(H.HOME_FIGURES) | {"catalog"})
 
 
 class CronTest(unittest.TestCase):
