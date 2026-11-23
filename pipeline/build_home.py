@@ -120,6 +120,60 @@ def metrics_html(data, research, vscode_total):
     return '<div class="nb-stats">%s</div>%s' % ("".join(cards), foot)
 
 
+FEATURED = ("openapi-companion", "ansible-companion", "dependency-vulnerability-companion",
+            "mermaid-companion", "cors-policy-companion", "cert-companion")
+PRICE_LABEL = {"FREE": ("Free", "is-free"), "FREEMIUM": ("Freemium", "is-freemium"), "PAID": ("Paid", "is-paid")}
+
+
+def featured_html(data, featured=FEATURED):
+    """The featured plugin cards of the home catalog section: name, downloads and price, all read from the data.
+    A featured plugin missing from the data, without downloads, or with an unknown price stops the build."""
+    by_repo = {p["repo"]: p for p in data["plugins"]}
+    cards = []
+    for repo in featured:
+        p = by_repo.get(repo)
+        if p is None:
+            sys.exit("[build_home] ERROR: featured plugin %r is not in data/catalog-data.json" % repo)
+        if p.get("pricing") not in PRICE_LABEL:
+            sys.exit("[build_home] ERROR: featured plugin %r has an unknown price %r" % (repo, p.get("pricing")))
+        if not isinstance(p.get("downloads"), int):
+            sys.exit("[build_home] ERROR: featured plugin %r has no download count" % repo)
+        label, cls = PRICE_LABEL[p["pricing"]]
+        cards.append('<a class="nb-feat" href="/catalog/%s/"><span class="nb-feat-name">%s</span>'
+                     '<span class="nb-feat-meta">%s downloads</span><span class="badge badge-status %s">%s</span></a>'
+                     % (repo, esc(p["name"]), format(p["downloads"], ","), cls, label))
+    return "".join(cards)
+
+
+# Hand-made pages that state how many plugins are in the catalog: each figure is bound by a comment placed right
+# before it (<!--count:jetbrains-->147), rewritten here from the data. build_i18n drops comments before it looks a
+# text up, so the translation keys do not change.
+COUNT_PAGES = ("custom-plugins-inspections/index.html", "plugin-performance-audit/index.html", "plugin-updates/index.html")
+COUNT_RE = re.compile(r"<!--count:([a-z]+)-->(\d[\d,]*)")
+
+
+def bind_counts(text, values, label):
+    def rep(m):
+        if m.group(1) not in values:
+            sys.exit("[build_home] ERROR: %s: unknown count %r (known: %s)" % (label, m.group(1), ", ".join(sorted(values))))
+        return "<!--count:%s-->%s" % (m.group(1), values[m.group(1)])
+    new, n = COUNT_RE.subn(rep, text)
+    if n == 0:
+        sys.exit("[build_home] ERROR: %s has no <!--count:...--> binding left" % label)
+    return new
+
+
+def bind_count_pages(data, vscode_total, dry_run=False):
+    values = {"jetbrains": str(data["totalPlugins"]), "vscode": str(vscode_total),
+              "tools": str(data["totalPlugins"] + vscode_total)}
+    for rel in COUNT_PAGES:
+        path = ROOT / rel
+        raw = path.read_bytes().decode("utf-8")
+        new = bind_counts(raw, values, rel)
+        if new != raw and not dry_run:
+            path.write_bytes(new.encode("utf-8"))
+
+
 def inline_stat_figures(html, where):
     for figure in STAT_FIGURES:
         html = iso_figures.inject_or_die(html, figure, where, "build_home")
@@ -497,8 +551,7 @@ def build(dry_run: bool = False) -> None:
     snapshot = (data.get("generatedAt") or "")[:10]
     catalog_line = (
         "%d JetBrains plugins and %d VS Code extensions, each with its own page and a clear price: "
-        "free, freemium or paid. Figures are synced twice a day from public JetBrains Marketplace "
-        "and GitHub data (last snapshot: %s)." % (data["totalPlugins"], vscode_total, snapshot)
+        "free, freemium or paid." % (data["totalPlugins"], vscode_total)
     )
 
     html = inject(html, "<!-- PRERENDER:TOOLS:START -->", "<!-- PRERENDER:TOOLS:END -->", tools_html, "TOOLS")
@@ -516,6 +569,17 @@ def build(dry_run: bool = False) -> None:
     html = inline_stat_figures(html, "index.html")
     html = inject(html, "<!-- PRERENDER:STACK:START -->", "<!-- PRERENDER:STACK:END -->", stack_html(), "STACK")
     html = inject(html, "<!-- PRERENDER:CATALOG:START -->", "<!-- PRERENDER:CATALOG:END -->", esc(catalog_line), "CATALOG")
+    # Every number of the catalog section comes from the data, so the twice-daily cron (regenerate.py) keeps it
+    # current: the title, the "All n tools" link and the featured cards (name, downloads, price).
+    total_tools = data["totalPlugins"] + vscode_total
+    html = inject(html, "<!-- PRERENDER:CATTITLE:START -->", "<!-- PRERENDER:CATTITLE:END -->",
+                  "%d engineering tools,<br>one place" % total_tools, "CATTITLE")
+    html = inject(html, "<!-- PRERENDER:CATALL:START -->", "<!-- PRERENDER:CATALL:END -->",
+                  "All %d tools &rarr;" % total_tools, "CATALL")
+    html = inject(html, "<!-- PRERENDER:CATFEATURED:START -->", "<!-- PRERENDER:CATFEATURED:END -->",
+                  featured_html(data), "CATFEATURED")
+    html = iso_figures.inject_or_die(html, "catalog", "index.html", "build_home")
+    bind_count_pages(data, vscode_total, dry_run)
 
     sponsors = load_sponsors()
     html = inject(html, "<!-- PRERENDER:SPONSORS:START -->", "<!-- PRERENDER:SPONSORS:END -->",
