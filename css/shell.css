@@ -733,9 +733,10 @@
 .price-badge { display: inline-flex; align-items: center; gap: 6px; padding: 2px 9px 2px 8px; border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
   background: var(--surface-2); font: 600 12px / 1.5 var(--sans); letter-spacing: .02em; white-space: nowrap; }
 .price-badge::before { content: ""; flex: none; width: 6px; height: 6px; border-radius: 50%; background: var(--dot, var(--pending)); }
-.price-free { --dot: var(--valid); }
-.price-freemium { --dot: var(--cyan); }
-.price-paid { --dot: var(--inspect); }
+/* 2026-11-22: price is neither a positive state nor a technical element, so no green and no blue: gray, ink, orange. */
+.price-free { --dot: var(--pending); }
+.price-freemium { --dot: var(--text); }
+.price-paid { --dot: var(--signal); }
 .price-free, .price-freemium, .price-paid { color: var(--text); }
 .price-pending { background: var(--surface-3); color: var(--text-dim); }
 
@@ -1138,28 +1139,47 @@ a.sp-logo:focus-visible, a.sp-person:focus-visible { outline: 2px solid var(--si
 .sp-card a.sp-person { text-decoration: none; }
 a.sp-person:hover { border-color: var(--signal); }
 
-.disclosure .sp-group-title { margin: 24px 0 10px; font: 600 15px / 1.4 var(--sans); color: var(--text); }
-.sp-levels { display: grid; overflow: hidden; border: 1px solid var(--border); border-radius: var(--radius-lg); }
-.sp-level { display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 6px 28px; padding: 18px 20px; border-top: 1px solid var(--border); }
-.sp-level:first-child { border-top: 0; }
-.sp-level:nth-child(odd) { background: var(--band-a); }
-.sp-level:nth-child(even) { background: var(--band-b); }
-.sp-level-top { box-shadow: inset 3px 0 0 var(--signal); }
-.sp-level-head { display: grid; align-content: start; gap: 2px; }
-.disclosure .sp-level-name { margin: 0; font: 700 16px / 1.3 var(--sans); letter-spacing: -0.015em; color: var(--text); }
-.disclosure .sp-level-head p { margin: 0; }
+/* Levels as comparable cards (2026-11-22): one card per level, same rows in each, one highlighted by its border. */
+.sp-levels-sec .sp-group-title { margin: 0 0 10px; font: 600 12px / 1.4 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); }
+.sp-level-groups { display: grid; gap: 24px; }
+.sp-levels { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.sp-levels-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.sp-level { position: relative; display: flex; flex-direction: column; gap: 14px; padding: 20px; border: 1px solid var(--border); border-radius: var(--radius-lg);
+  background: linear-gradient(180deg, var(--panel-1), var(--panel-2)); }
+.sp-level-feature { border-color: var(--signal); box-shadow: 0 0 0 1px var(--signal); }
+.sp-level-head { display: grid; align-content: start; gap: 4px; }
+.sp-level-head p { margin: 0; }
+/* The flag sits on the top border, so every card keeps the same rows at the same height. */
+.sp-level-flag { position: absolute; top: -10px; left: 16px; padding: 0 8px; border: 1px solid var(--signal); border-radius: var(--radius-sm);
+  background: var(--bg); font: 600 11.5px / 1.6 var(--mono); color: var(--signal); }
+.sp-level-name { margin: 0; font: 700 16px / 1.3 var(--sans); letter-spacing: -0.015em; color: var(--text); }
 .sp-level-price { font: 400 13px / 1.5 var(--mono); color: var(--text-dim); }
-.sp-amount { font-weight: 600; color: var(--text); }
-.disclosure .sp-level-cap { font: 500 11.5px / 1.4 var(--mono); letter-spacing: 0.04em; color: var(--inspect); }
-.disclosure .sp-perks { display: grid; gap: 6px; margin: 0; padding-left: 1.1em; }
-.disclosure .sp-perks li { margin: 0; font-size: 14px; }
-.disclosure .sp-perks li.sp-inherit { margin-left: -1.1em; list-style: none; font: 600 12px / 1.6 var(--mono); letter-spacing: 0.04em; color: var(--valid); }
-.disclosure .sp-note { margin: 14px 0 0; }
-.disclosure .sp-fund, .disclosure .sp-steps { display: grid; gap: 10px; }
-.disclosure .sp-fund li, .disclosure .sp-steps li { margin: 0; }
+.sp-amount { display: block; font: 700 26px / 1.1 var(--sans); letter-spacing: -0.02em; color: var(--text); }
+.sp-level-cap { font: 500 11.5px / 1.4 var(--mono); letter-spacing: 0.04em; color: var(--text-dim); }
+.sp-perks { display: grid; align-content: start; gap: 8px; margin: 0; padding: 14px 0 0; border-top: 1px solid var(--border); list-style: none; }
+.sp-perks li { position: relative; margin: 0; padding-left: 18px; color: var(--text-dim); font-size: 14px; line-height: 1.5; }
+.sp-perks li::before { content: ""; position: absolute; left: 0; top: 7px; width: 6px; height: 6px; border-radius: 50%; background: var(--border-strong); }
+.sp-perks li.sp-inherit { padding-left: 0; font: 600 12px / 1.6 var(--mono); letter-spacing: 0.04em; color: var(--text-faint); }
+.sp-perks li.sp-inherit::before { content: none; }
+.sp-note { margin: 14px 0 0; color: var(--text-dim); font-size: 14px; line-height: 1.6; }
+.disclosure .sp-steps { display: grid; gap: 10px; }
+.disclosure .sp-steps li { margin: 0; }
+
+/* Page layout: what the money pays for, the levels, then the rest; the page rail on the right is the side panel. */
+.sp-body { display: grid; gap: 32px; }
+.sp-fund-sec h2, .sp-levels-sec h2 { margin: 0 0 14px; font: 700 20px / 1.3 var(--sans); letter-spacing: -0.025em; }
+.sp-levels-sec > p { max-width: 62ch; margin: 0 0 16px; color: var(--text-dim); font-size: 14.5px; line-height: 1.65; }
+.sp-fund { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 0; padding: 0; list-style: none; counter-reset: fund; }
+.sp-fund li { padding: 18px 20px; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface);
+  color: var(--text-dim); font-size: 14.5px; line-height: 1.6; counter-increment: fund; }
+.sp-fund li::before { content: counter(fund, decimal-leading-zero); display: block; margin-bottom: 8px; font: 600 12px / 1.4 var(--mono); color: var(--signal); }
+.sp-fund li b { display: block; margin-bottom: 4px; color: var(--text); font-size: 15px; }
+.sp-fund a { color: var(--text); }
+.sp-brand-ico { flex: none; width: 16px; height: 16px; fill: currentColor; }
+.btn:has(> .sp-brand-ico) { display: inline-flex; align-items: center; gap: 8px; }
 @media (max-width: 700px) {
   .sp-card { padding: 20px; }
-  .sp-level { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+  .sp-fund, .sp-levels, .sp-levels-3 { grid-template-columns: minmax(0, 1fr); }
   .sp-logo img { max-width: 100%; }
 }
 
@@ -1175,4 +1195,65 @@ a.sp-person:hover { border-color: var(--signal); }
 @supports (animation-timeline: scroll()) {
   @keyframes nb-grow-bar { to { transform: scaleX(1); } }
   #nb-scroll-bar { animation: nb-grow-bar linear both; animation-timeline: scroll(root); }
+}
+
+/* =====================================================================
+   Graphite direction (2026-11-22): isometric figures, page headers with a figure, side panels.
+   ===================================================================== */
+/* Isometric figures: static inline SVG built by pipeline/iso, decorative (aria-hidden), colors from --iso-* tokens. */
+.iso-figure { display: block; width: 100%; height: auto; max-width: 640px; }
+/* Phones: details finer than about 0.4 CSS px read as noise, so they drop out; the volumes stay. */
+@media (max-width: 479px) { .iso-figure .iso-fine { display: none; } }
+@media (forced-colors: active) { .iso-figure { display: none; } }
+
+/* Inner page header with a figure on the right; on narrow screens the figure follows the text, smaller. */
+.gh-page-header.has-figure { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 420px); gap: 24px 40px; align-items: center; }
+.gh-page-header.has-figure::before { -webkit-mask-image: none; mask-image: none; background: none; }
+.page-figure { justify-self: end; width: 100%; max-width: 420px; }
+@media (max-width: 900px) {
+  .gh-page-header.has-figure { grid-template-columns: minmax(0, 1fr); }
+  .page-figure { justify-self: start; max-width: 360px; }
+}
+
+/* Evidence hub: the latest case per area (thumbnail, chips, context, source), the case lists, and the side panel.
+   Blue marks only the technical identifier chip; the illustration stays small and boxed, below the findings. */
+.ee-sec-head h2 { margin: 0; font: 700 20px / 1.3 var(--sans); letter-spacing: -0.025em; }
+.ee-sec-head p { max-width: 62ch; margin: 6px 0 0; color: var(--text-dim); font-size: 14.5px; line-height: 1.6; }
+.ee-cases { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-top: 16px; }
+.ee-case { display: grid; grid-template-columns: 104px minmax(0, 1fr); gap: 16px; padding: 18px; border: 1px solid var(--border);
+  border-radius: var(--radius-lg); background: linear-gradient(180deg, var(--panel-1), var(--panel-2)); }
+.ee-thumb { align-self: start; padding: 6px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface-2); }
+.ee-case-body { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.ee-chips, .ee-case-meta, .ee-row-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.ee-chip { padding: 2px 8px; border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text-dim); font: 500 12px / 1.5 var(--sans); }
+.ee-chip-tech { border-color: color-mix(in srgb, var(--cyan) 45%, var(--border)); color: var(--cyan); font-family: var(--mono); }
+.ee-chip-tech .ticket-id { color: inherit; font: inherit; text-decoration: none; }
+.ee-case h3 { margin: 0; color: var(--text); font: 600 16px / 1.3 var(--sans); letter-spacing: -0.015em; }
+.ee-context { margin: 0; color: var(--text-dim); font-size: 14px; line-height: 1.55; }
+.ee-case-meta, .ee-row-meta { color: var(--text-faint); font: 500 12px / 1.4 var(--mono); }
+.ee-case-meta li + li::before { content: "\00B7"; margin-right: 6px; }
+.ee-ico { width: 14px; height: 14px; margin-right: 4px; fill: currentColor; vertical-align: -2px; }
+.ee-view { align-self: flex-start; margin-top: auto; color: var(--text); font: 600 13.5px / 1.3 var(--sans);
+  text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
+.ee-view::after { content: " \2192"; }
+.ee-view:hover { color: var(--signal); }
+.ee-sort { display: flex; align-items: center; justify-content: flex-end; gap: 10px; margin: 28px 0 0; color: var(--text-dim); font-size: 14px; }
+.ee-sort[hidden] { display: none; }
+.ee-sort select { padding: 6px 10px; border: 1px solid var(--border-strong); border-radius: var(--radius); background: var(--surface);
+  color: var(--text); font: inherit; }
+.ee-sec { margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--border); }
+.ee-rows { display: grid; margin: 14px 0 0; padding: 0; overflow: hidden; list-style: none; border: 1px solid var(--border); border-radius: var(--radius-lg); }
+.ee-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px 16px; align-items: center; padding: 12px 16px;
+  border-top: 1px solid var(--border); background: var(--surface); }
+.ee-row:first-child { border-top: 0; }
+.ee-row-title { margin: 0; color: var(--text); font-size: 14.5px; line-height: 1.45; }
+.ee-row-meta { justify-content: flex-end; }
+.ee-row-meta a { color: var(--text); }
+.ee-sec-more { margin: 12px 0 0; font-size: 14px; }
+.ee-counts b { display: inline-block; min-width: 24px; color: var(--text); font: 700 13.5px / 1 var(--mono); }
+@media (max-width: 1100px) { .ee-cases { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 640px) {
+  .ee-case { grid-template-columns: 96px minmax(0, 1fr); gap: 12px; padding: 16px; }
+  .ee-row { grid-template-columns: minmax(0, 1fr); }
+  .ee-row-meta { justify-content: flex-start; }
 }

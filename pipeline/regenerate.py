@@ -35,6 +35,8 @@ STEPS = (
     ("build_catalog_grid.py", (), "the catalog's pre-rendered grid and table"),
     ("build_home.py", (), "the home's pre-rendered blocks (metrics, tools, catalog line, sponsors)"),
     ("build_blog.py", (), "the Blog index from data/blog-cases.json"),
+    ("build_evidence.py", (), "the evidence hub's case cards and counts, from data/blog-cases.json and the four "
+                              "evidence pages"),
     ("build_plugin_pages.py", ("--sitemap", "--inject"), "one page per plugin, the sitemap and the hash shim"),
     ("build_feed.py", (), "the plugins RSS feed"),
     ("build_i18n.py", (), "every Spanish page, copied from the English ones: after every English generator"),
@@ -49,6 +51,8 @@ STEPS = (
 # Generators that are deliberately not part of a rebuild, with the reason.
 EXCLUDED = {
     "build_icons.py": "needs the simple-icons npm package; writes pipeline/icons.json only when a brand icon is added",
+    "build_iso_figures.py": "needs Node and the isometric build packages; writes the committed pipeline/iso/out/*.svg "
+                            "only when a figure changes, and the page generators inline those files",
     "build_og_images.py": "renders one PNG per plugin with Chromium; run by hand when a plugin is added",
     "build_page_og.py": "renders the page social images with Chromium; build_services.py --check fails when their "
                         "prices are out of date",

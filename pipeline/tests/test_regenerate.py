@@ -14,7 +14,7 @@ import regenerate as R  # noqa: E402
 ROOT = R.ROOT
 WORKFLOWS = ROOT / ".github" / "workflows"
 ENGLISH_GENERATORS = ("build_services.py", "build_chrome.py", "build_catalog_grid.py", "build_home.py", "build_blog.py",
-                      "build_plugin_pages.py", "build_feed.py")
+                      "build_evidence.py", "build_plugin_pages.py", "build_feed.py")
 # Node 20 pins replaced on 2026-11-09 (actions/checkout v4, actions/setup-python v5).
 NODE20_PINS = ("11d5960a326750d5838078e36cf38b85af677262", "a26af69be951a213d495a4c3e4e4022e16d87065")
 
