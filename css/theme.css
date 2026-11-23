@@ -52,60 +52,63 @@
     --radius-md: var(--radius);
     --radius-lg: 10px;
 
-    --bg: #FAFAFA;
+    /* Light surfaces (2026-11-23): page < secondary section < container < card, never one universal white. */
+    --bg: #ECEEF1;                /* page */
+    --section: #E3E6EA;           /* secondary sections: footer */
     --brand-atlassian: #1868DB;
     --brand-atlassian-neutral: #6C6F77;
-    --surface: #FFFFFF;
-    --surface-2: #F5F5F5;
-    --surface-3: #EDEDED;
-    --border: #E5E5E5;
-    --border-strong: #737373;
+    --surface: #F7F8FA;           /* containers */
+    --surface-2: #EEF0F3;         /* insets: chips, table heads, hovers */
+    --surface-3: #E3E6EA;
+    --border: #D3D7DD;
+    --border-strong: #6B7280;
     --text: #0A0A0A;
-    --text-dim: #525252;
-    --text-faint: #595959;
+    --text-dim: #4A4F57;
+    --text-faint: #545A63;
     --accent: #0A0A0A;
     --accent-hover: #262626;
     --accent-ink: #FFFFFF;
-    --accent-soft: #F0F0F0;
-    --inspect: #9A4A08;
-    --inspect-bg: #FBF0DF;
+    --accent-soft: #E6E9ED;
+    --inspect: #8A4207;
+    --inspect-bg: #F6E9D6;
     --inspect-line: #F59E0B;
-    --valid: #047857;
-    --valid-bg: #E3F3EC;
+    --valid: #036B4E;
+    --valid-bg: #DDEFE6;
     --valid-line: #10B981;
     --good: var(--valid);
     --good-bg: var(--valid-bg);
     --bad: #B42318;
-    --bad-bg: #FBEAE8;
+    --bad-bg: #F8E3E0;
     --warn: var(--inspect);
-    --pending: #525252;
-    --pending-bg: #F0F0F0;
+    --pending: #4A4F57;
+    --pending-bg: #E6E9ED;
     --cyan: #0A6C8C;
-    --signal: #C2410C;            /* acento naranja, 5.2:1 sobre papel */
-    --glass: rgba(250,250,250,0.78);
-    --grid-line: rgba(10,10,10,0.05);
-    --band-a: #FFFFFF;            /* bandas alternas de la tabla de insignias */
-    --band-b: #F5F5F5;
-    --shadow: none;
-    --shadow-lg: none;
+    --signal: #B43C0A;            /* orange accent: >= 4.6:1 on every light surface, the darkest being --section */
+    --glass: rgba(236,238,241,0.82);
+    --grid-line: rgba(15,23,42,0.07);
+    --band-a: #F7F8FA;            /* bandas alternas de la tabla de insignias */
+    --band-b: #EEF0F3;
+    /* Ambient shadows: light mode only (the dark blocks set them to none). Cards read as lifted off the gray page. */
+    --shadow: 0 1px 2px rgba(15,23,42,0.05), 0 6px 16px -8px rgba(15,23,42,0.12);
+    --shadow-lg: 0 2px 4px rgba(15,23,42,0.06), 0 14px 30px -12px rgba(15,23,42,0.20);
     --shadow-pop: 0 1px 2px rgba(10,10,10,0.08), 0 8px 24px rgba(10,10,10,0.12);
-    --focus-ring: 0 0 0 2px #FAFAFA, 0 0 0 4px #0A0A0A;
+    --focus-ring: 0 0 0 2px #ECEEF1, 0 0 0 4px #0A0A0A;
     /* Panels: a restrained graphite gradient for hero cards and side panels. */
-    --panel-1: #FFFFFF;
-    --panel-2: #F4F4F5;
+    --panel-1: #FFFFFF;           /* cards: the lightest step, lifted by --shadow */
+    --panel-2: #F3F4F6;
     /* Isometric figures (pipeline/iso): faces lit from the top left, graphite and metal materials. */
     --iso-top-1: #FFFFFF; --iso-top-2: #E9EAEC; --iso-top-3: #DADDE1;
-    --iso-left-1: #D0D4D8; --iso-left-2: #BEC2C8;
-    --iso-right-1: #AAAFB6; --iso-right-2: #989EA6;
+    --iso-left-1: #C2C7CD; --iso-left-2: #AFB5BC;
+    --iso-right-1: #9CA2AA; --iso-right-2: #8A9099;
     --iso-metal-1: #D2D6DB; --iso-metal-2: #7D838B;
     --iso-bezel-1: #3A3F46; --iso-bezel-2: #2A2E34;
     --iso-screen-1: #1F2328; --iso-screen-2: #14171A;
-    --iso-edge: #FFFFFF; --iso-recess: rgba(0, 0, 0, .45); --iso-line: rgba(0, 0, 0, .07);
-    --iso-glass: rgba(120, 140, 160, .12); --iso-glass-edge: rgba(60, 80, 100, .35);
+    --iso-edge: #FFFFFF; --iso-recess: rgba(0, 0, 0, .45); --iso-line: rgba(15, 23, 42, .13);
+    --iso-glass: rgba(120, 140, 160, .14); --iso-glass-edge: rgba(60, 80, 100, .48);
     --iso-gloss: #FFFFFF; --iso-gloss-op: .35;
-    --iso-ink: #8B929B;
-    --iso-shadow: #2B2F36; --iso-shadow-op: .38;
-    --iso-accent: #C2410C; --iso-accent-2: #0F766E; --iso-halo-op: .18;
+    --iso-ink: #737A84;
+    --iso-shadow: #2B2F36; --iso-shadow-op: .46;
+    --iso-accent: #B43C0A; --iso-accent-2: #0F766E; --iso-halo-op: .20;
 }
 
 /* Dark theme. "System" = no data-theme: follows the OS. "Light"/"Dark" =
@@ -149,6 +152,9 @@
       --focus-ring: 0 0 0 2px #0A0A0A, 0 0 0 4px #EDEDED;
       --panel-1: #151515;
       --panel-2: #0E0E0E;
+      --section: #0A0A0A;
+      --shadow: none;
+      --shadow-lg: none;
       /* Isometric figures (pipeline/iso): faces lit from the top left, graphite and metal materials. */
       --iso-top-1: #4A4E55; --iso-top-2: #3A3D42; --iso-top-3: #2A2D31;
       --iso-left-1: #2B2D31; --iso-left-2: #1F2124;
@@ -201,6 +207,9 @@
     --focus-ring: 0 0 0 2px #0A0A0A, 0 0 0 4px #EDEDED;
     --panel-1: #151515;
     --panel-2: #0E0E0E;
+    --section: #0A0A0A;
+    --shadow: none;
+    --shadow-lg: none;
     /* Isometric figures (pipeline/iso): faces lit from the top left, graphite and metal materials. */
     --iso-top-1: #4A4E55; --iso-top-2: #3A3D42; --iso-top-3: #2A2D31;
     --iso-left-1: #2B2D31; --iso-left-2: #1F2124;

@@ -81,6 +81,27 @@
    "turquoise": 0,
    "problems": []
   },
+  "step-find": {
+   "bytes": 5870,
+   "nodes": 61,
+   "blurFilters": 0,
+   "turquoise": 0,
+   "problems": []
+  },
+  "step-fix": {
+   "bytes": 5999,
+   "nodes": 61,
+   "blurFilters": 0,
+   "turquoise": 0,
+   "problems": []
+  },
+  "step-trace": {
+   "bytes": 7177,
+   "nodes": 70,
+   "blurFilters": 0,
+   "turquoise": 0,
+   "problems": []
+  },
   "thumb-analysis": {
    "bytes": 7089,
    "nodes": 67,

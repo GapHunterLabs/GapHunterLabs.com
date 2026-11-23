@@ -99,6 +99,14 @@ class BoundCountsTest(unittest.TestCase):
                 self.assertIn("%d plugins" % DATA["totalPlugins"], es)
 
 
+class HomeFiguresTest(unittest.TestCase):
+    def test_every_figure_marker_of_the_home_is_rebuilt_by_build_home(self):
+        # A marker left out of the generator keeps its old SVG and silently goes stale when the figure changes.
+        html = (ROOT / "index.html").read_text(encoding="utf-8")
+        markers = set(re.findall(r"<!-- PRERENDER:ISO:([a-z0-9-]+):START -->", html))
+        self.assertEqual(markers, set(H.HOME_FIGURES) | set(H.STAT_FIGURES) | {"catalog"})
+
+
 class CronTest(unittest.TestCase):
     def test_the_twice_daily_update_runs_the_home_generator(self):
         wf = (ROOT / ".github" / "workflows" / "update-catalog.yml").read_text(encoding="utf-8")
