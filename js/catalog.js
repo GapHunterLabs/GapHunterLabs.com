@@ -32,6 +32,10 @@
   if (pricingParam === 'PAID' && location.search.indexOf('pricing=paid') !== -1) pricingParam = 'PAIDANY';
   if (['FREE', 'FREEMIUM', 'PAID', 'PAIDANY', 'PENDING'].indexOf(pricingParam) !== -1) filterPricing = pricingParam;
   var filterCategory = knownCats.indexOf(categoryParam) !== -1 ? categoryParam : '';
+  // 2026-11-24: the grid can be sorted too (before, only the table headers sorted). ?sort= keeps it in the URL.
+  var SORTS = { downloads: ['downloads', -1], rating: ['rating', -1], newest: ['firstPublished', -1], name: ['name', 1] };
+  var sortParam = new URLSearchParams(location.search).get('sort') || '';
+  if (SORTS[sortParam]) { sortKey = SORTS[sortParam][0]; sortDir = SORTS[sortParam][1]; }
 
   var gridEl = document.getElementById('catalogGrid');
   var gridPagerHost = document.getElementById('fieldPager');
@@ -125,10 +129,10 @@
   function pagerHtml(total) {
     var pages = Math.max(1, Math.ceil(total / PAGE_SIZE));
     if (pages <= 1) return '';
-    return '<nav class="catalog-pager" aria-label="' + (ES ? 'Paginas del catalogo' : 'Catalog pages') + '">' +
-      '<button type="button" class="btn catalog-pager-btn" data-page-dir="-1" aria-label="' + (ES ? 'Pagina anterior' : 'Previous page') + '"' + (catalogPage <= 1 ? ' disabled' : '') + '>' + (ES ? 'Anterior' : 'Previous') + '</button>' +
+    return '<nav class="catalog-pager" aria-label="' + (ES ? 'P\u00e1ginas del cat\u00e1logo' : 'Catalog pages') + '">' +
+      '<button type="button" class="btn catalog-pager-btn" data-page-dir="-1" aria-label="' + (ES ? 'P\u00e1gina anterior' : 'Previous page') + '"' + (catalogPage <= 1 ? ' disabled' : '') + '>' + (ES ? 'Anterior' : 'Previous') + '</button>' +
       '<span class="catalog-pager-status" aria-live="polite">' + (ES ? 'P\u00e1gina ' + catalogPage + ' de ' + pages : 'Page ' + catalogPage + ' of ' + pages) + '</span>' +
-      '<button type="button" class="btn catalog-pager-btn" data-page-dir="1" aria-label="' + (ES ? 'Pagina siguiente' : 'Next page') + '"' + (catalogPage >= pages ? ' disabled' : '') + '>' + (ES ? 'Siguiente' : 'Next') + '</button>' +
+      '<button type="button" class="btn catalog-pager-btn" data-page-dir="1" aria-label="' + (ES ? 'P\u00e1gina siguiente' : 'Next page') + '"' + (catalogPage >= pages ? ' disabled' : '') + '>' + (ES ? 'Siguiente' : 'Next') + '</button>' +
       '</nav>';
   }
 
@@ -207,8 +211,6 @@
   }
 
   function renderAll() {
-    var sel = document.getElementById('categoryFilter');
-    if (sel) sel.value = filterCategory;
     updateCategoryBoard();
     document.getElementById('fieldView').style.display = mode === 'field' ? 'grid' : 'none';
     document.getElementById('tableView').style.display = mode === 'table' ? 'block' : 'none';
@@ -294,6 +296,45 @@
     });
   })();
 
+  var sortSelect = document.getElementById('sortOrder');
+  // The table headers and the sort select show the same order: one function marks both.
+  function markSort() {
+    Array.prototype.forEach.call(document.querySelectorAll('thead th'), function (t) {
+      var on = t.getAttribute('data-key') === sortKey;
+      t.classList.toggle('sorted', on);
+      var old = t.querySelector('.arrow');
+      if (old) old.remove();
+      t.setAttribute('aria-sort', on ? (sortDir === 1 ? 'ascending' : 'descending') : 'none');
+      if (on) {
+        var arrow = document.createElement('span');
+        arrow.className = 'arrow';
+        arrow.textContent = sortDir === 1 ? '▲' : '▼';
+        t.appendChild(arrow);
+      }
+    });
+    if (sortSelect) {
+      var match = '';
+      Object.keys(SORTS).forEach(function (k) { if (SORTS[k][0] === sortKey && SORTS[k][1] === sortDir) match = k; });
+      sortSelect.value = match || sortSelect.value;
+    }
+  }
+  if (sortSelect) {
+    sortSelect.addEventListener('change', function (e) {
+      var s = SORTS[e.target.value];
+      if (!s) return;
+      sortKey = s[0]; sortDir = s[1];
+      try {
+        var url = new URL(location.href);
+        if (e.target.value === 'downloads') url.searchParams.delete('sort'); else url.searchParams.set('sort', e.target.value);
+        history.replaceState(null, '', url.pathname + url.search + url.hash);
+      } catch (err) { /* sin History API: el orden igual funciona */ }
+      catalogPage = 1;
+      markSort();
+      renderAll();
+      revealResults(document.getElementById('controls'));
+    });
+  }
+
   Array.prototype.forEach.call(document.querySelectorAll('thead th[data-key]'), function (th) {
     var sort = function () {
       var key = th.getAttribute('data-key');
@@ -303,17 +344,7 @@
         sortKey = key;
         sortDir = (key === 'name' || key === 'pricing' || key === 'firstPublished') ? 1 : -1;
       }
-      Array.prototype.forEach.call(document.querySelectorAll('thead th'), function (t) {
-        t.classList.remove('sorted');
-        t.querySelector('.arrow') && t.querySelector('.arrow').remove();
-        t.setAttribute('aria-sort', 'none');
-      });
-      th.classList.add('sorted');
-      th.setAttribute('aria-sort', sortDir === 1 ? 'ascending' : 'descending');
-      var arrow = document.createElement('span');
-      arrow.className = 'arrow';
-      arrow.textContent = sortDir === 1 ? '▲' : '▼';
-      th.appendChild(arrow);
+      markSort();
       renderAll();
       if (tbody) {
         tbody.classList.remove('just-sorted');
@@ -352,21 +383,17 @@
     renderAll();
     revealResults(document.getElementById('controls'));
   });
-  var categoryFilterSelect = document.getElementById('categoryFilter');
-  if (categoryFilterSelect) {
-    categoryFilterSelect.addEventListener('change', function (e) {
-      filterCategory = e.target.value;
-      catalogPage = 1;
-      renderAll();
-      revealResults(document.getElementById('controls'));
-    });
-  }
   if (board) {
     board.addEventListener('click', function (e) {
       var btn = e.target.closest('.cat-cell');
       if (!btn || !board.contains(btn)) return;
       var cat = btn.getAttribute('data-cat') || '';
       filterCategory = (!cat || filterCategory === cat) ? '' : cat;
+      try {
+        var url = new URL(location.href);
+        if (filterCategory) url.searchParams.set('category', filterCategory); else url.searchParams.delete('category');
+        history.replaceState(null, '', url.pathname + url.search + url.hash);
+      } catch (err) { /* sin History API: el filtro igual funciona */ }
       catalogPage = 1;
       renderAll();
       // 2026-10-05: el tablero queda fijo (sticky) en escritorio; si se elige
@@ -391,6 +418,7 @@
     });
   }
 
+  markSort();
   renderAll();
 
   (function initCatalogTopbar() {

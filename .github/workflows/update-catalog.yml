@@ -130,11 +130,21 @@ jobs:
           # tabla ya no va en el HTML: catalog.js la arma en el navegador
           # desde esas mismas tarjetas, asi que contar sus filas daba 0.
           totals = (data.get("totalPlugins"), len(data.get("plugins", [])),
-                    ld.get("mainEntity", {}).get("numberOfItems"),
                     len(re.findall(r'class="plugin-card"', catalog)))
           if len(set(totals)) != 1:
-              sys.exit("catalog count mismatch: data/rows/jsonld/cards=%r" % (totals,))
-          print("catalog JSON/SEO parity OK (%s plugins)" % totals[0])
+              sys.exit("catalog count mismatch: data/rows/cards=%r" % (totals,))
+          # 2026-11-24: the ItemList also lists the VS Code extensions and the Atlassian apps.
+          others = 0
+          for name, key in (("data/vscode-catalog-data.json", "extensions"), ("data/atlassian-catalog-data.json", "apps")):
+              try:
+                  with open(name, encoding="utf-8") as f:
+                      others += sum(1 for x in json.load(f).get(key, []) if x.get("name"))
+              except FileNotFoundError:
+                  pass
+          listed = ld.get("mainEntity", {}).get("numberOfItems")
+          if listed != totals[0] + others:
+              sys.exit("catalog-jsonld lists %r items, expected %d plugins + %d others" % (listed, totals[0], others))
+          print("catalog JSON/SEO parity OK (%s plugins, %d others)" % (totals[0], others))
           PYEOF
 
       # 2026-09-11: bug real -- este workflow y update-vscode-catalog.yml

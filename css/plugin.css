@@ -1647,23 +1647,21 @@
 .catalog-v2 .catalog-heading.gh-page-header.has-figure { padding-top: 20px; padding-bottom: 6px; align-items: center; row-gap: 12px; }
 .catalog-v2 .catalog-heading .ch-copy h1 { max-width: none; font-size: clamp(24px, 2.6vw, 30px); line-height: 1.12; }
 .catalog-v2 .catalog-heading .ch-copy .hero-actions { margin-top: 14px; padding-top: 0; padding-bottom: 0; }
-.catalog-v2 .catalog-heading .ch-copy .ch-proof { margin-top: 14px; }
 .catalog-v2 .catalog-heading .page-figure { max-width: 300px; justify-self: end; }
 .catalog-v2 .catalog-heading .page-figure .iso-figure { max-height: 180px; width: auto; margin-inline: auto; }
 .catalog-v2 .platform-panel > .cv-head { padding-top: 12px; padding-bottom: 4px; margin-bottom: 0; align-items: center; }
-.catalog-v2 .platform-panel > .cv-head .cv-eyebrow { display: none; }
 .catalog-v2 .platform-panel > .cv-head h2 { font-size: 20px; margin: 0; }
 .catalog-v2 .platform-panel > .cv-head .cv-lead { margin-top: 2px; font-size: 14px; }
 .catalog-v2 #fieldView.field-layout { grid-template-columns: minmax(0, 1fr); row-gap: 14px; }
 .catalog-v2 .platform-tabs { margin-top: 12px; margin-bottom: 0; }
 .catalog-v2 .platform-panel { padding-top: 8px; }
-.catalog-v2 .catalog-explore { min-width: 0; max-width: 100%; margin-bottom: 0; }
+/* the category board sits under the controls (one category control for the grid and the table) */
+.catalog-v2 .platform-panel > .catalog-explore { min-width: 0; max-width: 100%; margin: 0 0 14px; }
 .catalog-v2 .catalog-explore .cat-board { display: flex; flex-wrap: nowrap; overflow-x: auto; gap: 6px; padding-bottom: 4px; scrollbar-width: thin; max-width: 100%; }
 .catalog-v2 .catalog-explore .cat-cell { flex: none; min-width: max-content; padding: 6px 12px 6px 8px; gap: 8px; }
 .catalog-v2 .catalog-explore .cat-cell-copy { flex-direction: row; align-items: baseline; gap: 5px; max-width: none; }
 .catalog-v2 .catalog-explore .cat-cell-label, .catalog-v2 .catalog-explore .cat-cell-count { max-width: none; }
 @media (max-width: 760px) {
-  .catalog-v2 .catalog-heading .ch-copy .ch-proof { display: none; }
   .catalog-v2 .platform-panel > .cv-head .cv-lead { display: none; }
 }
 

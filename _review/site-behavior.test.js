@@ -593,6 +593,32 @@ test('catalog: the first plugin card starts on the first screen, with no scroll 
   }
 });
 
+// 2026-11-24: the grid sorts (and keeps the order in ?sort=), the category board also filters the table, and the
+// sort select and the table headers always show the same order.
+test('catalog: sort the grid, keep it in the URL, and filter the table with the category board', async ({ b, base }) => {
+  const names = "[...document.querySelectorAll('#catalogGrid > a:not([hidden])')].map(c => c.dataset.name)";
+  await b.navigate(base + '/catalog/');
+  await b.evaluate("(() => { const s = document.getElementById('sortOrder'); s.value = 'name'; s.dispatchEvent(new Event('change')); })()");
+  await delay(200);
+  const sorted = await b.evaluate(names);
+  equal(JSON.stringify(sorted), JSON.stringify([...sorted].sort()), 'grid sorted by name');
+  assert(/[?&]sort=name/.test(await b.evaluate('location.search')), 'the order is in the URL');
+  await b.navigate(base + '/catalog/?sort=newest');
+  equal(await b.evaluate("document.getElementById('sortOrder').value"), 'newest', 'the URL order selects the option');
+  const dates = await b.evaluate("[...document.querySelectorAll('#catalogGrid > a:not([hidden])')].map(c => c.dataset.firstpublished || '')");
+  const known = dates.filter(Boolean);
+  equal(JSON.stringify(known), JSON.stringify([...known].sort().reverse()), 'newest first');
+  await b.evaluate("document.querySelector('#modeToggle [data-mode=table]').click()");
+  await delay(200);
+  equal(await b.evaluate("getComputedStyle(document.querySelector('.catalog-explore')).display !== 'none'"), true, 'category board visible in the table');
+  await b.evaluate("document.querySelector('.cat-cell[data-cat=security]').click()");
+  await delay(200);
+  const cats = await b.evaluate("[...document.querySelectorAll('#tbody tr.row:not([hidden])')].map(r => r.dataset.cat)");
+  assert(cats.length > 0 && cats.every(c => c === 'security'), 'table filtered by the board: ' + JSON.stringify(cats.slice(0, 3)));
+  assert(/[?&]category=security/.test(await b.evaluate('location.search')), 'the category is in the URL');
+  equal(await b.evaluate("document.querySelector('thead th.sorted') ? document.querySelector('thead th.sorted').dataset.key : ''"), 'firstPublished', 'the table header marks the same order');
+});
+
 // 2026-11-09: the Spanish pages show the plugin descriptions in Spanish, also after catalog-vsx.js redraws the grid.
 test('Spanish catalog: plugin descriptions in Spanish after the scripts run, and the search finds them', async ({ b, base }) => {
   const stored = JSON.parse(fs.readFileSync(path.join(root, 'pipeline', 'i18n', 'plugin-pitches.es.json'), 'utf8'));

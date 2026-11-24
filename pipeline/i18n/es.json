@@ -455,7 +455,6 @@
   "Software Security and Performance Audits | Gap Hunter Labs": "Auditorías de seguridad y rendimiento de software | Gap Hunter Labs",
   "Gap Hunter Labs — Plugin Intelligence Catalog Report": "Gap Hunter Labs — Informe del catálogo Plugin Intelligence",
   "Gap Hunter Labs — find the gap, understand the cause, build the fix": "Gap Hunter Labs — encontrar la brecha, entender la causa, construir la corrección",
-  "Gap Hunter Labs — performance, security and reliability engineering": "Gap Hunter Labs — ingeniería de rendimiento, seguridad y fiabilidad",
   "How a gap becomes a fix — Gap Hunter Labs methodology": "De la brecha a la solución — metodología de Gap Hunter Labs",
   "Everything that backs the work — Gap Hunter Labs engineering and evidence": "Todo lo que respalda el trabajo — ingeniería y evidencia de Gap Hunter Labs",
   "Plugins with the strongest evidence — Gap Hunter Labs case studies": "Plugins con la evidencia más sólida — casos de estudio de Gap Hunter Labs",
@@ -1991,5 +1990,16 @@
   "JetBrains and VS Code plugins for real developer gaps: the Gap Hunter Labs catalog": "Plugins para JetBrains y VS Code que resuelven brechas reales: el catálogo de Gap Hunter Labs",
   "Plugins I build for JetBrains IDEs, VS Code and Jira, each one aimed at a documented gap in an existing tool.": "Plugins que construyo para IDE de JetBrains, VS Code y Jira, cada uno dirigido a una brecha documentada en una herramienta existente.",
   "Gap Hunter Labs: new plugins": "Gap Hunter Labs: nuevos plugins",
-  "Grid": "Cuadrícula"
+  "Grid": "Cuadrícula",
+  "Best rated": "Mejor valorados",
+  "Free ({n})": "Gratis ({n})",
+  "Freemium ({n})": "Freemium ({n})",
+  "Freemium or paid ({n})": "Freemium o de pago ({n})",
+  "Most downloaded": "Más descargados",
+  "Name, A to Z": "Nombre, de la A a la Z",
+  "Paid ({n})": "De pago ({n})",
+  "Sort plugins": "Ordenar plugins",
+  "Pending moderation ({n})": "Pendiente de moderación ({n})",
+  "Gap Hunter Labs: performance, security and reliability engineering": "Gap Hunter Labs: ingeniería de rendimiento, seguridad y fiabilidad",
+  "n/a": "n/d"
 }

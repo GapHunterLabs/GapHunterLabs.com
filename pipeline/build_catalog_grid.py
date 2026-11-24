@@ -246,29 +246,30 @@ def build(dry_run: bool = False) -> None:
         for label, value, wide in spec_rows
     )
     _ = total_downloads
-    # Hero proof line: three counts from the same data as the spec sheet, never typed by hand.
-    proof_html = "".join(
-        '<li><strong>%d</strong><span>%s</span></li>' % (n, label)
-        for n, label in ((len(src.plugins), "JetBrains plugins"), (len(vsx), "VS Code extensions"),
-                         (by_price["FREE"], "Free plugins"))
+    # 2026-11-24 (catalog audit): the hero no longer repeats the counts (the platform tabs carry them) and the category
+    # <select> is gone (the category board is the one category control, for the grid and the table). What the hero's
+    # "free plugins" count said now lives where it is used: each pricing option carries its own count.
+    pending = sum(1 for p in src.plugins if p.get("downloads") is None)
+    price_options = (
+        ("FREE", "Free", by_price["FREE"]), ("FREEMIUM", "Freemium", by_price["FREEMIUM"]),
+        ("PAID", "Paid", by_price["PAID"]), ("PAIDANY", "Freemium or paid", by_price["FREEMIUM"] + by_price["PAID"]),
+        ("PENDING", "Pending moderation", pending),
     )
-
-    counts = {c["key"]: 0 for c in src.categories}
-    for p in src.plugins:
-        counts[p["categoryKey"]] = counts.get(p["categoryKey"], 0) + 1
-    active_cats = [c for c in src.categories if c["key"] != "other" or counts.get("other", 0) > 0]
-    options_html = "".join(
-        '<option value="%s">%s (%d)</option>' % (c["key"], esc(c["label"]), counts.get(c["key"], 0))
-        for c in active_cats
+    price_options_html = "".join(
+        '<option value="%s">%s (%d)</option>' % (value, label, n) for value, label, n in price_options
+        if n or value in ("FREE", "PAIDANY")
     )
 
     grid_html = "".join(card_html(p, renderer, src) for p in rows)
     table_html = "".join(table_row_html(p, renderer, src) for p in rows)
 
     html = inject(html, "<!-- PRERENDER:STATS:START -->", "<!-- PRERENDER:STATS:END -->", stats_html, "STATS")
-    html = inject(html, "<!-- PRERENDER:PROOF:START -->", "<!-- PRERENDER:PROOF:END -->", proof_html, "PROOF")
-    html = inject(html, "<!-- PRERENDER:CATOPTIONS:START -->", "<!-- PRERENDER:CATOPTIONS:END -->",
-                  options_html, "CATOPTIONS")
+    html = inject(html, "<!-- PRERENDER:PRICEOPTIONS:START -->", "<!-- PRERENDER:PRICEOPTIONS:END -->",
+                  price_options_html, "PRICEOPTIONS")
+    # 2026-11-24: the catalog's ItemList lists the three platforms, so it has to follow the VS Code and Atlassian data
+    # as well: this step runs in every rebuild, the JetBrains updater only twice a day. Same function, same output.
+    import auto_update_catalog  # noqa: E402
+    html = auto_update_catalog.apply_seo_blocks(html, src.data["plugins"], src.data.get("generatedAt") or "", vsx, atl)
     html = inject(html, "<!-- PRERENDER:GRID:START -->", "<!-- PRERENDER:GRID:END -->", grid_html, "GRID")
     # 2026-09-27: la tabla ya no se pre-renderiza (duplicaba la grilla); la
     # arma js/catalog.js desde las tarjetas. El marcador queda vacio.

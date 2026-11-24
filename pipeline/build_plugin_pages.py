@@ -72,7 +72,9 @@ SITEMAP = ROOT / "sitemap.xml"
 LASTMOD_STORE = ROOT / "_review" / "plugin_lastmod.json"
 
 OG_IMAGE = "%s/og-image.png?v=%s" % (SITE, OG_VERSION)
-OG_IMAGE_ALT = "Gap Hunter Labs — performance, security and reliability engineering"
+OG_IMAGE_ALT = "Gap Hunter Labs: performance, security and reliability engineering"
+# 2026-11-24: an empty value is shown as "n/a" ("n/d" in Spanish), not as a dash
+EMPTY = "n/a"
 MEDIA_DIR = ROOT / "media"
 SHARE_ICON_X = ('<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 '
                 '8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833'
@@ -421,6 +423,29 @@ def pitch_prose(value) -> str:
     return SINGLE_DASH_RE.sub(single, text)
 
 
+QUOTED_RE = re.compile(r'("[^"\n]*"|\u201c[^\u201d]*\u201d|`[^`\n]*`)')
+
+
+def prose_without_dashes(value) -> str:
+    """Our own prose without dashes (2026-11-24), with the same rules as pitch_prose(): a pair becomes parentheses, a
+    single one a colon (or a comma when the sentence already has a colon). Quoted text and code are left exactly as
+    they are: the evidence quotes users and documentation verbatim."""
+    text = "" if value is None else str(value)
+    parts = QUOTED_RE.split(text)
+    for i in range(0, len(parts), 2):   # even parts are outside quotes and code
+        # an aside that already has parentheses becomes a comma-delimited one, never nested parentheses
+        chunk = PAIRED_DASH_RE.sub(lambda m: (", %s, " if "(" in m.group(1) else " (%s) ") % m.group(1), parts[i])
+
+        def single(m, chunk=chunk):
+            before = chunk[:m.start()]
+            sentence = before[before.rfind(". ") + 1:]
+            return ", " if ":" in sentence else ": "
+        chunk = SINGLE_DASH_RE.sub(single, chunk)
+        chunk = re.sub(r"(\d)[–—](\d)", r"\1-\2", chunk)   # a numeric range takes a hyphen
+        parts[i] = re.sub(r"\s+[—–]\s*$", ":", chunk)   # a trailing dash (a list follows) becomes a colon
+    return "".join(parts)
+
+
 def pitch_text(value) -> str:
     """pitch_prose() sin markdown, para tarjetas, metadatos y el buscador."""
     return plain_text(pitch_prose(value))
@@ -734,10 +759,10 @@ class PluginRenderer:
             return ("pending", "Pending")
         return {"FREE": ("free", "Free"),
                 "FREEMIUM": ("freemium", "Freemium"),
-                "PAID": ("paid", "Paid")}.get(pricing, ("free", pricing or "—"))
+                "PAID": ("paid", "Paid")}.get(pricing, ("free", pricing or EMPTY))
 
     def gap_text(self, p):
-        return self.src.gap_overrides.get(p["repo"]) or p.get("why") or "—"
+        return prose_without_dashes(self.src.gap_overrides.get(p["repo"]) or p.get("why")) or EMPTY
 
     def platform_of(self, p):
         m = re.match(r"^(IntelliJ[^.]*?plugin)\s*[.(]", p.get("pitch") or "")
@@ -760,7 +785,7 @@ class PluginRenderer:
                  if p.get("growthSince") else "No earlier snapshot")
         attr = ' title="%s"' % esc(title)
         if g is None:
-            return '<span class="growth flat"%s>—</span>' % attr
+            return '<span class="growth flat"%s>n/a</span>' % attr
         if p.get("growthFrom") is not None and p["growthFrom"] < GROWTH_PERCENT_MIN_BASELINE and p.get("downloads") is not None:
             delta = p["downloads"] - p["growthFrom"]
             if delta > 0:
@@ -830,7 +855,7 @@ class PluginRenderer:
     def share_html(self, p, platform="IntelliJ IDEs"):
         url = "%s/catalog/%s/" % (SITE, p["repo"])
         kind = "plugin" if platform == "IntelliJ IDEs" else "extension"
-        text = "%s — %s %s for %s" % (p["name"], plain_text(p.get("niche")) or "developer tooling", kind, platform)
+        text = "%s: %s %s for %s" % (p["name"], plain_text(p.get("niche")) or "developer tooling", kind, platform)
         q = lambda s: urllib.parse.quote(s, safe="")
         x_url = "https://x.com/intent/post?text=%s&url=%s&via=GapHunterLabs" % (q(text), q(url))
         li_url = "https://www.linkedin.com/sharing/share-offsite/?url=%s" % q(url)
@@ -908,9 +933,9 @@ class PluginRenderer:
         stat = lambda num, label: ('<div class="hdr-stat"><span class="hdr-stat-num">%s</span>'
                                    '<span class="hdr-stat-label">%s</span></div>' % (num, label))
         h.append('<div class="hdr-stats ph-stats">%s%s%s%s</div>' % (
-            stat("—" if is_pending else thousands(p["downloads"]), "Downloads"),
-            stat(p.get("stars") if p.get("stars") is not None else "—", "GitHub stars"),
-            stat(esc(p.get("firstPublished") or "—"), "Published"),
+            stat(EMPTY if is_pending else thousands(p["downloads"]), "Downloads"),
+            stat(p.get("stars") if p.get("stars") is not None else EMPTY, "GitHub stars"),
+            stat(esc(p.get("firstPublished") or EMPTY), "Published"),
             stat(esc(price_text), "Pricing")))
         h.append('</div>')
         if media:
@@ -928,8 +953,8 @@ class PluginRenderer:
                      fact("Category", esc(cat["label"])),
                      fact("Pricing", price_badge(pr_cls, pr_text)),
                      fact("Platform", badge(self.platform_of(p), icon="jetbrains", variant="dark", extra_class="fact-data")),
-                     fact("First published", esc(p.get("firstPublished") or "—")),
-                     fact("Marketplace ID", ("#" + esc(mp_id)) if mp_id else ("Pending" if is_pending else "—")),
+                     fact("First published", esc(p.get("firstPublished") or EMPTY)),
+                     fact("Marketplace ID", ("#" + esc(mp_id)) if mp_id else ("Pending" if is_pending else EMPTY)),
                      fact("Repository", '<code>%s</code><button type="button" class="copy-btn" data-copy="%s" '
                                         'aria-label="Copy repository name">%s</button>' % (esc(p["repo"]), esc(p["repo"]), icons["copy"])),
                  ))))
@@ -1033,9 +1058,9 @@ class PluginRenderer:
         stat = lambda num, label: ('<div class="hdr-stat"><span class="hdr-stat-num">%s</span>'
                                    '<span class="hdr-stat-label">%s</span></div>' % (num, label))
         h.append('<div class="hdr-stats ph-stats">%s%s%s%s</div>' % (
-            stat(thousands(n), "Installs"), stat(esc(e.get("version") or "—"), "Version"),
-            stat(esc((e.get("publishedDate") or "—")[:10]), "Published"),
-            stat(esc((e.get("lastUpdated") or "—")[:10]), "Last updated")))
+            stat(thousands(n), "Installs"), stat(esc(e.get("version") or EMPTY), "Version"),
+            stat(esc((e.get("publishedDate") or EMPTY)[:10]), "Published"),
+            stat(esc((e.get("lastUpdated") or EMPTY)[:10]), "Last updated")))
         h.append('</div></header>')
 
         fact = lambda k, v: '<div class="fact"><dt>%s</dt><dd>%s</dd></div>' % (k, v)
@@ -1045,10 +1070,10 @@ class PluginRenderer:
                  '<dl class="facts-table">%s</dl></section>' % (self.share_html(share_item, platform="VS Code"), "".join((
                      fact("Platform", badge("Visual Studio Code", icon="vscode", variant="dark")),
                      fact("Pricing", price_badge("free", "Free")),
-                     fact("Version", esc(e.get("version") or "—")),
-                     fact("First published", esc((e.get("publishedDate") or "—")[:10])),
-                     fact("Last updated", esc((e.get("lastUpdated") or "—")[:10])),
-                     fact("Marketplace ID", "<code>%s</code>" % esc(item) if item else "—"),
+                     fact("Version", esc(e.get("version") or EMPTY)),
+                     fact("First published", esc((e.get("publishedDate") or EMPTY)[:10])),
+                     fact("Last updated", esc((e.get("lastUpdated") or EMPTY)[:10])),
+                     fact("Marketplace ID", "<code>%s</code>" % esc(item) if item else EMPTY),
                      fact("Repository", '<code>%s</code><button type="button" class="copy-btn" data-copy="%s" '
                                         'aria-label="Copy repository name">%s</button>' % (esc(e.get("repo") or ""), esc(e.get("repo") or ""), icons["copy"])),
                  ))))
@@ -1155,9 +1180,9 @@ class PluginRenderer:
         stat = lambda num, label: ('<div class="hdr-stat"><span class="hdr-stat-num">%s</span>'
                                    '<span class="hdr-stat-label">%s</span></div>' % (num, label))
         h.append('<div class="hdr-stats ph-stats">%s%s%s%s</div>' % (
-            stat("Pending" if is_pending else thousands(n), "Installs"), stat(esc(e.get("version") or "—"), "Version"),
-            stat(esc((e.get("publishedDate") or "—")[:10]), "Published"),
-            stat(esc((e.get("lastUpdated") or "—")[:10]), "Last updated")))
+            stat("Pending" if is_pending else thousands(n), "Installs"), stat(esc(e.get("version") or EMPTY), "Version"),
+            stat(esc((e.get("publishedDate") or EMPTY)[:10]), "Published"),
+            stat(esc((e.get("lastUpdated") or EMPTY)[:10]), "Last updated")))
         h.append('</div>')
         if shots:
             h.append('<div class="ph-media">%s</div>' % atl_shot_img(shots[0], eager=True))
@@ -1175,10 +1200,10 @@ class PluginRenderer:
                  '<dl class="facts-table">%s</dl></section>' % (self.share_html(share_item, platform="Atlassian Marketplace"), "".join((
                      fact("Platform", badge("Atlassian Marketplace", icon="atlassian", variant="dark")),
                      fact("Pricing", price_badge("pending", "Pending") if is_pending else price_badge("free", "Free")),
-                     fact("Version", esc(e.get("version") or "—")),
-                     fact("First published", esc((e.get("publishedDate") or "—")[:10])),
-                     fact("Last updated", esc((e.get("lastUpdated") or "—")[:10])),
-                     fact("Marketplace ID", "<code>%s</code>" % esc(item) if item else "—"),
+                     fact("Version", esc(e.get("version") or EMPTY)),
+                     fact("First published", esc((e.get("publishedDate") or EMPTY)[:10])),
+                     fact("Last updated", esc((e.get("lastUpdated") or EMPTY)[:10])),
+                     fact("Marketplace ID", "<code>%s</code>" % esc(item) if item else EMPTY),
                      fact("Repository", '<code>%s</code><button type="button" class="copy-btn" data-copy="%s" '
                                         'aria-label="Copy repository name">%s</button>' % (esc(e.get("repo") or ""), esc(e.get("repo") or ""), icons["copy"])),
                  ))))
@@ -1210,7 +1235,7 @@ class PluginRenderer:
         name = p["name"]
         niche = plain_text(p.get("niche")) or "JetBrains"
         tail = " for IntelliJ"
-        sep = " — "
+        sep = ": "   # 2026-11-24: no dashes in public text (was " — ")
         fixed_len = len(name) + len(sep) + len(tail)
         if fixed_len > TITLE_SOFT_MAX:
             # Ni siquiera nombre+cola entra: se cae la cola tambien.
@@ -1550,12 +1575,12 @@ def main():
         # vez de romper el <head>.
         has_own_og = (MEDIA_DIR / slug / "og.png").exists()
         og_image = "%s/media/%s/og.png?v=%s" % (SITE, slug, OG_VERSION) if has_own_og else OG_IMAGE
-        og_image_alt = ("%s — Gap Hunter Labs" % p["name"]) if has_own_og else OG_IMAGE_ALT
+        og_image_alt = ("%s: IntelliJ plugin by Gap Hunter Labs" % p["name"]) if has_own_og else OG_IMAGE_ALT
         page = shell.render(
             title=renderer.title(p),
             # En una tarjeta social el nombre del plugin ya es el gancho;
             # el sufijo de categoria que ayuda en SERP solo estorba ahi.
-            og_title="%s — Gap Hunter Labs" % p["name"],
+            og_title="%s | Gap Hunter Labs" % p["name"],
             desc=renderer.description(p),
             url=url,
             jsonld=renderer.jsonld(p, url),
@@ -1596,11 +1621,11 @@ def main():
         # media/vscode/<name>/og.png lo genera pipeline/build_og_images.py; sin el, cae a la generica.
         has_own_og = (MEDIA_DIR / slug / "og.png").exists()
         page = shell.render(
-            title=renderer.vsx_title(e), og_title="%s — Gap Hunter Labs" % e["displayName"],
+            title=renderer.vsx_title(e), og_title="%s | Gap Hunter Labs" % e["displayName"],
             desc=renderer.vsx_description(e), url=url, jsonld=renderer.vsx_jsonld(e, url),
             body=renderer.vsx_body_html(e),
             og_image="%s/media/%s/og.png?v=%s" % (SITE, slug, OG_VERSION) if has_own_og else OG_IMAGE,
-            og_image_alt=("%s — VS Code extension — Gap Hunter Labs" % e["displayName"]) if has_own_og else OG_IMAGE_ALT)
+            og_image_alt=("%s: VS Code extension by Gap Hunter Labs" % e["displayName"]) if has_own_og else OG_IMAGE_ALT)
         page = page.replace('<div class="app-main">', '<div class="app-main plugin-page">', 1)
         fingerprint = json.dumps({k: e.get(k) for k in ("displayName", "pitch", "niche", "version", "marketplaceUrl")},
                                  ensure_ascii=False, sort_keys=True)
@@ -1625,11 +1650,11 @@ def main():
         url = "%s/catalog/%s/" % (SITE, slug)
         has_own_og = (MEDIA_DIR / slug / "og.png").exists()
         page = shell.render(
-            title=renderer.atl_title(e), og_title="%s — Gap Hunter Labs" % e["displayName"],
+            title=renderer.atl_title(e), og_title="%s | Gap Hunter Labs" % e["displayName"],
             desc=renderer.atl_description(e), url=url, jsonld=renderer.atl_jsonld(e, url),
             body=renderer.atl_body_html(e),
             og_image="%s/media/%s/og.png?v=%s" % (SITE, slug, OG_VERSION) if has_own_og else OG_IMAGE,
-            og_image_alt=("%s — Atlassian Marketplace app — Gap Hunter Labs" % e["displayName"]) if has_own_og else OG_IMAGE_ALT)
+            og_image_alt=("%s: Atlassian Marketplace app by Gap Hunter Labs" % e["displayName"]) if has_own_og else OG_IMAGE_ALT)
         page = page.replace('<div class="app-main">', '<div class="app-main plugin-page">', 1)
         fingerprint = json.dumps({k: e.get(k) for k in ("displayName", "pitch", "niche", "version", "marketplaceUrl", "installs")},
                                  ensure_ascii=False, sort_keys=True)

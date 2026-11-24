@@ -109,5 +109,128 @@ class CatalogServedHtmlTest(unittest.TestCase):
         self.assertIn("[data-reveal='none']", read("js/site-reveal.js"))
 
 
+class CatalogExploreSectionTest(unittest.TestCase):
+    """2026-11-24: one control per job. The hero no longer repeats the counts the tabs carry, the category board is
+    the only category control (outside the grid view, so the table can use it too), the panels no longer repeat the
+    tab's platform as an eyebrow, the pricing options carry their counts, and the grid can be sorted."""
+
+    def test_no_duplicate_controls_or_labels(self):
+        for rel in PAGES.values():
+            text = read(rel)
+            self.assertNotIn('id="categoryFilter"', text, rel)
+            self.assertNotIn('class="ch-proof"', text, rel)
+            self.assertIsNone(re.search(r'<p class="cv-eyebrow">[^<]*Marketplace</p>', text), rel)
+            self.assertEqual(text.count('class="catalog-explore"'), 1, rel)
+            self.assertLess(text.index('class="catalog-explore"'), text.index('id="fieldView"'), rel)
+            self.assertGreater(text.index('class="catalog-explore"'), text.index('id="controls"'), rel)
+
+    def test_pricing_options_carry_the_counts_of_the_data(self):
+        data = json.loads(read("data/catalog-data.json"))["plugins"]
+        by = {k: sum(1 for p in data if p.get("pricing") == k) for k in ("FREE", "FREEMIUM", "PAID")}
+        text = read(PAGES["en"])
+        options = dict(re.findall(r'<option value="([A-Z]+)">[^<(]*\((\d+)\)</option>', text))
+        self.assertEqual(int(options["FREE"]), by["FREE"])
+        self.assertEqual(int(options["PAIDANY"]), by["FREEMIUM"] + by["PAID"])
+        self.assertIn("Gratis (%d)" % by["FREE"], read(PAGES["es"]))
+
+    def test_the_grid_has_a_sort_control_in_both_languages(self):
+        for rel, labels in ((PAGES["en"], ("Most downloaded", "Name, A to Z")), (PAGES["es"], ("Más descargados", "Nombre, de la A a la Z"))):
+            text = read(rel)
+            select = re.search(r'<select id="sortOrder"[^>]*>(.*?)</select>', text, re.S).group(1)
+            self.assertEqual(re.findall(r'value="(\w+)"', select), ["downloads", "rating", "newest", "name"], rel)
+            for label in labels:
+                self.assertIn(label, select, rel)
+        js = read("js/catalog.js")
+        for key in ("downloads:", "rating:", "newest:", "name:"):
+            self.assertIn(key, js)
+        self.assertNotIn("categoryFilter", js)
+
+
+class CatalogItemListTest(unittest.TestCase):
+    def test_the_item_list_has_the_three_platforms(self):
+        vs = json.loads(read("data/vscode-catalog-data.json"))["extensions"]
+        atl = json.loads(read("data/atlassian-catalog-data.json"))["apps"]
+        jb = json.loads(read("data/catalog-data.json"))["plugins"]
+        for lang, rel in PAGES.items():
+            ld = collection(read(rel))["mainEntity"]
+            items = ld["itemListElement"]
+            self.assertEqual(ld["numberOfItems"], len(items))
+            self.assertEqual(len(items), len(jb) + len(vs) + len(atl))
+            self.assertEqual([i["position"] for i in items], list(range(1, len(items) + 1)))
+            base = SITE + ("/es/catalogo/" if lang == "es" else "/catalog/")
+            self.assertTrue(any(i["url"] == base + "vscode/%s/" % vs[0]["name"] for i in items), lang)
+            self.assertTrue(any(i["url"] == base + "atlassian/%s/" % atl[0]["name"] for i in items), lang)
+            for i in items:
+                self.assertTrue((ROOT / i["url"][len(SITE):].strip("/") / "index.html").is_file(), i["url"])
+
+
+import build_plugin_pages as bpp  # noqa: E402
+
+
+class PluginPagesWithoutDashesTest(unittest.TestCase):
+    """2026-11-24: the plugin pages had six dashes each (title, social titles, image alts) and more in the empty-value
+    marks and in our own gap prose. Quotes of users and documentation stay verbatim."""
+
+    def test_prose_without_dashes(self):
+        f = bpp.prose_without_dashes
+        self.assertEqual(f("A — an aside — ends."), "A (an aside) ends.")
+        self.assertEqual(f("A — the leading one (430K) — has it."), "A, the leading one (430K), has it.")
+        self.assertEqual(f("One — two."), "One: two.")
+        self.assertEqual(f("Note: one — two."), "Note: one, two.")
+        self.assertEqual(f("since 2009–2010"), "since 2009-2010")
+        self.assertEqual(f("freezes —"), "freezes:")
+        kept = 'they said "slow — broken" and `a — b`'
+        self.assertEqual(f(kept), kept)
+        self.assertEqual(f(None), "")
+        self.assertEqual(f(""), "")
+
+    def test_no_dash_in_titles_social_titles_or_alts(self):
+        tags = re.compile(r'<title>[^<]*</title>|<meta (?:property|name)="(?:og:title|twitter:title|og:image:alt|twitter:image:alt)" content="[^"]*">')
+        for page in list((ROOT / "catalog").glob("**/index.html")) + list((ROOT / "es" / "catalogo").glob("**/index.html")):
+            for tag in tags.findall(page.read_text(encoding="utf-8")):
+                self.assertIsNone(re.search("[–—]", tag), "%s: %s" % (page, tag))
+
+    def test_dashes_left_in_the_pages_are_only_inside_quotes(self):
+        for page in list((ROOT / "catalog").glob("*/index.html")) + list((ROOT / "es" / "catalogo").glob("*/index.html")):
+            text = re.sub(r"<script\b.*?</script>", "", page.read_text(encoding="utf-8"), flags=re.S)
+            text = re.sub(r"&quot;.*?&quot;|“.*?”|<code>.*?</code>|<em>&quot;.*?</em>", "", text, flags=re.S)
+            self.assertIsNone(re.search("[–—]", text), str(page))
+
+
+class PluginGapsInSpanishTest(unittest.TestCase):
+    def test_every_gap_has_a_current_translation(self):
+        build_i18n._GAPS = None
+        by_path, stale = build_i18n._gap_tables()
+        self.assertEqual(stale, [])
+        self.assertEqual(len(by_path), len(json.loads(read("data/catalog-data.json"))["plugins"]))
+
+    def test_the_spanish_pages_show_the_spanish_gap(self):
+        for path, (en_html, es_html) in list(build_i18n._gap_tables()[0].items())[:20]:
+            es_page = read("es/catalogo/%s/index.html" % path.strip("/").split("/")[-1])
+            self.assertIn('<div class="pb-text">%s</div>' % es_html, es_page, path)
+            if en_html != es_html:
+                self.assertNotIn('<div class="pb-text">%s</div>' % en_html, es_page, path)
+
+    def test_a_changed_english_gap_counts_as_missing(self):
+        saved = build_i18n.GAPS_FILE
+        import tempfile
+        with tempfile.TemporaryDirectory() as d:
+            stored = json.loads(saved.read_text(encoding="utf-8"))
+            key = sorted(stored)[0]
+            stored[key]["en"] += " changed"
+            fake = Path(d) / "gaps.json"
+            fake.write_text(json.dumps(stored), encoding="utf-8")
+            try:
+                build_i18n.GAPS_FILE, build_i18n._GAPS = fake, None
+                self.assertIn(key, build_i18n._gap_tables()[1])
+            finally:
+                build_i18n.GAPS_FILE, build_i18n._GAPS = saved, None
+
+    def test_a_social_title_is_kept_only_for_an_exact_plugin_name(self):
+        name = sorted(build_i18n.NAMES)[0]
+        self.assertEqual(build_i18n.lookup("%s | Gap Hunter Labs" % name, {}), "%s | Gap Hunter Labs" % name)
+        self.assertIsNone(build_i18n.lookup("An English sentence nobody translated | Gap Hunter Labs", {}))
+
+
 if __name__ == "__main__":
     unittest.main()
