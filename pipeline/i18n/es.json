@@ -455,9 +455,7 @@
   "Software Security and Performance Audits | Gap Hunter Labs": "Auditorías de seguridad y rendimiento de software | Gap Hunter Labs",
   "Gap Hunter Labs — Plugin Intelligence Catalog Report": "Gap Hunter Labs — Informe del catálogo Plugin Intelligence",
   "Gap Hunter Labs — find the gap, understand the cause, build the fix": "Gap Hunter Labs — encontrar la brecha, entender la causa, construir la corrección",
-  "Gap Hunter Labs — new plugins": "Gap Hunter Labs — nuevos plugins",
   "Gap Hunter Labs — performance, security and reliability engineering": "Gap Hunter Labs — ingeniería de rendimiento, seguridad y fiabilidad",
-  "JetBrains and VS Code plugins for real developer gaps — Gap Hunter Labs catalog": "Plugins para JetBrains y VS Code que resuelven brechas reales — catálogo de Gap Hunter Labs",
   "How a gap becomes a fix — Gap Hunter Labs methodology": "De la brecha a la solución — metodología de Gap Hunter Labs",
   "Everything that backs the work — Gap Hunter Labs engineering and evidence": "Todo lo que respalda el trabajo — ingeniería y evidencia de Gap Hunter Labs",
   "Plugins with the strongest evidence — Gap Hunter Labs case studies": "Plugins con la evidencia más sólida — casos de estudio de Gap Hunter Labs",
@@ -545,7 +543,7 @@
   "Issue #{n}": "Issue #{n}",
   "It is harm reduction, not a vault. It raises the cost of a mistake a great deal; it is not a guarantee against an attacker who is actively targeting this specific sandbox, and it does not replace kernel-level enforcement or a real VM. It is the fence you put around a tool <i>before</i> you trust it &mdash; not a reason to run things you already know are malicious.": "Es reducción de daño, no una bóveda. Sube mucho el costo de un error; no es una garantía contra un atacante que ataca activamente este sandbox en concreto, y no reemplaza la aplicación a nivel de kernel ni una máquina virtual real. Es la cerca que pones alrededor de una herramienta <i>antes</i> de confiar en ella &mdash; no una razón para ejecutar cosas que ya sabes que son maliciosas.",
   "It sees an empty folder and no network &mdash; a backdoored build like the Bitwarden case finds no credentials on disk and no way out.": "Ve una carpeta vacía y nada de red &mdash; una versión con puerta trasera como la de Bitwarden no encuentra credenciales en el disco ni salida alguna.",
-  "JetBrains &amp; VS Code Plugin Catalog | Gap Hunter Labs": "Catálogo de plugins para JetBrains y VS Code | Gap Hunter Labs",
+  "JetBrains &amp; VS Code Plugin Catalog | Gap Hunter Labs": "Catálogo de plugins JetBrains y VS Code | Gap Hunter Labs",
   "JetBrains &amp; VS Code plugins for real developer gaps": "Plugins para JetBrains y VS Code que resuelven brechas reales",
   "JetBrains IDEs": "IDE de JetBrains",
   "JetBrains IDEs &middot; Free": "IDE de JetBrains &middot; Gratis",
@@ -1587,7 +1585,7 @@
   "I build and verify your JetBrains plugin against the IDE versions you support: removed APIs, Kotlin K{n}, Gradle plugin {n}.x and Plugin Verifier failures.": "Compilo y verifico tu plugin de JetBrains contra las versiones del IDE que soportas: API removidas, Kotlin K2, Gradle plugin 2.x y fallos del Plugin Verifier.",
   "What my plugins do and don't do with your code, how I handle vulnerability reports, and why I hold no formal SOC {n}/ISO certification yet.": "Qué hacen y qué no hacen mis plugins con tu código, cómo manejo los reportes de vulnerabilidades y por qué todavía no tengo una certificación formal SOC 2/ISO.",
   "I take fixed-scope, fixed-price work: performance audits, dependency and CI/CD security reviews, IDE platform updates, and custom plugins and inspections.": "Tomo trabajo de alcance y precio fijos: auditorías de rendimiento, revisiones de seguridad de dependencias y CI/CD, actualizaciones para nuevos IDE y plugins e inspecciones a medida.",
-  "Browse every plugin I build for JetBrains IDEs and VS Code: filter by category and price (free, freemium or paid) and see the gap each one fixes.": "Explora todos los plugins que construyo para IDE de JetBrains y VS Code: filtra por categoría y precio (gratis, freemium o de pago) y mira la brecha que resuelve cada uno.",
+  "Browse every plugin I build for JetBrains IDEs and VS Code: filter by category and price (free, freemium or paid) and see the gap each one fixes.": "Todos los plugins que construyo para IDE de JetBrains y VS Code: filtra por categoría y precio (gratis, freemium o de pago) y mira qué brecha resuelve cada uno.",
   "<a href=\"#tools\">Featured tools</a> &middot; <a href=\"#catalog\">Full catalog</a>": "<a href=\"#tools\">Herramientas destacadas</a> &middot; <a href=\"#catalog\">Catálogo completo</a>",
   "<a href=\"https://youtrack.jetbrains.com/issue/IDEA-393501\" target=\"_blank\" rel=\"noopener\">IDEA-{n}</a> &middot; <a href=\"https://youtrack.jetbrains.com/issue/IJPL-200871\" target=\"_blank\" rel=\"noopener\">IJPL-{n}</a>": "<a href=\"https://youtrack.jetbrains.com/issue/IDEA-393501\" target=\"_blank\" rel=\"noopener\">IDEA-{n}</a> &middot; <a href=\"https://youtrack.jetbrains.com/issue/IJPL-200871\" target=\"_blank\" rel=\"noopener\">IJPL-{n}</a>",
   "<a href=\"https://youtrack.jetbrains.com/issue/IJPL-257909\" target=\"_blank\" rel=\"noopener\">IJPL-{n}</a> &middot; <a href=\"https://github.com/JetBrains/intellij-community/pull/3701\" target=\"_blank\" rel=\"noopener\">PR #{n}</a>": "<a href=\"https://youtrack.jetbrains.com/issue/IJPL-257909\" target=\"_blank\" rel=\"noopener\">IJPL-{n}</a> &middot; <a href=\"https://github.com/JetBrains/intellij-community/pull/3701\" target=\"_blank\" rel=\"noopener\">PR #{n}</a>",
@@ -1989,5 +1987,9 @@
   "<strong>Joel D&iacute;az, Founder.</strong> I find and fix performance and security problems in developer tools.": "<strong>Joel D&iacute;az, fundador.</strong> Encuentro y corrijo problemas de rendimiento y seguridad en herramientas para desarrolladores.",
   "A UI-thread call in Red Hat&rsquo;s LSP{n}IJ": "Una llamada en el hilo de interfaz de LSP{n}IJ, de Red Hat",
   "lsp{n}ij#{n} &middot; fixed by the maintainer": "lsp{n}ij#{n} &middot; corregido por el mantenedor",
-  "Gap Hunter Labs is my engineering practice: fixed-price audits and fixes for JetBrains plugins and JVM tooling.": "Gap Hunter Labs es mi práctica de ingeniería: auditorías y correcciones a precio fijo para plugins de JetBrains y herramientas para la JVM."
+  "Gap Hunter Labs is my engineering practice: fixed-price audits and fixes for JetBrains plugins and JVM tooling.": "Gap Hunter Labs es mi práctica de ingeniería: auditorías y correcciones a precio fijo para plugins de JetBrains y herramientas para la JVM.",
+  "JetBrains and VS Code plugins for real developer gaps: the Gap Hunter Labs catalog": "Plugins para JetBrains y VS Code que resuelven brechas reales: el catálogo de Gap Hunter Labs",
+  "Plugins I build for JetBrains IDEs, VS Code and Jira, each one aimed at a documented gap in an existing tool.": "Plugins que construyo para IDE de JetBrains, VS Code y Jira, cada uno dirigido a una brecha documentada en una herramienta existente.",
+  "Gap Hunter Labs: new plugins": "Gap Hunter Labs: nuevos plugins",
+  "Grid": "Cuadrícula"
 }

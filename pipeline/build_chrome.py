@@ -173,7 +173,7 @@ def alternates_html(en_path, es_path):
     return (ALT_START + '\n<link rel="alternate" hreflang="en" href="%s%s">\n'
             '<link rel="alternate" hreflang="es" href="%s%s">\n'
             '<link rel="alternate" hreflang="x-default" href="%s%s">\n'
-            '<link rel="alternate" type="application/rss+xml" title="Gap Hunter Labs — new plugins" href="/feed.xml">\n'
+            '<link rel="alternate" type="application/rss+xml" title="Gap Hunter Labs: new plugins" href="/feed.xml">\n'
             + ALT_END) % (
         SITE, en_path, SITE, es_path, SITE, en_path)
 LINKEDIN = "https://www.linkedin.com/in/joel-diaz-82687b428/?locale=en"

@@ -272,11 +272,12 @@ def build_catalog_jsonld(rows, generated_at):
     payload = {
         "@context": "https://schema.org",
         "@type": "CollectionPage",
-        "name": "Gap Hunter Labs Plugin Catalog",
+        "name": "Gap Hunter Labs plugin catalog",
         "url": CATALOG_URL,
-        "description": "A catalog of IntelliJ/JetBrains-family IDE plugins, each built from a documented, evidence-based gap in an existing tool.",
+        "description": "Plugins I build for JetBrains IDEs, VS Code and Jira, each one aimed at a documented gap in an existing tool.",
         "inLanguage": "en",
-        "isPartOf": {"@id": SITE + "#org"},
+        "isPartOf": {"@id": SITE + "#website"},
+        "publisher": {"@id": SITE + "#org"},
         "mainEntity": {
             "@type": "ItemList",
             "numberOfItems": len(rows),

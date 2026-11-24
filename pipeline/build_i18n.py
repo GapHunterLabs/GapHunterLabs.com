@@ -642,14 +642,20 @@ def translate_jsonld_text(text, table):
         def url_sub(um):
             url, frag = um.group(2), um.group(3) or ""
             path = url[len(SITE):] if url.startswith(SITE) else None
-            if path in (None, "/") or path not in ES_PATHS:
+            # 2026-11-24: the plugin pages too (the catalog's ItemList listed the English page of every plugin)
+            es = ES_PATHS.get(path) or PLUGIN_PAGES.get(path)
+            if path in (None, "/") or not es:
                 return um.group(0)
             if um.group(1).startswith('"@id"') and frag != "#webpage":
                 return um.group(0)
-            return um.group(1) + SITE + ES_PATHS[path] + frag + '"'
-        return re.sub(r'("(?:url|@id)":\s*")(https://[^"#]+)(#[^"]*)?"', url_sub, block)
+            return um.group(1) + SITE + es + frag + '"'
+        block = re.sub(r'("(?:url|@id)":\s*")(https://[^"#]+)(#[^"]*)?"', url_sub, block)
+        # a translated block is a Spanish document: its inLanguage says so
+        return re.sub(r'("inLanguage":\s*)"en"', r'\1"es"', block)
 
-    return re.sub(r'<script type="application/ld\+json">.*?</script>', script_sub, text, flags=re.S)
+    # 2026-11-24: also the blocks with attributes (the catalog's is <script ... id="catalog-jsonld">): with the bare tag
+    # only, /es/catalogo/ kept the English CollectionPage, its English URL and the English page of every plugin.
+    return re.sub(r'<script type="application/ld\+json"(?: [^>]*)?>.*?</script>', script_sub, text, flags=re.S)
 
 
 def structural(text, en_path, es_path, table):
