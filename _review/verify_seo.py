@@ -30,6 +30,8 @@ from site_config import OG_VERSION  # noqa: E402  (version of the og:image URLs)
 MIN_WORDS = 110          # contenido real en el HTML crudo, sin JS
 TITLE_MAX = 70
 DESC_MAX = 160
+# Bloques de index.html que build_home.py pre-renderiza desde los datos (ver chequeo 6).
+HOME_PRERENDER_BLOCKS = ("SVCTILES", "HEROPROOF", "CATALOG", "CATTITLE", "CATALL", "CATFEATURED")
 SLUG_MARK = "/*SLUGS*/"
 SLUG_MARK_END = "/*ENDSLUGS*/"
 SHIM_TARGETS = ("js/slug-shim.js", "catalog.html")
@@ -63,6 +65,29 @@ def one(pattern: str, html: str, where: str, label: str):
         fail(where, "se esperaba 1 %s, hay %d" % (label, len(found)))
         return None
     return found[0]
+
+
+def check_home(home_text: str) -> None:
+    """Chequeo 6: la home trae pre-renderizado lo que depende del catalogo."""
+    if re.search(r"""fetch\(\s*['"]/data/catalog-data\.json""", home_text):
+        fail("index.html", "vuelve a hacer fetch de catalog-data.json; el hero/stats/categorias deberian venir pre-renderizados")
+    if re.search(r'<script src="/js/catalog-shared\.js"', home_text):
+        fail("index.html", "todavia carga catalog-shared.js (nada en esta pagina lo necesita ya)")
+    if re.search(r'id="siteLoader"|<html[^>]*\bclass="boot"', home_text):
+        fail("index.html", "volvio el loader (markup real, no solo la CSS muerta que queda)")
+    blocks = {}
+    for marker in HOME_PRERENDER_BLOCKS:
+        block = re.search(r"<!-- PRERENDER:%s:START -->(.*?)<!-- PRERENDER:%s:END -->" % (marker, marker), home_text, re.S)
+        if not block or not block.group(1).strip():
+            fail("index.html", "el bloque %s no viene pre-renderizado" % marker)
+        else:
+            blocks[marker] = block.group(1)
+    featured = re.findall(r'<a class="nb-feat" href="([^"]+)"', blocks.get("CATFEATURED", ""))
+    if "CATFEATURED" in blocks and not featured:
+        fail("index.html", "el bloque CATFEATURED no trae ninguna herramienta destacada")
+    for tool_href in featured:
+        if not re.match(r"^/catalog/[a-z0-9-]+/$", tool_href):
+            fail("index.html", "herramienta destacada con href no canonico: %s" % tool_href)
 
 
 def main() -> int:
@@ -280,22 +305,12 @@ def main() -> int:
     # ---- 6. index.html pre-renderizado (Fase 2) -----------------------------
     # Mismo contrato que catalog/index.html: lo que depende del catalogo ya es
     # HTML real, no un fetch -- estos chequeos fallan si esa garantia se rompe.
-    # El rediseno 2026-10-18 (01db39bb) retiro el slider, las metricas y las
-    # categorias: build_home.py solo pre-renderiza TOOLS y CATALOG.
+    # Los bloques son los que build_home.py inyecta hoy (HOME_PRERENDER_BLOCKS);
+    # test_verify_seo_home.py falla si las dos listas se separan. El recorte de
+    # la home (#45, 2026-11-23) quito TOOLS, y como este chequeo solo corria en
+    # el cron, el primer aviso fue el cron rojo del 2026-11-24.
     home_text = (ROOT / "index.html").read_text(encoding="utf-8")
-    if re.search(r"""fetch\(\s*['"]/data/catalog-data\.json""", home_text):
-        fail("index.html", "vuelve a hacer fetch de catalog-data.json; el hero/stats/categorias deberian venir pre-renderizados")
-    if re.search(r'<script src="/js/catalog-shared\.js"', home_text):
-        fail("index.html", "todavia carga catalog-shared.js (nada en esta pagina lo necesita ya)")
-    if re.search(r'id="siteLoader"|<html[^>]*\bclass="boot"', home_text):
-        fail("index.html", "volvio el loader (markup real, no solo la CSS muerta que queda)")
-    for marker in ("TOOLS", "CATALOG"):
-        block = re.search(r"<!-- PRERENDER:%s:START -->(.*?)<!-- PRERENDER:%s:END -->" % (marker, marker), home_text, re.S)
-        if not block or not block.group(1).strip():
-            fail("index.html", "el bloque %s no viene pre-renderizado" % marker)
-    for tool_href in re.findall(r'<h3 class="tool-name"><a href="([^"]+)"', home_text):
-        if not re.match(r"^/catalog/[a-z0-9-]+/$", tool_href):
-            fail("index.html", "herramienta destacada con href no canonico: %s" % tool_href)
+    check_home(home_text)
 
     # ---- 7. demos re-alojadas en /media/ (Fase 3) --------------------------
     # Las 34 demos migraron de raw.githubusercontent.com a media/<slug>/ en

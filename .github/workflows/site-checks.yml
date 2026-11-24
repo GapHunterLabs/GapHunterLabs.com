@@ -41,6 +41,12 @@ jobs:
       - name: Generated files are up to date
         run: python3 pipeline/regenerate.py --strict --check
 
+      # 2026-11-24: the scheduled catalog update runs this script after rebuilding; pull requests did not, so the
+      # home cut (#45) merged green and the first sign that the check still wanted the removed TOOLS block was the
+      # cron failing the next morning.
+      - name: SEO guardrails (verify_seo.py)
+        run: python3 _review/verify_seo.py
+
       # 2026-11-09: css/tw.css is compiled by the Tailwind CLI from the classes in the pages, the scripts and the
       # Python generators. It is not part of regenerate.py (it needs npm), so it is checked here: text in a generator
       # once added CSS rules nobody uses, and nothing ran this check.
