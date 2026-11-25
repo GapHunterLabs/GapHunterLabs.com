@@ -245,6 +245,7 @@ test('home: six blocks, offer in the hero, counts from the data, short proof, no
       blocks: [...main.children].filter((e) => e.tagName === 'SECTION').map((e) => e.id),
       h1: document.querySelector('h1.nb-hero-title').textContent.trim(),
       lede: q('.nb-hero .nb-lede').length,
+      ledeText: (document.querySelector('.nb-hero .nb-lede') || {}).textContent || '',
       proof: q('.nb-hero .nb-proof span').map((s) => s.textContent.trim()),
       figure: q('.nb-hero-figure svg.iso-figure[aria-hidden=true]').length,
       tiles: q('.nb-svc-tile').map((a) => a.getAttribute('href')),
@@ -260,7 +261,8 @@ test('home: six blocks, offer in the hero, counts from the data, short proof, no
     };
   })()`);
   equal(JSON.stringify(f.blocks), JSON.stringify(['top', 'services', 'proof', 'catalog', 'about', 'start']), 'blocks');
-  assert(/JetBrains plugins/.test(f.h1) && f.lede === 1 && f.figure === 1, 'hero: ' + JSON.stringify(f));
+  // The headline names the offer (audits); the hero names who it's for (JetBrains plugins), in the headline or the lede.
+  assert(/audits/i.test(f.h1) && /JetBrains plugins/.test(f.h1 + ' ' + f.ledeText) && f.lede === 1 && f.figure === 1, 'hero: ' + JSON.stringify(f));
   equal(JSON.stringify(f.proof), JSON.stringify([
     research.upstreamPullRequests.total + ' fixes sent to JetBrains.',
     research.advisoriesClosedUpstream.count + ' advisories closed upstream.',
