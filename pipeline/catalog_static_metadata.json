@@ -150,7 +150,7 @@
       "xmlId": "dev.gaphunter.circulardependencycompanion",
       "name": "Circular Dependency Companion",
       "pitch": "IntelliJ-family plugin. Visualizes the dependency graph between **modules** of a multi-module Gradle or Maven project, and highlights real circular dependencies when they exist — module/build-system level, not file/class-level \"circular import\" (already covered by several existing plugins). 100% static text/XML analysis of files already open in your project: no Gradle daemon, no Maven reactor buil",
-      "why": "An original idea, not a port of an existing competitor — validated against this catalog's own idea-validation discipline before being built: (1) confirmed no plugin in this catalog or in JetBrains Marketplace does exactly this (results for `\"circular dependency java\"` are generic architecture visualizers or package analyzers, none focused specifically on build-module cycles); (2) confirmed buildable in the ~10-day budget with techniques this catalog already has proven — a hand-rolled text/regex parser for Gradle DSL (same pattern as `NginxLexer`/`DockerfileParser`), the JDK's own XML parser fo",
+      "why": "An original idea, not a port of an existing competitor. Before building it I confirmed that no plugin in JetBrains Marketplace does exactly this: results for `\"circular dependency java\"` are generic architecture visualizers or package analyzers, none focused on cycles between build modules. It parses the Gradle DSL with plain text and regex, reads Maven POMs with the JDK's own XML parser, finds cycles with a standard directed-graph search and shows them in a tree tool window, the same pattern as `xsd-companion` and `gitlab-ci-companion`. It is free.",
       "niche": "Build Tooling / Architecture",
       "githubUrl": "https://github.com/GapHunterLabs/circular-dependency-companion",
       "firstPublished": "2026-08-27"
@@ -168,7 +168,7 @@
       "xmlId": "dev.gaphunter.commitmessageconventioncompanion",
       "name": "Commit Message Convention Companion",
       "pitch": "IntelliJ-family plugin. Validates the commit message you are **currently writing**, live, in the IntelliJ VCS Commit dialog — against the [Conventional Commits](https://www.conventionalcommits.org/) convention — and shows the exact rule it breaks before you commit, instead of silently accepting or rejecting.",
-      "why": "An original idea, not a port of an existing competitor — validated against this catalog's own idea-validation discipline before being built: (1) confirmed no plugin in this catalog does exactly this; (2) confirmed buildable in the ~10-day budget with a platform mechanism already stable (`CheckinHandlerFactory`/`CheckinHandler` — first use of this specific mechanism in the Gap Hunter Labs catalog, its real signature confirmed via `javap` against the platform jar rather than guessed). Same \"apuesta consciente sin ancla de mercado\" treatment as Refactor Simulator / Test Scaffold Companion / SQL S",
+      "why": "An original idea, not a port of an existing competitor. Before building it I confirmed that no other plugin in this catalog does exactly this. It runs at commit time through the platform's stable `CheckinHandlerFactory` / `CheckinHandler` mechanism, with its real signature checked with `javap` against the platform jar rather than guessed. It is free.",
       "niche": "VCS / Git Workflow",
       "githubUrl": "https://github.com/GapHunterLabs/commit-message-convention-companion",
       "firstPublished": "2026-08-20"
@@ -177,7 +177,7 @@
       "xmlId": "dev.gaphunter.completablefuturecancellationcompanion",
       "name": "CompletableFuture Cancellation Propagation Companion",
       "pitch": "IntelliJ-family plugin that flags a `.thenCompose(...)` chain whose result future can be cancelled, but whose inner future -- constructed directly inside the lambda -- never receives that cancellation, so the orphaned work keeps running and consuming resources after the caller believes the whole operation stopped.",
-      "why": "`CompletableFuture.thenCompose` never propagates cancellation into the stage it returns -- calling `.cancel(true)` on the outer/chained future only marks that future as cancelled; it does not touch the inner `CompletableFuture` the lambda constructed and is still waiting on. This is a real, repeatedly-reported gap: it shows up in GitHub issues against Reactor Core, Failsafe, and OpenTelemetry's Java instrumentation, each describing the same shape -- a caller cancels what it thinks is the whole async operation, but a `supplyAsync`/ `runAsync` stage buried inside a `thenCompose` lambda keeps exe",
+      "why": "`CompletableFuture.thenCompose` never propagates cancellation into the stage it returns: calling `.cancel(true)` on the outer, chained future only marks that future as cancelled; it does not touch the inner `CompletableFuture` the lambda constructed and is still waiting on. This is a real, repeatedly reported gap: it shows up in GitHub issues against Reactor Core, Failsafe and OpenTelemetry's Java instrumentation, each describing the same shape. A caller cancels what it thinks is the whole async operation, but a `supplyAsync` / `runAsync` stage buried inside a `thenCompose` lambda keeps executing to completion regardless. I found no dedicated IDE inspection for this pattern on the Marketplace.",
       "niche": "Concurrency / Async Bugs",
       "githubUrl": "https://github.com/GapHunterLabs/completablefuture-cancellation-companion",
       "firstPublished": "2026-09-02"
@@ -222,7 +222,7 @@
       "xmlId": "dev.gaphunter.deadlocklockordercompanion",
       "name": "Deadlock Lock-Order Companion",
       "pitch": "IntelliJ-family plugin. Flags a real lock acquisition-order cycle inside a single Java class -- the classic static-deadlock shape -- before it ever happens at runtime.",
-      "why": "Static deadlock detection via a lock-order graph and cycle search is well-established research (MIT/ECOOP 2005 \"Static Deadlock Detection for Java Libraries\"; refined for scale by Peahen, FSE 2022), but no dedicated JetBrains Marketplace plugin was found doing this ahead of time, inline, as you write code. IntelliJ IDEA's own tooling only shows a deadlock *after* it happens, via thread dumps of a running or hung process (Help > Diagnostic Tools > Analyze/Capture Thread Dump). There is no built-in or third-party static check that a lock-order cycle exists in your own code before you ever run it",
+      "why": "Static deadlock detection with a lock-order graph and a cycle search is well-established research (MIT/ECOOP 2005 \"Static Deadlock Detection for Java Libraries\"; refined for scale by Peahen, FSE 2022), but I found no JetBrains Marketplace plugin that does it ahead of time, inline, as you write code. IntelliJ IDEA's own tooling only shows a deadlock *after* it happens, through thread dumps of a running or hung process (Help > Diagnostic Tools > Analyze/Capture Thread Dump). There is no built-in or third-party static check that a lock-order cycle exists in your own code before you ever run it. No paid competitor with real complaints motivated this one: it is a deliberate bet on a real, well-known correctness problem, solved with a real static-analysis mechanism rather than text pattern matching.",
       "niche": "Concurrency / Async Bugs",
       "githubUrl": "https://github.com/GapHunterLabs/deadlock-lock-order-companion",
       "firstPublished": "2026-09-02"
@@ -249,7 +249,7 @@
       "xmlId": "dev.gaphunter.dockerfilelayersizecompanion",
       "name": "Dockerfile Layer Size Companion",
       "pitch": "IntelliJ-family plugin. Shows the real, on-disk size of each `COPY`/`ADD` layer in an open Dockerfile, inline — computed by summing the actual file sizes of what gets copied from your local build context, respecting `.dockerignore`. No Docker daemon, no build, no network call: 100% static analysis of the project already open in the IDE.",
-      "why": "An original idea, not a port of an existing competitor — validated against this catalog's own idea-validation discipline before being built: (1) confirmed no plugin in this catalog or in JetBrains Marketplace does exactly this (`\"docker layer size\"` → 0 results on Marketplace); (2) confirmed buildable in the ~10-day budget with techniques this catalog already has proven — a hand-rolled line-based Dockerfile scanner (same pattern as `NginxLexer`) and the inlay rendering mechanism already shipped twice this session (HTTP Status Code Inline Companion, Regex Named Group Companion). Same \"apuesta c",
+      "why": "An original idea, not a port of an existing competitor. Before building it I confirmed that no plugin in JetBrains Marketplace does exactly this (`\"docker layer size\"` returns 0 results). It combines a line-based Dockerfile scanner (the same approach as `NginxLexer`) with the inlay rendering already used by HTTP Status Code Inline Companion and Regex Named Group Companion. It is free.",
       "niche": "Docker / DevOps",
       "githubUrl": "https://github.com/GapHunterLabs/dockerfile-layer-size-companion",
       "firstPublished": "2026-08-20"
@@ -303,7 +303,7 @@
       "xmlId": "dev.gaphunter.envvarmissingcompanion",
       "name": "Env Var Missing Companion",
       "pitch": "IntelliJ-family plugin. Cross-checks every real environment-variable access in your open file (`process.env.PORT`, `process.env[\"PORT\"]`, `import.meta.env.VITE_API_URL`, `os.environ[\"DEBUG\"]`, `os.environ.get(\"DEBUG\")`, `os.getenv(\"TIMEOUT\")`) against your project's real `.env`/`.env.example`/etc. files, and warns on any variable that's **used in code but never declared anywhere** — with a real qu",
-      "why": "An original idea, not a port of an existing competitor — validated against this catalog's own idea-validation discipline before being built: (1) confirmed no plugin in this catalog or in JetBrains Marketplace does exactly this cross-check (searches for \"env var missing\" surface AI-driven secrets-management tools or run-config drift detectors, none of which cross-reference actual `process.env`/ `os.environ` accesses in source against `.env*` file contents); (2) confirmed buildable in the ~10-day budget with techniques this catalog already has proven — `.env` file parsing adapted from `env-diff-",
+      "why": "An original idea, not a port of an existing competitor. Before building it I confirmed that no plugin in JetBrains Marketplace does exactly this cross-check: searches for \"env var missing\" surface secrets-management tools or run-configuration drift detectors, and none of them compare the real `process.env` / `os.environ` accesses in source against the contents of the `.env*` files. It reuses the `.env` parser of `env-diff-companion`, scans source with plain text and regex, and reports through the platform's standard inspection and quick fix. It complements `env-diff-companion`, which compares two `.env` files against each other and never against code. It is free.",
       "niche": "Env Config Tooling",
       "githubUrl": "https://github.com/GapHunterLabs/env-var-missing-companion",
       "firstPublished": "2026-08-31"
@@ -312,7 +312,7 @@
       "xmlId": "dev.gaphunter.environmentspecificconstantcompanion",
       "name": "Environment-Specific Constant Companion",
       "pitch": "IntelliJ-family plugin that flags a hardcoded URL or `host:port` string literal in Java source that also appears, textually, as a value in one of the project's own config files (`.properties`/`.yml`/`.yaml`/`.env`) -- the value clearly belongs to config, and the code copy can now silently drift out of sync with it.",
-      "why": "Config drift is a real, recurring source of production incidents: a value that gets updated one day only in the config file (the \"correct\" place to change it) leaves a hardcoded copy in source code still pointing at the old endpoint, host, or port -- with no compile error, no test failure, and often no symptom until that specific code path runs against production. Adjacent to this catalog's own `config-secrets-file-companion` (which flags real secrets hardcoded in config files) and `env-diff-companion` (which diffs keys across `.env` files), but neither checks specifically for code-vs-config v",
+      "why": "Config drift is a real, recurring source of production incidents: a value that gets updated one day only in the config file (the \"correct\" place to change it) leaves a hardcoded copy in source code still pointing at the old endpoint, host or port, with no compile error, no test failure and often no symptom until that specific code path runs against production. It sits next to `config-secrets-file-companion` (which flags real secrets hardcoded in config files) and `env-diff-companion` (which compares keys across `.env` files) in this catalog, but neither checks specifically for a value in code that diverges from the config.",
       "niche": "Env Config Tooling",
       "githubUrl": "https://github.com/GapHunterLabs/environment-specific-constant-companion",
       "firstPublished": "2026-09-02"
@@ -339,7 +339,7 @@
       "xmlId": "dev.gaphunter.featureflagreferencecompanion",
       "name": "Feature Flag Reference Companion",
       "pitch": "IntelliJ-family plugin. Gutter icon next to every recognized feature-flag-check call's key literal in Java/Kotlin code (`isEnabled(\"checkout_v2\")`, `variation(\"checkout_v2\", false)`, and similar), showing how many times that exact key is referenced anywhere else in the open project — helps find orphaned flags (dead code left behind after a rollout completed) without connecting to any provider. 100",
-      "why": "An original idea, not a port of an existing competitor — validated against this catalog's own idea-validation discipline before being built. The 3 existing feature-flag plugins on JetBrains Marketplace are all clients that **connect to a provider's service** to check a flag's live state — this plugin is deliberately the opposite: 100% static analysis of references already in your code, no provider connection, complementary rather than competing. Same \"apuesta consciente sin ancla de mercado\" treatment as Refactor Simulator / Test Scaffold Companion / Circular Dependency Companion / Unused npm ",
+      "why": "An original idea, not a port of an existing competitor. The 3 existing feature-flag plugins on JetBrains Marketplace are all clients that **connect to a provider's service** to check a flag's live state. This plugin is deliberately the opposite: 100% static analysis of the references already in your code, with no provider connection, so it complements those plugins instead of competing with them. It is free.",
       "niche": "Code Quality / Feature Flags",
       "githubUrl": "https://github.com/GapHunterLabs/feature-flag-reference-companion",
       "firstPublished": "2026-08-31"
@@ -375,7 +375,7 @@
       "xmlId": "dev.gaphunter.formatconvertercompanion",
       "name": "Format Converter Companion",
       "pitch": "Converts JSON, YAML, and XML directly in the editor -- select text (or convert the whole file) and pick a target format from the right-click menu.",
-      "why": "**JSON-YAML-XML Converter** (JetBrains Marketplace id 20297), 10,062 downloads, paid, vendor Syncro Soft -- rated 2.9/5, the lowest of any competitor evaluated for this workspace. Real, verbatim reviewer complaints:\n\n- *\"Not usable with IntelliJ 2024.2.1 (Ultimate Edition)\"* / *\"Not usable with IntelliJ 2021.2.2\"* -- recurring compatibility breaks.\n- *\"Works okay, but has problems with UTF-8 characters\"*\n- *\"the tool is not able to convert BIG Files (> 1GB)\"*\n- *\"I was expecting that I can convert editor content without extra dialog that asks me to enter two file paths... it was easier to open a chrome tab with some online converter and copy-paste stuff there\"*",
+      "why": "**JSON-YAML-XML Converter** (JetBrains Marketplace id 20297), 10,062 downloads, paid, vendor Syncro Soft: rated 2.9/5, the lowest of any competitor I evaluated for this plugin. Real, verbatim reviewer complaints:\n\n- *\"Not usable with IntelliJ 2024.2.1 (Ultimate Edition)\"* / *\"Not usable with IntelliJ 2021.2.2\"*: recurring compatibility breaks.\n- *\"Works okay, but has problems with UTF-8 characters\"*\n- *\"the tool is not able to convert BIG Files (> 1GB)\"*\n- *\"I was expecting that I can convert editor content without extra dialog that asks me to enter two file paths... it was easier to open a chrome tab with some online converter and copy-paste stuff there\"*",
       "niche": "Data Format Conversion",
       "githubUrl": "https://github.com/GapHunterLabs/format-converter-companion",
       "firstPublished": "2026-08-27"
@@ -483,7 +483,7 @@
       "xmlId": "dev.gaphunter.httpstatusinlinecompanion",
       "name": "HTTP Status Code Inline Companion",
       "pitch": "IntelliJ-family plugin. Shows the official name of any HTTP status code (`404 -> Not Found`, `503 -> Service Unavailable`) inline, right after the numeric literal, in Java and Kotlin code — no need to look it up. Works in any code context, not tied to a specific HTTP framework's own annotations.",
-      "why": "An original idea, not a port of an existing competitor — validated against this catalog's own idea-validation discipline before being built: (1) confirmed no plugin in this catalog or in JetBrains Marketplace does exactly this (the closest results in a Marketplace search are full IDE-suite plugins like Toolset without this feature isolated on its own); (2) confirmed buildable in the ~10-day budget with a technique this catalog already has proven — the same inlay rendering mechanism Error Lens Companion and Regex Named Group Companion already ship. Same \"apuesta consciente sin ancla de mercado\"",
+      "why": "An original idea, not a port of an existing competitor. Before building it I confirmed that no plugin in JetBrains Marketplace does exactly this: the closest results are full IDE-suite plugins like Toolset, without this feature on its own. It uses the same inlay rendering that Error Lens Companion and Regex Named Group Companion already ship. It is free.",
       "niche": "Editor Productivity",
       "githubUrl": "https://github.com/GapHunterLabs/http-status-inline-companion",
       "firstPublished": "2026-08-20"
@@ -501,7 +501,7 @@
       "xmlId": "dev.gaphunter.importcostcompanion",
       "name": "Import Cost Companion",
       "pitch": "IntelliJ-family plugin. Run **Check Import Sizes** on a JS/TS file and get a real report of every `node_modules` package it imports, sorted by on-disk size, with unusually large ones flagged.",
-      "why": "Born from real evidence in JetBrains Marketplace reviews of the closest existing plugin in this space (135K downloads, 75% of reviews at 3 stars or fewer): a documented, years-long pattern of severe CPU spikes and IDE freezes —",
+      "why": "Born from real evidence in JetBrains Marketplace reviews of the closest existing plugin in this space (135K downloads, 75% of reviews at 3 stars or fewer): a documented, years-long pattern of severe CPU spikes and IDE freezes.\n\n- *\"drains 100% CPU... My notebook becomes hot... battery lasts for one hour\"*\n- *\"freezes my IDE and I cannot work!\"*\n- *\"caused significant performance issues in WebStorm, making the IDE almost unusable\"*\n\nThe cause is recalculating package sizes continuously, inline, on every keystroke.",
       "niche": "JS/TS Tooling",
       "githubUrl": "https://github.com/GapHunterLabs/import-cost-companion",
       "firstPublished": "2026-08-14"
@@ -546,7 +546,7 @@
       "xmlId": "dev.gaphunter.interproceduralresourceleakcompanion",
       "name": "Interprocedural Resource Leak Companion",
       "pitch": "Flags a resource delegated to a helper method that doesn't guarantee closing it, where the caller never closes it either.",
-      "why": "CWE-772 (Resource Leak), in the interprocedural form academic frameworks like LeakChecker (built on Soot, using demand-driven points-to analysis) document as genuinely harder to detect than the single-method case -- real tools (FindBugs, Coverity, Infer) exist for this, all CI/build-step, not inline IDE plugins. The platform's own bundled \"JDBC resource opened but not safely closed\" inspection covers the simple never-touched-at-all case within one method; this plugin adds the genuinely new, interprocedural angle on top, deliberately gated so it never re-flags what the bundled inspection alread",
+      "why": "CWE-772 (Resource Leak), in the interprocedural form that academic frameworks like LeakChecker (built on Soot, with demand-driven points-to analysis) document as genuinely harder to detect than the single-method case. Real tools exist for it (FindBugs, Coverity, Infer), all as CI or build steps, not inline IDE plugins. The platform's bundled \"JDBC resource opened but not safely closed\" inspection covers the simple case of a resource never closed within one method; this plugin adds the interprocedural angle on top, and deliberately never flags what the bundled inspection already flags.",
       "niche": "Resource Leak Detection",
       "githubUrl": "https://github.com/GapHunterLabs/interprocedural-resource-leak-companion",
       "firstPublished": null
@@ -555,7 +555,7 @@
       "xmlId": "dev.gaphunter.jdbcdoubleclosecompanion",
       "name": "JDBC Double-Close Companion",
       "pitch": "Flags a JDBC resource `.close()`/use reached with the resource already closed on some or every path.",
-      "why": "CWE-675 (Duplicate Operations on Resource) / adjacent to CWE-415 (Double Free): closing a JDBC `Connection`/`Statement` twice can throw `SQLException` on some drivers, or trigger undefined behavior. Coverity and Infer (real enterprise SAST tools) use \"typestate-guided static analysis\" for exactly this class of problem, confirming it's a real, established technique -- neither is free or an inline IDE plugin. The platform's own bundled \"JDBC resource opened but not safely closed\" inspection covers LEAKS (never closing), a different bug entirely -- never double-close or use-after-close with real ",
+      "why": "CWE-675 (Duplicate Operations on Resource), next to CWE-415 (Double Free): closing a JDBC `Connection` or `Statement` twice can throw `SQLException` on some drivers, or trigger undefined behavior. Coverity and Infer (real enterprise SAST tools) use \"typestate-guided static analysis\" for exactly this class of problem, which confirms it is a real, established technique, but neither is free or an inline IDE plugin. The platform's own bundled \"JDBC resource opened but not safely closed\" inspection covers leaks (never closing), a different bug entirely: never a double close or a use after close, with real branch sensitivity.",
       "niche": "Resource Leak Detection",
       "githubUrl": "https://github.com/GapHunterLabs/jdbc-double-close-companion",
       "firstPublished": null
@@ -726,7 +726,7 @@
       "xmlId": "dev.gaphunter.logformatstringcompanion",
       "name": "Log Format String Companion",
       "pitch": "IntelliJ-family plugin. Flags a **log message whose placeholder count doesn't match its argument count** — an error that today only surfaces at runtime: a leftover placeholder stays literal in the log output, or an extra argument is silently dropped, or (worst case) SLF4J misinterprets the last argument as an exception when it isn't one. Deliberately narrow (not a full SAST scanner like Qodana): o",
-      "why": "An original idea, not a port of an existing competitor — validated against this catalog's own idea-validation discipline before being built: (1) confirmed no plugin in this catalog does exactly this, and a search for \"log format\" only surfaces MyBatis output formatters — an unrelated tool, not a placeholder/argument mismatch inspector; (2) confirmed buildable in the ~10-day budget with techniques this catalog already has proven — `LocalInspectionTool.checkFile` doing a whole- document regex scan, the exact mechanism `sql-concatenation-companion` already proved in this catalog (reused directly,",
+      "why": "An original idea, not a port of an existing competitor. Before building it I confirmed that no other plugin does exactly this: a search for \"log format\" only surfaces MyBatis output formatters, an unrelated tool, not an inspector of placeholder and argument mismatches. The check is a whole-document regex scan inside a `LocalInspectionTool`, the same mechanism `sql-concatenation-companion` already uses. It is free.",
       "niche": "Code Quality / Logging",
       "githubUrl": "https://github.com/GapHunterLabs/log-format-string-companion",
       "firstPublished": "2026-08-31"
@@ -834,7 +834,7 @@
       "xmlId": "dev.gaphunter.nplusonequerycompanion",
       "name": "N+1 Query Companion",
       "pitch": "Gutter icon on any Java/Kotlin `for` loop whose body accesses a lazy-loaded JPA association directly on the raw loop variable — the classic N+1 query shape: fetch a collection, then trigger one extra query per element while iterating it.",
-      "why": "Static N+1 detection already has a real, paid-adjacent competitor in this exact niche: **JPA Fetch Lens** (JetBrains Marketplace, real installs). Reading its published feature list and source confirms it is 100% hover/visualization — it shows you where an association *might* fire an extra query, but nothing in it marks the loop itself or gives you a fix-oriented tooltip at the exact site the extra query happens. N+1 Query Companion covers the same underlying JPA-annotation signal but anchors the warning on the loop (not the field declaration), so the fix target is obvious without cross-referen",
+      "why": "Static N+1 detection already has a real, paid-adjacent competitor in this exact niche: **JPA Fetch Lens** (JetBrains Marketplace, real installs). Reading its published feature list and source confirms it is 100% hover and visualization: it shows you where an association *might* fire an extra query, but nothing in it marks the loop itself or gives you a fix-oriented tooltip at the exact site where the extra query happens. N+1 Query Companion covers the same underlying JPA-annotation signal but anchors the warning on the loop (not the field declaration), so the place to fix is obvious without cross-referencing two places in the file.",
       "niche": "Database Performance",
       "githubUrl": "https://github.com/GapHunterLabs/n-plus-one-query-companion",
       "firstPublished": "2026-09-01"
@@ -1059,7 +1059,7 @@
       "xmlId": "dev.gaphunter.refactorsimulator",
       "name": "Refactor Simulator",
       "pitch": "IntelliJ IDEA (Community + Ultimate) plugin. **Preview every refactoring before committing it.** Simulates a rename in an isolated, in-memory sandbox — using IntelliJ's own PSI, Find Usages, and refactoring processors, never a custom engine — and shows a full impact report, deterministic validation, and a native side-by-side diff before anything touches a real file.",
-      "why": "Unlike the other 8 Gap Hunter Labs plugins, this one wasn't built from a documented backlog of real competitor reviews. A quick evidence check (2026-07-28) confirmed there's no direct competitor with real, citable paid-tier complaints in this exact space — refactor previews already exist natively in IntelliJ, and the closest paid product found (Parasoft Jtest) is an unrelated enterprise test-impact-analysis suite that runs tests *after* a change is applied, not a pre-commit simulation. This is an original idea, not market-validated the way the other 8 plugins were — treat it accordingly.",
+      "why": "Most plugins in this catalog started from a documented backlog of real competitor reviews; this one did not. An evidence check on 2026-07-28 found no direct competitor with real, citable paid-tier complaints in this exact space: refactor previews already exist natively in IntelliJ, and the closest paid product I found (Parasoft Jtest) is an unrelated enterprise test-impact-analysis suite that runs tests *after* a change is applied, not a pre-commit simulation. This is an original idea, not validated by the market the way the review-driven plugins were: treat it accordingly.",
       "niche": "Refactoring Tools",
       "githubUrl": "https://github.com/GapHunterLabs/refactor-simulator",
       "firstPublished": "2026-08-27"
@@ -1068,7 +1068,7 @@
       "xmlId": "dev.gaphunter.regexnamedgroupcompanion",
       "name": "Regex Named Group Companion",
       "pitch": "IntelliJ-family plugin. Shows the name of every named group (`(?<year>\\d{4})`) inline, right on the line of any Java or Kotlin regex literal that has one — no need to open a separate tool window just to remember what a pattern's groups are called. A companion tool window (reusing Regex Preview Companion's own matching engine) lets you test a pattern against real sample text and see every named gro",
-      "why": "An original idea, not a port of an existing competitor — validated against this catalog's own idea-validation discipline before being built: (1) confirmed no plugin in this catalog or in JetBrains Marketplace does exactly this (the closest, \"Regex Tool\" at 17,961 downloads, is a generic tester with no inline-in-source-code angle at all); (2) confirmed buildable in the ~10-day budget with techniques this catalog already has proven (PSI walking for Java/Kotlin, an `EditorCustomElementRenderer` inlay, a tool window) — no new technique invented for this plugin, just two existing ones combined. Sam",
+      "why": "An original idea, not a port of an existing competitor. Before building it I confirmed that no plugin in JetBrains Marketplace does exactly this: the closest, \"Regex Tool\" (17,961 downloads), is a generic tester with nothing shown inline in the source code. It combines two techniques already proven in this catalog: walking the Java/Kotlin PSI and an `EditorCustomElementRenderer` inlay, plus a tool window. It is free.",
       "niche": "Regex Tooling",
       "githubUrl": "https://github.com/GapHunterLabs/regex-named-group-companion",
       "firstPublished": "2026-08-25"
@@ -1149,7 +1149,7 @@
       "xmlId": "dev.gaphunter.secondordersqlifieldcompanion",
       "name": "Second-Order SQLi Field Companion",
       "pitch": "Flags a SQL sink reading a `@Entity` field that's ALSO confirmed, elsewhere in the project, to be written from unsanitized HTTP input.",
-      "why": "CWE-89, the second-order form: the tainted value passes through persistent storage (a real database) between the write and the read. Documented explicitly as the real blind spot of simple SAST tools -- \"SAST tools excel at direct input-to-query flows but struggle when malicious data is stored and later used in a different execution context... most simple pattern-matching SAST tools fail because they don't model the database as a taint propagation intermediary.\" Checkmarx and Fortify (real, confirmed enterprise SAST) model this exact pattern -- neither is free, an inline IDE plugin, or Communit",
+      "why": "CWE-89 in its second-order form: the tainted value passes through persistent storage (a real database) between the write and the read. It is documented explicitly as the real blind spot of simple SAST tools: \"SAST tools excel at direct input-to-query flows but struggle when malicious data is stored and later used in a different execution context... most simple pattern-matching SAST tools fail because they don't model the database as a taint propagation intermediary.\" Checkmarx and Fortify (real, confirmed enterprise SAST) model this exact pattern, but neither is free, an inline IDE plugin or compatible with Community Edition. I found no dedicated Marketplace plugin.",
       "niche": "SQL Injection Detection",
       "githubUrl": "https://github.com/GapHunterLabs/second-order-sqli-field-companion",
       "firstPublished": null
@@ -1167,7 +1167,7 @@
       "xmlId": "dev.gaphunter.sessionattributetypeconfusioncompanion",
       "name": "Session Attribute Type Confusion Companion",
       "pitch": "Flags `(TypeB) session.getAttribute(\"key\")` when every known write site for that exact key stores a genuinely incompatible type.",
-      "why": "CWE-843. The Servlet API predates Java 5 generics: `getAttribute` always returns `Object`, so nothing in the language stops a mismatch between what one part of the code stores under a key and what another part expects when it reads it back -- a real, documented pattern in technical forums (Coderanch, Experts Exchange), only discovered at runtime as a `ClassCastException` otherwise. Searched explicitly for a named competitor (FindBugs rule, CodeQL query, Datadog rule) for this exact angle and found none -- stated honestly, same as this catalog's other weaker-evidence Tier -3 entries.",
+      "why": "CWE-843. The Servlet API predates Java 5 generics: `getAttribute` always returns `Object`, so nothing in the language stops a mismatch between what one part of the code stores under a key and what another part expects when it reads it back. It is a real, documented pattern in technical forums (Coderanch, Experts Exchange) that otherwise only shows up at runtime as a `ClassCastException`. I searched explicitly for a named competitor (a FindBugs rule, a CodeQL query, a Datadog rule) for this exact angle and found none, and I say so plainly: the evidence for this gap is weaker than for most plugins in this catalog.",
       "niche": "Web Session Security",
       "githubUrl": "https://github.com/GapHunterLabs/session-attribute-type-confusion-companion",
       "firstPublished": null
@@ -1194,7 +1194,7 @@
       "xmlId": "dev.gaphunter.sqlconcatenationcompanion",
       "name": "SQL String Concatenation Companion",
       "pitch": "IntelliJ-family plugin. Flags SQL queries built by **unparameterized string concatenation or interpolation** — the classic SQL-injection shape — across Java, Kotlin, and Python, and offers a real quick-fix toward parameterization. Deliberately narrow (not a full SAST scanner like Qodana): one specific pattern, near-zero configuration, tuned hard against false positives.",
-      "why": "An original idea, not a port of an existing competitor — validated against this catalog's own idea-validation discipline before being built: (1) confirmed no plugin in this catalog does exactly this, and Qodana (968K downloads) is a full general-purpose SAST scanner — much heavier and broader than a single, zero-config pattern check; (2) confirmed buildable in the ~10-day budget with techniques this catalog already has proven — plain-text/regex scanning of source (same principle as `env-var-missing-companion`'s `EnvVarReferenceScanner` and `dockerfile-layer-size-companion`'s Dockerfile parser)",
+      "why": "An original idea, not a port of an existing competitor. Before building it I confirmed that no other plugin does exactly this: Qodana (968K downloads) is a full general-purpose SAST scanner, much heavier and broader than a single, zero-configuration pattern check. The check itself is a plain-text and regex scan of the source, the same principle behind the source scanners of `env-var-missing-companion` and `dockerfile-layer-size-companion`.",
       "niche": "SQL Injection Detection",
       "githubUrl": "https://github.com/GapHunterLabs/sql-concatenation-companion",
       "firstPublished": "2026-08-31"
@@ -1203,7 +1203,7 @@
       "xmlId": "dev.gaphunter.ssrfallowlistbypasscompanion",
       "name": "SSRF Allow-List Bypass Companion",
       "pitch": "Flags an outbound HTTP call using an endpoint parameter that was only validated with `.startsWith`/`.contains` against a raw URL string.",
-      "why": "CWE-918 (SSRF). Treating a URL as a plain string and checking whether an allowed host is a substring/prefix of it is a well-documented, structurally unsound validation pattern -- confirmed real and current via **CVE-2024-22243** (Spring Framework, 2024): a regex mismatch in `UriComponentsBuilder` parsed the userinfo segment differently from the JDK's own URL handling, so `https://evil.com[@127.0.0.1` passed a `startsWith`/`getHost()`-style check while the request's real host differed. This isn't a theoretical weakness -- it's a dated, named CVE in the exact framework this plugin's sinks target",
+      "why": "CWE-918 (SSRF). Treating a URL as a plain string and checking whether an allowed host is a substring or prefix of it is a well-documented, structurally unsound validation pattern, confirmed real and current by **CVE-2024-22243** (Spring Framework, 2024): a regex mismatch in `UriComponentsBuilder` parsed the userinfo segment differently from the JDK's own URL handling, so `https://evil.com[@127.0.0.1` passed a `startsWith` / `getHost()` style check while the request's real host was a different one. This is not a theoretical weakness: it is a dated, named CVE in the same framework this plugin's checks target.",
       "niche": "SSRF Detection",
       "githubUrl": "https://github.com/GapHunterLabs/ssrf-allowlist-bypass-companion",
       "firstPublished": null
@@ -1257,7 +1257,7 @@
       "xmlId": "dev.gaphunter.threadconfinementescapecompanion",
       "name": "Thread-Confinement Escape Companion",
       "pitch": "Flags a mutable local variable shared with a background thread that the same method also touches afterward without synchronization.",
-      "why": "CWE-362/366. Thread confinement (never sharing mutable state across threads) is the standard strategy for avoiding race conditions, and Java has no language-level way to enforce it -- exactly the gap a static analyzer needs to cover. Real, documented in reference material (MIT 6.005/6.031 Thread Safety). Searched explicitly for a named competitor (FindBugs rule, CodeQL query, Datadog rule) for this exact angle and found none -- stated honestly, unlike this catalog's other Tier -3 entries where a specific absence was confirmed by name.",
+      "why": "CWE-362/366. Thread confinement (never sharing mutable state across threads) is the standard strategy for avoiding race conditions, and Java has no language-level way to enforce it: exactly the gap a static analyzer needs to cover. It is real and documented in reference material (MIT 6.005/6.031 Thread Safety). I searched explicitly for a named competitor (a FindBugs rule, a CodeQL query, a Datadog rule) for this exact angle and found none, and I say so plainly: unlike some other plugins in this catalog, there is no specific competitor whose absence I could confirm by name.",
       "niche": "Concurrency / Async Bugs",
       "githubUrl": "https://github.com/GapHunterLabs/thread-confinement-escape-companion",
       "firstPublished": null
@@ -1293,7 +1293,7 @@
       "xmlId": "dev.gaphunter.unusednpmscriptcompanion",
       "name": "Unused npm Script Companion",
       "pitch": "IntelliJ-family plugin. Gutter icon on every entry of an open `package.json`'s `\"scripts\"` section, showing whether that script is actually **referenced** anywhere in your project — or an orphan nobody calls, a real candidate for cleanup. 100% static text/PSI analysis of files already open in your project: no Node.js/npm process spawned, no network call.",
-      "why": "An original idea, not a port of an existing competitor — validated against this catalog's own idea-validation discipline before being built: (1) confirmed no plugin in this catalog or in JetBrains Marketplace does exactly this (\"unused dependency\" tools like Knip or Jonnyzzz Dependencies analyze packages under `node_modules`, never the scripts declared in the project's own `package.json`); (2) confirmed buildable in the ~10-day budget with techniques this catalog already has proven — the bundled JSON plugin's real PSI to read `\"scripts\"` (same pattern as `json-schema-companion`/`json-to-code-c",
+      "why": "An original idea, not a port of an existing competitor. Before building it I confirmed that no plugin in JetBrains Marketplace does exactly this: \"unused dependency\" tools like Knip or Jonnyzzz Dependencies analyze packages under `node_modules`, never the scripts declared in the project's own `package.json`. It reads `\"scripts\"` through the real PSI of the bundled JSON plugin (the same approach as `json-schema-companion` and `json-to-code-companion`) and matches them against CI configs and README.md with plain-text and regex scanning. It is free.",
       "niche": "Node.js / npm Tooling",
       "githubUrl": "https://github.com/GapHunterLabs/unused-npm-script-companion",
       "firstPublished": "2026-08-31"

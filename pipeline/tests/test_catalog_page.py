@@ -226,6 +226,21 @@ class PluginGapsInSpanishTest(unittest.TestCase):
             finally:
                 build_i18n.GAPS_FILE, build_i18n._GAPS = saved, None
 
+    def test_gap_texts_are_complete_and_free_of_internal_process_language(self):
+        # 2026-11-24: 14 gap texts named internal process ("idea-validation discipline", "~10-day budget", "this session",
+        # "Tier -3", a Spanish working phrase) and 17 were cut mid-sentence by a 600-character limit upstream.
+        internal = re.compile(r"idea-validation discipline|10-day budget|this session|other 8 Gap Hunter|apuesta consciente|"
+                              r"ancla de mercado|Tier -3|this workspace|disciplina de validación|presupuesto de ~10|esta sesión",
+                              re.I)
+        renderer = bpp.PluginRenderer(bpp.Sources())
+        stored = json.loads(build_i18n.GAPS_FILE.read_text(encoding="utf-8"))
+        for p in renderer.src.plugins:
+            gap = renderer.gap_text(p).rstrip()
+            es = stored["jetbrains:" + p["repo"]]["es"].rstrip()
+            for text in (gap, es):
+                self.assertIsNone(internal.search(text), p["repo"])
+                self.assertRegex(text, r'[.!?)"”*`\]]$', "%s ends mid-sentence" % p["repo"])
+
     def test_a_social_title_is_kept_only_for_an_exact_plugin_name(self):
         name = sorted(build_i18n.NAMES)[0]
         self.assertEqual(build_i18n.lookup("%s | Gap Hunter Labs" % name, {}), "%s | Gap Hunter Labs" % name)
