@@ -1637,3 +1637,30 @@
 .catalog-v2 .catalog-about .spec-sheet { margin-top: 12px; }
 @media (max-width: 700px) { .catalog-v2 .ch-copy .hero-actions, .catalog-v2 .ch-proof { margin-top: 16px; }
   .catalog-v2 .ch-proof { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; } .catalog-v2 .ch-proof strong { font-size: 18px; } }
+
+/* ---- Rediseño del 2026-11-24: la primera pantalla sirve para encontrar un plugin ----
+   Medido antes: la primera tarjeta empezaba en y=1009 (1280x900) y en y=1184 (390x844), detrás del hero, las pestañas, la
+   cabecera del panel, los controles y un tablero de 10 categorías. Ahora: hero compacto (una acción, figura más baja, título en
+   una línea en escritorio), cabecera del panel en una línea (la pestaña ya dice la plataforma, así que su etiqueta sobra),
+   categorías en una sola fila desplazable, y en el teléfono sin las cifras del hero (las repiten las pestañas) ni la línea de IDE
+   de la cabecera. Los selectores llevan .catalog-v2 y la clase del bloque porque shell.css carga después y empata en especificidad. */
+.catalog-v2 .catalog-heading.gh-page-header.has-figure { padding-top: 20px; padding-bottom: 6px; align-items: center; row-gap: 12px; }
+.catalog-v2 .catalog-heading .ch-copy h1 { max-width: none; font-size: clamp(24px, 2.6vw, 30px); line-height: 1.12; }
+.catalog-v2 .catalog-heading .ch-copy .hero-actions { margin-top: 14px; padding-top: 0; padding-bottom: 0; }
+.catalog-v2 .catalog-heading .page-figure { max-width: 300px; justify-self: end; }
+.catalog-v2 .catalog-heading .page-figure .iso-figure { max-height: 180px; width: auto; margin-inline: auto; }
+.catalog-v2 .platform-panel > .cv-head { padding-top: 12px; padding-bottom: 4px; margin-bottom: 0; align-items: center; }
+.catalog-v2 .platform-panel > .cv-head h2 { font-size: 20px; margin: 0; }
+.catalog-v2 .platform-panel > .cv-head .cv-lead { margin-top: 2px; font-size: 14px; }
+.catalog-v2 #fieldView.field-layout { grid-template-columns: minmax(0, 1fr); row-gap: 14px; }
+.catalog-v2 .platform-tabs { margin-top: 12px; margin-bottom: 0; }
+.catalog-v2 .platform-panel { padding-top: 8px; }
+/* the category board sits under the controls (one category control for the grid and the table) */
+.catalog-v2 .platform-panel > .catalog-explore { min-width: 0; max-width: 100%; margin: 0 0 14px; }
+.catalog-v2 .catalog-explore .cat-board { display: flex; flex-wrap: nowrap; overflow-x: auto; gap: 6px; padding-bottom: 4px; scrollbar-width: thin; max-width: 100%; }
+.catalog-v2 .catalog-explore .cat-cell { flex: none; min-width: max-content; padding: 6px 12px 6px 8px; gap: 8px; }
+.catalog-v2 .catalog-explore .cat-cell-copy { flex-direction: row; align-items: baseline; gap: 5px; max-width: none; }
+.catalog-v2 .catalog-explore .cat-cell-label, .catalog-v2 .catalog-explore .cat-cell-count { max-width: none; }
+@media (max-width: 760px) {
+  .catalog-v2 .platform-panel > .cv-head .cv-lead { display: none; }
+}

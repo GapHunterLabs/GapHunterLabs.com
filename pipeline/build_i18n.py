@@ -179,11 +179,15 @@ PATTERNS = (
     (re.compile(r"^Show (.+)$"), r"Mostrar \1"),
     (re.compile(r"^Share (.+) on (X|LinkedIn)$"), r"Compartir \1 en \2"),
     # titulos de las fichas (2026-10-05; nombre y nicho son datos)
-    (re.compile(r"^(.+) — (.+) for IntelliJ \| Gap Hunter Labs$"), r"\1 — \2 para IntelliJ | Gap Hunter Labs"),
+    # 2026-11-24: the plugin pages use ": " and " | " (no dashes in public text)
+    (re.compile(r"^(.+): (.+) for IntelliJ \| Gap Hunter Labs$"), r"\1: \2 para IntelliJ | Gap Hunter Labs"),
     (re.compile(r"^(.+) for VS Code \| Gap Hunter Labs$"), r"\1 para VS Code | Gap Hunter Labs"),
     (re.compile(r"^(.+) for Jira Cloud \| Gap Hunter Labs$"), r"\1 para Jira Cloud | Gap Hunter Labs"),
-    (re.compile(r"^(.+) — Gap Hunter Labs$"), r"\1 — Gap Hunter Labs"),
-    (re.compile(r"^(.+) — (.+) for IntelliJ$"), r"\1 — \2 para IntelliJ"),
+    (re.compile(r"^(.+): IntelliJ plugin by Gap Hunter Labs$"), r"\1: plugin para IntelliJ de Gap Hunter Labs"),
+    (re.compile(r"^(.+): VS Code extension by Gap Hunter Labs$"), r"\1: extensión para VS Code de Gap Hunter Labs"),
+    (re.compile(r"^(.+): Atlassian Marketplace app by Gap Hunter Labs$"), r"\1: app de Atlassian Marketplace de Gap Hunter Labs"),
+    (re.compile(r"^(.+) — Gap Hunter Labs$"), r"\1 — Gap Hunter Labs"),   # other pages' social titles, unchanged
+    (re.compile(r"^(.+): (.+) for IntelliJ$"), r"\1: \2 para IntelliJ"),
     (re.compile(r"^(.+) for IntelliJ$"), r"\1 para IntelliJ"),
     (re.compile(r"^(.+) in action$"), r"\1 en acción"),
 )
@@ -214,6 +218,11 @@ def lookup(key, table):
         if rx.match(key):
             return rx.sub(repl, key)
     if key in NAMES or key in NAMES_NORM:
+        return key
+    # a plugin page's social title, "<name> | Gap Hunter Labs": the same in both languages, but only for an exact
+    # plugin, extension or app name (a generic pattern would pass any English sentence as translated)
+    brand = " | Gap Hunter Labs"
+    if key.endswith(brand) and (key[:-len(brand)] in NAMES or key[:-len(brand)] in NAMES_NORM):
         return key
     return None
 
@@ -458,6 +467,49 @@ def html_escape_attr(s):
     return s.replace("&", "&amp;").replace('"', "&quot;").replace("<", "&lt;").replace(">", "&gt;")
 
 
+# ---- la brecha de cada plugin en espanol (2026-11-24) --------------------------------------------------------------
+# pipeline/i18n/plugin-gaps.es.json guarda, por plugin, el texto ingles de la seccion de la brecha (gap_text del
+# renderer: la redaccion propia sin rayas, las citas textuales intactas) y su traduccion. Antes el bloque pb-text salia
+# en ingles en las 147 fichas en espanol (esta en SKIP_CLASSES, asi que nunca contaba como faltante). Una traduccion
+# vieja o ausente cuenta como faltante y --strict falla, igual que las descripciones.
+GAPS_FILE = Path(__file__).resolve().parent / "i18n" / "plugin-gaps.es.json"
+_GAPS = None
+
+
+def _gap_tables():
+    """(por ruta inglesa de la ficha: (html ingles del bloque, html espanol), claves viejas o sin traducir)."""
+    global _GAPS
+    if _GAPS is not None:
+        return _GAPS
+    from build_plugin_pages import Sources, PluginRenderer, md_block  # noqa: WPS433
+    stored = json.loads(GAPS_FILE.read_text(encoding="utf-8")) if GAPS_FILE.exists() else {}
+    src = Sources()
+    renderer = PluginRenderer(src)
+    by_path, stale = {}, []
+    for p in src.plugins:
+        key = "jetbrains:" + p["repo"]
+        gap = renderer.gap_text(p)
+        entry = stored.get(key)
+        if entry is None or entry.get("en") != gap.strip() or not entry.get("es"):
+            stale.append(key)
+            continue
+        by_path["/catalog/%s/" % p["repo"]] = (md_block(gap), md_block(entry["es"]))
+    _GAPS = (by_path, stale)
+    return _GAPS
+
+
+def translate_gap(text, page):
+    """Reemplaza el bloque de la brecha de la ficha por su traduccion; las fichas sin traduccion ya cuentan como faltantes."""
+    pair = _gap_tables()[0].get(page)
+    if not pair:
+        return text
+    en_html, es_html = pair
+    old = '<div class="pb-text">%s</div>' % en_html
+    if text.count(old) != 1:
+        sys.exit("[build_i18n] la seccion de la brecha de %s no coincide con su texto ingles" % page)
+    return text.replace(old, '<div class="pb-text">%s</div>' % es_html)
+
+
 # ---- descripciones de plugins en espanol (2026-11-09) --------------------------------------------------------------
 # pipeline/i18n/plugin-pitches.es.json guarda, por plugin, el texto ingles de origen (pitch_prose del dato) y su
 # traduccion. Si el dato ingles cambia, la traduccion queda vieja y cuenta como faltante (--strict falla).
@@ -642,14 +694,20 @@ def translate_jsonld_text(text, table):
         def url_sub(um):
             url, frag = um.group(2), um.group(3) or ""
             path = url[len(SITE):] if url.startswith(SITE) else None
-            if path in (None, "/") or path not in ES_PATHS:
+            # 2026-11-24: the plugin pages too (the catalog's ItemList listed the English page of every plugin)
+            es = ES_PATHS.get(path) or PLUGIN_PAGES.get(path)
+            if path in (None, "/") or not es:
                 return um.group(0)
             if um.group(1).startswith('"@id"') and frag != "#webpage":
                 return um.group(0)
-            return um.group(1) + SITE + ES_PATHS[path] + frag + '"'
-        return re.sub(r'("(?:url|@id)":\s*")(https://[^"#]+)(#[^"]*)?"', url_sub, block)
+            return um.group(1) + SITE + es + frag + '"'
+        block = re.sub(r'("(?:url|@id)":\s*")(https://[^"#]+)(#[^"]*)?"', url_sub, block)
+        # a translated block is a Spanish document: its inLanguage says so
+        return re.sub(r'("inLanguage":\s*)"en"', r'\1"es"', block)
 
-    return re.sub(r'<script type="application/ld\+json">.*?</script>', script_sub, text, flags=re.S)
+    # 2026-11-24: also the blocks with attributes (the catalog's is <script ... id="catalog-jsonld">): with the bare tag
+    # only, /es/catalogo/ kept the English CollectionPage, its English URL and the English page of every plugin.
+    return re.sub(r'<script type="application/ld\+json"(?: [^>]*)?>.*?</script>', script_sub, text, flags=re.S)
 
 
 def structural(text, en_path, es_path, table):
@@ -737,10 +795,13 @@ def main() -> int:
     for key in _pitch_tables()[2]:   # dato ingles cambiado o plugin nuevo sin traduccion
         missing.setdefault("plugin description %s: stale or missing in pipeline/i18n/plugin-pitches.es.json" % key,
                            set()).add("data")
+    for key in _gap_tables()[1]:   # brecha cambiada en ingles o plugin nuevo sin traduccion
+        missing.setdefault("plugin gap %s: stale or missing in pipeline/i18n/plugin-gaps.es.json" % key, set()).add("data")
     used_context: set = set()
     for en_path, es_path in list(ES_PATHS.items()) + list(PLUGIN_PAGES.items()):
         src = file_for(en_path).read_text(encoding="utf-8")
-        out = structural(translate_pitches(translate(src, table, missing, en_path, used_context), en_path, missing),
+        out = structural(translate_gap(translate_pitches(translate(src, table, missing, en_path, used_context), en_path,
+                                                         missing), en_path),
                          en_path, es_path, table)
         out = apply_writing_es_body(out, en_path)
         out = sync_social_titles(out, src)

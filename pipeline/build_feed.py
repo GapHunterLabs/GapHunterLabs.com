@@ -55,7 +55,7 @@ def main() -> int:
     out = ['<?xml version="1.0" encoding="UTF-8"?>',
            '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">',
            "<channel>",
-           "<title>Gap Hunter Labs — new plugins</title>",
+           "<title>Gap Hunter Labs: new plugins</title>",
            "<link>%s/</link>" % SITE_URL,
            '<atom:link href="%s/feed.xml" rel="self" type="application/rss+xml"/>' % SITE_URL,
            "<description>New JetBrains plugins and VS Code extensions from Gap Hunter Labs, each built for a documented gap in developer tooling.</description>",

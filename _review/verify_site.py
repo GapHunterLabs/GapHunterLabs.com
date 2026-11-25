@@ -185,7 +185,9 @@ def _catalog_checks(lang: str):
             cards = all_cards(p)
             for cat in CATEGORIES:
                 env.go(p, "%s?category=%s" % (L["catalog"], cat))
-                eq(p.locator("#categoryFilter").input_value(), cat, "select value for " + cat)
+                # 2026-11-24: the category board is the only category control (the duplicate <select> is gone)
+                eq(p.locator(".cat-board .cat-cell[aria-pressed='true']").get_attribute("data-cat"), cat, "pressed category for " + cat)
+                eq(p.locator("#categoryFilter").count(), 0, "a second category control is back")
                 vis = visible_cards(p)
                 wanted = min(PAGE_SIZE, sum(1 for c in cards if c["cat"] == cat))
                 eq(len(vis), wanted, "visible cards for " + cat)

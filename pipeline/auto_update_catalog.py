@@ -250,7 +250,16 @@ def plain_text(s):
     return s
 
 
-def build_catalog_jsonld(rows, generated_at):
+def other_platforms():
+    """(VS Code extensions, Atlassian apps) from their data files; empty when a file is missing."""
+    out = []
+    for name, key in (("vscode-catalog-data.json", "extensions"), ("atlassian-catalog-data.json", "apps")):
+        path = os.path.join(ROOT, "data", name)
+        out.append(json.load(open(path, encoding="utf-8")).get(key, []) if os.path.exists(path) else [])
+    return tuple(out)
+
+
+def build_catalog_jsonld(rows, generated_at, extensions=(), apps=()):
     # Fase 1 (2026-09-22) le dio a cada plugin su propia URL real y su
     # propio JSON-LD completo (SoftwareApplication + BreadcrumbList, ver
     # pipeline/build_plugin_pages.py) -- este bloque a nivel catalogo ya
@@ -269,17 +278,30 @@ def build_catalog_jsonld(rows, generated_at):
             "url": url,
             "name": p.get("name") or slug,
         })
+    # 2026-11-24: the VS Code extensions and the Atlassian apps have their own pages too (catalog/vscode/<name>/,
+    # catalog/atlassian/<name>/); the list used to stop at the JetBrains plugins.
+    for folder, items in (("vscode", extensions), ("atlassian", apps)):
+        for x in items:
+            if not x.get("name"):
+                continue
+            elements.append({
+                "@type": "ListItem",
+                "position": len(elements) + 1,
+                "url": "%s%s/%s/" % (CATALOG_URL, folder, x["name"]),
+                "name": x.get("displayName") or x["name"],
+            })
     payload = {
         "@context": "https://schema.org",
         "@type": "CollectionPage",
-        "name": "Gap Hunter Labs Plugin Catalog",
+        "name": "Gap Hunter Labs plugin catalog",
         "url": CATALOG_URL,
-        "description": "A catalog of IntelliJ/JetBrains-family IDE plugins, each built from a documented, evidence-based gap in an existing tool.",
+        "description": "Plugins I build for JetBrains IDEs, VS Code and Jira, each one aimed at a documented gap in an existing tool.",
         "inLanguage": "en",
-        "isPartOf": {"@id": SITE + "#org"},
+        "isPartOf": {"@id": SITE + "#website"},
+        "publisher": {"@id": SITE + "#org"},
         "mainEntity": {
             "@type": "ItemList",
-            "numberOfItems": len(rows),
+            "numberOfItems": len(elements),
             "itemListOrder": "https://schema.org/ItemListUnordered",
             "itemListElement": elements,
         },
@@ -300,14 +322,17 @@ def _replace_inner(page_html, pattern, inner, label):
     return pattern.sub(repl, page_html, count=1)
 
 
-def apply_seo_blocks(page_html, rows, generated_at):
+def apply_seo_blocks(page_html, rows, generated_at, extensions=None, apps=None):
+    if extensions is None or apps is None:
+        extensions, apps = other_platforms()
     page_html = _replace_inner(
-        page_html, JSONLD_RE, build_catalog_jsonld(rows, generated_at), "catalog-jsonld"
+        page_html, JSONLD_RE, build_catalog_jsonld(rows, generated_at, extensions, apps), "catalog-jsonld"
     )
     mld = JSONLD_RE.search(page_html)
     ld = json.loads(mld.group(2))
-    if ld.get("mainEntity", {}).get("numberOfItems") != len(rows):
-        sys.exit("[auto_update] ERROR: catalog-jsonld numberOfItems does not match plugin count")
+    wanted = len(rows) + sum(1 for x in list(extensions) + list(apps) if x.get("name"))
+    if ld.get("mainEntity", {}).get("numberOfItems") != wanted:
+        sys.exit("[auto_update] ERROR: catalog-jsonld numberOfItems does not match the plugin, extension and app count")
     return page_html
 
 
