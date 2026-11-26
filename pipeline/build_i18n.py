@@ -182,6 +182,9 @@ PATTERNS = (
     # 2026-11-24: the plugin pages use ": " and " | " (no dashes in public text)
     (re.compile(r"^(.+): (.+) for IntelliJ \| Gap Hunter Labs$"), r"\1: \2 para IntelliJ | Gap Hunter Labs"),
     (re.compile(r"^(.+) for VS Code \| Gap Hunter Labs$"), r"\1 para VS Code | Gap Hunter Labs"),
+    # 2026-11-26: titles of 60 characters or less drop the niche or the brand when they do not fit
+    (re.compile(r"^(.+) for IntelliJ \| Gap Hunter Labs$"), r"\1 para IntelliJ | Gap Hunter Labs"),
+    (re.compile(r"^(.+) for VS Code$"), r"\1 para VS Code"),
     (re.compile(r"^(.+) for Jira Cloud \| Gap Hunter Labs$"), r"\1 para Jira Cloud | Gap Hunter Labs"),
     (re.compile(r"^(.+): IntelliJ plugin by Gap Hunter Labs$"), r"\1: plugin para IntelliJ de Gap Hunter Labs"),
     (re.compile(r"^(.+): VS Code extension by Gap Hunter Labs$"), r"\1: extensión para VS Code de Gap Hunter Labs"),
@@ -651,7 +654,10 @@ def localize_links(text):
     return head + "</head>" + body
 
 
-JSONLD_TRANSLATABLE = ('"FAQPage"', '"Article"', '"TechArticle"', '"CollectionPage"', '"ContactPage"', '"WebPage"')
+# 2026-11-26 (SEO audit of the plugin pages): SoftwareApplication and BreadcrumbList too. The Spanish plugin pages
+# declared the English page as their url and an English breadcrumb (Home > Catalog, with English URLs).
+JSONLD_TRANSLATABLE = ('"FAQPage"', '"Article"', '"TechArticle"', '"CollectionPage"', '"ContactPage"', '"WebPage"',
+                       '"SoftwareApplication"', '"BreadcrumbList"')
 
 
 def translate_jsonld_text(text, table):
@@ -702,6 +708,18 @@ def translate_jsonld_text(text, table):
                 return um.group(0)
             return um.group(1) + SITE + es + frag + '"'
         block = re.sub(r'("(?:url|@id)":\s*")(https://[^"#]+)(#[^"]*)?"', url_sub, block)
+
+        # A breadcrumb "item" goes to the Spanish page, home included (/es/), and keeps its query (?platform=vscode).
+        def item_sub(im):
+            url = im.group(2)
+            if not url.startswith(SITE):
+                return im.group(0)
+            path, q, query = url[len(SITE):].partition("?")
+            es = "/es/" if path == "/" else (ES_PATHS.get(path) or PLUGIN_PAGES.get(path))
+            if not es:
+                return im.group(0)
+            return im.group(1) + SITE + es + q + query + '"'
+        block = re.sub(r'("item":\s*")(https://[^"#]+)"', item_sub, block)
         # a translated block is a Spanish document: its inLanguage says so
         return re.sub(r'("inLanguage":\s*)"en"', r'\1"es"', block)
 

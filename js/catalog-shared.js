@@ -158,6 +158,9 @@
     'Docker / DevOps': 'devops',
     'Node.js / npm Tooling': 'devops',
     'VCS / Git Workflow': 'devops',
+    // 2026-11-26: the two niches corrected in the audit keep the category they had.
+    'PHP / Composer Tooling': 'devops',
+    'Ruby / Bundler Tooling': 'devops',
     // 23 niches added 2026-08-27 -- 67 of 101 plugins (2/3 of the whole
     // catalog) had their `niche` field stuck at "—" (a placeholder that
     // was never filled in when those plugins were added, mostly the

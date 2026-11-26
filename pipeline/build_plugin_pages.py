@@ -88,7 +88,9 @@ SHARE_ICON_LINKEDIN = ('<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden
 SHARE_ICON_LINK = ('<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" '
                    'stroke-linejoin="round" aria-hidden="true"><path d="M6.5 9.5a3 3 0 0 0 4.2 0l2-2a3 3 0 0 0-4.2-4.2l-.7.7"/>'
                    '<path d="M9.5 6.5a3 3 0 0 0-4.2 0l-2 2a3 3 0 0 0 4.2 4.2l.7-.7"/></svg>')
-TITLE_SOFT_MAX = 70
+# 2026-11-26 (SEO audit of the plugin pages): 59, not 70. Results pages cut titles near 60 characters, and the Spanish
+# page translates 'for' to 'para' (one character more), so 59 keeps both languages at 60 or less.
+TITLE_SOFT_MAX = 59
 DESC_MAX = 155
 SIMILAR_MAX = 4
 GROWTH_PERCENT_MIN_BASELINE = 10
@@ -663,11 +665,11 @@ PLUGIN_PAGE_CSS = """
 .ph-actions .btn-icon { display: inline-flex; }
 .ph-actions .btn-icon svg { width: 16px; height: 16px; }
 .ph-buy-note { margin: 12px 0 0; color: var(--text-dim); font-size: 13.5px; line-height: 1.5; }
-.ph-stats { margin-top: 24px; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.ph-stats { margin-top: 24px; grid-template-columns: repeat(var(--n, 4), minmax(0, 1fr)); }
 /* 2026-10-05: cuadro de cifras ~55% mas chico en area (ancho y alto a ~2/3).
    Los selectores llevan .ph-stats para ganarle a .hdr-stat de shell.css, que
    carga despues, sin tocar las cifras de la home. */
-.ph-stats { max-width: 390px; }
+.ph-stats { max-width: calc(var(--n, 4) * 98px); }
 .ph-stats .hdr-stat { gap: 2px; padding: 10px 13px; }
 .ph-stats .hdr-stat-num { font-size: 17px; }
 .ph-stats .hdr-stat-label { font-size: 11.5px; }
@@ -932,11 +934,13 @@ class PluginRenderer:
 
         stat = lambda num, label: ('<div class="hdr-stat"><span class="hdr-stat-num">%s</span>'
                                    '<span class="hdr-stat-label">%s</span></div>' % (num, label))
-        h.append('<div class="hdr-stats ph-stats">%s%s%s%s</div>' % (
-            stat(EMPTY if is_pending else thousands(p["downloads"]), "Downloads"),
-            stat(p.get("stars") if p.get("stars") is not None else EMPTY, "GitHub stars"),
-            stat(esc(p.get("firstPublished") or EMPTY), "Published"),
-            stat(esc(price_text), "Pricing")))
+        # 2026-11-26 (UX audit): the price is already the badge next to the name and a row of the facts table, so it is
+        # not a third time here; GitHub stars show only when there are some ("0" on every page read as a weak signal).
+        stats = [stat(EMPTY if is_pending else thousands(p["downloads"]), "Downloads")]
+        if p.get("stars"):
+            stats.append(stat(thousands(p["stars"]), "GitHub stars"))
+        stats.append(stat(esc(p.get("firstPublished") or EMPTY), "Published"))
+        h.append('<div class="hdr-stats ph-stats" style="--n:%d">%s</div>' % (len(stats), "".join(stats)))
         h.append('</div>')
         if media:
             h.append('<div class="ph-media">%s</div>' % media)
@@ -1241,7 +1245,8 @@ class PluginRenderer:
             # Ni siquiera nombre+cola entra: se cae la cola tambien.
             return truncate(name, TITLE_SOFT_MAX)
         budget = TITLE_SOFT_MAX - fixed_len
-        niche_fit = niche if len(niche) <= budget else (truncate(niche, budget) if budget >= 4 else None)
+        # A niche that does not fit is dropped, not cut: a cut niche reads as broken in a results page.
+        niche_fit = niche if len(niche) <= budget else None
         base = (name + sep + niche_fit + tail) if niche_fit else (name + tail)
         with_brand = base + " | Gap Hunter Labs"
         return with_brand if len(esc(with_brand)) <= TITLE_SOFT_MAX else base
@@ -1346,6 +1351,12 @@ class Shell:
         html = cut(CATALOG_JSONLD_RE, "@@JSONLD@@\n", "catalog-jsonld")
         html = cut(TAIL_SCRIPTS_RE, '<script src="/js/plugin-page.js" defer></script>\n', "scripts del catalogo")
         html = cut(MAIN_RE, r"\1@@BODY@@\2", "<main class=\"wrap\">")
+
+        # 2026-11-26 (UX audit): nothing on a plugin page waits for the scroll animation to be seen (the facts, the gap
+        # and the related plugins started invisible, and a full-page capture showed them blank).
+        if html.count('class="wrap">@@BODY@@') != 1:
+            die('the plugin page template changed: <main class=wrap> not found to mark it without animation')
+        html = html.replace('class="wrap">@@BODY@@', 'class="wrap" data-reveal="none">@@BODY@@')
 
         # Todo el CSS inline pasa a /css/plugin.css: una descarga cacheada
         # por las 146 fichas en vez de ~107 KB repetidos en cada una.

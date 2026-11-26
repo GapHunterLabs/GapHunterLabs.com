@@ -1318,7 +1318,7 @@
   "For people who use the tools": "Para quienes usan las herramientas",
   "For teams and companies": "Para equipos y empresas",
   "Free tools kept current": "Herramientas gratuitas al día",
-  "Fund independent engineering: upstream fixes and free JetBrains and VS Code tools. Levels from USD {n} a month, what each includes, and what sponsorship never buys.": "Financia ingeniería independiente: correcciones al origen y herramientas gratuitas para JetBrains y VS Code. Niveles desde USD {n} al mes, qué incluye cada uno y qué nunca compra un patrocinio.",
+  "Fund independent engineering: upstream fixes and free JetBrains and VS Code tools. Levels from USD {n} a month, what each includes and what it never buys.": "Financia ingeniería independiente: correcciones al origen y herramientas gratis para JetBrains y VS Code. Desde USD {n} al mes, qué incluye y qué nunca compra.",
   "Gold": "Oro",
   "How to become a sponsor": "Cómo ser patrocinador",
   "Independent by design": "Independiente por diseño",
@@ -1339,7 +1339,8 @@
   "Sponsor links are marked <code>rel=\"sponsored\"</code>, as search engines ask for paid placements.": "Los enlaces de patrocinadores llevan <code>rel=\"sponsored\"</code>, como piden los buscadores para las colocaciones pagadas.",
   "Sponsor the work": "Patrocina el trabajo",
   "Sponsor the work &mdash; Gap Hunter Labs": "Patrocina el trabajo &mdash; Gap Hunter Labs",
-  "Sponsor the work — levels and benefits": "Patrocina el trabajo — niveles y beneficios",
+  "Sponsor the work: levels and benefits": "Patrocina el trabajo: niveles y beneficios",
+  "Sponsor the work: levels and benefits | Gap Hunter Labs": "Patrocina el trabajo: niveles y beneficios | Gap Hunter Labs",
   "Sponsors": "Patrocinadores",
   "Sponsors fund the upstream fixes, the free tools and the time to keep them working. No sponsor can change a finding, a report or a rating.": "Los patrocinadores financian las correcciones al origen, las herramientas gratuitas y el tiempo para mantenerlas funcionando. Ningún patrocinador puede cambiar un hallazgo, un informe o una calificación.",
   "Sponsors never change a finding, a report or a rating.": "Los patrocinadores nunca cambian un hallazgo, un informe o una calificación.",
@@ -1364,7 +1365,7 @@
   "Backers": "Impulsores",
   "Supporters": "Colaboradores",
   "Services — Gap Hunter Labs": "Servicios — Gap Hunter Labs",
-  "Sponsor the work — Gap Hunter Labs": "Patrocina el trabajo — Gap Hunter Labs",
+  "Gap Hunter Labs sponsorship levels": "Niveles de patrocinio de Gap Hunter Labs",
   "Your plugin built and verified against the IntelliJ versions you need to support: removed or deprecated APIs, Kotlin K{n} mode, IntelliJ Platform Gradle Plugin {n}.x and Plugin Verifier failures. It is the process I use to keep my own catalog compatible with each new release. You receive the changes as a pull request, the Plugin Verifier report for each target version and a written list of the API changes that were resolved.": "Tu plugin compilado y verificado contra las versiones de IntelliJ que necesitas soportar: API eliminadas u obsoletas, el modo K{n} de Kotlin, el IntelliJ Platform Gradle Plugin {n}.x y los fallos de Plugin Verifier. Es el proceso que uso para mantener mi propio catálogo compatible con cada versión nueva. Recibes los cambios como un pull request, el informe de Plugin Verifier de cada versión objetivo y una lista escrita de los cambios de API resueltos.",
   "<span class=\"nb-step\">{n}</span>I find the gap": "<span class=\"nb-step\">{n}</span>Encuentro la brecha",
   "<span class=\"nb-step\">{n}</span>I trace the cause": "<span class=\"nb-step\">{n}</span>Rastreo la causa",
@@ -2043,5 +2044,6 @@
   "What does Spring Boot {n} change that tests may not catch?": "¿Qué cambia en Spring Boot {n} que las pruebas pueden no detectar?",
   "What you pay for is the review and the contract tests, not a recipe. Automated recipes do the mechanical part; I check what they leave behind and prove with tests that your API still answers the same. The migration of the code itself is quoted after the diagnosis, with its own scope.": "Lo que pagas es la revisión y las pruebas de contrato, no una receta. Las recetas automáticas hacen la parte mecánica; yo reviso lo que dejan y pruebo con pruebas que tu API sigue respondiendo igual. La migración del código se cotiza después del diagnóstico, con su propio alcance.",
   "Within {n} business days I send you the scope in writing: services, delivery date and price.": "En {n} días hábiles te envío el alcance por escrito: servicios, fecha de entrega y precio.",
-  "{n} of {n} tests passed before and after, and the API contract (JSON and CSV) stayed identical byte for byte.": "{n} de {n} pruebas pasaron antes y después, y el contrato de la API (JSON y CSV) quedó idéntico byte a byte."
+  "{n} of {n} tests passed before and after, and the API contract (JSON and CSV) stayed identical byte for byte.": "{n} de {n} pruebas pasaron antes y después, y el contrato de la API (JSON y CSV) quedó idéntico byte a byte.",
+  "Atlassian Marketplace apps": "Apps de Atlassian Marketplace"
 }
