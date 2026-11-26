@@ -223,8 +223,9 @@ async function unreachableData({ b, base }) {
   assert((await b.evaluate(visibleCards + '.length')) >= 1, 'search should work without data');
   equal(b.exceptions.length, 0, 'catalog JavaScript exceptions: ' + b.exceptions.join(' | '));
   await b.navigate(base + '/');
-  // 2026-11-23 home cut: the four service tiles and the three proof cards are in the HTML, not built from /data.
-  equal(await b.evaluate("document.querySelectorAll('.nb-svc-tile').length"), 4, 'service tiles without data');
+  // 2026-11-23 home cut: the service tiles and the three proof cards are in the HTML, not built from /data.
+  // 2026-11-26: one tile per service in data/services.json (five since the Spring Boot 4 migration), not a fixed 4.
+  equal(await b.evaluate("document.querySelectorAll('.nb-svc-tile').length"), readData('services.json').services.length, 'service tiles without data');
   equal(await b.evaluate("document.querySelectorAll('.nb-case-card').length"), 3, 'proof cards without data');
   equal(b.exceptions.length, 0, 'home JavaScript exceptions: ' + b.exceptions.join(' | '));
 }
@@ -268,7 +269,7 @@ test('home: six blocks, offer in the hero, counts from the data, short proof, no
     research.advisoriesClosedUpstream.count + ' advisories closed upstream.',
     free + ' free tools.']), 'the hero proof line follows the data');
   equal(JSON.stringify(f.tiles), JSON.stringify(services), 'service tiles follow data/services.json');
-  equal(f.pitches, 4, 'every service tile has its one-line pitch');
+  equal(f.pitches, services.length, 'every service tile has its one-line pitch');
   assert(f.cases.length === 3 && f.cases.every((h) => h.startsWith('https://')), 'proof cards: ' + JSON.stringify(f.cases));
   assert(f.quote.length === 1 && f.quote[0] === f.quoteLink[0] && f.quote[0].startsWith('https://github.com/'), 'quote: ' + JSON.stringify(f.quote));
   assert(f.photo.length === 1 && /joel-diaz/.test(f.photo[0][0]) && f.photo[0][1].length > 3, 'about photo: ' + JSON.stringify(f.photo));
