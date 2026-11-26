@@ -51,6 +51,18 @@
         {"id": "inspections", "usd": 7500, "days": 10},
         {"id": "full-plugin", "usd": 15000, "days": null, "openEnded": true}
       ]
+    },
+    {
+      "key": "springboot",
+      "name": "Spring Boot 4 migration",
+      "shortName": "Spring Boot 4 migration",
+      "path": "/spring-boot-4-migration/",
+      "group": "any",
+      "contactLabel": {"en": "Spring Boot 4 migration", "es": "Migración a Spring Boot 4"},
+      "tiers": [
+        {"id": "review", "usd": 2000, "days": 3},
+        {"id": "diagnosis", "usd": 7500, "days": 10}
+      ]
     }
   ]
 }

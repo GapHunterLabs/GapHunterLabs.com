@@ -29,6 +29,7 @@
     ['updates', t('Plugin update for new IDE versions', 'Actualización de un plugin para versiones nuevas del IDE')],
     ['depsec', t('Dependency and CI/CD security review', 'Revisión de seguridad de dependencias y CI/CD')],
     ['custom', t('Custom plugins and inspections', 'Plugins e inspecciones a medida')],
+    ['springboot', t('Spring Boot 4 migration', 'Migración a Spring Boot 4')],
     ['other', t('Something else', 'Otra cosa')]
   ];
   // SERVICES:END

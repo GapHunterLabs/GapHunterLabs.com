@@ -428,7 +428,7 @@ a:focus-visible, .btn:focus-visible { outline: none; box-shadow: var(--focus-rin
 .nb-hero-terms .nb-ico { width: 20px; height: 20px; color: var(--text-faint); }
 
 /* Service tiles: name, starting price and delivery time from data/services.json; each links to its page. */
-.nb-svc-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin: 12px 0 0; padding: 0; list-style: none; }
+.nb-svc-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin: 12px 0 0; padding: 0; list-style: none; }
 .nb-svc-tile { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; height: 100%; padding: 14px;
   border: 1px solid var(--border); border-radius: var(--radius-lg); background: linear-gradient(180deg, var(--panel-1), var(--panel-2));
   color: var(--text-dim); text-decoration: none; transition: border-color 0.15s, background 0.15s; }
@@ -510,8 +510,18 @@ a:focus-visible, .btn:focus-visible { outline: none; box-shadow: var(--focus-rin
   .nb-hero-figure { max-width: 360px; }
 }
 @media (max-width: 960px) { .nb-assure { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+/* Up to 1180 px: five tiles as 3 + 2 with no hole (six columns: the first three span two, the last two span three).
+   The 700 px block below takes over on phones. Existing breakpoints only: the design budget caps their count. */
+@media (max-width: 1180px) {
+  .nb-svc-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .nb-svc-grid > li { grid-column: span 2; }
+  .nb-svc-grid > li:nth-child(n+4) { grid-column: span 3; }
+}
 @media (max-width: 700px) {
   .nb-svc-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .nb-svc-grid > li, .nb-svc-grid > li:nth-child(n+4) { grid-column: auto; }
+  /* Five tiles in two columns: the last one spans the row instead of leaving a hole. */
+  .nb-svc-grid > li:last-child:nth-child(odd) { grid-column: 1 / -1; }
 }
 @media (max-width: 520px) {
   .nb-hero-card { --face: 72px; }
