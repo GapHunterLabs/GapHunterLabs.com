@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-26 14:35:58 UTC",
+  "generatedAt": "2026-11-27 03:55:33 UTC",
   "totalPlugins": 147,
   "totalDownloads": 15912,
   "pending": 0,
@@ -7,10 +7,6 @@
   "totalReviews": 0,
   "avgRating": null,
   "trend7d": [
-    {
-      "date": "2026-11-20",
-      "totalDownloads": 15289
-    },
     {
       "date": "2026-11-21",
       "totalDownloads": 15391
@@ -34,45 +30,13 @@
     {
       "date": "2026-11-26",
       "totalDownloads": 15912
+    },
+    {
+      "date": "2026-11-27",
+      "totalDownloads": 15912
     }
   ],
-  "recentChanges": [
-    {
-      "date": "2026-11-26",
-      "type": "growth",
-      "name": "Mermaid Companion",
-      "niche": "Diagrams",
-      "delta": 62
-    },
-    {
-      "date": "2026-11-26",
-      "type": "growth",
-      "name": "API Security Companion",
-      "niche": "API Security",
-      "delta": 12
-    },
-    {
-      "date": "2026-11-26",
-      "type": "growth",
-      "name": "Ruby Shell Injection Companion",
-      "niche": "Ruby Security",
-      "delta": 2
-    },
-    {
-      "date": "2026-11-26",
-      "type": "growth",
-      "name": "Ruby Gemfile Group Companion",
-      "niche": "Ruby / Bundler Tooling",
-      "delta": 2
-    },
-    {
-      "date": "2026-11-26",
-      "type": "growth",
-      "name": "OpenAPI Companion",
-      "niche": "OpenAPI/Swagger Tooling",
-      "delta": 2
-    }
-  ],
+  "recentChanges": [],
   "plugins": [
     {
       "xmlId": "dev.gaphunter.mermaidcompanion",
