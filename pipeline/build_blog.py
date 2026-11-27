@@ -163,8 +163,12 @@ def rail_html(cases) -> str:
     """Side rail: the case counts by status and by area (every number comes from the cases), the feed and links."""
     by_status = {k: sum(1 for c in cases if c["status"] == k) for k in STATUS}
     by_cat = {k: sum(1 for c in cases if c["cat"] == k) for k in CATS}
-    status_rows = "".join('<li><b>%d</b> %s</li>' % (by_status[k], STATUS[k][0]) for k in STATUS if by_status[k])
-    cat_rows = "".join('<li><b>%d</b> %s</li>' % (by_cat[k], CATS[k]) for k in CATS if by_cat[k])
+    # 2026-11-26: each count is a link to the case grid with that filter on (js/blog.js reads ?status= and ?area=;
+    # without JavaScript the link still lands on the cases).
+    status_rows = "".join('<li><a href="/writing/?status=%s#cases"><b>%d</b> %s</a></li>' % (k, by_status[k], STATUS[k][0])
+                          for k in STATUS if by_status[k])
+    cat_rows = "".join('<li><a href="/writing/?area=%s#cases"><b>%d</b> %s</a></li>' % (k, by_cat[k], CATS[k])
+                       for k in CATS if by_cat[k])
     return ('<div class="pi-card"><p class="pi-eyebrow">Cases by status</p><ul class="pi-list pi-counts">%s</ul></div>'
             '<div class="pi-card"><p class="pi-eyebrow">Cases by area</p><ul class="pi-list pi-counts">%s</ul></div>'
             '<div class="pi-card"><p class="pi-eyebrow">Follow</p><ul class="pi-links">'
@@ -184,7 +188,7 @@ def build(dry_run: bool = False) -> None:
     block = (SPRITE +
              '<section class="blog-sec" aria-labelledby="blogPostsTitle"><div class="blog-sec-head"><h2 id="blogPostsTitle">Posts</h2></div>'
              '<div class="case-grid case-grid--posts">%s</div></section>'
-             '<section class="blog-sec" aria-labelledby="blogCasesTitle"><div class="blog-sec-head"><h2 id="blogCasesTitle">Cases</h2>'
+             '<section class="blog-sec" id="cases" aria-labelledby="blogCasesTitle"><div class="blog-sec-head"><h2 id="blogCasesTitle">Cases</h2>'
              '<p>%d real cases, newest first: the problem, what I did and what happened, each with its public source.</p></div>'
              '%s<div class="case-grid" data-blog-grid>%s</div></section>' % (posts, len(cases), filters_html(cases), grid)
              + calendar_html())

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="/js/lang-detect.js?v=69fa3aeb"></script>
 <script src="/js/theme-init.js?v=d981b522"></script>
-<script src="/js/site-chrome.js?v=4958fea1" defer></script>
+<script src="/js/site-chrome.js?v=a9ed697c" defer></script>
 <script src="/js/site-reveal.js?v=0b32ef8c" defer></script>
 <meta name="description" content="Vulnerable dependencies I reported to open-source maintainers, each advisory checked against the exact pinned version in OSV and listed once fixed.">
 <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -28,26 +28,26 @@
 <link rel="preload" href="/fonts/JetBrainsMono-Latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preconnect" href="https://gc.zgo.at">
 <link rel="preconnect" href="https://gaphunterlabs.goatcounter.com">
-<title>Open-Source Security Reports — Gap Hunter Labs</title>
+<title>Open-Source Security Reports | Gap Hunter Labs</title>
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Gap Hunter Labs">
 <meta property="og:url" content="https://gaphunterlabs.com/engineering-evidence/open-source-security-reports/">
-<meta property="og:title" content="Open-Source Security Reports — Gap Hunter Labs">
+<meta property="og:title" content="Open-Source Security Reports | Gap Hunter Labs">
 <meta property="og:description" content="Vulnerable dependencies I reported to open-source maintainers, each advisory checked against the exact pinned version in OSV and listed once fixed.">
 <meta property="og:image" content="https://gaphunterlabs.com/og-evidence-security-reports.png?v=6">
 <meta property="og:image:secure_url" content="https://gaphunterlabs.com/og-evidence-security-reports.png?v=6">
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Vulnerable dependencies fixed by maintainers — Gap Hunter Labs">
+<meta property="og:image:alt" content="Vulnerable dependencies fixed by maintainers | Gap Hunter Labs">
 <meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@GapHunterLabs">
-<meta name="twitter:title" content="Open-Source Security Reports — Gap Hunter Labs">
+<meta name="twitter:title" content="Open-Source Security Reports | Gap Hunter Labs">
 <meta name="twitter:description" content="Vulnerable dependencies I reported to open-source maintainers, each advisory checked against the exact pinned version in OSV and listed once fixed.">
 <meta name="twitter:image" content="https://gaphunterlabs.com/og-evidence-security-reports.png?v=6">
-<meta name="twitter:image:alt" content="Vulnerable dependencies fixed by maintainers — Gap Hunter Labs">
+<meta name="twitter:image:alt" content="Vulnerable dependencies fixed by maintainers | Gap Hunter Labs">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","@id":"https://gaphunterlabs.com/engineering-evidence/open-source-security-reports/#article","mainEntityOfPage":"https://gaphunterlabs.com/engineering-evidence/open-source-security-reports/","headline":"Open-source security reports","description":"Vulnerable dependencies I reported to open-source maintainers, each advisory checked against the exact pinned version in OSV and listed once fixed.","author":{"@type":"Person","@id":"https://gaphunterlabs.com/#joel","name":"Joel Diaz","url":"https://gaphunterlabs.com/"},"publisher":{"@type":"Organization","@id":"https://gaphunterlabs.com/#org","name":"Gap Hunter Labs","logo":{"@type":"ImageObject","url":"https://gaphunterlabs.com/apple-touch-icon.png"}},"datePublished":"2026-09-28","dateModified":"2026-10-23","url":"https://gaphunterlabs.com/engineering-evidence/open-source-security-reports/"}</script>
 <link rel="stylesheet" href="/css/theme.css?v=44ce0b54">
 <link rel="stylesheet" href="/css/base.css?v=f5309b4e">
@@ -265,7 +265,7 @@
       </div>
       <div class="badge-row ticket-badges"><span class="badge badge--dark"><svg class="b-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg><span>GitHub</span></span></div>
       <p><code>data-mask</code> is an open-source Java library from Bancolombia used with Jackson-Databind to mask sensitive data in JSON serialization through encryption. Its core module pinned <code>jackson-databind</code> (Jackson 3) at 3.2.2, which falls in the affected range of two published high-severity advisories: CVE-2026-91777 (GHSA-cxp5-3px4-pw24, quadratic forward-reference completion, denial of service) and CVE-2026-91776 (GHSA-wv8q-qhhj-9h54, unbounded retention of unknown type ids, memory exhaustion), both fixed in 3.2.3.</p>
-      <p>I reported it on October 4, 2026, suggesting the patch release 3.2.3 on the same branch. The maintainers instead removed the direct version pin and upgraded to Spring Boot 4.1.2, whose dependency management fixes <code>jackson-databind</code> (Jackson 3) at 3.1.7 — outside the affected range — in <a href="https://github.com/bancolombia/data-mask/pull/91" target="_blank" rel="noopener">pull request #91</a>, merged on October 23, 2026, which closed the report.</p>
+      <p>I reported it on October 4, 2026, suggesting the patch release 3.2.3 on the same branch. The maintainers instead removed the direct version pin and upgraded to Spring Boot 4.1.2, whose dependency management fixes <code>jackson-databind</code> (Jackson 3) at 3.1.7 (outside the affected range) in <a href="https://github.com/bancolombia/data-mask/pull/91" target="_blank" rel="noopener">pull request #91</a>, merged on October 23, 2026, which closed the report.</p>
     </article>
   </div>
 
