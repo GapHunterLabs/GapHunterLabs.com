@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="/js/lang-detect.js?v=69fa3aeb"></script>
 <script src="/js/theme-init.js?v=d981b522"></script>
-<script src="/js/site-chrome.js?v=49aa6706" defer></script>
+<script src="/js/site-chrome.js?v=4958fea1" defer></script>
 <script src="/js/site-reveal.js?v=0b32ef8c" defer></script>
 <meta name="description" content="Financia ingeniería independiente: correcciones al origen y herramientas gratis para JetBrains y VS Code. Desde USD 5 al mes, qué incluye y qué nunca compra.">
 <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -111,7 +111,7 @@
     .sp-facts { grid-template-columns: minmax(0, 1fr); }
   }
 </style>
-<link rel="stylesheet" href="/css/shell.css?v=c23b54be">
+<link rel="stylesheet" href="/css/shell.css?v=ec0dfb21">
 <link rel="stylesheet" href="/css/tw.css?v=b0984558">
 <script type="application/ld+json">
 {
@@ -170,6 +170,11 @@
   </div>
 
   <div class="sp-body">
+    <section class="sp-card sp-proof" aria-labelledby="sec-reach">
+      <h2 id="sec-reach">El trabajo que apoyas</h2>
+      <p>Estas cifras muestran cuánto se usa el trabajo. Salen de datos públicos de JetBrains Marketplace y GitHub y se sincronizan dos veces al día. Los nombres de los patrocinadores nunca aparecen dentro de los plugins, así que estas descargas no son una audiencia para tu logo. La sección siguiente muestra la audiencia que sí alcanzas.</p>
+      <div class="sp-reach"><!-- PRERENDER:METRICS:START --><div class="nb-stats"><div class="nb-stat nb-stat-stat-downloads"><p class="nb-stat-value">15.811</p><p class="nb-stat-label">Descargas en JetBrains Marketplace</p><p class="nb-stat-sub"><b>+522</b> <span>desde</span> <time datetime="2026-11-20">2026-11-20</time></p></div><div class="nb-stat nb-stat-stat-tools"><p class="nb-stat-value">180</p><p class="nb-stat-label">Herramientas en el catálogo</p><p class="nb-stat-sub"><span>147 plugins de JetBrains</span> &middot; <span>33 extensiones de VS Code</span></p></div><div class="nb-stat nb-stat-stat-prs"><p class="nb-stat-value">8</p><p class="nb-stat-label">Pull requests a IntelliJ</p><p class="nb-stat-sub"><b>2</b> <span>integrados</span> &middot; <b>6</b> <span>abiertos</span></p></div><div class="nb-stat nb-stat-stat-advisories"><p class="nb-stat-value">10</p><p class="nb-stat-label">Avisos de seguridad cerrados en origen</p><p class="nb-stat-sub"><span>Corregidos por los mantenedores en</span> <code>reactive-commons-go</code></p></div></div><div class="nb-stat-foot"><p><span class="live-dot" aria-hidden="true"></span><span>Descargas y herramientas al</span> <time datetime="2026-11-26">2026-11-26</time></p><p><span>Pull requests y avisos al</span> <time datetime="2026-10-31">2026-10-31</time></p></div><!-- PRERENDER:METRICS:END --></div>
+    </section>
     <section class="sp-fund-sec" aria-labelledby="sec-fund">
       <h2 id="sec-fund">En qué se usa tu patrocinio</h2>
       <ul class="sp-fund">
@@ -196,6 +201,7 @@
             <li>Tu nombre en esta página, si quieres.</li>
             <li>Un voto cada trimestre sobre qué brecha investigo después.</li>
           </ul>
+          <a class="btn sp-level-cta" href="#sec-join" data-goatcounter-click="sponsors-level-supporter">Elegir Colaborador</a>
         
         </article>
         <article class="sp-level" id="level-backer">
@@ -208,6 +214,7 @@
             <li>Acceso anticipado: versiones de plugins nuevos antes de que lleguen al Marketplace.</li>
             <li>Tu nombre enlaza a tu perfil.</li>
           </ul>
+          <a class="btn sp-level-cta" href="#sec-join" data-goatcounter-click="sponsors-level-backer">Elegir Impulsor</a>
         
         </article>
       </div>
@@ -224,6 +231,7 @@
             <li class="sp-inherit">Todo lo de Impulsor</li>
             <li>Tu logo y un enlace en esta página.</li>
           </ul>
+          <a class="btn sp-level-cta" href="#sec-join" data-goatcounter-click="sponsors-level-silver">Elegir Plata</a>
         
         </article>
         <article class="sp-level sp-level-feature" id="level-gold">
@@ -240,6 +248,7 @@
             <li>Te agradezco por tu nombre en mi publicación mensual de LinkedIn y X.</li>
             <li>Una nota breve cada trimestre con las visitas y los clics que recibió tu logo.</li>
           </ul>
+          <a class="btn primary sp-level-cta" href="#sec-join" data-goatcounter-click="sponsors-level-gold">Elegir Oro</a>
         
         </article>
         <article class="sp-level" id="level-platinum">
@@ -254,6 +263,7 @@
             <li>Una llamada conmigo de 30 minutos cada trimestre para fijar prioridades de tu stack.</li>
             <li>Programo una solicitud de compatibilidad o de función por trimestre antes de la cola pública.</li>
           </ul>
+          <a class="btn sp-level-cta" href="#sec-join" data-goatcounter-click="sponsors-level-platinum">Elegir Platino</a>
         
         </article>
       </div>
@@ -263,6 +273,16 @@
     </section>
 
     <div class="disclosure-list sp-rest">
+    <section class="disclosure disclosure-warn" aria-labelledby="sec-independence">
+      <h2 id="sec-independence">Lo que un patrocinio nunca compra</h2>
+      <ul>
+        <li><b>Una conclusión distinta.</b> Un patrocinador no puede lograr que yo cambie, retrase o retire una investigación, un informe o una calificación. Si el producto del propio patrocinador es el tema, igual publico el informe.</li>
+        <li><b>Un lugar dentro de las herramientas.</b> Nunca pongo logos ni mensajes de patrocinadores en mis plugins ni en mis extensiones.</li>
+        <li><b>Tus datos.</b> Uso los datos de contacto que envíes solo para acordar el patrocinio.</li>
+        <li><b>Un contrato de servicios.</b> Un patrocinio no tiene alcance, entregable, ni fecha fija. Para eso, mira <a href="/es/servicios/">Servicios</a>.</li>
+      </ul>
+    </section>
+
     <section class="disclosure" aria-labelledby="sec-join">
       <h2 id="sec-join">Cómo ser patrocinador</h2>
       <ol class="sp-steps">
@@ -282,55 +302,33 @@
       <!-- PRERENDER:SPONSORS:START --><p class="sp-empty">Los primeros lugares de patrocinador están abiertos. Tu nombre o tu logo podría ser el primero aquí.</p><!-- PRERENDER:SPONSORS:END -->
     </section>
 
-    <section class="sp-card" aria-labelledby="sec-reach">
-      <h2 id="sec-reach">El trabajo que apoyas</h2>
-      <p>Estas cifras muestran cuánto se usa el trabajo. Salen de datos públicos de JetBrains Marketplace y GitHub y se sincronizan dos veces al día. Los nombres de los patrocinadores nunca aparecen dentro de los plugins, así que estas descargas no son una audiencia para tu logo. La sección siguiente muestra la audiencia que sí alcanzas.</p>
-      <div class="sp-reach"><!-- PRERENDER:METRICS:START --><div class="nb-stats"><div class="nb-stat nb-stat-stat-downloads"><p class="nb-stat-value">15.811</p><p class="nb-stat-label">Descargas en JetBrains Marketplace</p><p class="nb-stat-sub"><b>+522</b> <span>desde</span> <time datetime="2026-11-20">2026-11-20</time></p></div><div class="nb-stat nb-stat-stat-tools"><p class="nb-stat-value">180</p><p class="nb-stat-label">Herramientas en el catálogo</p><p class="nb-stat-sub"><span>147 plugins de JetBrains</span> &middot; <span>33 extensiones de VS Code</span></p></div><div class="nb-stat nb-stat-stat-prs"><p class="nb-stat-value">8</p><p class="nb-stat-label">Pull requests a IntelliJ</p><p class="nb-stat-sub"><b>2</b> <span>integrados</span> &middot; <b>6</b> <span>abiertos</span></p></div><div class="nb-stat nb-stat-stat-advisories"><p class="nb-stat-value">10</p><p class="nb-stat-label">Avisos de seguridad cerrados en origen</p><p class="nb-stat-sub"><span>Corregidos por los mantenedores en</span> <code>reactive-commons-go</code></p></div></div><div class="nb-stat-foot"><p><span class="live-dot" aria-hidden="true"></span><span>Descargas y herramientas al</span> <time datetime="2026-11-26">2026-11-26</time></p><p><span>Pull requests y avisos al</span> <time datetime="2026-10-31">2026-10-31</time></p></div><!-- PRERENDER:METRICS:END --></div>
-    </section>
-
     <section class="sp-card" aria-labelledby="sec-audience">
       <h2 id="sec-audience">Dónde aparece tu nombre</h2>
       <p>Los nombres y logos de los patrocinadores aparecen en este sitio y en mis publicaciones de LinkedIn y X. Estas cifras cubren este sitio y mi perfil de LinkedIn, la audiencia que puedo medir hoy. Prefiero mostrarte cifras medidas antes que estimaciones, por eso cada cifra lleva las fechas que cubre.</p>
-      <div class="sp-audience"><!-- PRERENDER:REACH:START --><div class="tw-grid tw-grid-cols-2 tw-gap-px tw-overflow-hidden tw-rounded-lg tw-border tw-border-line tw-bg-line md:tw-grid-cols-4"><div class="tw-bg-bg tw-p-5"><p class="tw-font-mono tw-text-xs tw-text-faint">Seguidores en LinkedIn</p><p class="tw-mt-1 tw-text-3xl tw-font-bold tw-text-ink">164</p><p class="tw-mt-2 tw-text-xs tw-text-dim"><span>En mi perfil de LinkedIn</span></p></div><div class="tw-bg-bg tw-p-5"><p class="tw-font-mono tw-text-xs tw-text-faint">Impresiones en LinkedIn</p><p class="tw-mt-1 tw-text-3xl tw-font-bold tw-text-ink">8.932</p><p class="tw-mt-2 tw-text-xs tw-text-dim"><b>50%</b> <span>de fuera de mi red</span></p></div><div class="tw-bg-bg tw-p-5"><p class="tw-font-mono tw-text-xs tw-text-faint">Miembros alcanzados</p><p class="tw-mt-1 tw-text-3xl tw-font-bold tw-text-ink">2.861</p><p class="tw-mt-2 tw-text-xs tw-text-dim"><span>Personas distintas que vieron mis publicaciones</span></p></div><div class="tw-bg-bg tw-p-5"><p class="tw-font-mono tw-text-xs tw-text-faint">Visitas al sitio</p><p class="tw-mt-1 tw-text-3xl tw-font-bold tw-text-ink">170</p><p class="tw-mt-2 tw-text-xs tw-text-dim"><span>Unas 15 por semana</span></p></div><div class="tw-bg-bg tw-p-5"><p class="tw-font-mono tw-text-xs tw-text-faint">Impresiones de mis publicaciones, últimos 7 días</p><p class="tw-mt-1 tw-text-3xl tw-font-bold tw-text-ink">271</p><p class="tw-mt-2 tw-text-xs tw-text-dim"><b>+201%</b> <span>frente a los 7 días anteriores</span></p></div><div class="tw-bg-bg tw-p-5"><p class="tw-font-mono tw-text-xs tw-text-faint">Visitas a mi perfil</p><p class="tw-mt-1 tw-text-3xl tw-font-bold tw-text-ink">60</p><p class="tw-mt-2 tw-text-xs tw-text-dim"><span>En los últimos 90 días</span></p></div><div class="tw-bg-bg tw-p-5"><p class="tw-font-mono tw-text-xs tw-text-faint">Contactos en LinkedIn</p><p class="tw-mt-1 tw-text-3xl tw-font-bold tw-text-ink">158</p><p class="tw-mt-2 tw-text-xs tw-text-dim"><span>Personas en mi red</span></p></div><div class="tw-bg-bg tw-p-5"><p class="tw-font-mono tw-text-xs tw-text-faint">Apariciones en búsquedas</p><p class="tw-mt-1 tw-text-3xl tw-font-bold tw-text-ink">5</p><p class="tw-mt-2 tw-text-xs tw-text-dim"><span>Del</span> <time datetime="2026-10-27">2026-10-27</time> <span>al</span> <time datetime="2026-11-02">2026-11-02</time></p></div></div><div class="sp-facts"><div><p class="sp-tier-title">De dónde vienen las visitas al sitio</p><ul class="sp-names"><li><span class="sp-person"><span>Colombia</span> <b>37%</b></span></li><li><span class="sp-person"><span>Estados Unidos</span> <b>18%</b></span></li><li><span class="sp-person"><span>Suiza</span> <b>8%</b></span></li><li><span class="sp-person"><span>Chile</span> <b>8%</b></span></li><li><span class="sp-person"><span>Japón</span> <b>6%</b></span></li><li><span class="sp-person"><span>Venezuela</span> <b>5%</b></span></li></ul></div><div><p class="sp-tier-title">Idioma del navegador de las visitas</p><ul class="sp-names"><li><span class="sp-person"><span>Inglés</span> <b>31%</b></span></li><li><span class="sp-person"><span>Español</span> <b>27%</b></span></li><li><span class="sp-person"><span>Otro o desconocido</span> <b>42%</b></span></li></ul></div><div><p class="sp-tier-title">Quién sigue mi perfil de LinkedIn</p><ul class="sp-names"><li><span class="sp-person"><span>Servicios y consultoría de TI</span> <b>44%</b></span></li><li><span class="sp-person"><span>Ingeniero de DevOps</span> <b>29%</b></span></li></ul></div><div><p class="sp-tier-title">Quién ve mis publicaciones en LinkedIn</p><ul class="sp-names"><li><span class="sp-person"><span>Servicios y consultoría de TI</span> <b>27%</b></span></li><li><span class="sp-person"><span>Empresas con más de 10.000 empleados</span> <b>17%</b></span></li><li><span class="sp-person"><span>Ingeniero de software</span> <b>11%</b></span></li></ul></div></div><p class="tw-mt-3 tw-font-mono tw-text-xs tw-text-faint"><span>Visitas al sitio: GoatCounter, del</span> <time datetime="2026-08-14">2026-08-14</time> <span>al</span> <time datetime="2026-10-29">2026-10-29</time></p><p class="tw-mt-1 tw-font-mono tw-text-xs tw-text-faint"><span>LinkedIn: analíticas del perfil, del</span> <time datetime="2026-08-13">2026-08-13</time> <span>al</span> <time datetime="2026-10-29">2026-10-29</time></p><p class="tw-mt-1 tw-font-mono tw-text-xs tw-text-faint"><span>El conteo del sitio incluye mis propias visitas.</span></p><p class="tw-mt-1 tw-font-mono tw-text-xs tw-text-faint"><span>LinkedIn muestra solo el valor más frecuente de cada categoría.</span></p><p class="tw-mt-1 tw-font-mono tw-text-xs tw-text-faint"><span>Los seguidores y contactos de LinkedIn son totales a la fecha de abajo; las ventanas de 7 y 90 días terminan ese día.</span></p><p class="tw-mt-1 tw-font-mono tw-text-xs tw-text-faint"><span>Cifras al</span> <time datetime="2026-11-10">2026-11-10</time></p><!-- PRERENDER:REACH:END --></div>
+      <details class="sp-more"><summary>Cada cifra de alcance, con su fuente y su fecha</summary><div class="sp-audience"><!-- PRERENDER:REACH:START --><div class="tw-grid tw-grid-cols-2 tw-gap-px tw-overflow-hidden tw-rounded-lg tw-border tw-border-line tw-bg-line md:tw-grid-cols-4"><div class="tw-bg-bg tw-p-5"><p class="tw-font-mono tw-text-xs tw-text-faint">Seguidores en LinkedIn</p><p class="tw-mt-1 tw-text-3xl tw-font-bold tw-text-ink">164</p><p class="tw-mt-2 tw-text-xs tw-text-dim"><span>En mi perfil de LinkedIn</span></p></div><div class="tw-bg-bg tw-p-5"><p class="tw-font-mono tw-text-xs tw-text-faint">Impresiones en LinkedIn</p><p class="tw-mt-1 tw-text-3xl tw-font-bold tw-text-ink">8.932</p><p class="tw-mt-2 tw-text-xs tw-text-dim"><b>50%</b> <span>de fuera de mi red</span></p></div><div class="tw-bg-bg tw-p-5"><p class="tw-font-mono tw-text-xs tw-text-faint">Miembros alcanzados</p><p class="tw-mt-1 tw-text-3xl tw-font-bold tw-text-ink">2.861</p><p class="tw-mt-2 tw-text-xs tw-text-dim"><span>Personas distintas que vieron mis publicaciones</span></p></div><div class="tw-bg-bg tw-p-5"><p class="tw-font-mono tw-text-xs tw-text-faint">Visitas al sitio</p><p class="tw-mt-1 tw-text-3xl tw-font-bold tw-text-ink">170</p><p class="tw-mt-2 tw-text-xs tw-text-dim"><span>Unas 15 por semana</span></p></div><div class="tw-bg-bg tw-p-5"><p class="tw-font-mono tw-text-xs tw-text-faint">Impresiones de mis publicaciones, últimos 7 días</p><p class="tw-mt-1 tw-text-3xl tw-font-bold tw-text-ink">271</p><p class="tw-mt-2 tw-text-xs tw-text-dim"><b>+201%</b> <span>frente a los 7 días anteriores</span></p></div><div class="tw-bg-bg tw-p-5"><p class="tw-font-mono tw-text-xs tw-text-faint">Visitas a mi perfil</p><p class="tw-mt-1 tw-text-3xl tw-font-bold tw-text-ink">60</p><p class="tw-mt-2 tw-text-xs tw-text-dim"><span>En los últimos 90 días</span></p></div><div class="tw-bg-bg tw-p-5"><p class="tw-font-mono tw-text-xs tw-text-faint">Contactos en LinkedIn</p><p class="tw-mt-1 tw-text-3xl tw-font-bold tw-text-ink">158</p><p class="tw-mt-2 tw-text-xs tw-text-dim"><span>Personas en mi red</span></p></div><div class="tw-bg-bg tw-p-5"><p class="tw-font-mono tw-text-xs tw-text-faint">Apariciones en búsquedas</p><p class="tw-mt-1 tw-text-3xl tw-font-bold tw-text-ink">5</p><p class="tw-mt-2 tw-text-xs tw-text-dim"><span>Del</span> <time datetime="2026-10-27">2026-10-27</time> <span>al</span> <time datetime="2026-11-02">2026-11-02</time></p></div></div><div class="sp-facts"><div><p class="sp-tier-title">De dónde vienen las visitas al sitio</p><ul class="sp-names"><li><span class="sp-person"><span>Colombia</span> <b>37%</b></span></li><li><span class="sp-person"><span>Estados Unidos</span> <b>18%</b></span></li><li><span class="sp-person"><span>Suiza</span> <b>8%</b></span></li><li><span class="sp-person"><span>Chile</span> <b>8%</b></span></li><li><span class="sp-person"><span>Japón</span> <b>6%</b></span></li><li><span class="sp-person"><span>Venezuela</span> <b>5%</b></span></li></ul></div><div><p class="sp-tier-title">Idioma del navegador de las visitas</p><ul class="sp-names"><li><span class="sp-person"><span>Inglés</span> <b>31%</b></span></li><li><span class="sp-person"><span>Español</span> <b>27%</b></span></li><li><span class="sp-person"><span>Otro o desconocido</span> <b>42%</b></span></li></ul></div><div><p class="sp-tier-title">Quién sigue mi perfil de LinkedIn</p><ul class="sp-names"><li><span class="sp-person"><span>Servicios y consultoría de TI</span> <b>44%</b></span></li><li><span class="sp-person"><span>Ingeniero de DevOps</span> <b>29%</b></span></li></ul></div><div><p class="sp-tier-title">Quién ve mis publicaciones en LinkedIn</p><ul class="sp-names"><li><span class="sp-person"><span>Servicios y consultoría de TI</span> <b>27%</b></span></li><li><span class="sp-person"><span>Empresas con más de 10.000 empleados</span> <b>17%</b></span></li><li><span class="sp-person"><span>Ingeniero de software</span> <b>11%</b></span></li></ul></div></div><p class="tw-mt-3 tw-font-mono tw-text-xs tw-text-faint"><span>Visitas al sitio: GoatCounter, del</span> <time datetime="2026-08-14">2026-08-14</time> <span>al</span> <time datetime="2026-10-29">2026-10-29</time></p><p class="tw-mt-1 tw-font-mono tw-text-xs tw-text-faint"><span>LinkedIn: analíticas del perfil, del</span> <time datetime="2026-08-13">2026-08-13</time> <span>al</span> <time datetime="2026-10-29">2026-10-29</time></p><p class="tw-mt-1 tw-font-mono tw-text-xs tw-text-faint"><span>El conteo del sitio incluye mis propias visitas.</span></p><p class="tw-mt-1 tw-font-mono tw-text-xs tw-text-faint"><span>LinkedIn muestra solo el valor más frecuente de cada categoría.</span></p><p class="tw-mt-1 tw-font-mono tw-text-xs tw-text-faint"><span>Los seguidores y contactos de LinkedIn son totales a la fecha de abajo; las ventanas de 7 y 90 días terminan ese día.</span></p><p class="tw-mt-1 tw-font-mono tw-text-xs tw-text-faint"><span>Cifras al</span> <time datetime="2026-11-10">2026-11-10</time></p><!-- PRERENDER:REACH:END --></div></details>
     </section>
-
-    <section class="disclosure disclosure-warn" aria-labelledby="sec-independence">
-      <h2 id="sec-independence">Lo que un patrocinio nunca compra</h2>
-      <ul>
-        <li><b>Una conclusión distinta.</b> Un patrocinador no puede lograr que yo cambie, retrase o retire una investigación, un informe o una calificación. Si el producto del propio patrocinador es el tema, igual publico el informe.</li>
-        <li><b>Un lugar dentro de las herramientas.</b> Nunca pongo logos ni mensajes de patrocinadores en mis plugins ni en mis extensiones.</li>
-        <li><b>Tus datos.</b> Uso los datos de contacto que envíes solo para acordar el patrocinio.</li>
-        <li><b>Un contrato de servicios.</b> Un patrocinio no tiene alcance, entregable, ni fecha fija. Para eso, mira <a href="/es/servicios/">Servicios</a>.</li>
-      </ul>
-    </section>
-
 
     <section class="disclosure" aria-labelledby="sec-faq">
       <h2 id="sec-faq">Preguntas frecuentes (FAQ)</h2>
-      <h3>¿Un patrocinio es deducible de impuestos?</h3>
-      <p>No. No soy una organización benéfica registrada, así que un patrocinio es un pago personal o comercial, no una donación. Consulta con tu contador cómo registrarlo.</p>
-      <h3>¿Puedo parar en cualquier momento?</h3>
-      <p>Sí. Cancela desde la plataforma por la que te uniste. Retiro tu nombre o logo del sitio al terminar el período que ya pagaste.</p>
-      <h3>¿Puedo patrocinar de forma anónima?</h3>
-      <p>Sí. Avísame y cuentas, pero no apareces en la lista.</p>
-      <h3>¿Puedo patrocinar un solo plugin?</h3>
-      <p>Dime cuál cuando me escribas. Guía hacia dónde van tus solicitudes prioritarias. No cambia lo que hace el plugin ni cómo se revisa.</p>
-      <h3>¿Cómo sabré qué aportó mi patrocinio?</h3>
-      <p>Los patrocinadores Gold y Platinum reciben cada trimestre una nota breve con las visitas a las páginas donde aparece el logo y los clics en el logo. Los cuento con GoatCounter, que no guarda datos personales.</p>
-      <h3>¿Los buscadores siguen los enlaces de esta página?</h3>
-      <p>Los enlaces de patrocinadores llevan <code>rel="sponsored"</code>, como piden los buscadores para las colocaciones pagadas.</p>
+      <details class="sp-faq"><summary><h3>¿Un patrocinio es deducible de impuestos?</h3></summary><p>No. No soy una organización benéfica registrada, así que un patrocinio es un pago personal o comercial, no una donación. Consulta con tu contador cómo registrarlo.</p></details>
+      <details class="sp-faq"><summary><h3>¿Puedo parar en cualquier momento?</h3></summary><p>Sí. Cancela desde la plataforma por la que te uniste. Retiro tu nombre o logo del sitio al terminar el período que ya pagaste.</p></details>
+      <details class="sp-faq"><summary><h3>¿Puedo patrocinar de forma anónima?</h3></summary><p>Sí. Avísame y cuentas, pero no apareces en la lista.</p></details>
+      <details class="sp-faq"><summary><h3>¿Puedo patrocinar un solo plugin?</h3></summary><p>Dime cuál cuando me escribas. Guía hacia dónde van tus solicitudes prioritarias. No cambia lo que hace el plugin ni cómo se revisa.</p></details>
+      <details class="sp-faq"><summary><h3>¿Cómo sabré qué aportó mi patrocinio?</h3></summary><p>Los patrocinadores Gold y Platinum reciben cada trimestre una nota breve con las visitas a las páginas donde aparece el logo y los clics en el logo. Los cuento con GoatCounter, que no guarda datos personales.</p></details>
+      <details class="sp-faq"><summary><h3>¿Los buscadores siguen los enlaces de esta página?</h3></summary><p>Los enlaces de patrocinadores llevan <code>rel="sponsored"</code>, como piden los buscadores para las colocaciones pagadas.</p></details>
     </section>
     </div>
   </div>
 </main>
-<aside class="page-insights" aria-label="El patrocinio de un vistazo">
+<aside class="page-insights" aria-label="Sobre esta página">
   <div class="pi-card">
-    <p class="pi-eyebrow">De un vistazo</p>
-    <ul class="pi-list">
-      <li>Cinco niveles, de USD 5 a USD 1.000 al mes.</li>
-      <li>Cancela cuando quieras, en la plataforma por la que te uniste.</li>
-      <li>Nombres y logos solo con tu permiso.</li>
-      <li>Los patrocinadores nunca cambian un hallazgo, un informe o una calificación.</li>
+    <p class="pi-eyebrow">En esta página</p>
+    <ul class="pi-links">
+      <li><a href="#sec-levels">Niveles de patrocinio</a></li>
+      <li><a href="#sec-independence">Lo que un patrocinio nunca compra</a></li>
+      <li><a href="#sec-join">Cómo ser patrocinador</a></li>
+      <li><a href="#sec-audience">Dónde aparece tu nombre</a></li>
+      <li><a href="#sec-faq">Preguntas frecuentes (FAQ)</a></li>
     </ul>
   </div>
   <div class="pi-card">

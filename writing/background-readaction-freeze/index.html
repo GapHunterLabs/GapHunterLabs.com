@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="/js/lang-detect.js?v=69fa3aeb"></script>
 <script src="/js/theme-init.js?v=d981b522"></script>
-<script src="/js/site-chrome.js?v=49aa6706" defer></script>
+<script src="/js/site-chrome.js?v=4958fea1" defer></script>
 <script src="/js/site-reveal.js?v=0b32ef8c" defer></script>
 <meta name="description" content="How I found a UI-freeze pattern in IntelliJ's own test runner (a blocking, non-cancellable read action with no checkCanceled), reported it, and how JetBrains fixed it on master.">
 <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -27,26 +27,26 @@
 <link rel="preload" href="/fonts/JetBrainsMono-Latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preconnect" href="https://gc.zgo.at">
 <link rel="preconnect" href="https://gaphunterlabs.goatcounter.com">
-<title>A non-cancellable read action in IntelliJ&rsquo;s test runner &mdash; Gap Hunter Labs</title>
+<title>A non-cancellable read action in IntelliJ&rsquo;s test runner | Gap Hunter Labs</title>
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Gap Hunter Labs">
 <meta property="og:url" content="https://gaphunterlabs.com/writing/background-readaction-freeze/">
-<meta property="og:title" content="A non-cancellable read action in IntelliJ's test runner — Gap Hunter Labs">
+<meta property="og:title" content="A non-cancellable read action in IntelliJ's test runner | Gap Hunter Labs">
 <meta property="og:description" content="How I found a UI-freeze pattern in IntelliJ's own test runner (a blocking, non-cancellable read action with no checkCanceled), reported it, and how JetBrains fixed it on master.">
 <meta property="og:image" content="https://gaphunterlabs.com/og-blog.png?v=6">
 <meta property="og:image:secure_url" content="https://gaphunterlabs.com/og-blog.png?v=6">
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="A non-cancellable read action in IntelliJ's test runner — Gap Hunter Labs">
+<meta property="og:image:alt" content="A non-cancellable read action in IntelliJ's test runner | Gap Hunter Labs">
 <meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@GapHunterLabs">
-<meta name="twitter:title" content="A non-cancellable read action in IntelliJ's test runner — Gap Hunter Labs">
+<meta name="twitter:title" content="A non-cancellable read action in IntelliJ's test runner | Gap Hunter Labs">
 <meta name="twitter:description" content="How I found a UI-freeze pattern in IntelliJ's own test runner (a blocking, non-cancellable read action with no checkCanceled), reported it, and how JetBrains fixed it on master.">
 <meta name="twitter:image" content="https://gaphunterlabs.com/og-blog.png?v=6">
-<meta name="twitter:image:alt" content="A non-cancellable read action in IntelliJ's test runner — Gap Hunter Labs">
+<meta name="twitter:image:alt" content="A non-cancellable read action in IntelliJ's test runner | Gap Hunter Labs">
 <link rel="stylesheet" href="/css/theme.css?v=44ce0b54">
 <link rel="stylesheet" href="/css/base.css?v=f5309b4e">
 <style>
@@ -126,7 +126,7 @@
   }
 
 </style>
-<link rel="stylesheet" href="/css/shell.css?v=c23b54be">
+<link rel="stylesheet" href="/css/shell.css?v=ec0dfb21">
 <link rel="stylesheet" href="/css/tw.css?v=b0984558">
 </head>
 <body>
@@ -156,7 +156,7 @@
 <main id="main-content" tabindex="-1" class="methodology-main writing-article">
   <div class="page-hero band-dark gh-page-header">
     <p class="contact-kicker"><a href="/writing/">Blog</a> &middot; Platform freezes</p>
-    <h1>A non-cancellable read action in IntelliJ&rsquo;s own test runner &mdash; and how it got fixed</h1>
+    <h1>A non-cancellable read action in IntelliJ&rsquo;s own test runner, and how it got fixed</h1>
     <p class="contact-lead" style="margin-bottom:0">A background task wrapped half its work in a cancellable read action and the other half in a blocking one, with no cancellation check in between. That is a textbook UI-freeze pattern, and it was sitting in IntelliJ&rsquo;s own test runner.</p>
     <p class="writing-byline">Joel D&iacute;az &middot; <time datetime="2026-11-03">November&nbsp;3,&nbsp;2026</time></p>
   </div>
@@ -164,18 +164,18 @@
   <div class="disclosure-list">
     <section class="disclosure" aria-labelledby="a-what">
       <h2 id="a-what">What I was looking for</h2>
-      <p>One of the plugins in my catalog, <a href="/catalog/background-readaction-freeze-companion/">Background ReadAction Freeze Companion</a>, is a static check for one specific mistake: a blocking read action on a background thread with no <code>checkCanceled()</code>. JetBrains&rsquo; own Platform Blog names that pattern as a recurring cause of UI freezes, because a pending write action &mdash; you typing in the editor &mdash; has to wait for the read action to finish. I ran the same check as a scan over IntelliJ Community&rsquo;s own <code>master</code>.</p>
+      <p>One of the plugins in my catalog, <a href="/catalog/background-readaction-freeze-companion/">Background ReadAction Freeze Companion</a>, is a static check for one specific mistake: a blocking read action on a background thread with no <code>checkCanceled()</code>. JetBrains&rsquo; own Platform Blog names that pattern as a recurring cause of UI freezes, because a pending write action (you typing in the editor) has to wait for the read action to finish. I ran the same check as a scan over IntelliJ Community&rsquo;s own <code>master</code>.</p>
     </section>
 
     <section class="disclosure" aria-labelledby="a-found">
       <h2 id="a-found">What it found</h2>
-      <p><code>SearchForTestsTask</code> is a <code>Task.Backgroundable</code>. Its <code>run()</code> wrapped <code>search()</code> in a cancellable <code>ReadAction.nonBlocking()</code> &mdash; the right call &mdash; and then, a few lines later, called the sibling <code>onFound()</code> through a blocking <code>ReadAction.run()</code>, with no <code>checkCanceled()</code> anywhere in the class. So half the task could be cancelled and half could not.</p>
+      <p><code>SearchForTestsTask</code> is a <code>Task.Backgroundable</code>. Its <code>run()</code> wrapped <code>search()</code> in a cancellable <code>ReadAction.nonBlocking()</code> (the right call) and then, a few lines later, called the sibling <code>onFound()</code> through a blocking <code>ReadAction.run()</code>, with no <code>checkCanceled()</code> anywhere in the class. So half the task could be cancelled and half could not.</p>
       <p>I filed it as <a href="https://youtrack.jetbrains.com/issue/IDEA-393501" target="_blank" rel="noopener">IDEA-393501</a> (originally IJPL-254654). JetBrains moved it into the IDEA project, under Java &rsaquo; Tests, and assigned it to a developer.</p>
     </section>
 
     <section class="disclosure" aria-labelledby="a-deeper">
       <h2 id="a-deeper">The part that made it harder than it looked</h2>
-      <p>A blunt fix &mdash; swap the blocking call for a non-blocking read action &mdash; would have introduced a different bug. A non-blocking read action can be restarted, and <code>onFound()</code> writes files; on a restart it would write them twice. In a follow-up comment I added two points: that the default smart-mode branch was also blocking, through the deprecated <code>DumbService.runReadActionInSmartMode()</code> (which uses <code>ReadAction.computeBlocking()</code> internally), and that the real fix had to keep the write side safe.</p>
+      <p>A blunt fix (swap the blocking call for a non-blocking read action) would have introduced a different bug. A non-blocking read action can be restarted, and <code>onFound()</code> writes files; on a restart it would write them twice. In a follow-up comment I added two points: that the default smart-mode branch was also blocking, through the deprecated <code>DumbService.runReadActionInSmartMode()</code> (which uses <code>ReadAction.computeBlocking()</code> internally), and that the real fix had to keep the write side safe.</p>
     </section>
 
     <section class="disclosure" aria-labelledby="a-fixed">

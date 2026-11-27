@@ -64,13 +64,20 @@ class SponsorsPageTest(unittest.TestCase):
                 self.assertEqual(page.get("inLanguage"), lang)
                 self.assertTrue(page["url"].endswith("/sponsors/" if lang == "en" else "/es/patrocinadores/"))
 
-    def test_how_to_join_comes_right_after_the_levels(self):
+    def test_how_to_join_is_one_click_from_every_level(self):
+        # 2026-11-26 redesign: the independence note sits between the levels and the ways to join (read it before
+        # paying), and every level card links straight to the ways to join.
         for lang, rel in self.PAGES.items():
             text = read(rel)
             order = [m.group(1) for m in re.finditer(r'aria-labelledby="(sec-[a-z]+)"', text)]
             with self.subTest(lang=lang, order=order):
-                self.assertEqual(order[order.index("sec-levels") + 1], "sec-join")
                 self.assertEqual(order.count("sec-join"), 1)
+                self.assertIn(order.index("sec-join") - order.index("sec-levels"), (1, 2))
+                if order.index("sec-join") - order.index("sec-levels") == 2:
+                    self.assertEqual(order[order.index("sec-levels") + 1], "sec-independence")
+                ctas = re.findall(r'<a class="btn( primary)? sp-level-cta" href="#sec-join"', text)
+                self.assertEqual(len(ctas), 5, "one button per level")
+                self.assertEqual([c for c in ctas if c], [" primary"], "only the featured level is the primary action")
 
     def test_nothing_waits_for_the_scroll_animation(self):
         for rel in self.PAGES.values():

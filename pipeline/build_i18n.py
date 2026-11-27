@@ -657,7 +657,7 @@ def localize_links(text):
 # 2026-11-26 (SEO audit of the plugin pages): SoftwareApplication and BreadcrumbList too. The Spanish plugin pages
 # declared the English page as their url and an English breadcrumb (Home > Catalog, with English URLs).
 JSONLD_TRANSLATABLE = ('"FAQPage"', '"Article"', '"TechArticle"', '"CollectionPage"', '"ContactPage"', '"WebPage"',
-                       '"SoftwareApplication"', '"BreadcrumbList"')
+                       '"SoftwareApplication"', '"BreadcrumbList"', '"Blog"')
 
 
 def translate_jsonld_text(text, table):

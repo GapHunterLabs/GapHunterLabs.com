@@ -64,6 +64,42 @@
 .case-refs a { color: var(--text); text-decoration: underline; text-underline-offset: 0.2em; text-decoration-thickness: 1px; }
 .case-refs a:hover { text-decoration-thickness: 2px; }
 
+/* ---- Redesign 2026-11-26: editorial grid, the post as a feature, compact cases, filters ------------------ */
+/* display: flex/grid would beat the hidden attribute the filters set */
+.case[hidden], .blog-filters[hidden] { display: none; }
+.case-grid { grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); gap: 20px; }
+.case { padding: 22px 22px 18px; }
+.case-title { font-size: 18px; }
+.case-grid--posts { grid-template-columns: 1fr; }
+.case--post { padding: 28px; border-left: 2px solid var(--signal); }
+.case--post .case-title { font-size: clamp(20px, 2.1vw, 25px); }
+.case--post .case-summary { max-width: 70ch; font-size: 15.5px; color: var(--text); }
+.case--post .case-refs { margin-top: 16px; }
+.case--post .case-refs .btn { text-decoration: none; }
+.case-outcome { display: flex; align-items: flex-start; gap: 8px; margin-top: 12px; font: 600 14.5px/1.5 var(--sans); color: var(--text); }
+.case-outcome .case-ico { margin-top: 2px; color: var(--signal); }
+.case-more { margin: 12px 0 14px; }
+.case-more summary { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; list-style: none;
+  font: 600 13px/1.4 var(--sans); color: var(--text-dim); }
+.case-more summary::-webkit-details-marker { display: none; }
+.case-more summary::before { content: "+"; font: 600 14px/1 var(--mono); color: var(--signal); }
+.case-more[open] summary::before { content: "2"; }
+.case-more summary:hover { color: var(--text); }
+.case-more summary:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; border-radius: 6px; }
+.case-more .case-facts { margin-top: 10px; }
+.case-more .case-facts > div:last-child dd { color: var(--text-dim); font-weight: 400; }
+
+.blog-filters { display: grid; gap: 10px; margin: 0 0 20px; }
+.bf-group { display: flex; flex-wrap: wrap; gap: 8px; }
+.bf-chip { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border: 1px solid var(--border-strong);
+  border-radius: 999px; background: var(--surface); color: var(--text); font: 600 13px/1.4 var(--sans); cursor: pointer; }
+.bf-chip b { font-weight: 600; color: var(--text-faint); }
+.bf-chip:hover { border-color: var(--signal); }
+.bf-chip[aria-pressed="true"] { background: var(--text); border-color: var(--text); color: var(--bg); }
+.bf-chip[aria-pressed="true"] b { color: var(--bg); }
+.bf-chip:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
+.bf-count { margin: 0; font-size: 13px; color: var(--text-dim); }
+
 /* ---- Calendar ------------------------------------------------------------- */
 .cal { max-width: 720px; padding: 18px; border: 1px solid var(--border); border-radius: 14px; background: var(--surface); }
 .cal-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }

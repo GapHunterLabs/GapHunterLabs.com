@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="/js/lang-detect.js?v=69fa3aeb"></script>
 <script src="/js/theme-init.js?v=d981b522"></script>
-<script src="/js/site-chrome.js?v=49aa6706" defer></script>
+<script src="/js/site-chrome.js?v=4958fea1" defer></script>
 <script src="/js/site-reveal.js?v=0b32ef8c" defer></script>
 <meta name="description" content="Cómo encontré un patrón de congelamiento de la interfaz en el propio ejecutor de pruebas de IntelliJ (una acción de lectura bloqueante y no cancelable sin checkCanceled), lo reporté, y cómo JetBrains lo corrigió en master.">
 <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -27,27 +27,27 @@
 <link rel="preload" href="/fonts/JetBrainsMono-Latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preconnect" href="https://gc.zgo.at">
 <link rel="preconnect" href="https://gaphunterlabs.goatcounter.com">
-<title>Una acción de lectura no cancelable en el ejecutor de pruebas de IntelliJ &mdash; Gap Hunter Labs</title>
+<title>Una acción de lectura no cancelable en el ejecutor de pruebas de IntelliJ | Gap Hunter Labs</title>
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Gap Hunter Labs">
 <meta property="og:url" content="https://gaphunterlabs.com/es/escritos/background-readaction-freeze/">
-<meta property="og:title" content="Una acción de lectura no cancelable en el ejecutor de pruebas de IntelliJ — Gap Hunter Labs">
+<meta property="og:title" content="Una acción de lectura no cancelable en el ejecutor de pruebas de IntelliJ | Gap Hunter Labs">
 <meta property="og:description" content="Cómo encontré un patrón de congelamiento de la interfaz en el propio ejecutor de pruebas de IntelliJ (una acción de lectura bloqueante y no cancelable sin checkCanceled), lo reporté, y cómo JetBrains lo corrigió en master.">
 <meta property="og:image" content="https://gaphunterlabs.com/og-blog.es.png?v=6">
 <meta property="og:image:secure_url" content="https://gaphunterlabs.com/og-blog.es.png?v=6">
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Una acción de lectura no cancelable en el ejecutor de pruebas de IntelliJ — Gap Hunter Labs">
+<meta property="og:image:alt" content="Una acción de lectura no cancelable en el ejecutor de pruebas de IntelliJ | Gap Hunter Labs">
 <meta property="og:locale" content="es_ES">
 <meta property="og:locale:alternate" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@GapHunterLabs">
-<meta name="twitter:title" content="Una acción de lectura no cancelable en el ejecutor de pruebas de IntelliJ — Gap Hunter Labs">
+<meta name="twitter:title" content="Una acción de lectura no cancelable en el ejecutor de pruebas de IntelliJ | Gap Hunter Labs">
 <meta name="twitter:description" content="Cómo encontré un patrón de congelamiento de la interfaz en el propio ejecutor de pruebas de IntelliJ (una acción de lectura bloqueante y no cancelable sin checkCanceled), lo reporté, y cómo JetBrains lo corrigió en master.">
 <meta name="twitter:image" content="https://gaphunterlabs.com/og-blog.es.png?v=6">
-<meta name="twitter:image:alt" content="Una acción de lectura no cancelable en el ejecutor de pruebas de IntelliJ — Gap Hunter Labs">
+<meta name="twitter:image:alt" content="Una acción de lectura no cancelable en el ejecutor de pruebas de IntelliJ | Gap Hunter Labs">
 <link rel="stylesheet" href="/css/theme.css?v=44ce0b54">
 <link rel="stylesheet" href="/css/base.css?v=f5309b4e">
 <style>
@@ -127,7 +127,7 @@
   }
 
 </style>
-<link rel="stylesheet" href="/css/shell.css?v=c23b54be">
+<link rel="stylesheet" href="/css/shell.css?v=ec0dfb21">
 <link rel="stylesheet" href="/css/tw.css?v=b0984558">
 </head>
 <body>
@@ -157,7 +157,7 @@
 <main id="main-content" tabindex="-1" class="methodology-main writing-article">
   <div class="page-hero band-dark gh-page-header">
     <p class="contact-kicker"><a href="/es/escritos/">Blog</a> &middot; Congelamientos de la plataforma</p>
-    <h1>Una acción de lectura no cancelable en el propio ejecutor de pruebas de IntelliJ &mdash; y cómo se corrigió</h1>
+    <h1>Una acción de lectura no cancelable en el propio ejecutor de pruebas de IntelliJ, y cómo se corrigió</h1>
     <p class="contact-lead" style="margin-bottom:0">Una tarea en segundo plano envolvía la mitad de su trabajo en una acción de lectura cancelable y la otra mitad en una bloqueante, sin ninguna comprobación de cancelación entre ambas. Es un patrón de manual de congelamiento de la interfaz, y estaba en el propio ejecutor de pruebas de IntelliJ.</p>
     <p class="writing-byline">Joel D&iacute;az &middot; <time datetime="2026-11-03">3&nbsp;de&nbsp;noviembre&nbsp;de&nbsp;2026</time></p>
   </div>
@@ -165,18 +165,18 @@
   <div class="disclosure-list">
     <section class="disclosure" aria-labelledby="a-what">
       <h2 id="a-what">Qué estaba buscando</h2>
-      <p>Uno de los plugins de mi catálogo, <a href="/es/catalogo/background-readaction-freeze-companion/">Background ReadAction Freeze Companion</a>, es una comprobación estática para un error concreto: una acción de lectura bloqueante en un hilo en segundo plano sin <code>checkCanceled()</code>. El propio Platform Blog de JetBrains señala ese patrón como una causa recurrente de congelamientos de la interfaz, porque una acción de escritura pendiente &mdash; tú escribiendo en el editor &mdash; tiene que esperar a que la acción de lectura termine. Corrí la misma comprobación como un escaneo sobre el propio <code>master</code> de IntelliJ Community.</p>
+      <p>Uno de los plugins de mi catálogo, <a href="/es/catalogo/background-readaction-freeze-companion/">Background ReadAction Freeze Companion</a>, es una comprobación estática para un error concreto: una acción de lectura bloqueante en un hilo en segundo plano sin <code>checkCanceled()</code>. El propio Platform Blog de JetBrains señala ese patrón como una causa recurrente de congelamientos de la interfaz, porque una acción de escritura pendiente (tú escribiendo en el editor) tiene que esperar a que la acción de lectura termine. Corrí la misma comprobación como un escaneo sobre el propio <code>master</code> de IntelliJ Community.</p>
     </section>
 
     <section class="disclosure" aria-labelledby="a-found">
       <h2 id="a-found">Qué encontró</h2>
-      <p><code>SearchForTestsTask</code> es un <code>Task.Backgroundable</code>. Su <code>run()</code> envolvía <code>search()</code> en un <code>ReadAction.nonBlocking()</code> cancelable &mdash; la llamada correcta &mdash; y luego, unas líneas más abajo, llamaba al <code>onFound()</code> hermano a través de un <code>ReadAction.run()</code> bloqueante, sin ningún <code>checkCanceled()</code> en toda la clase. Así que la mitad de la tarea se podía cancelar y la otra mitad no.</p>
+      <p><code>SearchForTestsTask</code> es un <code>Task.Backgroundable</code>. Su <code>run()</code> envolvía <code>search()</code> en un <code>ReadAction.nonBlocking()</code> cancelable (la llamada correcta) y luego, unas líneas más abajo, llamaba al <code>onFound()</code> hermano a través de un <code>ReadAction.run()</code> bloqueante, sin ningún <code>checkCanceled()</code> en toda la clase. Así que la mitad de la tarea se podía cancelar y la otra mitad no.</p>
       <p>Lo reporté como <a href="https://youtrack.jetbrains.com/issue/IDEA-393501" target="_blank" rel="noopener">IDEA-393501</a> (originalmente IJPL-254654). JetBrains lo movió al proyecto IDEA, bajo Java &rsaquo; Tests, y se lo asignó a un desarrollador.</p>
     </section>
 
     <section class="disclosure" aria-labelledby="a-deeper">
       <h2 id="a-deeper">La parte que lo hizo más difícil de lo que parecía</h2>
-      <p>Un arreglo tosco &mdash; cambiar la llamada bloqueante por una acción de lectura no bloqueante &mdash; habría introducido otro error. Una acción de lectura no bloqueante se puede reiniciar, y <code>onFound()</code> escribe archivos; en un reinicio los escribiría dos veces. En un comentario de seguimiento añadí dos puntos: que la rama por defecto en modo inteligente también bloqueaba, a través del obsoleto <code>DumbService.runReadActionInSmartMode()</code> (que usa <code>ReadAction.computeBlocking()</code> internamente), y que el arreglo real tenía que mantener segura la parte de escritura.</p>
+      <p>Un arreglo tosco (cambiar la llamada bloqueante por una acción de lectura no bloqueante) habría introducido otro error. Una acción de lectura no bloqueante se puede reiniciar, y <code>onFound()</code> escribe archivos; en un reinicio los escribiría dos veces. En un comentario de seguimiento añadí dos puntos: que la rama por defecto en modo inteligente también bloqueaba, a través del obsoleto <code>DumbService.runReadActionInSmartMode()</code> (que usa <code>ReadAction.computeBlocking()</code> internamente), y que el arreglo real tenía que mantener segura la parte de escritura.</p>
     </section>
 
     <section class="disclosure" aria-labelledby="a-fixed">

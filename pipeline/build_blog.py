@@ -21,6 +21,7 @@ Despues: build_i18n.py y version_assets.py.
 from __future__ import annotations
 
 import argparse
+import html as html_lib
 import json
 import sys
 from datetime import date
@@ -31,6 +32,8 @@ DATA = ROOT / "data" / "blog-cases.json"
 PAGE = ROOT / "writing" / "index.html"
 START, END = "<!-- PRERENDER:BLOG:START -->", "<!-- PRERENDER:BLOG:END -->"
 RAIL_START, RAIL_END = "<!-- PRERENDER:BLOGRAIL:START -->", "<!-- PRERENDER:BLOGRAIL:END -->"
+LD_START, LD_END = "<!-- PRERENDER:BLOGLD:START -->", "<!-- PRERENDER:BLOGLD:END -->"
+SITE = "https://gaphunterlabs.com"
 
 CATS = {"performance": "Performance", "security": "Security", "custom": "Custom tools", "platform": "Platform engineering"}
 STATUS = {"fixed": ("Fixed", "is-fixed", "ico-check"), "review": ("In review", "is-open", "ico-clock"),
@@ -84,24 +87,58 @@ def case_html(c) -> str:
         metric = '<p class="case-metric">%s</p>' % inner
         if c.get("caption"):
             metric += '<p class="case-caption">%s</p>' % c["caption"]
+    # 2026-11-26 (redesign): the result is the line a reader looks for, so it is shown; the problem and the work are one
+    # click away (<details>), which keeps the full text on the page and in search, and the grid short.
     facts = "".join('<div><dt>%s%s</dt><dd>%s</dd></div>' % (ico(i), dt, c[k]) for i, dt, k in
-                    (("ico-alert", "The problem", "problem"), ("ico-gear", "The work", "work"), ("ico-check-o", "The result", "result")))
+                    (("ico-alert", "The problem", "problem"), ("ico-gear", "The work", "work")))
     refs = " &middot; ".join(link(label, href) for label, href in c["refs"])
-    return ('<article class="case blog-item" id="%s" data-cat="%s" aria-labelledby="%s-t">'
+    return ('<article class="case blog-item" id="%s" data-cat="%s" data-status="%s" aria-labelledby="%s-t">'
             '<div class="case-top"><p class="case-label">%s</p><p class="case-status %s">%s%s</p></div>'
-            '<h3 class="case-title" id="%s-t">%s</h3>%s<dl class="case-facts">%s</dl>%s'
+            '<h3 class="case-title" id="%s-t">%s</h3>%s'
+            '<p class="case-outcome">%s<span>%s</span></p>'
+            '<details class="case-more"><summary>The problem and the work</summary><dl class="case-facts">%s</dl></details>%s'
             '<p class="case-refs">%s<span>%s</span></p></article>'
-            % (cid, c["cat"], cid, CATS[c["cat"]], st_cls, ico(st_ico, "case-ico case-ico-sm"), st_label,
-               cid, c["title"], metric, facts, dates_html(c["events"]), ico("ico-link"), refs))
+            % (cid, c["cat"], c["status"], cid, CATS[c["cat"]], st_cls, ico(st_ico, "case-ico case-ico-sm"), st_label,
+               cid, c["title"], metric, ico("ico-check-o"), c["result"], facts, dates_html(c["events"]), ico("ico-link"), refs))
 
 
 def post_html(p) -> str:
+    # A post is the long read of the Blog: one wide card above the cases, not a cell of their grid.
     return ('<article class="case case--post blog-item" id="%s" aria-labelledby="%s-t">'
             '<div class="case-top"><p class="case-label">Post</p></div>'
             '<h3 class="case-title" id="%s-t"><a href="%s">%s</a></h3>'
             '<p class="case-summary">%s</p>%s'
-            '<p class="case-refs"><a href="%s">Read the write-up &rarr;</a></p></article>'
+            '<p class="case-refs"><a class="btn" href="%s">Read the write-up</a></p></article>'
             % (p["id"], p["id"], p["id"], p["href"], p["title"], p["summary"], dates_html(p["events"]), p["href"]))
+
+
+def filters_html(cases) -> str:
+    """Area and status filters for the case grid. Hidden until js/blog.js runs: without JavaScript every case shows.
+    Each button carries its count from the cases; an empty bucket gets no button."""
+    by_cat = {k: sum(1 for c in cases if c["cat"] == k) for k in CATS}
+    by_status = {k: sum(1 for c in cases if c["status"] == k) for k in STATUS}
+    chip = lambda attr, key, label, n, on: ('<button type="button" class="bf-chip" data-%s="%s" aria-pressed="%s">'  # noqa: E731
+                                            '<span>%s</span> <b>%d</b></button>' % (attr, key, "true" if on else "false", label, n))
+    cats = chip("bf-cat", "all", "All areas", len(cases), True) + "".join(
+        chip("bf-cat", k, CATS[k], by_cat[k], False) for k in CATS if by_cat[k])
+    sts = chip("bf-status", "all", "Any status", len(cases), True) + "".join(
+        chip("bf-status", k, STATUS[k][0], by_status[k], False) for k in STATUS if by_status[k])
+    return ('<div class="blog-filters" data-blog-filters hidden>'
+            '<div class="bf-group" role="group" aria-label="Filter by area">%s</div>'
+            '<div class="bf-group" role="group" aria-label="Filter by status">%s</div>'
+            '<p class="bf-count" data-bf-count aria-live="polite"></p>'
+            '<p class="bf-i18n" hidden><span data-bf-t="shown">Showing</span><span data-bf-t="of">of</span>'
+            '<span data-bf-t="cases">cases</span></p></div>' % (cats, sts))
+
+
+def blog_jsonld(data) -> str:
+    """The Blog and its posts as JSON-LD (build_i18n points the Spanish copy to /es/escritos/ and flips inLanguage)."""
+    posts = [{"@type": "BlogPosting", "headline": html_lib.unescape(p["title"]), "url": SITE + p["href"],
+              "datePublished": min(e["d"] for e in p["events"]), "author": {"@id": SITE + "/#joel"}}
+             for p in data["posts"]]
+    doc = {"@context": "https://schema.org", "@type": "Blog", "@id": SITE + "/writing/#blog", "url": SITE + "/writing/",
+           "name": "Blog", "inLanguage": "en", "publisher": {"@id": SITE + "/#org"}, "blogPost": posts}
+    return '<script type="application/ld+json">%s</script>' % json.dumps(doc, ensure_ascii=False)
 
 
 def calendar_html() -> str:
@@ -149,7 +186,7 @@ def build(dry_run: bool = False) -> None:
              '<div class="case-grid case-grid--posts">%s</div></section>'
              '<section class="blog-sec" aria-labelledby="blogCasesTitle"><div class="blog-sec-head"><h2 id="blogCasesTitle">Cases</h2>'
              '<p>%d real cases, newest first: the problem, what I did and what happened, each with its public source.</p></div>'
-             '<div class="case-grid">%s</div></section>' % (posts, len(cases), grid)
+             '%s<div class="case-grid" data-blog-grid>%s</div></section>' % (posts, len(cases), filters_html(cases), grid)
              + calendar_html())
     html = PAGE.read_text(encoding="utf-8")
     a, b = html.find(START), html.find(END)
@@ -160,6 +197,10 @@ def build(dry_run: bool = False) -> None:
     if ra < 0 or rb < ra or html.count(RAIL_START) != 1:
         sys.exit("[build_blog] faltan los marcadores PRERENDER:BLOGRAIL en %s" % PAGE)
     html = html[:ra + len(RAIL_START)] + rail_html(cases) + html[rb:]
+    la, lb = html.find(LD_START), html.find(LD_END)
+    if la < 0 or lb < la or html.count(LD_START) != 1:
+        sys.exit("[build_blog] faltan los marcadores PRERENDER:BLOGLD en %s" % PAGE)
+    html = html[:la + len(LD_START)] + blog_jsonld(data) + html[lb:]
     if dry_run:
         print("[build_blog] dry-run: %d casos, %d articulos" % (len(cases), len(data["posts"])))
         return
