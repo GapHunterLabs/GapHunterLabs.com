@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="/js/lang-detect.js?v=69fa3aeb"></script>
 <script src="/js/theme-init.js?v=d981b522"></script>
-<script src="/js/site-chrome.js?v=ab9ef134" defer></script>
+<script src="/js/site-chrome.js?v=2575cc67" defer></script>
 <script src="/js/site-reveal.js?v=0b32ef8c" defer></script>
 <meta name="description" content="Audito el rendimiento de plugins de IntelliJ Platform a precio fijo: congelamientos de la UI, lag al escribir y CPU alta, reproducidos, medidos y parcheados.">
 <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -34,8 +34,8 @@
 <meta property="og:url" content="https://gaphunterlabs.com/es/auditoria-de-rendimiento/">
 <meta property="og:title" content="Auditoría de rendimiento de plugins — Gap Hunter Labs">
 <meta property="og:description" content="Audito el rendimiento de plugins de IntelliJ Platform a precio fijo: congelamientos de la UI, lag al escribir y CPU alta, reproducidos, medidos y parcheados.">
-<meta property="og:image" content="https://gaphunterlabs.com/og-audit.es.png?v=5">
-<meta property="og:image:secure_url" content="https://gaphunterlabs.com/og-audit.es.png?v=5">
+<meta property="og:image" content="https://gaphunterlabs.com/og-audit.es.png?v=6">
+<meta property="og:image:secure_url" content="https://gaphunterlabs.com/og-audit.es.png?v=6">
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -46,7 +46,7 @@
 <meta name="twitter:site" content="@GapHunterLabs">
 <meta name="twitter:title" content="Auditoría de rendimiento de plugins — Gap Hunter Labs">
 <meta name="twitter:description" content="Audito el rendimiento de plugins de IntelliJ Platform a precio fijo: congelamientos de la UI, lag al escribir y CPU alta, reproducidos, medidos y parcheados.">
-<meta name="twitter:image" content="https://gaphunterlabs.com/og-audit.es.png?v=5">
+<meta name="twitter:image" content="https://gaphunterlabs.com/og-audit.es.png?v=6">
 <meta name="twitter:image:alt" content="Auditoría de rendimiento de plugins, USD 10.500 fijo — Gap Hunter Labs">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"¿Cómo se diagnostica un cuello de botella de rendimiento en un plugin de IntelliJ IDEA?","acceptedAnswer":{"@type":"Answer","text":"Reproduzco el plugin en un IDE limpio para cada versión que soporta, con la detección de congelamientos activada y volcados de hilos capturados en cada congelamiento, y luego mido el tiempo en el hilo de interfaz cuando se abren las páginas de configuración, las acciones y las ventanas de herramientas, en frío y en caliente. En la revisión de código busco los patrones de congelamiento que están detrás de la mayoría de los reportes del tracker de JetBrains: acciones de lectura bloqueantes en tareas en segundo plano sin cancelación, acceso a archivos o red en el hilo de interfaz y esperas de otros hilos mientras se mantiene el bloqueo de lectura. Rastreo cada hallazgo hasta el código exacto que lo causó. Reporto lo que encuentro; no puedo demostrar que no exista otro congelamiento."}},{"@type":"Question","name":"¿Cómo se demuestra que una corrección de rendimiento realmente funciona?","acceptedAnswer":{"@type":"Answer","text":"Cada parche que propongo viene con una medición antes y después de la misma acción en la misma versión del IDE, así que la mejora es un número que puedes comprobar, no una afirmación. Entrego los parches como un pull request o un diff con tests donde la corrección lo permite. Es el mismo método que usé con congelamientos en el propio código de IntelliJ, que reporté a JetBrains con una causa raíz y una medición."}}]}</script>
 <link rel="stylesheet" href="/css/theme.css?v=44ce0b54">
@@ -128,7 +128,7 @@
   }
 
 </style>
-<link rel="stylesheet" href="/css/shell.css?v=c23b54be">
+<link rel="stylesheet" href="/css/shell.css?v=ec0dfb21">
 <link rel="stylesheet" href="/css/tw.css?v=b0984558">
 </head>
 <body>
@@ -295,7 +295,7 @@
           <p class="gh-footer-about-links"><a href="/feed.xml">RSS</a><a href="mailto:contact@gaphunterlabs.com">contact@gaphunterlabs.com</a></p></div>
         </div>
       </div>
-      <nav class="gh-footer-cols" aria-label="Pie de página"><div class="gh-footer-col"><p class="gh-footer-title">Servicios</p><a href="/es/servicios/">Contratar</a><a href="/es/auditoria-de-rendimiento/" aria-current="page">Auditoría de rendimiento</a><a href="/es/actualizacion-de-plugins/">Actualización de plugins</a><a href="/es/revision-de-seguridad-de-dependencias/">Seguridad de dependencias y CI/CD</a><a href="/es/plugins-e-inspecciones-a-medida/">Plugins e inspecciones a medida</a><a href="/es/contacto/">Contacto</a></div><div class="gh-footer-col"><p class="gh-footer-title">Evidencia</p><a href="/es/ingenieria-y-evidencia/">Resumen de la evidencia</a><a href="/es/ingenieria-y-evidencia/tickets-jetbrains-platform/">Tickets de JetBrains Platform</a><a href="/es/ingenieria-y-evidencia/reportes-de-seguridad/">Reportes de seguridad en código abierto</a><a href="/es/ingenieria-y-evidencia/auditorias-de-plugins-de-terceros/">Auditorías de plugins de terceros</a><a href="/es/ingenieria-y-evidencia/casos-de-estudio/">Casos de estudio de plugins</a><a href="/es/metodologia/">Metodología</a><a href="/es/escritos/">Blog</a></div><div class="gh-footer-col"><p class="gh-footer-title">Herramientas</p><a href="/es/catalogo/">Catálogo de plugins</a><a href="/es/catalogo/?pricing=paid">Plugins de pago y Pro</a><a href="/es/catalogo/?platform=vscode">Extensiones de VS Code</a><a href="/es/ghl-jail/">ghl-jail (sandbox de Windows)</a></div><div class="gh-footer-col"><p class="gh-footer-title">Patrocinio</p><a href="/es/patrocinadores/">Patrocina el trabajo</a><a href="/es/patrocinadores/#sec-levels">Niveles de patrocinio</a><a href="/es/contacto/?intent=sponsor">Patrocinio de empresa</a></div><div class="gh-footer-col"><p class="gh-footer-title">Tiendas</p><a href="https://plugins.jetbrains.com/vendor/gap-hunter-labs" target="_blank" rel="noopener">JetBrains Marketplace</a><a href="https://marketplace.visualstudio.com/publishers/GapHunterLabs" target="_blank" rel="noopener">VS Code Marketplace</a><a href="https://github.com/GapHunterLabs" target="_blank" rel="noopener">GitHub</a></div><div class="gh-footer-col"><p class="gh-footer-title">Legal</p><a href="/es/seguridad/">Seguridad</a><a href="/es/privacidad/">Privacidad</a><a href="/es/terminos/">Términos</a><a href="/es/eula/">EULA</a></div></nav>
+      <nav class="gh-footer-cols" aria-label="Pie de página"><div class="gh-footer-col"><p class="gh-footer-title">Servicios</p><a href="/es/servicios/">Contratar</a><a href="/es/auditoria-de-rendimiento/" aria-current="page">Auditoría de rendimiento</a><a href="/es/actualizacion-de-plugins/">Actualización de plugins</a><a href="/es/revision-de-seguridad-de-dependencias/">Seguridad de dependencias y CI/CD</a><a href="/es/plugins-e-inspecciones-a-medida/">Plugins e inspecciones a medida</a><a href="/es/migracion-a-spring-boot-4/">Migración a Spring Boot 4</a><a href="/es/contacto/">Contacto</a></div><div class="gh-footer-col"><p class="gh-footer-title">Evidencia</p><a href="/es/ingenieria-y-evidencia/">Resumen de la evidencia</a><a href="/es/ingenieria-y-evidencia/tickets-jetbrains-platform/">Tickets de JetBrains Platform</a><a href="/es/ingenieria-y-evidencia/reportes-de-seguridad/">Reportes de seguridad en código abierto</a><a href="/es/ingenieria-y-evidencia/auditorias-de-plugins-de-terceros/">Auditorías de plugins de terceros</a><a href="/es/ingenieria-y-evidencia/casos-de-estudio/">Casos de estudio de plugins</a><a href="/es/metodologia/">Metodología</a><a href="/es/escritos/">Blog</a></div><div class="gh-footer-col"><p class="gh-footer-title">Herramientas</p><a href="/es/catalogo/">Catálogo de plugins</a><a href="/es/catalogo/?pricing=paid">Plugins de pago y Pro</a><a href="/es/catalogo/?platform=vscode">Extensiones de VS Code</a><a href="/es/ghl-jail/">ghl-jail (sandbox de Windows)</a></div><div class="gh-footer-col"><p class="gh-footer-title">Patrocinio</p><a href="/es/patrocinadores/">Patrocina el trabajo</a><a href="/es/patrocinadores/#sec-levels">Niveles de patrocinio</a><a href="/es/contacto/?intent=sponsor">Patrocinio de empresa</a></div><div class="gh-footer-col"><p class="gh-footer-title">Tiendas</p><a href="https://plugins.jetbrains.com/vendor/gap-hunter-labs" target="_blank" rel="noopener">JetBrains Marketplace</a><a href="https://marketplace.visualstudio.com/publishers/GapHunterLabs" target="_blank" rel="noopener">VS Code Marketplace</a><a href="https://github.com/GapHunterLabs" target="_blank" rel="noopener">GitHub</a></div><div class="gh-footer-col"><p class="gh-footer-title">Legal</p><a href="/es/seguridad/">Seguridad</a><a href="/es/privacidad/">Privacidad</a><a href="/es/terminos/">Términos</a><a href="/es/eula/">EULA</a></div></nav>
     </div>
     <div class="gh-footer-bottom">
       <p class="gh-footer-legal">&copy; 2026 Gap Hunter Labs. Los datos de descargas se sincronizan dos veces al día con las API públicas de JetBrains Marketplace y GitHub.</p>

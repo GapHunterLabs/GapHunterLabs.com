@@ -93,7 +93,18 @@ class BlogRailTest(unittest.TestCase):
         self.assertEqual(sum(self.counts(html, "Cases by status")), len(self.cases))
         self.assertEqual(sum(self.counts(html, "Cases by area")), len(self.cases))
         fixed = sum(1 for c in self.cases if c["status"] == "fixed")
-        self.assertIn("<li><b>%d</b> Fixed</li>" % fixed, html)
+        self.assertIn('<li><a href="/writing/?status=fixed#cases"><b>%d</b> Fixed</a></li>' % fixed, html)
+
+    def test_every_rail_link_opens_an_existing_filter(self):
+        html = B.rail_html(self.cases)
+        filters = B.filters_html(self.cases)
+        links = re.findall(r'href="/writing/\?(status|area)=([a-z]+)#cases"', html)
+        self.assertEqual(len(links), len(re.findall(r"<b>\d+</b>", html.split("Follow")[0])), "every count is a link")
+        for kind, value in links:
+            attr = "data-bf-status" if kind == "status" else "data-bf-cat"
+            self.assertIn('%s="%s"' % (attr, value), filters, "%s=%s has no filter button" % (kind, value))
+        page = (ROOT / "writing" / "index.html").read_text(encoding="utf-8")
+        self.assertIn('id="cases"', page, "the links land on the case grid")
 
     def test_an_empty_bucket_is_left_out_not_shown_as_zero(self):
         only_fixed = [c for c in self.cases if c["status"] == "fixed"]

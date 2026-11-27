@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="/js/lang-detect.js?v=69fa3aeb"></script>
 <script src="/js/theme-init.js?v=d981b522"></script>
-<script src="/js/site-chrome.js?v=ab9ef134" defer></script>
+<script src="/js/site-chrome.js?v=2575cc67" defer></script>
 <script src="/js/site-reveal.js?v=0b32ef8c" defer></script>
 <meta name="description" content="I take fixed-scope, fixed-price work: performance audits, dependency and CI/CD security reviews, IDE platform updates, and custom plugins and inspections.">
 <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -34,8 +34,8 @@
 <meta property="og:url" content="https://gaphunterlabs.com/services/">
 <meta property="og:title" content="Services — Gap Hunter Labs">
 <meta property="og:description" content="I take fixed-scope, fixed-price work: performance audits, dependency and CI/CD security reviews, IDE platform updates, and custom plugins and inspections.">
-<meta property="og:image" content="https://gaphunterlabs.com/og-services.png?v=5">
-<meta property="og:image:secure_url" content="https://gaphunterlabs.com/og-services.png?v=5">
+<meta property="og:image" content="https://gaphunterlabs.com/og-services.png?v=6">
+<meta property="og:image:secure_url" content="https://gaphunterlabs.com/og-services.png?v=6">
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -45,7 +45,7 @@
 <meta name="twitter:site" content="@GapHunterLabs">
 <meta name="twitter:title" content="Services — Gap Hunter Labs">
 <meta name="twitter:description" content="I take fixed-scope, fixed-price work: performance audits, dependency and CI/CD security reviews, IDE platform updates, and custom plugins and inspections.">
-<meta name="twitter:image" content="https://gaphunterlabs.com/og-services.png?v=5">
+<meta name="twitter:image" content="https://gaphunterlabs.com/og-services.png?v=6">
 <meta name="twitter:image:alt" content="Engineering services with published fixed prices — Gap Hunter Labs">
 <link rel="stylesheet" href="/css/theme.css?v=44ce0b54">
 <link rel="stylesheet" href="/css/base.css?v=f5309b4e">
@@ -104,7 +104,7 @@
   }
 
 </style>
-<link rel="stylesheet" href="/css/shell.css?v=c23b54be">
+<link rel="stylesheet" href="/css/shell.css?v=ec0dfb21">
 <link rel="stylesheet" href="/css/tw.css?v=b0984558">
 <script type="application/ld+json">
 {
@@ -178,6 +178,20 @@
             "@type": "Service",
             "name": "Custom plugins and inspections"
           }
+        },
+        {
+          "@type": "Offer",
+          "priceSpecification": {
+            "@type": "PriceSpecification",
+            "minPrice": "2000",
+            "maxPrice": "7500",
+            "priceCurrency": "USD"
+          },
+          "url": "https://gaphunterlabs.com/spring-boot-4-migration/",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Spring Boot 4 migration"
+          }
         }
       ]
     }
@@ -214,7 +228,7 @@
     <div class="page-hero-copy">
       <p class="contact-kicker">Work with me</p>
       <h1>Engineering services</h1>
-      <p class="contact-lead">I offer fixed-scope, fixed-price engineering to teams that build or depend on developer tools, enterprise platforms and open-source software: performance audits, security reviews, platform updates and custom tooling. I deliver in writing, async by default.</p>
+      <p class="contact-lead">I offer fixed-scope, fixed-price engineering to teams that build or depend on developer tools, enterprise platforms and open-source software: performance audits, security reviews, platform updates, custom tooling and Spring Boot 4 migrations. I deliver in writing, async by default.</p>
       <div class="hero-actions">
         <a class="btn primary" href="/contact/?intent=hire" data-goatcounter-click="cta-services-contact">Start a conversation</a>
         <a class="btn" href="https://www.linkedin.com/in/joel-diaz-82687b428/?locale=en" target="_blank" rel="noopener" data-goatcounter-click="out-services-linkedin">Connect on LinkedIn</a>
@@ -269,6 +283,16 @@
         <div class="tier"><dt>Full plugin with CI</dt><dd class="tier-scope">The inspections also run in GitHub Actions or GitLab CI, and the plugin is served from a private plugin repository. I set the delivery date in the scope.</dd><dd class="tier-terms">From USD <!--svc:custom.full-plugin.usd-->15,000</dd></div>
       </dl>
       <p><a class="btn primary" href="/custom-plugins-inspections/" data-goatcounter-click="cta-services-custom">See the full service</a></p>
+    </section>
+
+    <section class="disclosure" aria-labelledby="svc-springboot">
+      <h2 id="svc-springboot">Spring Boot 4 migration</h2>
+      <p>Before your Spring Boot 3 services move to Spring Boot 4 and Jackson 3, I find the changes that compile, start and still change what your API answers, and I write contract tests that compare each response byte for byte. I showed the method in a public migration of a 3.5 service to 4.1: six findings, three of them silent.</p>
+      <dl class="tier-list">
+        <div class="tier"><dt>Readiness review</dt><dd class="tier-scope">One service: inventory, silent contract risks with file and line, and an estimate to migrate it.</dd><dd class="tier-terms">USD <!--svc:springboot.review.usd-->2,000 &middot; <!--svc:springboot.review.days-->3 business days</dd></div>
+        <div class="tier"><dt>Full diagnosis</dt><dd class="tier-scope">Up to 5 services, contract tests for one critical service as a pull request, and a migration plan.</dd><dd class="tier-terms">USD <!--svc:springboot.diagnosis.usd-->7,500 &middot; <!--svc:springboot.diagnosis.days-->10 business days</dd></div>
+      </dl>
+      <p><a class="btn primary" href="/spring-boot-4-migration/" data-goatcounter-click="cta-services-springboot">See the full service</a> <a class="btn" href="https://github.com/GapHunterLabs/spring-boot-4-migration-demo" target="_blank" rel="noopener" data-goatcounter-click="out-services-springboot-demo">See the public migration</a></p>
     </section>
 
     <section class="disclosure" aria-labelledby="svc-how">
@@ -333,7 +357,7 @@
           <p class="gh-footer-about-links"><a href="/feed.xml">RSS</a><a href="mailto:contact@gaphunterlabs.com">contact@gaphunterlabs.com</a></p></div>
         </div>
       </div>
-      <nav class="gh-footer-cols" aria-label="Footer"><div class="gh-footer-col"><p class="gh-footer-title">Services</p><a href="/services/">Work with me</a><a href="/plugin-performance-audit/">Performance audit</a><a href="/plugin-updates/">Plugin updates</a><a href="/dependency-security-review/">Dependency and CI/CD security</a><a href="/custom-plugins-inspections/">Custom plugins and inspections</a><a href="/contact/">Contact</a></div><div class="gh-footer-col"><p class="gh-footer-title">Evidence</p><a href="/engineering-evidence/">Evidence overview</a><a href="/engineering-evidence/jetbrains-platform-tickets/">JetBrains Platform tickets</a><a href="/engineering-evidence/open-source-security-reports/">Open-source security reports</a><a href="/engineering-evidence/third-party-plugin-audits/">Third-party plugin audits</a><a href="/engineering-evidence/case-studies/">Plugin case studies</a><a href="/methodology/">Methodology</a><a href="/writing/">Blog</a></div><div class="gh-footer-col"><p class="gh-footer-title">Tools</p><a href="/catalog/">Plugin catalog</a><a href="/catalog/?pricing=paid">Paid &amp; Pro plugins</a><a href="/catalog/?platform=vscode">VS Code extensions</a><a href="/ghl-jail/">ghl-jail (Windows sandbox)</a></div><div class="gh-footer-col"><p class="gh-footer-title">Sponsorship</p><a href="/sponsors/">Sponsor the work</a><a href="/sponsors/#sec-levels">Sponsorship levels</a><a href="/contact/?intent=sponsor">Company sponsorship</a></div><div class="gh-footer-col"><p class="gh-footer-title">Marketplaces</p><a href="https://plugins.jetbrains.com/vendor/gap-hunter-labs" target="_blank" rel="noopener">JetBrains Marketplace</a><a href="https://marketplace.visualstudio.com/publishers/GapHunterLabs" target="_blank" rel="noopener">VS Code Marketplace</a><a href="https://github.com/GapHunterLabs" target="_blank" rel="noopener">GitHub</a></div><div class="gh-footer-col"><p class="gh-footer-title">Legal</p><a href="/security/">Security</a><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="/eula/">EULA</a></div></nav>
+      <nav class="gh-footer-cols" aria-label="Footer"><div class="gh-footer-col"><p class="gh-footer-title">Services</p><a href="/services/">Work with me</a><a href="/plugin-performance-audit/">Performance audit</a><a href="/plugin-updates/">Plugin updates</a><a href="/dependency-security-review/">Dependency and CI/CD security</a><a href="/custom-plugins-inspections/">Custom plugins and inspections</a><a href="/spring-boot-4-migration/">Spring Boot 4 migration</a><a href="/contact/">Contact</a></div><div class="gh-footer-col"><p class="gh-footer-title">Evidence</p><a href="/engineering-evidence/">Evidence overview</a><a href="/engineering-evidence/jetbrains-platform-tickets/">JetBrains Platform tickets</a><a href="/engineering-evidence/open-source-security-reports/">Open-source security reports</a><a href="/engineering-evidence/third-party-plugin-audits/">Third-party plugin audits</a><a href="/engineering-evidence/case-studies/">Plugin case studies</a><a href="/methodology/">Methodology</a><a href="/writing/">Blog</a></div><div class="gh-footer-col"><p class="gh-footer-title">Tools</p><a href="/catalog/">Plugin catalog</a><a href="/catalog/?pricing=paid">Paid &amp; Pro plugins</a><a href="/catalog/?platform=vscode">VS Code extensions</a><a href="/ghl-jail/">ghl-jail (Windows sandbox)</a></div><div class="gh-footer-col"><p class="gh-footer-title">Sponsorship</p><a href="/sponsors/">Sponsor the work</a><a href="/sponsors/#sec-levels">Sponsorship levels</a><a href="/contact/?intent=sponsor">Company sponsorship</a></div><div class="gh-footer-col"><p class="gh-footer-title">Marketplaces</p><a href="https://plugins.jetbrains.com/vendor/gap-hunter-labs" target="_blank" rel="noopener">JetBrains Marketplace</a><a href="https://marketplace.visualstudio.com/publishers/GapHunterLabs" target="_blank" rel="noopener">VS Code Marketplace</a><a href="https://github.com/GapHunterLabs" target="_blank" rel="noopener">GitHub</a></div><div class="gh-footer-col"><p class="gh-footer-title">Legal</p><a href="/security/">Security</a><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="/eula/">EULA</a></div></nav>
     </div>
     <div class="gh-footer-bottom">
       <p class="gh-footer-legal">&copy; 2026 Gap Hunter Labs. Download data is synced twice daily from the public JetBrains Marketplace and GitHub APIs.</p>

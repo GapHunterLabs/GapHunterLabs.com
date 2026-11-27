@@ -62,7 +62,7 @@
       "date": "2026-11-26",
       "type": "growth",
       "name": "Ruby Gemfile Group Companion",
-      "niche": "VCS / Git Workflow",
+      "niche": "Ruby / Bundler Tooling",
       "delta": 2
     },
     {
@@ -345,7 +345,7 @@
       "name": "PHP Composer Script Companion",
       "pitch": "Gutter icon per `\"scripts\"` entry of an open `composer.json`, showing whether it's used or an orphan candidate — checks the script's own composer.json (calling another script), GitHub Actions/GitLab CI/ CircleCI configs, and README.md for a real `composer run-script <name>` or `composer <name>` invocation.",
       "why": "Same real problem `unused-npm-script-companion` already solves for npm, ported to PHP/Composer: scripts pile up in `composer.json` over time, and there's no way to tell at a glance which ones are still actually called anywhere versus safe to delete.",
-      "niche": "Node.js / npm Tooling",
+      "niche": "PHP / Composer Tooling",
       "githubUrl": "https://github.com/GapHunterLabs/php-composer-script-companion",
       "firstPublished": "2026-08-31",
       "repo": "php-composer-script-companion",
@@ -1257,7 +1257,7 @@
       "name": "Ruby Gemfile Group Companion",
       "pitch": "Warning on a well-known dev/test gem (RSpec, RuboCop, Pry, FactoryBot, Capybara, SimpleCov, WebMock, VCR, and similar) declared at a `Gemfile`'s top level instead of inside a `group :development`/`group :test` block — it ships in every environment, including production, bloating the bundle and (for something like Pry or letter_opener) a real footgun if it's ever accidentally reachable in productio",
       "why": "A gem added quickly during a debugging session, or copy-pasted above the `group` blocks instead of inside them, is easy to miss on review — `bundle install` never complains, it just silently ships everywhere. Nothing in the IDE flags it today.",
-      "niche": "VCS / Git Workflow",
+      "niche": "Ruby / Bundler Tooling",
       "githubUrl": "https://github.com/GapHunterLabs/ruby-gemfile-group-companion",
       "firstPublished": "2026-08-25",
       "repo": "ruby-gemfile-group-companion",

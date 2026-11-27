@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="/js/lang-detect.js?v=69fa3aeb"></script>
 <script src="/js/theme-init.js?v=d981b522"></script>
-<script src="/js/site-chrome.js?v=ab9ef134" defer></script>
+<script src="/js/site-chrome.js?v=2575cc67" defer></script>
 <script src="/js/site-reveal.js?v=0b32ef8c" defer></script>
 <meta name="description" content="Bugs I filed in JetBrains&#x27; YouTrack after my catalog check found them in IntelliJ&#x27;s source, plus my root-cause analysis on existing Platform tickets.">
 <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -28,26 +28,26 @@
 <link rel="preload" href="/fonts/JetBrainsMono-Latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preconnect" href="https://gc.zgo.at">
 <link rel="preconnect" href="https://gaphunterlabs.goatcounter.com">
-<title>JetBrains Platform Tickets — Gap Hunter Labs</title>
+<title>JetBrains Platform Tickets | Gap Hunter Labs</title>
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Gap Hunter Labs">
 <meta property="og:url" content="https://gaphunterlabs.com/engineering-evidence/jetbrains-platform-tickets/">
-<meta property="og:title" content="JetBrains Platform Tickets — Gap Hunter Labs">
+<meta property="og:title" content="JetBrains Platform Tickets | Gap Hunter Labs">
 <meta property="og:description" content="Bugs I filed in JetBrains&#x27; YouTrack after my catalog check found them in IntelliJ&#x27;s source, plus my root-cause analysis on existing Platform tickets.">
-<meta property="og:image" content="https://gaphunterlabs.com/og-evidence-jetbrains-tickets.png?v=5">
-<meta property="og:image:secure_url" content="https://gaphunterlabs.com/og-evidence-jetbrains-tickets.png?v=5">
+<meta property="og:image" content="https://gaphunterlabs.com/og-evidence-jetbrains-tickets.png?v=6">
+<meta property="og:image:secure_url" content="https://gaphunterlabs.com/og-evidence-jetbrains-tickets.png?v=6">
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Root-cause reports in the IntelliJ Platform — Gap Hunter Labs">
+<meta property="og:image:alt" content="Root-cause reports in the IntelliJ Platform | Gap Hunter Labs">
 <meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@GapHunterLabs">
-<meta name="twitter:title" content="JetBrains Platform Tickets — Gap Hunter Labs">
+<meta name="twitter:title" content="JetBrains Platform Tickets | Gap Hunter Labs">
 <meta name="twitter:description" content="Bugs I filed in JetBrains&#x27; YouTrack after my catalog check found them in IntelliJ&#x27;s source, plus my root-cause analysis on existing Platform tickets.">
-<meta name="twitter:image" content="https://gaphunterlabs.com/og-evidence-jetbrains-tickets.png?v=5">
-<meta name="twitter:image:alt" content="Root-cause reports in the IntelliJ Platform — Gap Hunter Labs">
+<meta name="twitter:image" content="https://gaphunterlabs.com/og-evidence-jetbrains-tickets.png?v=6">
+<meta name="twitter:image:alt" content="Root-cause reports in the IntelliJ Platform | Gap Hunter Labs">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","@id":"https://gaphunterlabs.com/engineering-evidence/jetbrains-platform-tickets/#article","mainEntityOfPage":"https://gaphunterlabs.com/engineering-evidence/jetbrains-platform-tickets/","headline":"JetBrains Platform tickets","description":"Bugs I filed in JetBrains&#x27; YouTrack after my catalog check found them in IntelliJ&#x27;s source, plus my root-cause analysis on existing Platform tickets.","author":{"@type":"Person","@id":"https://gaphunterlabs.com/#joel","name":"Joel Diaz","url":"https://gaphunterlabs.com/"},"publisher":{"@type":"Organization","@id":"https://gaphunterlabs.com/#org","name":"Gap Hunter Labs","logo":{"@type":"ImageObject","url":"https://gaphunterlabs.com/apple-touch-icon.png"}},"datePublished":"2026-09-28","dateModified":"2026-10-27","url":"https://gaphunterlabs.com/engineering-evidence/jetbrains-platform-tickets/"}</script>
 <link rel="stylesheet" href="/css/theme.css?v=44ce0b54">
 <link rel="stylesheet" href="/css/base.css?v=f5309b4e">
@@ -199,7 +199,7 @@
     .case-meta-row { flex: 1 1 140px; }
   }
 </style>
-<link rel="stylesheet" href="/css/shell.css?v=c23b54be">
+<link rel="stylesheet" href="/css/shell.css?v=ec0dfb21">
 <link rel="stylesheet" href="/css/tw.css?v=b0984558">
 </head>
 <body>
@@ -283,7 +283,7 @@
         <span class="ticket-status is-open">Open</span>
       </div>
       <div class="badge-row ticket-badges"><span class="badge badge--dark"><svg class="b-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7.529 8.753h-.705v.941h.706c.376 0 .565-.188.565-.471-.001-.329-.236-.47-.566-.47zm-3.2.282c0-.235-.188-.329-.471-.329h-.705v.706h.659c.329-.047.517-.141.517-.377zm6.212 1.13h.847l-.423-1.083zm-6.588 0h-.847v.706h.847c.329 0 .518-.141.518-.376s-.189-.33-.518-.33zM0 0v24h24V0H0zm8.424 3.012h3.435v.941h-1.176v2.965H9.6V3.953H8.424v-.941zm-.236 0v.894h-2.07v.612H8v.847H6.118v.612h2.118v.941H5.082l-.047-3.906h3.153zm-2.635 7.623c0 .659-.565 1.082-1.459 1.082H2.071V7.812h2.023c.471 0 .847.141 1.082.329.142.141.236.377.236.659 0 .471-.235.706-.612.894.471.141.753.424.753.941zM2.682 5.647c.188.235.376.376.612.376.282 0 .424-.188.424-.565V2.965H4.8v2.494c0 .471-.141.847-.376 1.082s-.612.377-1.083.377c-.706.047-1.082-.236-1.364-.612l.705-.659zm8.377 15.341H2.071v-1.506h8.988v1.506zm.894-9.223l-.282-.706h-1.506l-.282.706h-1.13l.02-.047h-.679l-.8-1.176h-.47v1.176H5.741V7.812h1.835c.612 0 .988.141 1.271.424.235.235.329.518.329.894 0 .612-.329.988-.8 1.224l.605.878 1.465-3.419h1.035l1.647 3.953h-1.175zm2.4-.047h-1.082V7.812h1.082v3.906zm3.953 0h-.941L15.718 9.6v2.165h-1.082V7.812h.988l1.6 2.071V7.812h1.082v3.906zm1.929.047a2.488 2.488 0 0 1-1.835-.612l.612-.706c.376.329.8.471 1.271.471.282 0 .471-.094.471-.282s-.141-.235-.659-.376c-.847-.188-1.459-.424-1.459-1.224 0-.706.565-1.271 1.506-1.271.659 0 1.176.188 1.6.518l-.565.753c-.377-.236-.753-.377-1.083-.377-.282 0-.376.094-.376.235 0 .188.141.235.659.376.894.188 1.459.471 1.459 1.224-.001.8-.612 1.271-1.601 1.271z"/></svg><span>IntelliJ Platform</span></span></div>
-      <p>I found it in the same measurement of the Settings pages. Opening Settings &rsaquo; Plugins builds the list of installed plugins on the UI thread and asks, for each plugin, whether an essential plugin requires it. Each answer builds the plugin and module maps again and walks the dependencies of every essential plugin; the source code already has a <code>FIXME</code> about it. With 158 plugins loaded, the page took 689&ndash;931 ms to open. One walk followed by a lookup per plugin took 8&ndash;22 ms and gave the same answer for every plugin. The cost grows with the square of the number of installed plugins. I attached the measurement test to the ticket.</p>
+      <p>I found it in the same measurement of the Settings pages. Opening Settings &rsaquo; Plugins builds the list of installed plugins on the UI thread and asks, for each plugin, whether an essential plugin requires it. Each answer builds the plugin and module maps again and walks the dependencies of every essential plugin; the source code already has a <code>FIXME</code> about it. With 158 plugins loaded, the page took 689 to 931 ms to open. One walk followed by a lookup per plugin took 8 to 22 ms and gave the same answer for every plugin. The cost grows with the square of the number of installed plugins. I attached the measurement test to the ticket.</p>
     </article>
     <article class="ticket-card">
       <div class="ticket-head">
@@ -292,13 +292,13 @@
         <span class="ticket-status is-fixed">Fixed</span>
       </div>
       <div class="badge-row ticket-badges"><span class="badge badge--dark"><svg class="b-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7.529 8.753h-.705v.941h.706c.376 0 .565-.188.565-.471-.001-.329-.236-.47-.566-.47zm-3.2.282c0-.235-.188-.329-.471-.329h-.705v.706h.659c.329-.047.517-.141.517-.377zm6.212 1.13h.847l-.423-1.083zm-6.588 0h-.847v.706h.847c.329 0 .518-.141.518-.376s-.189-.33-.518-.33zM0 0v24h24V0H0zm8.424 3.012h3.435v.941h-1.176v2.965H9.6V3.953H8.424v-.941zm-.236 0v.894h-2.07v.612H8v.847H6.118v.612h2.118v.941H5.082l-.047-3.906h3.153zm-2.635 7.623c0 .659-.565 1.082-1.459 1.082H2.071V7.812h2.023c.471 0 .847.141 1.082.329.142.141.236.377.236.659 0 .471-.235.706-.612.894.471.141.753.424.753.941zM2.682 5.647c.188.235.376.376.612.376.282 0 .424-.188.424-.565V2.965H4.8v2.494c0 .471-.141.847-.376 1.082s-.612.377-1.083.377c-.706.047-1.082-.236-1.364-.612l.705-.659zm8.377 15.341H2.071v-1.506h8.988v1.506zm.894-9.223l-.282-.706h-1.506l-.282.706h-1.13l.02-.047h-.679l-.8-1.176h-.47v1.176H5.741V7.812h1.835c.612 0 .988.141 1.271.424.235.235.329.518.329.894 0 .612-.329.988-.8 1.224l.605.878 1.465-3.419h1.035l1.647 3.953h-1.175zm2.4-.047h-1.082V7.812h1.082v3.906zm3.953 0h-.941L15.718 9.6v2.165h-1.082V7.812h.988l1.6 2.071V7.812h1.082v3.906zm1.929.047a2.488 2.488 0 0 1-1.835-.612l.612-.706c.376.329.8.471 1.271.471.282 0 .471-.094.471-.282s-.141-.235-.659-.376c-.847-.188-1.459-.424-1.459-1.224 0-.706.565-1.271 1.506-1.271.659 0 1.176.188 1.6.518l-.565.753c-.377-.236-.753-.377-1.083-.377-.282 0-.376.094-.376.235 0 .188.141.235.659.376.894.188 1.459.471 1.459 1.224-.001.8-.612 1.271-1.601 1.271z"/></svg><span>IntelliJ Platform</span></span></div>
-      <p>I found it by scanning IntelliJ&rsquo;s own <code>master</code> for slow work inside read actions, and then measured it. Build &rsaquo; Package File copies a file into the artifacts that contain it. <code>PackageFileWorker</code> finds those artifacts and then does all the file I/O inside the same blocking <code>ReadAction.run()</code>: the copy, opening the archive, and repacking a nested archive. A write action requested meanwhile, such as a key press, waits until the I/O ends. I measured it with the platform test framework on IntelliJ IDEA 2026.2.3, with a WAR that contains a 40 MB JAR: the write action waited 2,219&ndash;2,508 ms. With only the artifact lookup in the read action and the I/O outside it, it waited 0 ms in 4 of 4 runs. I attached the measurement test to the ticket.</p>
+      <p>I found it by scanning IntelliJ&rsquo;s own <code>master</code> for slow work inside read actions, and then measured it. Build &rsaquo; Package File copies a file into the artifacts that contain it. <code>PackageFileWorker</code> finds those artifacts and then does all the file I/O inside the same blocking <code>ReadAction.run()</code>: the copy, opening the archive, and repacking a nested archive. A write action requested meanwhile, such as a key press, waits until the I/O ends. I measured it with the platform test framework on IntelliJ IDEA 2026.2.3, with a WAR that contains a 40 MB JAR: the write action waited 2,219 to 2,508 ms. With only the artifact lookup in the read action and the I/O outside it, it waited 0 ms in 4 of 4 runs. I attached the measurement test to the ticket.</p>
     </article>
   </div>
 
   <div class="lab-section-head">
     <h2>Fixes contributed</h2>
-    <p>Pull requests I sent to JetBrains&rsquo; <code>intellij-community</code> repository &mdash; fixes for the bugs reported above, plus new and extended Java inspections contributed to the platform.</p>
+    <p>Pull requests I sent to JetBrains&rsquo; <code>intellij-community</code> repository: fixes for the bugs reported above, plus new and extended Java inspections contributed to the platform.</p>
   </div>
   <div class="lab-tickets">
     <article class="ticket-card">
@@ -485,7 +485,7 @@
           <p class="gh-footer-about-links"><a href="/feed.xml">RSS</a><a href="mailto:contact@gaphunterlabs.com">contact@gaphunterlabs.com</a></p></div>
         </div>
       </div>
-      <nav class="gh-footer-cols" aria-label="Footer"><div class="gh-footer-col"><p class="gh-footer-title">Services</p><a href="/services/">Work with me</a><a href="/plugin-performance-audit/">Performance audit</a><a href="/plugin-updates/">Plugin updates</a><a href="/dependency-security-review/">Dependency and CI/CD security</a><a href="/custom-plugins-inspections/">Custom plugins and inspections</a><a href="/contact/">Contact</a></div><div class="gh-footer-col"><p class="gh-footer-title">Evidence</p><a href="/engineering-evidence/">Evidence overview</a><a href="/engineering-evidence/jetbrains-platform-tickets/">JetBrains Platform tickets</a><a href="/engineering-evidence/open-source-security-reports/">Open-source security reports</a><a href="/engineering-evidence/third-party-plugin-audits/">Third-party plugin audits</a><a href="/engineering-evidence/case-studies/">Plugin case studies</a><a href="/methodology/">Methodology</a><a href="/writing/">Blog</a></div><div class="gh-footer-col"><p class="gh-footer-title">Tools</p><a href="/catalog/">Plugin catalog</a><a href="/catalog/?pricing=paid">Paid &amp; Pro plugins</a><a href="/catalog/?platform=vscode">VS Code extensions</a><a href="/ghl-jail/">ghl-jail (Windows sandbox)</a></div><div class="gh-footer-col"><p class="gh-footer-title">Sponsorship</p><a href="/sponsors/">Sponsor the work</a><a href="/sponsors/#sec-levels">Sponsorship levels</a><a href="/contact/?intent=sponsor">Company sponsorship</a></div><div class="gh-footer-col"><p class="gh-footer-title">Marketplaces</p><a href="https://plugins.jetbrains.com/vendor/gap-hunter-labs" target="_blank" rel="noopener">JetBrains Marketplace</a><a href="https://marketplace.visualstudio.com/publishers/GapHunterLabs" target="_blank" rel="noopener">VS Code Marketplace</a><a href="https://github.com/GapHunterLabs" target="_blank" rel="noopener">GitHub</a></div><div class="gh-footer-col"><p class="gh-footer-title">Legal</p><a href="/security/">Security</a><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="/eula/">EULA</a></div></nav>
+      <nav class="gh-footer-cols" aria-label="Footer"><div class="gh-footer-col"><p class="gh-footer-title">Services</p><a href="/services/">Work with me</a><a href="/plugin-performance-audit/">Performance audit</a><a href="/plugin-updates/">Plugin updates</a><a href="/dependency-security-review/">Dependency and CI/CD security</a><a href="/custom-plugins-inspections/">Custom plugins and inspections</a><a href="/spring-boot-4-migration/">Spring Boot 4 migration</a><a href="/contact/">Contact</a></div><div class="gh-footer-col"><p class="gh-footer-title">Evidence</p><a href="/engineering-evidence/">Evidence overview</a><a href="/engineering-evidence/jetbrains-platform-tickets/">JetBrains Platform tickets</a><a href="/engineering-evidence/open-source-security-reports/">Open-source security reports</a><a href="/engineering-evidence/third-party-plugin-audits/">Third-party plugin audits</a><a href="/engineering-evidence/case-studies/">Plugin case studies</a><a href="/methodology/">Methodology</a><a href="/writing/">Blog</a></div><div class="gh-footer-col"><p class="gh-footer-title">Tools</p><a href="/catalog/">Plugin catalog</a><a href="/catalog/?pricing=paid">Paid &amp; Pro plugins</a><a href="/catalog/?platform=vscode">VS Code extensions</a><a href="/ghl-jail/">ghl-jail (Windows sandbox)</a></div><div class="gh-footer-col"><p class="gh-footer-title">Sponsorship</p><a href="/sponsors/">Sponsor the work</a><a href="/sponsors/#sec-levels">Sponsorship levels</a><a href="/contact/?intent=sponsor">Company sponsorship</a></div><div class="gh-footer-col"><p class="gh-footer-title">Marketplaces</p><a href="https://plugins.jetbrains.com/vendor/gap-hunter-labs" target="_blank" rel="noopener">JetBrains Marketplace</a><a href="https://marketplace.visualstudio.com/publishers/GapHunterLabs" target="_blank" rel="noopener">VS Code Marketplace</a><a href="https://github.com/GapHunterLabs" target="_blank" rel="noopener">GitHub</a></div><div class="gh-footer-col"><p class="gh-footer-title">Legal</p><a href="/security/">Security</a><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="/eula/">EULA</a></div></nav>
     </div>
     <div class="gh-footer-bottom">
       <p class="gh-footer-legal">&copy; 2026 Gap Hunter Labs. Download data is synced twice daily from the public JetBrains Marketplace and GitHub APIs.</p>

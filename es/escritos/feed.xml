@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom" xml:lang="es">
-  <title>Gap Hunter Labs — Blog</title>
+  <title>Blog de Gap Hunter Labs</title>
   <link href="https://gaphunterlabs.com/es/escritos/feed.xml" rel="self"/>
   <link href="https://gaphunterlabs.com/es/escritos/"/>
   <id>https://gaphunterlabs.com/es/escritos/</id>
   <updated>2026-11-03T00:00:00Z</updated>
   <author><name>Joel Díaz</name></author>
   <entry>
-    <title>Una acción de lectura no cancelable en el ejecutor de pruebas de IntelliJ</title>
+    <title>Una acción de lectura no cancelable en el ejecutor de pruebas de IntelliJ | Gap Hunter Labs</title>
     <link href="https://gaphunterlabs.com/es/escritos/background-readaction-freeze/"/>
     <id>https://gaphunterlabs.com/es/escritos/background-readaction-freeze/</id>
     <updated>2026-11-03T00:00:00Z</updated>

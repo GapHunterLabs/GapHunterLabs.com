@@ -394,10 +394,10 @@ def reach_html(reach):
     return grid + facts + "".join(notes)
 
 
-# ---- Hero: the four services and one real case -------------------------------------------------------------------
+# ---- Hero: the five services and one real case -------------------------------------------------------------------
 # Service tiles: name, starting price and delivery time come from data/services.json (the same figures the service
 # pages print). The icon is the only thing chosen here.
-SERVICE_ICONS = {"audit": "gauge", "updates": "layers", "depsec": "shield", "custom": "code"}
+SERVICE_ICONS = {"audit": "gauge", "updates": "layers", "depsec": "shield", "custom": "code", "springboot": "java"}
 
 
 # One line per service on the home tiles (services.json has no free-text field; it rejects unknown keys).
@@ -406,12 +406,15 @@ SERVICE_PITCH = {
     "updates": "Your plugin rebuilt and verified for the IDE versions you need to support.",
     "custom": "Inspections for your own code, delivered as a plugin your team installs.",
     "depsec": "A read-only review of known vulnerabilities in your dependencies and CI workflows.",
+    "springboot": "Before Spring Boot 4, the changes that silently break your API, caught with contract tests.",
 }
 
 
 def service_tiles_html(services):
-    if len(services) != 4:
-        die("services.json: the hero has room for exactly 4 services, found %d" % len(services))
+    # 2026-11-26: five services (Spring Boot 4 migration joined). The grid in css/home.css has five columns on wide
+    # screens, 3 + 2 without a hole from 701 to 1180 px, and two on phones, where the last tile spans the row.
+    if len(services) != 5:
+        die("services.json: the hero has room for exactly 5 services, found %d" % len(services))
     tiles = []
     for s in services:
         if s.get("key") not in SERVICE_ICONS:

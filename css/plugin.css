@@ -1063,8 +1063,8 @@
     align-items: center;
     justify-content: center;
     vertical-align: middle;
-    width: 22px;
-    height: 22px;
+    width: 24px;
+    height: 24px;
     margin-left: 4px;
     padding: 0;
     border: none;
@@ -1733,11 +1733,11 @@
 .ph-actions .btn-icon { display: inline-flex; }
 .ph-actions .btn-icon svg { width: 16px; height: 16px; }
 .ph-buy-note { margin: 12px 0 0; color: var(--text-dim); font-size: 13.5px; line-height: 1.5; }
-.ph-stats { margin-top: 24px; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.ph-stats { margin-top: 24px; grid-template-columns: repeat(var(--n, 4), minmax(0, 1fr)); }
 /* 2026-10-05: cuadro de cifras ~55% mas chico en area (ancho y alto a ~2/3).
    Los selectores llevan .ph-stats para ganarle a .hdr-stat de shell.css, que
    carga despues, sin tocar las cifras de la home. */
-.ph-stats { max-width: 390px; }
+.ph-stats { max-width: calc(var(--n, 4) * 98px); }
 .ph-stats .hdr-stat { gap: 2px; padding: 10px 13px; }
 .ph-stats .hdr-stat-num { font-size: 17px; }
 .ph-stats .hdr-stat-label { font-size: 11.5px; }

@@ -1173,6 +1173,26 @@ a.sp-person:hover { border-color: var(--signal); }
 .sp-fund li::before { content: counter(fund, decimal-leading-zero); display: block; margin-bottom: 8px; font: 600 12px / 1.4 var(--mono); color: var(--signal); }
 .sp-fund li b { display: block; margin-bottom: 4px; color: var(--text); font-size: 15px; }
 .sp-fund a { color: var(--text); }
+
+/* Sponsors redesign (2026-11-26): proof first, one action per level, the audience figures and the questions fold away. */
+.sp-level { grid-row: span 3; }   /* head, perks and the level's button: the buttons line up across a row */
+.sp-level-cta { align-self: end; justify-content: center; width: 100%; }
+.sp-amount { font-size: 32px; }
+.sp-proof { border-left: 2px solid var(--signal); }
+.sp-now { border-style: dashed; text-align: center; }
+.sp-now .sp-empty { margin-inline: auto; max-width: 62ch; }
+.sp-more { margin-top: 4px; }
+.sp-more summary, .sp-faq summary { display: flex; align-items: center; gap: 8px; cursor: pointer; list-style: none; }
+.sp-more summary::-webkit-details-marker, .sp-faq summary::-webkit-details-marker { display: none; }
+.sp-more summary::before, .sp-faq summary::before { content: "+"; flex: none; width: 14px; font: 600 14px / 1 var(--mono); color: var(--signal); }
+.sp-more[open] summary::before, .sp-faq[open] summary::before { content: "2"; }
+.sp-more summary { font: 600 14px / 1.5 var(--sans); color: var(--text); }
+.sp-more[open] summary { margin-bottom: 16px; }
+.sp-more summary:focus-visible, .sp-faq summary:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; border-radius: var(--radius-sm); }
+.sp-faq { padding: 14px 0; border-top: 1px solid var(--border); }
+.sp-faq:last-child { padding-bottom: 0; }
+.sp-faq summary h3 { margin: 0; font: 600 15.5px / 1.4 var(--sans); color: var(--text); }
+.sp-faq p { margin: 10px 0 0 22px; }
 .sp-brand-ico { flex: none; width: 16px; height: 16px; fill: currentColor; }
 .btn:has(> .sp-brand-ico) { display: inline-flex; align-items: center; gap: 8px; }
 @media (max-width: 700px) {

@@ -51,7 +51,8 @@ def fail(where: str, msg: str) -> None:
 
 def text_of(html: str) -> str:
     """Palabras visibles del <main>, sin etiquetas ni SVG."""
-    m = re.search(r'<main\b[^>]*\bclass="wrap">(.*?)</main>', html, re.S)
+    # 2026-11-26: the plugin pages' <main> also carries data-reveal="none", so other attributes may follow the class
+    m = re.search(r'<main\b[^>]*\bclass="wrap"[^>]*>(.*?)</main>', html, re.S)
     if not m:
         return ""
     body = re.sub(r"<svg.*?</svg>", " ", m.group(1), flags=re.S)

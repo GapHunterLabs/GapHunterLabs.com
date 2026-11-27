@@ -140,3 +140,59 @@
   renderMonth();
   renderDay();
 })();
+
+/* Case filters (2026-11-26): by area and by status, from the data-cat / data-status attributes the cards already carry.
+   The bar is hidden in the HTML, so without JavaScript every case shows. The choice is kept in the URL (?area=, ?status=)
+   and a value that is not one of the buttons is ignored. Labels come from the translated nodes of the page. */
+(function () {
+  'use strict';
+  var bar = document.querySelector('[data-blog-filters]');
+  var grid = document.querySelector('[data-blog-grid]');
+  if (!bar || !grid) return;
+  var cards = Array.prototype.slice.call(grid.querySelectorAll('.case'));
+  var count = bar.querySelector('[data-bf-count]');
+  var T = function (k) { var n = bar.querySelector('[data-bf-t="' + k + '"]'); return n ? n.textContent.trim() : k; };
+  var state = { cat: 'all', status: 'all' };
+  var valid = function (attr, v) { return !!bar.querySelector('[data-' + attr + '="' + v + '"]'); };
+
+  function apply(push) {
+    var shown = 0;
+    cards.forEach(function (c) {
+      var ok = (state.cat === 'all' || c.getAttribute('data-cat') === state.cat) &&
+               (state.status === 'all' || c.getAttribute('data-status') === state.status);
+      c.hidden = !ok;
+      if (ok) shown++;
+    });
+    Array.prototype.forEach.call(bar.querySelectorAll('.bf-chip'), function (b) {
+      var on = b.hasAttribute('data-bf-cat') ? b.getAttribute('data-bf-cat') === state.cat : b.getAttribute('data-bf-status') === state.status;
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+    count.textContent = T('shown') + ' ' + shown + ' ' + T('of') + ' ' + cards.length + ' ' + T('cases');
+    if (push && window.history && history.replaceState) {
+      var u = new URL(location.href);
+      ['area', 'status'].forEach(function (k, i) {
+        var v = i ? state.status : state.cat;
+        if (v === 'all') u.searchParams.delete(k); else u.searchParams.set(k, v);
+      });
+      history.replaceState(null, '', u.pathname + u.search + u.hash);
+    }
+  }
+
+  var q = new URLSearchParams(location.search);
+  if (q.get('area') && valid('bf-cat', q.get('area'))) state.cat = q.get('area');
+  if (q.get('status') && valid('bf-status', q.get('status'))) state.status = q.get('status');
+  bar.addEventListener('click', function (e) {
+    var b = e.target.closest('.bf-chip');
+    if (!b) return;
+    if (b.hasAttribute('data-bf-cat')) state.cat = b.getAttribute('data-bf-cat');
+    else state.status = b.getAttribute('data-bf-status');
+    apply(true);
+  });
+  // A link to one case (#case-...) always shows it, whatever the filters.
+  window.addEventListener('hashchange', function () {
+    var t = document.getElementById(location.hash.slice(1));
+    if (t && t.hidden) { state.cat = 'all'; state.status = 'all'; apply(true); t.scrollIntoView(); }
+  });
+  bar.hidden = false;
+  apply(false);
+})();

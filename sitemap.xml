@@ -514,7 +514,7 @@
   </url>
   <url>
     <loc>https://gaphunterlabs.com/es/catalogo/php-composer-script-companion/</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-11-26</lastmod>
   </url>
   <url>
     <loc>https://gaphunterlabs.com/es/catalogo/php-file-inclusion-companion/</loc>
@@ -610,7 +610,7 @@
   </url>
   <url>
     <loc>https://gaphunterlabs.com/es/catalogo/ruby-gemfile-group-companion/</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-11-26</lastmod>
   </url>
   <url>
     <loc>https://gaphunterlabs.com/es/catalogo/ruby-nethttp-reuse-companion/</loc>
@@ -901,6 +901,14 @@
     <lastmod>2026-11-17</lastmod>
   </url>
   <url>
+    <loc>https://gaphunterlabs.com/spring-boot-4-migration/</loc>
+    <lastmod>2026-11-26</lastmod>
+  </url>
+  <url>
+    <loc>https://gaphunterlabs.com/es/migracion-a-spring-boot-4/</loc>
+    <lastmod>2026-11-26</lastmod>
+  </url>
+  <url>
     <loc>https://gaphunterlabs.com/catalog/mermaid-companion/</loc>
     <lastmod>2026-09-28</lastmod>
   </url>
@@ -958,7 +966,7 @@
   </url>
   <url>
     <loc>https://gaphunterlabs.com/catalog/php-composer-script-companion/</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-11-26</lastmod>
   </url>
   <url>
     <loc>https://gaphunterlabs.com/catalog/asyncapi-companion/</loc>
@@ -1150,7 +1158,7 @@
   </url>
   <url>
     <loc>https://gaphunterlabs.com/catalog/ruby-gemfile-group-companion/</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-11-26</lastmod>
   </url>
   <url>
     <loc>https://gaphunterlabs.com/catalog/gradle-task-graph-companion/</loc>
