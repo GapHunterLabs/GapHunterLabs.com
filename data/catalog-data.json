@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-27 14:30:34 UTC",
+  "generatedAt": "2026-11-28 03:41:53 UTC",
   "totalPlugins": 147,
   "totalDownloads": 15953,
   "pending": 0,
@@ -7,10 +7,6 @@
   "totalReviews": 0,
   "avgRating": null,
   "trend7d": [
-    {
-      "date": "2026-11-21",
-      "totalDownloads": 15391
-    },
     {
       "date": "2026-11-22",
       "totalDownloads": 15410
@@ -34,45 +30,13 @@
     {
       "date": "2026-11-27",
       "totalDownloads": 15953
+    },
+    {
+      "date": "2026-11-28",
+      "totalDownloads": 15953
     }
   ],
-  "recentChanges": [
-    {
-      "date": "2026-11-27",
-      "type": "growth",
-      "name": "Mermaid Companion",
-      "niche": "Diagrams",
-      "delta": 26
-    },
-    {
-      "date": "2026-11-27",
-      "type": "growth",
-      "name": "React Native Companion",
-      "niche": "React Native Tooling",
-      "delta": 2
-    },
-    {
-      "date": "2026-11-27",
-      "type": "growth",
-      "name": "AsyncAPI Companion",
-      "niche": "AsyncAPI Tooling",
-      "delta": 2
-    },
-    {
-      "date": "2026-11-27",
-      "type": "growth",
-      "name": "XPath Injection Sink Companion",
-      "niche": "XPath Injection Detection",
-      "delta": 1
-    },
-    {
-      "date": "2026-11-27",
-      "type": "growth",
-      "name": "Merge Conflict Leftover Companion",
-      "niche": "VCS / Git Workflow",
-      "delta": 1
-    }
-  ],
+  "recentChanges": [],
   "plugins": [
     {
       "xmlId": "dev.gaphunter.mermaidcompanion",
